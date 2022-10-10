@@ -1,0 +1,273 @@
+2022-07-06 20:25:51 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/infocom.form.php2022-07-21 16:29:52 [2@GS001376]
+User ID: 2 tried to access or perform an action on /glpi/front/group_user.form.php with insufficient rights. Additional information: User failed a can* method check for right 4 (unknown right name) on item Type: Group_User ID: -1
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:2946 displayRightError()
+		C:\xampp\htdocs\glpi\front\group_user.form.php:49 check()
+2022-07-21 17:42:00 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:01 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:03 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:05 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:06 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:07 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:08 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:08 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:09 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:10 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:11 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 18:06:47 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/front/tracking.injector.php2022-07-21 18:14:45 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/profile.form.php2022-07-21 18:14:45 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/profile.form.php2022-07-22 20:41:23 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/massiveaction.php2022-07-22 20:51:59 [11@GS001376]
+CSRF check failed for User ID: 11 at /glpi/front/login.php2022-07-22 21:00:37 [11@GS001376]
+User ID: 11 tried to access or perform an action on /glpi/front/ticket.form.php?id=7 with insufficient rights. Additional information: No additional information given
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6240 displayRightError()
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6328 displayAccessDeniedPage()
+		C:\xampp\htdocs\glpi\front\ticket.form.php:259 displayFullPageForItem()
+2022-07-22 21:04:19 [11@GS001376]
+User ID: 11 tried to access or perform an action on /glpi/front/user.form.php?id=11 with insufficient rights. Additional information: No additional information given
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6240 displayRightError()
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6328 displayAccessDeniedPage()
+		C:\xampp\htdocs\glpi\front\user.form.php:241 displayFullPageForItem()
+2022-07-22 21:04:21 [11@GS001376]
+User ID: 11 tried to access or perform an action on /glpi/front/user.php with insufficient rights. Additional information: User is missing the 1 (unknown right name) right for user
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\Session.php:984 displayRightError()
+		C:\xampp\htdocs\glpi\front\user.php:38 checkRight()
+2022-07-22 21:15:55 [11@GS001376]
+User ID: 11 tried to access or perform an action on /glpi/front/ticket.form.php?id=7 with insufficient rights. Additional information: No additional information given
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6240 displayRightError()
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6328 displayAccessDeniedPage()
+		C:\xampp\htdocs\glpi\front\ticket.form.php:259 displayFullPageForItem()
+2022-07-22 21:39:38 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:41 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:43 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:44 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:47 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:50 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:56 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:57 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-22 21:39:58 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-25 17:53:35 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/datainjection/front/model.form.php2022-07-25 20:42:17 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/login.php2022-07-25 20:48:37 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-25 20:48:42 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-25 21:53:49 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-25 21:53:52 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-25 22:27:12 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-25 22:27:15 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 17:03:38 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 17:04:03 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 17:13:52 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 17:18:19 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 17:35:22 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 18:01:18 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-26 18:06:12 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-27 13:38:38 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-27 15:56:57 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-27 16:04:16 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-27 16:43:28 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-27 16:43:34 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-28 18:57:57 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-07-29 19:44:25 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/front/tracking.injector.php2022-08-01 14:25:04 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/front/tracking.injector.php2022-08-01 14:25:09 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/front/tracking.injector.php2022-08-01 14:33:02 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/tickettemplatehiddenfield.form.php2022-08-01 18:21:29 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/ajax/getDropdownValue.php2022-08-01 18:21:34 [9@GS001376]
+CSRF check failed for User ID: 9 at /glpi/ajax/actors.php2022-08-02 15:04:14 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/login.php2022-08-02 15:04:22 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/login.php2022-08-04 13:31:36 [2@GS001376]
+User ID: 2 tried to access or perform an action on /glpi/front/group_user.form.php with insufficient rights. Additional information: User failed a can* method check for right 4 (unknown right name) on item Type: Group_User ID: -1
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:2946 displayRightError()
+		C:\xampp\htdocs\glpi\front\group_user.form.php:49 check()
+2022-08-04 13:46:53 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:46:54 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:49:29 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:49:30 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:51:12 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:51:13 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:51:18 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 13:51:31 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-08-04 14:32:15 [9@GS001376]
+User ID: 9 tried to access or perform an action on /glpi/front/profile.form.php?id=6 with insufficient rights. Additional information: User is missing the 1 (unknown right name) right for profile
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\Session.php:984 displayRightError()
+		C:\xampp\htdocs\glpi\front\profile.form.php:38 checkRight()
+2022-08-04 15:12:27 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/profile.form.php2022-08-04 15:19:33 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:34 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:34 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:35 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:35 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:35 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:36 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:36 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:36 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:36 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 15:19:37 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/central.php2022-08-04 16:16:32 [13@GS001376]
+CSRF check failed for User ID: 13 at /glpi/front/massiveaction.php2022-08-04 22:23:50 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 12:51:06 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 13:54:00 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 13:54:06 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 13:59:36 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:13:50 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:17:51 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:17:57 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:19:24 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:34:11 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:34:44 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:34:51 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:41:14 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 14:51:09 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-05 14:52:43 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-05 14:52:45 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-05 14:52:46 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-05 14:52:46 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-05 19:19:23 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 19:55:14 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:09:57 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:13:18 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:13:39 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:13:48 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:13:52 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:14:10 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:16:40 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:17:52 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:18:56 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:19:54 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:26:33 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:32:44 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:35:39 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 20:39:37 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-05 21:35:54 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-05 21:36:40 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-08 14:42:00 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=22022-08-09 13:28:09 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/user.form.php?id=132022-08-09 13:29:43 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-09 13:30:25 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-09 17:15:24 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php?id=12022-08-11 22:31:15 [2@GS001376]
+User ID: 2 tried to access or perform an action on /glpi/front/knowbaseitem_item.form.php with insufficient rights. Additional information: User failed a can* method check for right 4 (unknown right name) on item Type: KnowbaseItem_Item ID: -1
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:2946 displayRightError()
+		C:\xampp\htdocs\glpi\front\knowbaseitem_item.form.php:51 check()
+2022-08-11 22:44:29 [2@GS001376]
+User ID: 2 tried to access or perform an action on /glpi/front/knowbaseitem_item.form.php with insufficient rights. Additional information: User failed a can* method check for right 4 (unknown right name) on item Type: KnowbaseItem_Item ID: -1
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\CommonDBTM.php:2946 displayRightError()
+		C:\xampp\htdocs\glpi\front\knowbaseitem_item.form.php:51 check()
+2022-08-12 16:22:36 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-08-12 16:22:41 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-08-12 16:24:04 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-08-12 16:24:07 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-08-12 16:41:28 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:42:23 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:42:28 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:44:04 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:44:08 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:47:25 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:47:53 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:47:55 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:49:25 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:50:05 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 16:58:28 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/report.dynamic.php2022-08-12 17:48:24 [@GS001376]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-08-12 17:48:27 [@GS001376]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-08-15 15:09:36 [@GS001376]
+CSRF check failed for User ID:  at /glpi/ajax/dashboard.php2022-08-15 15:24:46 [13@GS001376]
+User ID: 13 tried to access or perform an action on /glpi/front/inventory.conf.php with insufficient rights. Additional information: User is missing the 1 (unknown right name) right for config
+	Stack Trace:
+		C:\xampp\htdocs\glpi\src\Session.php:984 displayRightError()
+		C:\xampp\htdocs\glpi\front\inventory.conf.php:40 checkRight()
+2022-08-23 11:41:43 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-26 09:10:17 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/fields/front/container.form.php2022-08-26 16:13:52 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:18:56 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:21:58 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:22:30 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:29:01 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:33:37 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-26 16:34:36 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-29 09:39:56 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-29 09:43:39 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-30 12:43:39 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-30 15:10:20 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2022-08-30 16:09:53 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 15:11:23 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 15:16:55 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 15:18:00 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 15:25:22 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 15:53:40 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 16:34:49 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 16:38:03 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-08-31 16:57:09 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/massiveaction.php2022-08-31 17:54:37 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-09-01 08:27:30 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-09-01 15:49:21 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/glpiinventory/front/agentmodule.form.php2022-09-01 16:28:49 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/plugin.form.php2022-09-05 16:30:03 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/resources/front/wizard.form.php2022-09-05 16:30:33 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/resources/front/wizard.form.php2022-09-09 16:28:00 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-09-12 08:40:18 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/useditemsexport/front/export.form.php2022-09-12 11:03:18 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-09-12 11:05:32 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-09-12 12:39:22 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/ticket.form.php2022-09-12 12:39:24 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/ticket.form.php2022-09-12 15:56:11 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/ticket.form.php2022-09-14 10:44:53 [@GS001376]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-09-14 11:19:23 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/front/itilfollowup.form.php2022-09-14 11:59:15 [@GS001376]
+CSRF check failed for User ID:  at /glpi/front/lostpassword.php2022-09-14 12:14:15 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/search.php2022-09-14 14:51:21 [2@GS001376]
+CSRF check failed for User ID: 2 at /glpi/ajax/dropdownRubDocument.php2022-09-15 22:49:44 [5@GS003021]
+CSRF check failed for User ID: 5 at /glpi/marketplace/formcreator/front/form.form.php2022-09-15 23:46:25 [5@GS003021]
+CSRF check failed for User ID: 5 at /glpi/marketplace/formcreator/front/form.form.php2022-09-16 00:35:43 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/dropdownMassiveAction.php2022-09-16 00:35:46 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/dropdownMassiveAction.php2022-09-16 00:35:47 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/dropdownMassiveAction.php2022-09-16 00:44:56 [5@GS003021]
+CSRF check failed for User ID: 5 at /glpi/marketplace/formcreator/front/form.form.php2022-09-16 19:05:18 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/user.form.php2022-09-16 19:37:52 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/marketplace/formcreator/front/form.form.php2022-09-20 22:02:20 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/marketplace/formcreator/ajax/showfields.php2022-09-20 22:02:30 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/marketplace/formcreator/ajax/question.php2022-09-20 22:46:47 [4@GS003021]
+User ID: 4 tried to access or perform an action on /glpi/front/notificationajaxsetting.form.php with insufficient rights. Additional information: User is missing the 2 (unknown right name) right for config
+	Stack Trace:
+		C:\wamp64\www\glpi\src\Session.php:984 displayRightError()
+		C:\wamp64\www\glpi\front\notificationajaxsetting.form.php:38 checkRight()
+2022-09-20 23:37:20 [5@GS003021]
+User ID: 5 tried to access or perform an action on /glpi/front/queuednotification.form.php?id=376 with insufficient rights. Additional information: User is missing the 1 (unknown right name) right for queuednotification
+	Stack Trace:
+		C:\wamp64\www\glpi\src\Session.php:984 displayRightError()
+		C:\wamp64\www\glpi\front\queuednotification.form.php:42 checkRight()
+2022-09-20 23:37:23 [5@GS003021]
+User ID: 5 tried to access or perform an action on /glpi/front/queuednotification.form.php?id=376 with insufficient rights. Additional information: User is missing the 1 (unknown right name) right for queuednotification
+	Stack Trace:
+		C:\wamp64\www\glpi\src\Session.php:984 displayRightError()
+		C:\wamp64\www\glpi\front\queuednotification.form.php:42 checkRight()
+2022-09-21 16:29:54 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownUsers.php2022-09-21 16:29:56 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownUsers.php2022-09-21 16:30:17 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/getDropdownValue.php2022-09-21 17:48:57 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/notificationtemplatetranslation.form.php2022-09-21 20:54:08 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/ajax/dropdownMassiveAction.php2022-09-21 21:04:28 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/notificationtemplatetranslation.form.php2022-09-22 21:14:10 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/notificationtemplatetranslation.form.php2022-09-22 21:14:30 [@GS003021]
+CSRF check failed for User ID:  at /glpi/marketplace/formcreator/ajax/showfields.php2022-09-23 00:14:07 [5@GS003021]
+CSRF check failed for User ID: 5 at /glpi/marketplace/formcreator/front/form.form.php2022-09-27 13:42:27 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-27 13:58:46 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-27 13:59:16 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-27 17:11:25 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-28 08:43:15 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-28 09:53:00 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/consumable.form.php2022-09-28 14:52:00 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/manufacturer.form.php2022-09-28 14:52:04 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/manufacturer.form.php2022-09-28 15:23:07 [8@GS003021]
+CSRF check failed for User ID: 8 at /glpi/front/login.php2022-09-28 15:27:29 [8@GS003021]
+CSRF check failed for User ID: 8 at /glpi/front/login.php
