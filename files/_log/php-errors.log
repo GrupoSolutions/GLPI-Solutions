@@ -43060,3 +43060,361 @@ Compile css/standalone/reservations.scss  {"user":"2@GS003021"}
   src\CronTask.php:1018                              MailCollector::cronMailgate()
   front\cron.php:64                                  CronTask::launch()
   
+[2022-09-29 09:24:13] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-03 08:51:40] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-04 12:48:33] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-06 09:31:08] glpiphplog.WARNING: Test logger  
+[2022-10-06 09:47:37] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-06 09:47:37] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-06 09:47:38] glpiphplog.WARNING: Test logger  
+[2022-10-06 09:47:39] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:683                           DBConnection::getDBSlaveConf()
+  src\DBConnection.php:724                           DBConnection::showAllReplicateDelay()
+  src\Config.php:2080                                DBConnection->showSystemInformations()
+  src\Config.php:2216                                Config::showSystemInfoTable()
+  src\Config.php:2681                                Config->showSystemInformations()
+  src\CommonGLPI.php:670                             Config::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:47:39] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:692                           DBConnection::getReplicateDelay()
+  src\DBConnection.php:724                           DBConnection::showAllReplicateDelay()
+  src\Config.php:2080                                DBConnection->showSystemInformations()
+  src\Config.php:2216                                Config::showSystemInfoTable()
+  src\Config.php:2681                                Config->showSystemInformations()
+  src\CommonGLPI.php:670                             Config::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:14] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\Config.php:796                                 DBConnection::getDBSlaveConf()
+  src\Config.php:2685                                Config->showFormDBSlave()
+  src\CommonGLPI.php:670                             Config::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:32] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: NO) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\Config.php:796                                 DBConnection::getDBSlaveConf()
+  src\Config.php:2685                                Config->showFormDBSlave()
+  src\CommonGLPI.php:670                             Config::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:38] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:305                            Toolbox::callCurl()
+  src\GLPINetwork.php:79                             GLPINetwork::isServicesAvailable()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:38] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:223                            Toolbox::callCurl()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:38] glpiphplog.WARNING:   *** PHP User Warning (512): Unable to fetch registration information.
+Error message:Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate)
+Response:
+ in C:\wamp64\www\glpi\src\GLPINetwork.php at line 237
+  Backtrace :
+  src\GLPINetwork.php:237                            trigger_error()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:57] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:305                            Toolbox::callCurl()
+  src\GLPINetwork.php:79                             GLPINetwork::isServicesAvailable()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:58] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:223                            Toolbox::callCurl()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:48:58] glpiphplog.WARNING:   *** PHP User Warning (512): Unable to fetch registration information.
+Error message:Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate)
+Response:
+ in C:\wamp64\www\glpi\src\GLPINetwork.php at line 237
+  Backtrace :
+  src\GLPINetwork.php:237                            trigger_error()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:49:44] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:305                            Toolbox::callCurl()
+  src\GLPINetwork.php:79                             GLPINetwork::isServicesAvailable()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:49:44] glpiphplog.WARNING:   *** PHP User Warning (512): Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate) in C:\wamp64\www\glpi\src\Toolbox.php at line 1427
+  Backtrace :
+  src\Toolbox.php:1427                               trigger_error()
+  src\GLPINetwork.php:223                            Toolbox::callCurl()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:49:44] glpiphplog.WARNING:   *** PHP User Warning (512): Unable to fetch registration information.
+Error message:Falha na conexão. Se você usa um proxy, por favor configure-o. (SSL certificate problem: unable to get local issuer certificate)
+Response:
+ in C:\wamp64\www\glpi\src\GLPINetwork.php at line 237
+  Backtrace :
+  src\GLPINetwork.php:237                            trigger_error()
+  src\GLPINetwork.php:100                            GLPINetwork::getRegistrationInformations()
+  src\GLPINetwork.php:49                             GLPINetwork::showForConfig()
+  src\CommonGLPI.php:670                             GLPINetwork::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-06 09:57:07] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: NO) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\Config.php:796                                 DBConnection::getDBSlaveConf()
+  src\Config.php:2685                                Config->showFormDBSlave()
+  src\CommonGLPI.php:670                             Config::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-10 12:01:53] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-10 14:42:49] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-10 14:42:49] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-10 14:52:32] glpiphplog.CRITICAL:   *** Uncaught Exception Error: Call to undefined method Knowbase::showSearchView() in C:\wamp64\www\glpi\src\Knowbase.php at line 84
+  Backtrace :
+  src\CommonGLPI.php:670                             Knowbase::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-10 14:52:35] glpiphplog.CRITICAL:   *** Uncaught Exception Error: Call to undefined method Knowbase::showSearchView() in C:\wamp64\www\glpi\src\Knowbase.php at line 84
+  Backtrace :
+  src\CommonGLPI.php:670                             Knowbase::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-10 15:28:59] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-10 17:56:14] glpiphplog.CRITICAL:   *** Uncaught Exception Error: Call to undefined method Knowbase::showSearchView() in C:\wamp64\www\glpi\src\Knowbase.php at line 84
+  Backtrace :
+  src\CommonGLPI.php:670                             Knowbase::displayTabContentForItem()
+  ajax\common.tabs.php:111                           CommonGLPI::displayStandardTab()
+  
+[2022-10-11 07:49:13] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-11 07:49:13] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-11 09:08:54] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-11 14:20:57] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-11 14:20:57] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-13 11:07:29] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:11:53] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:11:53] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:20:45] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:21:21] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:328                           DBmysql->__construct()
+  src\DBConnection.php:638                           DBConnection::getDBSlaveConf()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:21:21] glpiphplog.WARNING:   *** PHP Warning (2): mysqli::real_connect(): (HY000/1045): Access denied for user 'glpi'@'localhost' (using password: YES) in C:\wamp64\www\glpi\src\DBmysql.php at line 250
+  Backtrace :
+  src\DBmysql.php:250                                mysqli->real_connect()
+  src\DBmysql.php:209                                DBmysql->connect()
+  src\DBConnection.php:554                           DBmysql->__construct()
+  src\DBConnection.php:646                           DBConnection::getReplicateDelay()
+  src\CronTask.php:1018                              DBConnection::cronCheckDBreplicate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-10-17 08:21:59] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2106                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1369                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:692                          MailCollector->connect()
+  src\MailCollector.php:1830                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  

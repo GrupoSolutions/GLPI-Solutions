@@ -416,6 +416,6 @@ class __TwigTemplate_6e4b9e4214adf45484f377dbddc5b012f9491fc2f0180acb1d7891d9465
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/layout.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\layout.html.twig");
+        return new Source("", "components/itilobject/layout.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\layout.html.twig");
     }
 }

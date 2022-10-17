@@ -161,6 +161,6 @@ $context["timeline_itemtype"], "item", [], "any", false, false, false, 56), "kb_
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/answer.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\answer.html.twig");
+        return new Source("", "components/itilobject/answer.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\answer.html.twig");
     }
 }

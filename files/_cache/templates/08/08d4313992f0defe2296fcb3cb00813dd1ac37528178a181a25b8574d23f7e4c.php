@@ -478,6 +478,6 @@ class __TwigTemplate_f89b6777d1cf8d9606ea0066148d51d2a7f9ef712365f04e0c0aab045f9
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/timeline/form_followup.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\timeline\\form_followup.html.twig");
+        return new Source("", "components/itilobject/timeline/form_followup.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\timeline\\form_followup.html.twig");
     }
 }

@@ -409,6 +409,6 @@ class __TwigTemplate_741e28b45e4a27afbaa8b37bed02283ac65fe0e576d4a61b8ac2816047a
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/footer.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\footer.html.twig");
+        return new Source("", "components/itilobject/footer.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\footer.html.twig");
     }
 }

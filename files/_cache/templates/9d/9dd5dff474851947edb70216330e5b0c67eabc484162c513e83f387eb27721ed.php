@@ -162,6 +162,6 @@ class __TwigTemplate_732999778e7090881240862e404bc9f526f0edc6d037cb781ce9c2135b9
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/fields/global_validation.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\fields\\global_validation.html.twig");
+        return new Source("", "components/itilobject/fields/global_validation.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\fields\\global_validation.html.twig");
     }
 }

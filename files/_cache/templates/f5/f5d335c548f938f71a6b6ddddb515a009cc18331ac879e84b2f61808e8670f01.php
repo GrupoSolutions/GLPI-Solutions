@@ -533,6 +533,6 @@ $context["entry"]]);
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/timeline/timeline.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\timeline\\timeline.html.twig");
+        return new Source("", "components/itilobject/timeline/timeline.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\timeline\\timeline.html.twig");
     }
 }

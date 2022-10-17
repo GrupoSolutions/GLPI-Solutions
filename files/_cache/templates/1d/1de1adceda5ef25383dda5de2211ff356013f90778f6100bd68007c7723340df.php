@@ -209,6 +209,6 @@ class __TwigTemplate_548e78289d4e2e0d5b1ec66c55a8fc7a86276bc24e21fd688abe21a091f
 
     public function getSourceContext()
     {
-        return new Source("", "pages/admin/events_list.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\pages\\admin\\events_list.html.twig");
+        return new Source("", "pages/admin/events_list.html.twig", "C:\\wamp64\\www\\glpi\\templates\\pages\\admin\\events_list.html.twig");
     }
 }

@@ -153,6 +153,6 @@ class __TwigTemplate_fb318cc28d5518af0711fa5ad2b1a1e3a8a45b3f0aff9ff43828da39ff9
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/timeline/timeline_item_header_badges.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\timeline\\timeline_item_header_badges.html.twig");
+        return new Source("", "components/itilobject/timeline/timeline_item_header_badges.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\timeline\\timeline_item_header_badges.html.twig");
     }
 }

@@ -75,6 +75,6 @@ class __TwigTemplate_dec8b0467aba74705133fee3262d07a11764be4d8ad8265225a2b215597
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/actors/assign_to_me.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\actors\\assign_to_me.html.twig");
+        return new Source("", "components/itilobject/actors/assign_to_me.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\actors\\assign_to_me.html.twig");
     }
 }

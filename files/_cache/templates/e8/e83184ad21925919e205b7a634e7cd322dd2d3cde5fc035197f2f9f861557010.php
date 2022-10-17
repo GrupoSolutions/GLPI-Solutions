@@ -291,6 +291,6 @@ class __TwigTemplate_65abf939247b2a407cdef048eb02a11fac5d47ec68bd7610fe036dab3a4
 
     public function getSourceContext()
     {
-        return new Source("", "components/dashboard/widget_form.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\dashboard\\widget_form.html.twig");
+        return new Source("", "components/dashboard/widget_form.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\dashboard\\widget_form.html.twig");
     }
 }

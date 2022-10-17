@@ -212,6 +212,6 @@ class __TwigTemplate_969bacb4e56aab2b6a6cb6c324f7aeb1e05b68e76bdda7604600a5f144c
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/add_items.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\add_items.html.twig");
+        return new Source("", "components/itilobject/add_items.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\add_items.html.twig");
     }
 }

@@ -23110,7 +23110,8 @@ body.iframed {
 .page-anonymous .glpi-logo {
   --logo: url(../pics/logos/logo-GLPI-250-black.png);
   content: var(--logo);
-  width: 200px;
+  margin-right: 10%;
+  margin-top:10%;
   height: 110px;
 }
 table td.active, table td.tab_bg_4 {

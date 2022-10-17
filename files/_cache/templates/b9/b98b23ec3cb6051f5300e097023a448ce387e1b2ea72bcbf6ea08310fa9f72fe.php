@@ -229,7 +229,7 @@ class __TwigTemplate_f36f1fcc027b5278d734c6809f457ccefe7120b282423d21a1b32db6a4c
     {
         $macros = $this->macros;
         // line 124
-        echo "<a href=\"https://gruposolutions.com.br\"> © Grupo Solutions 2005 - 2022 </a>
+        echo "<a style=\"margin-right:10%;\" href=\"https://gruposolutions.com.br\"> © Grupo Solutions 2005 - 2022 </a>
 ";
     }
 

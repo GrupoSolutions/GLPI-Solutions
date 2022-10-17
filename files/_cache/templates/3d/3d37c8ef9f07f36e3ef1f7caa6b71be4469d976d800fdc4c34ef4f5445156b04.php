@@ -51,6 +51,6 @@ class __TwigTemplate_5aaf40cd7ce06ad6c90e0dda48265538feacadde7e3f30fcc32f4d25ec1
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/mainform_close.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\mainform_close.html.twig");
+        return new Source("", "components/itilobject/mainform_close.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\mainform_close.html.twig");
     }
 }

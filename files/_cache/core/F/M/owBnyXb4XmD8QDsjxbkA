@@ -1,6 +1,6 @@
-1664387590
+1666004102
 ff0ebb151ac808b192606055b7379c1e6dc9efe4
-a:1:{s:65:"count_NetworkEquipment_State_81f2ae35-b366-4065-ac26-02ea4e3704a6";s:8710:"      <style>
+a:1:{s:65:"count_NetworkEquipment_State_81f2ae35-b366-4065-ac26-02ea4e3704a6";s:8708:"      <style>
          #chart-dashboard_card_central_1dcf79b7b08edb46481e30ce09ee8f23ace150ae {
             background-color: #f5f3ef;
             color: #a79571
@@ -87,8 +87,8 @@ a:1:{s:65:"count_NetworkEquipment_State_81f2ae35-b366-4065-ac26-02ea4e3704a6";s:
 
       $(function () {
          var chart = new Chartist.Pie('#chart-dashboard_card_central_1dcf79b7b08edb46481e30ce09ee8f23ace150ae .chart', {
-            labels: ["sem"],
-            series: [{"meta":"sem","value":1,"url":"\/glpi\/front\/networkequipment.php?reset&criteria%5B0%5D%5Bfield%5D=31&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=0&reset=reset"}],
+            labels: ["OK"],
+            series: [{"meta":"OK","value":1,"url":"\/glpi\/front\/networkequipment.php?reset&criteria%5B0%5D%5Bfield%5D=31&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=4&reset=reset"}],
          }, {
             width: 'calc(100% - 5px)',
             height: 'calc(100% - 5px)',

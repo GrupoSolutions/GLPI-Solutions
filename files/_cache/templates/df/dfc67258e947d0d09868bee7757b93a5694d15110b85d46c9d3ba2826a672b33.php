@@ -97,6 +97,6 @@ class __TwigTemplate_5825c06d2c0bfc7c15be47ca77e1f7f4c94fa626e1c5f705cac7d1ec813
 
     public function getSourceContext()
     {
-        return new Source("", "components/user/link_with_tooltip.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\user\\link_with_tooltip.html.twig");
+        return new Source("", "components/user/link_with_tooltip.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\user\\link_with_tooltip.html.twig");
     }
 }

@@ -177,6 +177,6 @@ class __TwigTemplate_9793cf04899c1a3de1a485fd1e2a2cfec591c69b6c7b2419b67f79434f1
 
     public function getSourceContext()
     {
-        return new Source("", "central/lists/itemtype_count.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\central\\lists\\itemtype_count.html.twig");
+        return new Source("", "central/lists/itemtype_count.html.twig", "C:\\wamp64\\www\\glpi\\templates\\central\\lists\\itemtype_count.html.twig");
     }
 }

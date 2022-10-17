@@ -151,6 +151,6 @@ class __TwigTemplate_4f1b5590e1ea84020d3fc9a211e18880c40a5def61e151b16ba5e23e66d
 
     public function getSourceContext()
     {
-        return new Source("", "central/widget_tab.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\central\\widget_tab.html.twig");
+        return new Source("", "central/widget_tab.html.twig", "C:\\wamp64\\www\\glpi\\templates\\central\\widget_tab.html.twig");
     }
 }

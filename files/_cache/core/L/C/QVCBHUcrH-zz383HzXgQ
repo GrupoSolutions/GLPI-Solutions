@@ -1,6 +1,6 @@
-1663872192
+1664821816
 a7abee2ea2e005107bed2339cf3b339b0135fb82
-a:1:{s:50:"ticket_status_5b256a35-b36b-4db5-ba11-ea7c125f126e";s:11050:"      <style>
+a:1:{s:50:"ticket_status_5b256a35-b36b-4db5-ba11-ea7c125f126e";s:7965:"      <style>
       #chart_dashboard_card_assistance_a0de6d192a62d5f68a54191e3f793f4f801fc9d9 {
          background-color: #f7f3f2;
          color: #a97e74
@@ -36,7 +36,9 @@ a:1:{s:50:"ticket_status_5b256a35-b36b-4db5-ba11-ea7c125f126e";s:11050:"      <s
 
       <div class="card g-chart bar tab10 filter-dates filter-dates_mod filter-itilcategory filter-group_tech filter-user_tech filter-requesttype filter-location"
             id="chart_dashboard_card_assistance_a0de6d192a62d5f68a54191e3f793f4f801fc9d9">
-         <div class="chart ct-chart"></div>
+         <div class="chart ct-chart"><span class='empty-card no-data'>
+               <div>Nenhum dado encontrado</div>
+            <span></div>
          <span class="main-label">Status dos chamados por mês</span>
          <i class="main-icon ti ti-alert-circle"></i>
       </div><script type="text/javascript">
@@ -44,8 +46,8 @@ a:1:{s:50:"ticket_status_5b256a35-b36b-4db5-ba11-ea7c125f126e";s:11050:"      <s
 
       $(function () {
          var chart = new Chartist.Bar('#chart_dashboard_card_assistance_a0de6d192a62d5f68a54191e3f793f4f801fc9d9 .chart', {
-            labels: ["2022-09"],
-            series: [{"name":"Novo","data":[{"value":1,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=1&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]},{"name":"Em atendimento (atribu\u00eddo)","data":[{"value":20,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=2&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]},{"name":"Em atendimento (planejado)","data":[{"value":0,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=3&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]},{"name":"Pendente","data":[{"value":0,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=4&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]},{"name":"Solucionado","data":[{"value":0,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=5&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]},{"name":"Fechado","data":[{"value":0,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=6&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=morethan&criteria%5B1%5D%5Bvalue%5D=2022-09-01%2000%3A00%3A00&criteria%5B2%5D%5Blink%5D=AND&criteria%5B2%5D%5Bfield%5D=15&criteria%5B2%5D%5Bsearchtype%5D=lessthan&criteria%5B2%5D%5Bvalue%5D=2022-10-01%2000%3A00%3A00&reset=reset"}]}],
+            labels: [],
+            series: [],
          }, {
             width: '100%',
             height: 'calc(100% - 40px)',

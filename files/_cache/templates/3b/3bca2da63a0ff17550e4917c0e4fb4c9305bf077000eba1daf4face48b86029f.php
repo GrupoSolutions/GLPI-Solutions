@@ -187,6 +187,6 @@ class __TwigTemplate_6c9f7ba70d94b9b11f4156c8ed36c4f72f790eb36e7d5744f958ce2ecb1
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/timeline/filter_timeline.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\timeline\\filter_timeline.html.twig");
+        return new Source("", "components/itilobject/timeline/filter_timeline.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\timeline\\filter_timeline.html.twig");
     }
 }

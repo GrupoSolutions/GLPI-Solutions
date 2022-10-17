@@ -133,6 +133,6 @@ class __TwigTemplate_ccafa71fef9390aae04103f4c32bc55b3916932c45875189bc1e96f5d91
 
     public function getSourceContext()
     {
-        return new Source("", "pages/self-service/home.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\pages\\self-service\\home.html.twig");
+        return new Source("", "pages/self-service/home.html.twig", "C:\\wamp64\\www\\glpi\\templates\\pages\\self-service\\home.html.twig");
     }
 }

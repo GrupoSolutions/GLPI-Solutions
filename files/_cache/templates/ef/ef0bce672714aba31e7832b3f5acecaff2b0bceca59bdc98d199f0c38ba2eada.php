@@ -168,6 +168,6 @@ class __TwigTemplate_bbbdbc8f2a52705d24961c9bb3b0dc24b787c53e16b6d67403a72ea76d8
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/fields/priority_matrix.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\fields\\priority_matrix.html.twig");
+        return new Source("", "components/itilobject/fields/priority_matrix.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\fields\\priority_matrix.html.twig");
     }
 }

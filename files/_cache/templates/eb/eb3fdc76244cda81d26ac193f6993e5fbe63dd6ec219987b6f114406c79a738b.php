@@ -856,6 +856,6 @@ var reloadCategory = function() {
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/fields_panel.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\fields_panel.html.twig");
+        return new Source("", "components/itilobject/fields_panel.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\fields_panel.html.twig");
     }
 }

@@ -3286,3 +3286,257 @@ Interno #1: Executar planningrecall
 Interno #1: Executar mailgate
 2022-09-28 15:41:50 [2@GS003021]
 An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-09-28 16:33:37 [2@GS003021]
+Interno #1: Executar temp
+2022-09-28 17:36:26 [2@GS003021]
+Interno #1: Executar graph
+2022-09-29 08:06:16 [2@GS003021]
+Interno #1: Executar olaticket
+2022-09-29 08:10:51 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-09-29 09:17:08 [@GS003021]
+Interno #1: Executar slaticket
+2022-09-29 09:17:32 [@GS003021]
+Interno #1: Executar planningrecall
+2022-09-29 09:23:43 [8@GS003021]
+Interno #1: Executar mailgate
+2022-09-29 09:24:13 [8@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-09-29 09:31:25 [8@GS003021]
+Interno #1: Executar RecurrentItems
+2022-09-29 09:38:04 [8@GS003021]
+Interno #1: Executar reservation
+2022-09-29 10:18:56 [2@GS003021]
+Interno #1: Executar temp
+2022-09-29 12:32:29 [2@GS003021]
+Interno #1: Executar graph
+2022-09-29 13:38:47 [2@GS003021]
+Interno #1: Executar closeticket
+2022-09-29 13:46:04 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-09-29 13:54:06 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-09-29 15:31:46 [2@GS003021]
+Interno #1: Executar olaticket
+2022-09-29 16:08:57 [2@GS003021]
+Interno #1: Executar slaticket
+2022-10-03 08:04:34 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-03 08:51:09 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-03 08:51:40 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-03 09:12:50 [2@GS003021]
+Interno #1: Executar certificate
+2022-10-03 09:14:07 [@GS003021]
+Interno #1: Executar contract
+2022-10-03 09:15:42 [@GS003021]
+Interno #1: Executar infocom
+2022-10-03 09:16:42 [@GS003021]
+Interno #1: Executar session
+2022-10-03 09:18:12 [@GS003021]
+Interno #1: Executar createinquest
+2022-10-03 09:18:18 [@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-03 09:18:32 [@GS003021]
+Interno #1: Executar reservation
+2022-10-03 09:18:43 [@GS003021]
+Interno #1: Executar temp
+2022-10-03 09:19:02 [@GS003021]
+Interno #1: Executar graph
+2022-10-03 11:13:54 [2@GS003021]
+Interno #1: Executar watcher
+2022-10-03 11:39:48 [2@GS003021]
+Interno #1: Executar queuednotificationclean
+2022-10-03 14:56:35 [@GS003021]
+Interno #1: Executar queuednotification
+2022-10-03 15:03:45 [8@GS003021]
+Interno #1: Executar mailgateerror
+2022-10-03 15:24:34 [8@GS003021]
+Interno #1: Executar consumable
+2022-10-03 15:29:09 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-03 15:46:00 [8@GS003021]
+Interno #1: Executar slaticket
+2022-10-03 16:00:45 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-03 17:13:16 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-04 12:06:40 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-04 12:48:03 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-04 12:48:33 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-04 13:39:11 [2@GS003021]
+Interno #1: Executar reservation
+2022-10-04 18:01:09 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-05 11:34:55 [2@GS003021]
+Interno #1: Executar temp
+2022-10-05 14:27:43 [2@GS003021]
+Interno #1: Executar graph
+2022-10-06 09:12:05 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-06 09:17:44 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-06 09:24:56 [2@GS003021]
+Interno #1: Executar slaticket
+2022-10-06 09:47:37 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-06 09:54:13 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-06 10:45:16 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-10 10:14:26 [2@GS003021]
+Interno #1: Executar certificate
+2022-10-10 10:22:36 [2@GS003021]
+Interno #1: Executar contract
+2022-10-10 10:41:22 [2@GS003021]
+Interno #1: Executar infocom
+2022-10-10 10:47:59 [@GS003021]
+Interno #1: Executar session
+2022-10-10 10:52:41 [2@GS003021]
+Interno #1: Executar createinquest
+2022-10-10 11:07:29 [2@GS003021]
+Interno #1: Executar watcher
+2022-10-10 11:37:26 [2@GS003021]
+Interno #1: Executar queuednotificationclean
+2022-10-10 11:49:17 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-10 12:01:22 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-10 12:01:53 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-10 12:47:02 [2@GS003021]
+Interno #1: Executar reservation
+2022-10-10 12:56:33 [2@GS003021]
+Interno #1: Executar mailgateerror
+2022-10-10 13:02:53 [2@GS003021]
+Interno #1: Executar consumable
+2022-10-10 14:05:15 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-10 14:07:05 [8@GS003021]
+Interno #1: Executar temp
+2022-10-10 14:17:54 [8@GS003021]
+Interno #1: Executar graph
+2022-10-10 14:25:15 [8@GS003021]
+Interno #1: Executar queuednotification
+2022-10-10 14:30:45 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-10 14:40:40 [8@GS003021]
+Interno #1: Executar slaticket
+2022-10-10 14:42:49 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-10 14:50:18 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-10 15:04:46 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-10 15:11:51 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-10 15:28:29 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-10 15:28:59 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-10 16:03:39 [8@GS003021]
+Interno #1: Executar reservation
+2022-10-10 16:04:28 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-10 16:25:27 [8@GS003021]
+Interno #1: Executar olaticket
+2022-10-10 17:54:08 [2@GS003021]
+Interno #1: Executar slaticket
+2022-10-11 07:49:13 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-11 07:54:46 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-11 08:20:36 [2@GS003021]
+Interno #1: Executar temp
+2022-10-11 08:34:42 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-11 09:02:43 [2@GS003021]
+Interno #1: Executar graph
+2022-10-11 09:08:24 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-11 09:08:54 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-11 09:19:44 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-11 09:42:33 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-11 09:42:42 [@GS003021]
+Interno #1: Executar reservation
+2022-10-11 10:25:30 [8@GS003021]
+Interno #1: Executar slaticket
+2022-10-11 11:10:34 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-11 13:41:00 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-11 14:20:57 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-11 14:35:45 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-11 15:00:32 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-13 11:06:59 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-13 11:07:29 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-13 14:47:31 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-17 07:54:18 [2@GS003021]
+Interno #1: Executar temp
+2022-10-17 07:54:32 [@GS003021]
+Interno #1: Executar olaticket
+2022-10-17 08:01:12 [@GS003021]
+Interno #1: Executar graph
+2022-10-17 08:01:30 [@GS003021]
+Interno #1: Executar certificate
+2022-10-17 08:07:32 [@GS003021]
+Interno #1: Executar contract
+2022-10-17 08:08:28 [@GS003021]
+Interno #1: Executar slaticket
+2022-10-17 08:09:14 [@GS003021]
+Interno #1: Executar infocom
+2022-10-17 08:09:56 [@GS003021]
+Interno #1: Executar reservation
+2022-10-17 08:10:27 [@GS003021]
+Interno #1: Executar session
+2022-10-17 08:10:33 [@GS003021]
+Interno #1: Executar createinquest
+2022-10-17 08:10:37 [@GS003021]
+Interno #1: Executar watcher
+2022-10-17 08:10:44 [@GS003021]
+Interno #1: Executar queuednotificationclean
+2022-10-17 08:11:31 [@GS003021]
+Interno #1: Executar mailgateerror
+2022-10-17 08:11:41 [@GS003021]
+Interno #1: Executar consumable
+2022-10-17 08:11:53 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-17 08:19:28 [@GS003021]
+Interno #1: Executar planningrecall
+2022-10-17 08:19:54 [@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-17 08:19:58 [@GS003021]
+Interno #1: Executar closeticket
+2022-10-17 08:20:06 [@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-17 08:20:14 [@GS003021]
+Interno #1: Executar mailgate
+2022-10-17 08:20:45 [@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-17 08:20:46 [@GS003021]
+Interno #1: Executar queuednotification
+2022-10-17 08:21:02 [@GS003021]
+Interno #1: Executar olaticket
+2022-10-17 08:21:06 [@GS003021]
+Interno #1: Executar slaticket
+2022-10-17 08:21:21 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-17 08:21:29 [@GS003021]
+Interno #1: Executar mailgate
+2022-10-17 08:21:59 [@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-17 08:22:00 [@GS003021]
+Interno #1: Executar queuednotification

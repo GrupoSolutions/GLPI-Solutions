@@ -283,6 +283,6 @@ class __TwigTemplate_be3fbfa684ae8d1c52bfc627a453754754dfa0c3571cebdbd64924fb37f
 
     public function getSourceContext()
     {
-        return new Source("", "components/itilobject/timeline/form_document_item.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\components\\itilobject\\timeline\\form_document_item.html.twig");
+        return new Source("", "components/itilobject/timeline/form_document_item.html.twig", "C:\\wamp64\\www\\glpi\\templates\\components\\itilobject\\timeline\\form_document_item.html.twig");
     }
 }

@@ -1,37 +1,37 @@
-1660569025
+1665487420
 a662c8c942bf2ed2125484918dd26ef362d3aa17
-a:1:{s:54:"bn_count_Computer_34cfbaf9-a471-4852-b48c-0dadea7644de";s:1155:"      <style>
-         #bn_309371604 {
+a:1:{s:54:"bn_count_Computer_34cfbaf9-a471-4852-b48c-0dadea7644de";s:1149:"      <style>
+         #bn_709474642 {
             background-color: #f3d0d0;
             color: #c53232;
          }
 
-         #bn_309371604:hover {
+         #bn_709474642:hover {
             background-color: #e39393;
             border: 1px solid #d45656;
          }
 
-         .theme-dark #bn_309371604 {
+         .theme-dark #bn_709474642 {
             background-color: #c53232;
             color: #f3d0d0;
          }
 
-         .theme-dark #bn_309371604:hover {
+         .theme-dark #bn_709474642:hover {
             background-color: #e39393;
             color: #c53232;
             border: 1px solid #d45656;
          }
       </style>
       <a href='/glpi/front/computer.php?reset=reset'
-         id="bn_309371604"
+         id="bn_709474642"
          class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech"
          title="">
-         <span class="content">            <span title="12"
+         <span class="content">            <span title="0"
                   class="formatted-number"
                   data-precision='0'>
-               <span class="number">12</span>
+               <span class="number">0</span>
                <span class="suffix"></span>
             </span></span>
-         <div class="label" title="Computadores">Computadores</div>
+         <div class="label" title="Computador">Computador</div>
          <i class="main-icon ti ti-device-laptop"></i>
       </a>";}
