@@ -1,29 +1,29 @@
-1666004102
+1666985080
 fc7fc39000088888a88191f91223446a8c50101a
 a:1:{s:54:"bn_count_Software_0690f524-e826-47a9-b50a-906451196b83";s:1136:"      <style>
-         #bn_332972398 {
+         #bn_577026411 {
             background-color: #aaddac;
             color: #358639;
          }
 
-         #bn_332972398:hover {
+         #bn_577026411:hover {
             background-color: #73c777;
             border: 1px solid #44aa48;
          }
 
-         .theme-dark #bn_332972398 {
+         .theme-dark #bn_577026411 {
             background-color: #358639;
             color: #aaddac;
          }
 
-         .theme-dark #bn_332972398:hover {
+         .theme-dark #bn_577026411:hover {
             background-color: #73c777;
             color: #358639;
             border: 1px solid #44aa48;
          }
       </style>
       <a href='/glpi/front/software.php?reset=reset'
-         id="bn_332972398"
+         id="bn_577026411"
          class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech"
          title="">
          <span class="content">            <span title="0"

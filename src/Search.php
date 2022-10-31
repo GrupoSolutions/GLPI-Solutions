@@ -2585,7 +2585,7 @@ class Search
 
         if ($p['mainform']) {
            // Display submit button
-            echo "<button class='btn btn-sm btn-primary me-1' type='submit' name='" . $p['actionname'] . "'>
+            echo "<button class='btn btn-sm btn-primary me-1 buscaFiltro' type='submit' name='" . $p['actionname'] . "'>
                <i class='ti ti-list-search'></i>
                <span class='d-none d-sm-block'>" . $p['actionvalue'] . "</span>
             </button>";

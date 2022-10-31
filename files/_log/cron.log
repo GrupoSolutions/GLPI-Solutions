@@ -3540,3 +3540,115 @@ Interno #1: Executar mailgate
 An error occurred trying to connect to collector.<br/>host doesn't allow connection
 2022-10-17 08:22:00 [@GS003021]
 Interno #1: Executar queuednotification
+2022-10-17 08:32:40 [@GS003021]
+Interno #1: Executar mailgate
+2022-10-17 08:33:10 [@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-17 11:43:30 [@GS003021]
+Interno #1: Executar queuednotification
+2022-10-19 17:13:37 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-24 08:06:43 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-24 08:16:33 [2@GS003021]
+Interno #1: Executar slaticket
+2022-10-24 11:59:37 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-25 09:15:28 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-25 09:15:59 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-25 09:16:01 [@GS003021]
+Interno #1: Executar temp
+2022-10-25 09:32:07 [@GS003021]
+Interno #1: Executar graph
+2022-10-25 12:47:38 [2@GS003021]
+Interno #1: Executar reservation
+2022-10-25 14:10:24 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-25 14:18:09 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-25 14:23:52 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-25 17:05:10 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-25 17:13:23 [2@GS003021]
+Interno #1: Executar certificate
+2022-10-25 17:22:25 [2@GS003021]
+Interno #1: Executar contract
+2022-10-25 17:42:11 [2@GS003021]
+Interno #1: Executar infocom
+2022-10-25 17:49:48 [2@GS003021]
+Interno #1: Executar session
+2022-10-26 08:03:33 [@GS003021]
+Interno #1: Executar createinquest
+2022-10-26 08:04:42 [@GS003021]
+Interno #1: Executar watcher
+2022-10-26 08:10:51 [@GS003021]
+Interno #1: Executar queuednotificationclean
+2022-10-26 08:24:33 [@GS003021]
+Interno #1: Executar consumable
+2022-10-26 08:24:34 [@GS003021]
+Interno #1: Executar mailgateerror
+2022-10-26 08:24:40 [@GS003021]
+Interno #1: Executar planningrecall
+2022-10-26 08:24:53 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-26 08:52:13 [@GS003021]
+Interno #1: Executar slaticket
+2022-10-28 14:06:59 [@GS003021]
+Interno #1: Executar olaticket
+2022-10-28 14:08:12 [@GS003021]
+Interno #1: Executar mailgate
+2022-10-28 14:08:44 [@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-28 14:09:33 [@GS003021]
+Interno #1: Executar temp
+2022-10-28 14:18:58 [2@GS003021]
+Interno #1: Executar graph
+2022-10-28 14:25:55 [2@GS003021]
+Interno #1: Executar reservation
+2022-10-28 14:37:17 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-28 14:42:35 [2@GS003021]
+Interno #1: Executar RecurrentItems
+2022-10-28 14:48:36 [2@GS003021]
+Interno #1: Executar closeticket
+2022-10-28 14:58:35 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2022-10-28 15:07:03 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-10-28 15:13:24 [2@GS003021]
+Interno #1: Executar planningrecall
+2022-10-28 15:26:27 [2@GS003021]
+Interno #1: Executar slaticket
+2022-10-28 15:32:37 [2@GS003021]
+Interno #1: Executar certificate
+2022-10-28 15:39:43 [2@GS003021]
+Interno #1: Executar contract
+2022-10-28 15:46:04 [2@GS003021]
+Interno #1: Executar infocom
+2022-10-28 15:51:34 [2@GS003021]
+Interno #1: Executar session
+2022-10-28 15:56:43 [2@GS003021]
+Interno #1: Executar createinquest
+2022-10-28 16:03:25 [2@GS003021]
+Interno #1: Executar watcher
+2022-10-28 16:09:22 [2@GS003021]
+Interno #1: Executar queuednotificationclean
+2022-10-28 16:21:05 [2@GS003021]
+Interno #1: Executar consumable
+2022-10-28 16:57:48 [2@GS003021]
+Interno #1: Executar mailgateerror
+2022-10-31 17:31:45 [2@GS003021]
+Interno #1: Executar mailgate
+2022-10-31 17:32:16 [2@GS003021]
+An error occurred trying to connect to collector.<br/>host doesn't allow connection
+2022-10-31 17:43:44 [2@GS003021]
+Interno #1: Executar olaticket
+2022-10-31 17:49:25 [2@GS003021]
+Interno #1: Executar queuednotification
+2022-10-31 17:55:15 [2@GS003021]
+Interno #1: Executar temp
+2022-10-31 18:00:28 [2@GS003021]
+Interno #1: Executar checkdbreplicate

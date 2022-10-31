@@ -52,7 +52,7 @@ class __TwigTemplate_b97e701fff1d8a8605597a0daec863b6800597943410d3b555f9e31b01b
    <a href=\"";
             // line 41
             echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path((($__internal_compile_6 = ($context["links"] ?? null)) && is_array($__internal_compile_6) || $__internal_compile_6 instanceof ArrayAccess ? ($__internal_compile_6["add"] ?? null) : null)), "html", null, true);
-            echo "\" class=\"btn btn-icon btn-sm btn-secondary me-1 pe-2\" title=\"";
+            echo "\" class=\"btn btn-icon btn-sm btn-secondary me-1 pe-2 adicionar\" title=\"";
             echo twig_escape_filter($this->env, __("Add"), "html", null, true);
             echo "\">
       <i class=\"ti ti-plus\"></i>

@@ -1,29 +1,29 @@
-1666004102
+1666985080
 5fdff95ed07a3b2a507c07a2afe66c51928dde2c
-a:1:{s:53:"bn_count_Problem_c1cf5cfb-f626-472e-82a1-49c3e200e746";s:1079:"      <style>
-         #bn_1128100567 {
+a:1:{s:53:"bn_count_Problem_c1cf5cfb-f626-472e-82a1-49c3e200e746";s:1074:"      <style>
+         #bn_900709129 {
             background-color: #f08d7b;
             color: #8f2410;
          }
 
-         #bn_1128100567:hover {
+         #bn_900709129:hover {
             background-color: #e85236;
             border: 1px solid #bd2f15;
          }
 
-         .theme-dark #bn_1128100567 {
+         .theme-dark #bn_900709129 {
             background-color: #8f2410;
             color: #f08d7b;
          }
 
-         .theme-dark #bn_1128100567:hover {
+         .theme-dark #bn_900709129:hover {
             background-color: #e85236;
             color: #8f2410;
             border: 1px solid #bd2f15;
          }
       </style>
       <a href='/glpi/front/problem.php?reset=reset'
-         id="bn_1128100567"
+         id="bn_900709129"
          class="card big-number  filter-dates filter-dates_mod"
          title="">
          <span class="content">            <span title="0"

@@ -6757,15 +6757,18 @@ sub, sup {
 sub {
   bottom: -0.25em;
 }
+.adicionar:hover {
+  color:black !important;
+}
 sup {
   top: -0.5em;
 }
 a {
-  color: #a958b9;
+  color: black;
   text-decoration: none;
 }
 a:hover {
-  color: #874694;
+  color: gray;
   text-decoration: none;
 }
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -8258,7 +8261,7 @@ progress {
 .form-control:focus {
   color: inherit;
   background-color: #ffffff;
-  border-color: #deed8d;
+  border-color: #0176b6!important;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.05)(188, 218, 26, 0.25);
 }
@@ -8414,7 +8417,7 @@ textarea.form-control-lg {
   }
 }
 .form-select:focus {
-  border-color: #deed8d;
+  border-color: #0176b6!important;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.05)(188, 218, 26, 0.25);
 }
@@ -8919,7 +8922,7 @@ textarea.form-control-lg {
 }
 .btn-link {
   font-weight: 400;
-  color: #a958b9;
+  color: #0176b6;
   text-decoration: none;
 }
 .btn-link:hover {
@@ -9190,8 +9193,8 @@ textarea.form-control-lg {
   border: 0;
 }
 .dropdown-item:hover, .dropdown-item:focus {
-  color: inherit;
-  background-color: rgba(32, 107, 196, 0.05)(98, 105, 118, 0.04);
+  color: #1f2226 !important;
+  background-color: rgba(32, 107, 196, 0.05)(98, 105, 118, 0.04) !important;
 }
 .dropdown-item.active, .dropdown-item:active {
   color: #0176b6;
@@ -16264,7 +16267,7 @@ Navbar
   color: rgba(32, 107, 196, 0.05)(30, 41, 59, 0.3);
 }
 .navbar .navbar-nav .show > .nav-link, .navbar .navbar-nav .active > .nav-link, .navbar .navbar-nav .nav-link.show, .navbar .navbar-nav .nav-link.active {
-  color: #1e293b;
+  color: white;
 }
 .navbar .navbar-toggler {
   color: #1e293b;
@@ -18545,6 +18548,16 @@ a.badge {
   color: var(--tblr-btn-color-text);
   border-color: rgba(32, 107, 196, 0.05)(var(--tblr-btn-color-text-rgb), 0.48);
 }
+.pesquisa:hover{
+  color:black !important;
+}
+.pesquisa {
+  color:black !important;
+}
+.buscaFiltro:hover {
+  background: white !important;
+  color:black !important;
+}
 .btn:focus:not([disabled]):not(.disabled) {
   border-color: var(--tblr-btn-color, #0176b6);
 }
@@ -18672,14 +18685,14 @@ a.badge {
   animation: spinner-border 0.75s linear infinite;
 }
 .btn-primary, .btn-outline-primary, .btn-ghost-primary {
-  --tblr-btn-color: #0176b6;
+  --tblr-btn-color: #1f2226;
   --tblr-btn-color-interactive: #0176b6;
   --tblr-btn-color-text: #fafbfc;
 }
 .btn-secondary, .btn-outline-secondary, .btn-ghost-secondary {
-  --tblr-btn-color: #626976;
-  --tblr-btn-color-interactive: #585f6a;
-  --tblr-btn-color-text: #fafbfc;
+  --tblr-btn-color: black;
+  --tblr-btn-color-interactive: white;
+  --tblr-btn-color-text: white;
 }
 .btn-success, .btn-outline-success, .btn-ghost-success {
   --tblr-btn-color: #2fb344;
@@ -18713,7 +18726,7 @@ a.badge {
 }
 .btn-muted, .btn-outline-muted, .btn-ghost-muted {
   --tblr-btn-color: #626976;
-  --tblr-btn-color-interactive: #585f6a;
+  --tblr-btn-color-interactive: #1f2226;
   --tblr-btn-color-text: #fafbfc;
 }
 .btn-blue, .btn-outline-blue, .btn-ghost-blue {
@@ -20073,7 +20086,7 @@ Input group
   border-radius: 4px;
 }
 .input-group-flat:focus-within .form-control, .input-group-flat:focus-within .input-group-text {
-  border-color: #deed8d !important;
+  border-color: #0176b6!important;
 }
 .input-group-flat .form-control:focus {
   border-color: #d9dbde;
@@ -23082,6 +23095,9 @@ body.iframed {
   margin-right: 0;
   line-height: 1.5em;
 }
+.dropdown-item a:hover {
+  color:#1f2226
+}
 .btn.btn-icon.btn-sm, .btn-group-sm > .btn.btn-icon {
   min-height: 24px;
 }
@@ -24701,8 +24717,8 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
   margin-right: 0.7em;
 }
 .sidebar #navbar-menu .nav-item:hover .nav-link {
-  border-left-color: #0176b6;
-  color: white;
+  border-left-color: black;
+  color: #1f2226;
   background-color: rgba(32, 107, 196, 0.05)(0, 0, 0, 0.1);
 }
 .sidebar .reduce-menu::before {
@@ -24761,10 +24777,10 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
   }
   body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu {
     background-color: #fff;
-    color: #a958b9;
-    top: 0;
+    color: #0176b6;
+    top: 0;/*#a958b9*/
     left: calc(100% + 1px);
-    border: 1px solid #a958b9;
+    border: 1px solid #0176b6;
     position: absolute;
     z-index: 1050;
   }
@@ -24794,7 +24810,7 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
     display: block;
   }
   body.navbar-collapsed .sidebar #navbar-menu .nav-item.active {
-    background-color: #b26ac1;
+    background-color: rgba(255, 255, 255, 0.31);
   }
   body.navbar-collapsed .sidebar .reduce-menu::before {
     content: "";
@@ -26938,7 +26954,7 @@ div.search-input span.search-input-tag-input:last-of-type {
   }
 }
 .select2-container--focus.select2-container .select2-selection {
-  border-color: #deed8d;
+  border-color: #0176b6!important;
   box-shadow: 0 0 0 0.25rem rgba(32, 107, 196, 0.05)(188, 218, 26, 0.25);
 }
 .select2-container--disabled.select2-container .select2-selection {
@@ -28398,7 +28414,7 @@ textarea:not(.form-control), input:not(.submit):not(.form-control):not([type=sub
 textarea:not(.form-control):focus, input:not(.submit):not(.form-control):not([type=submit]):not([type=color]):not([type=reset]):not([type=checkbox]):not([type=radio]):not(.select2-search__field):not(.numInput):not(.tox-textfield):focus {
   color: inherit;
   background-color: #ffffff;
-  border-color: #deed8d;
+  border-color: #0176b6!important;
 }
 textarea:not(.form-control):required:not(:valid), input:not(.submit):not(.form-control):not([type=submit]):not([type=color]):not([type=reset]):not([type=checkbox]):not([type=radio]):not(.select2-search__field):not(.numInput):not(.tox-textfield):required:not(:valid) {
   border: 1px rgba(32, 107, 196, 0.05)(255, 0, 0, 0.6) solid !important;
@@ -28418,7 +28434,7 @@ select:not(.form-select) {
   padding: 0.4375rem 2.25rem 0.4375rem 0.75rem;
 }
 select:not(.form-select):focus {
-  border-color: #deed8d;
+  border-color: #0176b6!important;
   outline: 0;
 }
 select:not(.form-select)[multiple], select:not(.form-select)[size]:not([size="1"]) {
