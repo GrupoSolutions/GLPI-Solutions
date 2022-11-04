@@ -8,9 +8,9 @@
 	$entity_id = $_POST["entities_id"];
 	$tipo = $_POST["tipo"];
 	$hostname="localhost:3306";
-	$username="glpi";
-	$password="16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@";
-	$dbname="glpidb";
+	$username="root";
+	$password="";
+	$dbname="ativo";
 	$acao = $_POST["acao"];
 	$conn = mysqli_connect($hostname,$username, $password) or die ("html>script language='JavaScript'>alert('Unable to connect to database! Please try again later.'),history.go(-1)/script>/html>");
 	function get_post_action($name)

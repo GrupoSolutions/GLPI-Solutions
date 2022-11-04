@@ -32,7 +32,6 @@
 use GlpiPlugin\Formcreator\Exception\ImportFailureException;
 use GlpiPlugin\Formcreator\Exception\ExportFailureException;
 use Glpi\Application\View\TemplateRenderer;
-use GlpiPlugin\Formcreator\Field\DropdownField;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -133,7 +132,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
             $tab = [
                1 => __('Properties', 'formcreator'),
                2 => __('Actors', 'formcreator'),
-               3 => __('Condition', 'formcreator'),
+               3 => PluginFormcreatorCondition::getTypeName(1),
             ];
             // if ((new Plugin)->isActivated('fields')) {
             //    $tab[4] = __('Fields plugin', 'formcreator');
@@ -542,7 +541,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
          $input['source_rule'] = self::REQUESTSOURCE_SPECIFIC;
       }
       $input['source_question'] = 0;
-      if ($input['source_rule'] == self::REQUESTTYPE_SPECIFIC) {
+      if ($input['source_rule'] == self::REQUESTSOURCE_SPECIFIC) {
          $input['source_question'] = PluginFormcreatorCommon::getFormcreatorRequestTypeId();
       }
       return $input;
@@ -558,10 +557,6 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
    public function prepareInputForUpdate($input) {
       // Control fields values :
       if (!$this->skipChecks) {
-         if (isset($input[('content')])) {
-            $input['content'] = Html::entity_decode_deep($input['content']);
-         }
-
          if (isset($input['destination_entity'])) {
             switch ($input['destination_entity']) {
                case self::DESTINATION_ENTITY_SPECIFIC :
@@ -666,20 +661,6 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
                case self::LOCATION_RULE_LAST_ANSWER:
                default:
                   $input['location_question'] = '0';
-            }
-         }
-
-         $plugin = new Plugin();
-         if ($plugin->isActivated('tag')) {
-            if (isset($input['tag_questions'])) {
-               $input['tag_questions'] = (!empty($input['_tag_questions']))
-                                          ? implode(',', $input['_tag_questions'])
-                                          : '';
-            }
-            if (isset($input['tag_specifics'])) {
-               $input['tag_specifics'] = (!empty($input['_tag_specifics']))
-                                       ? implode(',', $input['_tag_specifics'])
-                                       : '';
             }
          }
       }
@@ -797,14 +778,14 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       $targetTemplateFk = $targetItemtype::getForeignKeyField();
       if ($targetItemtype::isNewID($this->fields[$targetTemplateFk]) && !ITILCategory::isNewID($data['itilcategories_id'])) {
          $rows = $DB->request([
-            'SELECT' => ["${targetTemplateFk}_incident", "${targetTemplateFk}_demand"],
+            'SELECT' => ["{$targetTemplateFk}_incident", "{$targetTemplateFk}_demand"],
             'FROM'   => ITILCategory::getTable(),
             'WHERE'  => ['id' => $data['itilcategories_id']]
          ]);
          if ($row = $rows->current()) { // assign ticket template according to resulting ticket category and ticket type
             return ($data['type'] == Ticket::INCIDENT_TYPE
-                    ? $row["${targetTemplateFk}_incident"]
-                    : $row["${targetTemplateFk}_demand"]);
+                    ? $row["{$targetTemplateFk}_incident"]
+                    : $row["{$targetTemplateFk}_demand"]);
          }
       }
 
@@ -841,9 +822,10 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       );
       $data['name'] = Toolbox::addslashes_deep($data['name']);
       $data['name'] = $formanswer->parseTags($data['name'], $this);
+      $data['date'] = $_SESSION['glpi_currenttime'];
 
       $data['content'] = $this->prepareTemplate(
-         $this->fields['content'],
+         $this->fields['content'] ?? '',
          $formanswer,
          $richText
       );
@@ -911,24 +893,6 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       }
       if (count($this->assignedGroups['_groups_id_assign']) > 0) {
          $data = $this->assignedGroups + $data;
-      }
-
-      // emulate file uploads of inline images
-      $data['_content'] = [];
-      $data['_prefix_content'] = [];
-      $data['_tag_content'] = [];
-      // TODO: replace PluginFormcreatorCommon::getDocumentsFromTag by Toolbox::getDocumentsFromTag
-      // when is merged https://github.com/glpi-project/glpi/pull/9335
-      foreach (PluginFormcreatorCommon::getDocumentsFromTag($data['content']) as $document) {
-         $prefix = uniqid('', true);
-         $filename = $prefix . 'image_paste.' . pathinfo($document['filename'], PATHINFO_EXTENSION);
-         if (!copy(GLPI_DOC_DIR . '/' . $document['filepath'], GLPI_TMP_DIR . '/' . $filename)) {
-            continue;
-         }
-
-         $data['_content'][] = $filename;
-         $data['_prefix_content'][] = $prefix;
-         $data['_tag_content'][] = $document['tag'];
       }
 
       $data = $this->prepareUploadedFiles($data, $formanswer);
@@ -1094,11 +1058,11 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
             if (isset($type['answer']) && ctype_digit($type['answer'])) {
                $type = $type['answer'];
             } else {
-               // Invalid value. Maybe the questin is not compatible.
+               // Invalid value. Maybe the question is not compatible.
                trigger_error(sprintf("Attempt to set the type of a ticket from an incompatible question. Check the target ticket %s of the form ID=%s",
                   $this->fields['name'],
                   $this->getForm()->getID()
-               ));
+               ), E_USER_ERROR);
                $type = null;
             }
             break;
@@ -1139,7 +1103,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       echo Html::scriptBlock("plugin_formcreator_changeRequestType($rand);");
       echo '</td>';
       echo '<td width="15%">';
-      echo '<span id="requesttype_question_title" style="display: none">' . __('Question', 'formcreator') . '</span>';
+      echo '<span id="requesttype_question_title" style="display: none">' . PluginFormcreatorQuestion::getTypeName(1) . '</span>';
       echo '<span id="requesttype_specific_title" style="display: none">' . __('Type ', 'formcreator') . '</span>';
       echo '</td>';
       echo '<td width="25%">';
@@ -1178,7 +1142,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       echo Html::scriptBlock("plugin_formcreator_change_associate($rand)");
       echo '</td>';
       echo '<td width="15%">';
-      echo '<span id="plugin_formcreator_associate_question_title" style="display: none">' . __('Question', 'formcreator') . '</span>';
+      echo '<span id="plugin_formcreator_associate_question_title" style="display: none">' . PluginFormcreatorQuestion::getTypeName(1) . '</span>';
       echo '<span id="plugin_formcreator_associate_specific_title" style="display: none">' . __('Item ', 'formcreator') . '</span>';
       echo '</td>';
       echo '<td width="25%">';
@@ -1230,7 +1194,10 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
             // find the itemtype of the associated item
             $associateQuestion = $this->fields['associate_question'];
             $question = new PluginFormcreatorQuestion();
-            $question->getFromDB($associateQuestion);
+            if (!$question->getFromDB($associateQuestion)) {
+               trigger_error(sprintf("Question ID %s not found and should be used in target ticket ID %s", $associateQuestion, $this->getID()), E_USER_ERROR);
+               break;
+            }
             /** @var  GlpiPlugin\Formcreator\Field\DropdownField */
             $field = $question->getSubField();
             $itemtype = $field->getSubItemtype();

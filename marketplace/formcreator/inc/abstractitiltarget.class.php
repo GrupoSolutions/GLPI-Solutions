@@ -29,9 +29,8 @@
  * ---------------------------------------------------------------------
  */
 
-use Glpi\Application\View\TemplateRenderer;
 use Glpi\Toolbox\Sanitizer;
-use GlpiPlugin\Formcreator\Field\FileField;
+use GlpiPlugin\Formcreator\Field\TextareaField;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -950,7 +949,7 @@ PluginFormcreatorTranslatableInterface
 
    protected function showCategorySettings($rand) {
       echo '<tr>';
-      echo '<td width="15%">' . __('Category', 'formcreator') . '</td>';
+      echo '<td width="15%">' . PluginFormcreatorCategory::getTypeName(1) . '</td>';
       echo '<td width="25%">';
       Dropdown::showFromArray(
          'category_rule',
@@ -964,8 +963,8 @@ PluginFormcreatorTranslatableInterface
       echo Html::scriptBlock("plugin_formcreator_changeCategory($rand);");
       echo '</td>';
       echo '<td width="15%">';
-      echo '<span id="category_specific_title" style="display: none">' . __('Category', 'formcreator') . '</span>';
-      echo '<span id="category_question_title" style="display: none">' . __('Question', 'formcreator') . '</span>';
+      echo '<span id="category_specific_title" style="display: none">' . PluginFormcreatorCategory::getTypeName(1) . '</span>';
+      echo '<span id="category_question_title" style="display: none">' . PluginFormcreatorQuestion::getTypeName(1) . '</span>';
       echo '</td>';
       echo '<td width="25%">';
       echo '<div id="category_question_value" style="display: none">';
@@ -1002,7 +1001,7 @@ PluginFormcreatorTranslatableInterface
       echo Html::scriptBlock("plugin_formcreator_changeUrgency($rand);");
       echo '</td>';
       echo '<td width="15%">';
-      echo '<span id="urgency_question_title" style="display: none">' . __('Question', 'formcreator') . '</span>';
+      echo '<span id="urgency_question_title" style="display: none">' . PluginFormcreatorQuestion::getTypeName(1) . '</span>';
       echo '<span id="urgency_specific_title" style="display: none">' . __('Urgency ', 'formcreator') . '</span>';
       echo '</td>';
       echo '<td width="25%">';
@@ -1211,7 +1210,7 @@ SCRIPT;
       echo Html::scriptBlock("plugin_formcreator_change_location($rand)");
       echo '</td>';
       echo '<td width="15%">';
-      echo '<span id="location_question_title" style="display: none">' . __('Question', 'formcreator') . '</span>';
+      echo '<span id="location_question_title" style="display: none">' . PluginFormcreatorQuestion::getTypeName(1) . '</span>';
       echo '<span id="location_specific_title" style="display: none">' . __('Location ', 'formcreator') . '</span>';
       echo '</td>';
       echo '<td width="25%">';
@@ -1292,7 +1291,7 @@ SCRIPT;
 
       $display = $validation_rule == self::COMMONITIL_VALIDATION_RULE_ANSWER_USER || $validation_rule == self::COMMONITIL_VALIDATION_RULE_ANSWER_GROUP ? "" : "display: none";
       echo "<span id='commonitil_validation_from_question_title' style='$display'>";
-      echo __('Question', 'formcreator');
+      echo PluginFormcreatorQuestion::getTypeName(1);
       echo "</span>";
 
       echo '</td>';
@@ -1546,21 +1545,32 @@ SCRIPT;
             return [];
          }
 
+         if (isset($input[('content')])) {
+            $input['content'] = Html::entity_decode_deep($input['content']);
+         }
+
          // - content is required
          if (isset($input['content']) && strlen($input['content']) < 1) {
             Session::addMessageAfterRedirect(__('The description cannot be empty!', 'formcreator'), false, ERROR);
             return [];
          }
+
+         if (Plugin::isPluginActive('tag')) {
+            if (isset($input['_tag_questions'])) {
+               $input['tag_questions'] = (!empty($input['_tag_questions']))
+                                          ? implode(',', $input['_tag_questions'])
+                                          : '';
+            }
+            if (isset($input['_tag_specifics'])) {
+               $input['tag_specifics'] = (!empty($input['_tag_specifics']))
+                                       ? implode(',', $input['_tag_specifics'])
+                                       : '';
+            }
+         }
       }
 
       if (isset($input['_skip_create_actors']) && $input['_skip_create_actors']) {
          $this->skipCreateActors = true;
-      }
-
-      // generate a uniq id
-      if (!isset($input['uuid'])
-          || empty($input['uuid'])) {
-         $input['uuid'] = plugin_formcreator_getUuid();
       }
 
       if (isset($input['commonitil_validation_rule'])) {
@@ -2167,25 +2177,24 @@ SCRIPT;
             if (is_array($data["$actorType"])) {
                if (count($data["$actorType"]) < 1) {
                   unset($data["$actorType"]);
-                  unset($data["${actorType}_notif"]);
+                  unset($data["{$actorType}_notif"]);
                } else {
                   $cleaned = [];
                   $cleaned_notif = [];
                   foreach ($data["$actorType"] as $key => $actor) {
-                     if ($actor == 0) {
-                        continue;
-                     }
                      $cleaned[] = $actor;
-                     $cleaned_notif['use_notification'][] = $data["${actorType}_notif"]['use_notification'][$key];
-                     $cleaned_notif['alternative_email'][] = $data["${actorType}_notif"]['alternative_email'][$key];
+                     $cleaned_notif['use_notification'][] = $data["{$actorType}_notif"]['use_notification'][$key];
+                     $cleaned_notif['alternative_email'][] = $data["{$actorType}_notif"]['alternative_email'][$key];
                   }
                   $data["$actorType"] = $cleaned;
-                  $data["${actorType}_notif"] = $cleaned_notif;
+                  $data["{$actorType}_notif"] = $cleaned_notif;
                }
             } else {
                if ($data["$actorType"] == 0) {
-                  unset($data["$actorType"]);
-                  unset($data["${actorType}_notif"]);
+                  if (isset($data["{$actorType}_notif"]) && count($data["{$actorType}_notif"]) < 1) {
+                     unset($data["$actorType"]);
+                     unset($data["{$actorType}_notif"]);
+                  }
                }
             }
          }
@@ -2256,7 +2265,7 @@ SCRIPT;
       }
 
       // Manage special values
-      if (isset($predefined_fields['date']) && $predefined_fields['date'] == 'NOW') {
+      if (!isset($predefined_fields['date']) || isset($predefined_fields['date']) && $predefined_fields['date'] == 'NOW') {
          $predefined_fields['date'] = $_SESSION['glpi_currenttime'];
       }
 
@@ -2264,28 +2273,21 @@ SCRIPT;
       return $data;
    }
 
-   /**
-    * Emulate file uploads for documents provided to file questions
-    *
-    * @param array $data
-    * @param PluginFormcreatorFormAnswer $formanswer a form answer
-    * @return array input $data updated with (fake) file uploads
-    */
-   protected function prepareUploadedFiles(array $data, $formanswer): array {
+   protected function prepareUploadsFromTextarea(array $data, PluginFormcreatorFormAnswer $formanswer): array {
       $saved_documents = $formanswer->getFileProperties();
 
       if ($saved_documents) {
          foreach ($formanswer->getForm()->getFields() as $questionId => $field) {
-            if (!($field instanceOf FileField)) {
+            if (!($field instanceOf TextareaField)) {
                continue;
             }
-            if (!isset($saved_documents["_filename"][$questionId])) {
+            if (!isset($saved_documents["_content"][$questionId])) {
                continue;
             }
-            $data["_filename"] = array_merge($data["_filename"], $saved_documents["_filename"][$questionId] ?? []);
-            $data["_tag_filename"] = array_merge($data["_tag_filename"], $saved_documents["_tag_filename"][$questionId] ?? []);
+            $data["_content"] = array_merge($data["_content"], $saved_documents["_content"][$questionId] ?? []);
+            $data["_tag_content"] = array_merge($data["_tag_content"], $saved_documents["_tag_content"][$questionId] ?? []);
 
-            foreach ($saved_documents["_filename"][$questionId] as $key => $filename) {
+            foreach ($saved_documents["_content"][$questionId] as $key => $filename) {
                $uploaded_filename = $formanswer->getFileName($questionId, $key);
                if ($uploaded_filename != '') {
                   copy(GLPI_DOC_DIR . '/' . $uploaded_filename, GLPI_TMP_DIR . '/' . $filename);
@@ -2294,12 +2296,12 @@ SCRIPT;
          }
       } else {
          foreach ($formanswer->getForm()->getFields() as $questionId => $field) {
-            if (!($field instanceOf FileField)) {
+            if (!($field instanceOf TextareaField)) {
                continue;
             }
-            $data["_filename"] = array_merge($data["_filename"], $formanswer->input["_formcreator_field_" . $questionId]);
-            $data["_prefix_filename"] = array_merge($data["_prefix_filename"], $formanswer->input["_prefix_formcreator_field_" . $questionId]);
-            $data["_tag_filename"] = array_merge($data["_tag_filename"], $formanswer->input["_tag_formcreator_field_" . $questionId]);
+            $data["_content"] = array_merge($data["_content"], $formanswer->input["_formcreator_field_" . $questionId]);
+            $data["_prefix_content"] = array_merge($data["_prefix_content"], $formanswer->input["_prefix_formcreator_field_" . $questionId]);
+            $data["_tag_content"] = array_merge($data["_tag_content"], $formanswer->input["_tag_formcreator_field_" . $questionId]);
             foreach ($formanswer->input["_formcreator_field_" . $questionId] as $key => $filename) {
                $uploaded_filename = $formanswer->getFileName($questionId, $key);
                if ($uploaded_filename != '') {
@@ -2307,6 +2309,65 @@ SCRIPT;
                }
             }
          }
+      }
+
+      return $data;
+   }
+
+   /**
+    * Emulate file uploads for documents provided to file questions
+    *
+    * @param array $data
+    * @return array input $data updated with (fake) file uploads
+    */
+   protected function prepareUploadedFiles(array $data): array {
+      $data['_filename'] = [];
+      $data['_prefix_filename'] = [];
+      $data['_tag_filename'] = [];
+
+      // emulate file uploads of inline images
+      // TODO: replace PluginFormcreatorCommon::getDocumentsFromTag by Toolbox::getDocumentsFromTag
+      // when is merged https://github.com/glpi-project/glpi/pull/9335
+      foreach (PluginFormcreatorCommon::getDocumentsFromTag($data['content']) as $document) {
+         $prefix = uniqid('', true);
+         $filename = $prefix . 'image_paste.' . pathinfo($document['filename'], PATHINFO_EXTENSION);
+         if (!copy(GLPI_DOC_DIR . '/' . $document['filepath'], GLPI_TMP_DIR . '/' . $filename)) {
+            continue;
+         }
+
+         // Formanswers answers contains document tags to allow
+         // Replace them with a IMG tag similar to those found after pasting an
+         // image in a textarea
+         // <img id="..." src="blob:http://..." data-upload_id=".." />
+         // the attribute id is requires to let GLPI process the upload properly
+         $img = "<img id='" . $document['tag'] . "' src='' />";
+         $data['content'] = preg_replace(
+            '/' . Document::getImageTag($document['tag']) . '/',
+            Sanitizer::sanitize($img),
+            $data['content']
+         );
+
+         $data['_filename'][] = $filename;
+         $data['_prefix_filename'][] = $prefix;
+         $data['_tag_filename'][] = $document['tag'];
+      }
+
+      // emulate file upload
+      foreach (array_keys($this->attachedDocuments) as $documentId) {
+         $document = new Document();
+         if (!$document->getFromDB($documentId)) {
+            continue;
+         }
+
+         $prefix = uniqid('', true);
+         $filename = $prefix . $document->fields['filename'];
+         if (!copy(GLPI_DOC_DIR . '/' . $document->fields['filepath'], GLPI_TMP_DIR . '/' . $filename)) {
+            continue;
+         }
+
+         $data['_filename'][] = $filename;
+         $data['_prefix_filename'][] = $prefix;
+         $data['_tag_filename'][] = $document->fields['tag'];
       }
 
       return $data;

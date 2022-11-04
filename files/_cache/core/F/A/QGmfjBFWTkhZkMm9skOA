@@ -1,29 +1,29 @@
-1666985080
+1667508125
 569b310f5bc1f03867c68af6bd31075a04b013a2
 a:1:{s:52:"bn_count_Entity_9b82951a-ba52-45cc-a2d3-1d238ec37adf";s:1069:"      <style>
-         #bn_1595263345 {
+         #bn_2052730418 {
             background-color: #f9f9f9;
             color: #939393;
          }
 
-         #bn_1595263345:hover {
+         #bn_2052730418:hover {
             background-color: #d3d3d3;
             border: 1px solid #adadad;
          }
 
-         .theme-dark #bn_1595263345 {
+         .theme-dark #bn_2052730418 {
             background-color: #939393;
             color: #f9f9f9;
          }
 
-         .theme-dark #bn_1595263345:hover {
+         .theme-dark #bn_2052730418:hover {
             background-color: #d3d3d3;
             color: #939393;
             border: 1px solid #adadad;
          }
       </style>
       <a href='/glpi/front/entity.php?reset=reset'
-         id="bn_1595263345"
+         id="bn_2052730418"
          class="card big-number  filter-dates filter-dates_mod"
          title="">
          <span class="content">            <span title="1"

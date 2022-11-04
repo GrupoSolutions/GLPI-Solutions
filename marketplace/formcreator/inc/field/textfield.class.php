@@ -39,6 +39,7 @@ use PluginFormcreatorQuestionRegex;
 use PluginFormcreatorCommon;
 use Session;
 use Toolbox;
+use PluginFormcreatorFormAnswer;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Toolbox\Sanitizer;
 
@@ -84,7 +85,7 @@ class TextField extends PluginFormcreatorAbstractField
       return $html;
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       if ($this->value === null || $this->value === '') {
          return '';
       }
@@ -201,7 +202,6 @@ class TextField extends PluginFormcreatorAbstractField
          return false;
       }
 
-      $this->value = Sanitizer::sanitize($input[$key]);
       $this->value = Sanitizer::unsanitize($input[$key]);
       return true;
    }

@@ -1,6 +1,6 @@
-1666985080
+1667508125
 1950711a599fa2bfffc08098fd36907cfaa9dd77
-a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:10590:"      <style>
+a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:12075:"      <style>
       #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca {
          background-color: #f9fafb;
          color: #7f94a9
@@ -66,24 +66,44 @@ a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:105
  */
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-point, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-line, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-bar, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-slice-donut {
-  stroke: #7f94a9;
+  stroke: #4d80b3;
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-bar + .ct-barlabel {
-  fill: setcolor(#7f94a9);
+  fill: setcolor(#4d80b3);
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-circle {
-  fill: #7f94a9;
+  fill: #4d80b3;
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-circle + .ct-label {
-  fill: #7f94a9;
+  fill: #4d80b3;
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-slice-pie, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-area, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-a .ct-slice-donut-solid {
-  fill: #7f94a9;
-  stroke: setcolor(#7f94a9);
+  fill: #4d80b3;
+  stroke: setcolor(#4d80b3);
 }
 #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-0:before {
-  background-color: #7f94a9;
-  border-color: #7f94a9;
+  background-color: #4d80b3;
+  border-color: #4d80b3;
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-point, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-line, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-bar, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-slice-donut {
+  stroke: #1a334d;
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-bar + .ct-barlabel {
+  fill: setcolor(#1a334d);
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-circle {
+  fill: #1a334d;
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-circle + .ct-label {
+  fill: #1a334d;
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-slice-pie, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-area, #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-b .ct-slice-donut-solid {
+  fill: #1a334d;
+  stroke: setcolor(#1a334d);
+}
+#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .ct-series-1:before {
+  background-color: #1a334d;
+  border-color: #1a334d;
 }
 
       </style>
@@ -98,8 +118,8 @@ a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:105
 
       $(function () {
          var chart = new Chartist.Bar('#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .chart', {
-            labels: [" "],
-            series: [{"meta":" ","value":1,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=8&reset=reset"}],
+            labels: [" "," "],
+            series: [{"meta":" ","value":2,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=2&reset=reset"},{"meta":" ","value":1,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=8&reset=reset"}],
          }, {
             width: '100%',
             height: 'calc(100% - 5px)',

@@ -77,6 +77,7 @@ class PluginFormcreatorInstall {
       '2.12'   => '2.12.1',
       '2.12.1' => '2.12.5',
       '2.12.5' => '2.13',
+      '2.13'   => '2.13.1',
    ];
 
    protected bool $resyncIssues = false;
@@ -139,8 +140,8 @@ class PluginFormcreatorInstall {
       }
 
       // Check schema of tables before upgrading
+      $oldVersion = Config::getConfigurationValue('formcreator', 'previous_version');
       if (!isset($args['skip-db-check'])) {
-         $oldVersion = Config::getConfigurationValue('formcreator', 'previous_version');
          if ($oldVersion !== null) {
             $checkResult = true;
             if (version_compare($oldVersion, '2.13.0') >= 0) {
@@ -196,6 +197,8 @@ class PluginFormcreatorInstall {
          return false;
       }
 
+      $this->resyncIssues = false;
+
       ob_start();
       while ($fromSchemaVersion && isset($this->upgradeSteps[$fromSchemaVersion])) {
          $this->upgradeOneStep($this->upgradeSteps[$fromSchemaVersion]);
@@ -219,15 +222,17 @@ class PluginFormcreatorInstall {
          PluginFormcreatorIssue::cronSyncIssues($task);
       }
 
+      $lazyCheck = false;
+      // $lazyCheck = (version_compare($oldVersion, '2.13.0') < 0);
       // Check schema of tables after upgrade
       $checkResult = $this->checkSchema(
          PLUGIN_FORMCREATOR_VERSION,
          false,
-         false,
-         false,
-         false,
-         false,
-         false
+         $lazyCheck,
+         $lazyCheck,
+         $lazyCheck,
+         $lazyCheck,
+         $lazyCheck
       );
       if (!$checkResult) {
          $message = sprintf(
@@ -270,7 +275,9 @@ class PluginFormcreatorInstall {
       $upgradeStep = new $updateClass();
       $upgradeStep->upgrade($this->migration);
       $this->migration->executeMigration();
-      $this->resyncIssues = $this->resyncIssues || $upgradeStep->isResyncIssuesRequiresd();
+      if (method_exists($upgradeStep, 'isResyncIssuesRequired')) {
+         $this->resyncIssues = $this->resyncIssues || $upgradeStep->isResyncIssuesRequired();
+      }
    }
 
    /**
@@ -842,6 +849,22 @@ class PluginFormcreatorInstall {
       }
 
       if (count($differences) > 0) {
+         foreach ($differences as $table_name => $difference) {
+            $message = null;
+            switch ($difference['type']) {
+               case DatabaseSchemaIntegrityChecker::RESULT_TYPE_ALTERED_TABLE:
+                  $message = sprintf(__('Table schema differs for table "%s".'), $table_name);
+                  break;
+               case DatabaseSchemaIntegrityChecker::RESULT_TYPE_MISSING_TABLE:
+                  $message = sprintf(__('Table "%s" is missing.'), $table_name);
+                  break;
+               case DatabaseSchemaIntegrityChecker::RESULT_TYPE_UNKNOWN_TABLE:
+                  $message = sprintf(__('Unknown table "%s" has been found in database.'), $table_name);
+                  break;
+            }
+            echo $message . PHP_EOL;
+            echo $difference['diff'] . PHP_EOL;
+         }
          return false;
       }
 

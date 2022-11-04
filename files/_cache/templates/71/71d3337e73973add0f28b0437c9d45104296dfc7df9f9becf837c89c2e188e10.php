@@ -82,6 +82,6 @@ class __TwigTemplate_d7de10953d1c99da27c76f1d20b5bb9a0efd0cc1418e9e6cfc0b314e96c
 
     public function getSourceContext()
     {
-        return new Source("", "pages/assets/cartridgeitem.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\pages\\assets\\cartridgeitem.html.twig");
+        return new Source("", "pages/assets/cartridgeitem.html.twig", "C:\\wamp64\\www\\glpi\\templates\\pages\\assets\\cartridgeitem.html.twig");
     }
 }

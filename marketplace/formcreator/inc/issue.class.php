@@ -37,6 +37,8 @@ use Glpi\RichText\RichText;
 class PluginFormcreatorIssue extends CommonDBTM {
    static $rightname = 'ticket';
 
+   protected static $showTitleInNavigationHeader = true;
+
    public static function getTypeName($nb = 0) {
       return _n('Issue', 'Issues', $nb, 'formcreator');
    }
@@ -285,6 +287,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
       if (!class_exists($itemtype)) {
          Html::displayNotFoundError();
       }
+      /** @var CommonDBTM $item */
       $item = new $itemtype();
       if (!$item->getFromDB($this->fields['items_id'])) {
          Html::displayNotFoundError();
@@ -384,7 +387,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
             $date2    = strtotime($satisfaction->fields['date_begin']);
             if (($duration == 0)
                 || (strtotime("now") - $date2) <= $duration*DAY_TIMESTAMP) {
-               $satisfaction->showForm($item->getID());
+               $satisfaction->showSatisactionForm($item);
             } else {
                echo "<p class='center b'>".__('Satisfaction survey expired')."</p>";
             }
@@ -537,7 +540,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'itemtype',
-         'name'               => __('Type'),
+         'name'               => _n('Type', 'Types', 1),
          'searchtype'         => [
             '0'                  => 'equals',
             '1'                  => 'notequals'
@@ -580,7 +583,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
          'id'                 => '7',
          'table'              => 'glpi_entities',
          'field'              => 'completename',
-         'name'               => __('Entity'),
+         'name'               => _n('Entity', 'Entities', 1),
          'datatype'           => 'dropdown',
          'massiveaction'      => false
       ];
@@ -590,7 +593,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
          'table'              => 'glpi_users',
          'field'              => 'name',
          'linkfield'          => 'requester_id',
-         'name'               => __('Requester'),
+         'name'               => _n('Requester', 'Requesters', 1),
          'datatype'           => 'dropdown',
          'massiveaction'      => false
       ];
@@ -775,6 +778,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
          case 'status' :
             $ticket_opts = Ticket::getAllStatusArray(true);
             $ticket_opts = $ticket_opts + PluginFormcreatorFormAnswer::getStatuses();
+            unset($ticket_opts[PluginFormcreatorFormAnswer::STATUS_WAITING]);
             return Dropdown::showFromArray($name, $ticket_opts, ['display' => false,
                                                                  'value'   => $values[$field]]);
             break;
@@ -813,21 +817,25 @@ class PluginFormcreatorIssue extends CommonDBTM {
          case "glpi_plugin_formcreator_issues.name":
             $name = $data[$num][0]['name'];
             $subItemtype = $data['raw']['itemtype'];
+            $content = '';
             switch ($subItemtype) {
                case Ticket::class:
                   $ticket = new Ticket();
-                  $ticket->getFromDB($id);
+                  if (!$ticket->getFromDB($id)) {
+                     trigger_error(sprintf("Ticket ID %s not found", $id), E_USER_WARNING);
+                     break;
+                  }
                   $content = $ticket->fields['content'];
                   break;
 
                case PluginFormcreatorFormAnswer::class:
                   $formAnswer = PluginFormcreatorCommon::getFormAnswer();
-                  $formAnswer->getFromDB($id);
+                  if (!$formAnswer->getFromDB($id)) {
+                     trigger_error(sprintf("Formanswer ID %s not found", $id), E_USER_WARNING);
+                     break;
+                  }
                   $content = $formAnswer->parseTags($formAnswer->getFullForm());
                   break;
-
-               default:
-                  $content = '';
             }
             $link = self::getFormURLWithID($data['id']);
 

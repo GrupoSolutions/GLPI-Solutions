@@ -275,4 +275,6 @@ CSRF check failed for User ID:  at /glpi/front/login.php2022-10-10 14:44:29 [8@G
 CSRF check failed for User ID: 8 at /glpi/front/consumable.form.php2022-10-10 14:44:29 [8@GS003021]
 CSRF check failed for User ID: 8 at /glpi/front/consumable.form.php2022-10-10 14:44:29 [8@GS003021]
 CSRF check failed for User ID: 8 at /glpi/front/consumable.form.php2022-10-25 09:16:01 [@GS003021]
-CSRF check failed for User ID:  at /glpi/ajax/dashboard.php
+CSRF check failed for User ID:  at /glpi/ajax/dashboard.php2022-11-01 15:34:05 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/marketplace/formcreator/front/form.form.php2022-11-01 15:36:21 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/authmail.form.php

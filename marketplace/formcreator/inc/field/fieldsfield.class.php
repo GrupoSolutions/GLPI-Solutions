@@ -39,6 +39,7 @@ use Dropdown;
 use DbUtils;
 use Plugin;
 use Session;
+use PluginFormcreatorFormAnswer;
 use Html;
 use OperatingSystem;
 use PluginFieldsDropdown;
@@ -268,9 +269,10 @@ class FieldsField extends PluginFormcreatorAbstractField
                   'rows'    => 4,
                   'display' => false,
                ]);
-               $html .= Html::scriptBlock("$(function() {
+               // This JS function intercepts tinyMCE creation then must be executed before end of page load
+               $html .= Html::scriptBlock("
                   pluginFormcreatorInitializeTextarea('$fieldName', '$rand');
-               });");
+               ");
             } else {
                $html.= nl2br($value);
             }
@@ -391,7 +393,7 @@ class FieldsField extends PluginFormcreatorAbstractField
       return $html;
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       return $this->value;
    }
 
@@ -534,7 +536,15 @@ class FieldsField extends PluginFormcreatorAbstractField
       $decodedValues = json_decode($this->question->fields['values'], JSON_OBJECT_AS_ARRAY);
       $field_name = $decodedValues['dropdown_fields_field'] ?? '';
       $dropdown_field_name = "plugin_fields_" . $decodedValues['dropdown_fields_field'] . "dropdowns_id" ?? '';
-      $value = '';
+
+      // compute default value
+      $field = new PluginFieldsField();
+      $field->getFromDbByCrit(['name' => $field_name]);
+      if ($field->fields['type'] == 'dropdown') {
+         $value = 0;
+      } else {
+         $value = '';
+      }
 
       if (isset($input[$field_name])) {
          $value = $input[$field_name];

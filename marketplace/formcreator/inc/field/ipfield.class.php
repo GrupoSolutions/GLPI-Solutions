@@ -35,6 +35,7 @@ namespace GlpiPlugin\Formcreator\Field;
 use PluginFormcreatorAbstractField;
 use Html;
 use Toolbox;
+use PluginFormcreatorFormAnswer;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
 use Glpi\Application\View\TemplateRenderer;
 
@@ -76,7 +77,7 @@ class IpField extends PluginFormcreatorAbstractField
       ]);
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       if ($this->value === null || $this->value === '') {
          return '';
       }
@@ -156,7 +157,7 @@ class IpField extends PluginFormcreatorAbstractField
    }
 
    public function regex($value): bool {
-      return (preg_grep($value, $this->value)) ? true : false;
+      return (preg_match($value, $this->value) === 1) ? true : false;
    }
 
    public function isPublicFormCompatible(): bool {

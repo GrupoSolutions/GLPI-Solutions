@@ -74,7 +74,7 @@ class __TwigTemplate_b97e701fff1d8a8605597a0daec863b6800597943410d3b555f9e31b01b
    <a href=\"";
             // line 50
             echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path((($__internal_compile_7 = ($context["links"] ?? null)) && is_array($__internal_compile_7) || $__internal_compile_7 instanceof ArrayAccess ? ($__internal_compile_7["search"] ?? null) : null)), "html", null, true);
-            echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+            echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
             echo twig_escape_filter($this->env, __("Search"), "html", null, true);
             echo "\">
       <i class=\"ti ti-search\"></i>
@@ -93,7 +93,7 @@ class __TwigTemplate_b97e701fff1d8a8605597a0daec863b6800597943410d3b555f9e31b01b
         if (twig_get_attribute($this->env, $this->source, ($context["links"] ?? null), "lists", [], "array", true, true, false, 57)) {
             // line 58
             echo "<li class=\"nav-item\">
-   <a href=\"#\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 show-saved-searches\"
+   <a href=\"#\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa show-saved-searches\"
       data-itemtype=\"";
             // line 60
             echo twig_escape_filter($this->env, ($context["item"] ?? null), "html", null, true);
@@ -127,7 +127,7 @@ class __TwigTemplate_b97e701fff1d8a8605597a0daec863b6800597943410d3b555f9e31b01b
          <a href=\"";
                 // line 71
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
                 echo twig_escape_filter($this->env, __("Manage templates..."), "html", null, true);
                 echo "\">
             <i class=\"ti ti-template\"></i>
@@ -145,7 +145,7 @@ $context["type"], "showall"))) {
          <a href=\"";
                 // line 78
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
                 echo twig_escape_filter($this->env, __("Show all"), "html", null, true);
                 echo "\">
             <i class=\"ti ti-eye-check\"></i>
@@ -163,7 +163,7 @@ $context["type"], "summary"))) {
          <a href=\"";
                 // line 85
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
                 echo twig_escape_filter($this->env, __("Summary"), "html", null, true);
                 echo "\">
             <i class=\"ti ti-notes\"></i>
@@ -181,7 +181,7 @@ $context["type"], "summary_kanban"))) {
          <a href=\"";
                 // line 92
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa \" title=\"";
                 echo twig_escape_filter($this->env, __("Global Kanban"), "html", null, true);
                 echo "\">
             <i class=\"ti ti-layout-columns\"></i>
@@ -199,7 +199,7 @@ $context["type"], "transfer_list"))) {
          <a href=\"";
                 // line 99
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
                 echo twig_escape_filter($this->env, __("Transfer list"), "html", null, true);
                 echo "\">
             <i class=\"ti ti-list-check\"></i>
@@ -217,7 +217,7 @@ $context["type"], "config"))) {
          <a href=\"";
                 // line 106
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\" title=\"";
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\" title=\"";
                 echo twig_escape_filter($this->env, __("Setup"), "html", null, true);
                 echo "\">
             <i class=\"ti ti-tool\"></i>
@@ -234,7 +234,7 @@ $context["type"], "config"))) {
          <a href=\"";
                 // line 113
                 echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path($context["link"]), "html", null, true);
-                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2\">
+                echo "\" class=\"btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa\">
             ";
                 // line 114
                 echo $context["type"];

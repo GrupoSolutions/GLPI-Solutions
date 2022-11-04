@@ -103,7 +103,7 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
             $tab = [
                1 => __('Properties', 'formcreator'),
                2 => __('Actors', 'formcreator'),
-               3 => __('Condition', 'formcreator'),
+               3 => PluginFormcreatorCondition::getTypeName(1),
             ];
             // if ((new Plugin)->isActivated('fields')) {
             //    $tab[4] = __('Fields plugin', 'formcreator');
@@ -504,10 +504,6 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
    public function prepareInputForUpdate($input) {
       // Control fields values :
       if (!$this->skipChecks) {
-         if (isset($input[('content')])) {
-            $input['content'] = Html::entity_decode_deep($input['content']);
-         }
-
          if (isset($input['destination_entity'])) {
             switch ($input['destination_entity']) {
                case self::DESTINATION_ENTITY_SPECIFIC :
@@ -581,20 +577,6 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
                   $input['ola_question_tto'] = $input['_ola_questions_tto'];
                   $input['ola_question_ttr'] = $input['_ola_questions_ttr'];
                   break;
-            }
-         }
-
-         $plugin = new Plugin();
-         if ($plugin->isInstalled('tag') && $plugin->isActivated('tag')) {
-            if (isset($input['tag_questions'])) {
-               $input['tag_questions'] = (!empty($input['_tag_questions']))
-                                          ? implode(',', $input['_tag_questions'])
-                                          : '';
-            }
-            if (isset($input['tag_specifics'])) {
-               $input['tag_specifics'] = (!empty($input['_tag_specifics']))
-                                          ? implode(',', $input['_tag_specifics'])
-                                          : '';
             }
          }
       }
@@ -685,7 +667,7 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
       ];
       foreach ($changeFields as $changeField) {
          $data[$changeField] = $this->prepareTemplate(
-            $this->fields[$changeField],
+            $this->fields[$changeField] ?? '',
             $formanswer,
             $changeField == 'content' // only content supports rich text
          );

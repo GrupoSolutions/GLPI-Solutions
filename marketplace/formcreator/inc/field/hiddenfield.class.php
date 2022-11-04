@@ -35,6 +35,7 @@ namespace GlpiPlugin\Formcreator\Field;
 use PluginFormcreatorAbstractField;
 use Html;
 use Toolbox;
+use PluginFormcreatorFormAnswer;
 use Glpi\Application\View\TemplateRenderer;
 
 class HiddenField extends PluginFormcreatorAbstractField
@@ -70,7 +71,7 @@ class HiddenField extends PluginFormcreatorAbstractField
       ]);
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       return $this->value;
    }
 
@@ -140,7 +141,7 @@ class HiddenField extends PluginFormcreatorAbstractField
    }
 
    public function regex($value): bool {
-      return (preg_grep($value, $this->value)) ? true : false;
+      return (preg_match($value, $this->value) === 1) ? true : false;
    }
 
    public function isPublicFormCompatible(): bool {

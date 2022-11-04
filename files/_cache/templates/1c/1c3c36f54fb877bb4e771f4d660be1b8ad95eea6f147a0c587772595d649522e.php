@@ -144,7 +144,7 @@ class __TwigTemplate_0cde8c978128fd47797f8a8084f167e9760ce124146e4765cda5f108b6d
 
 
                   <p class=\"text-start\">
-                     <button class=\"btn btn-sm btn-ghost-secondary mb-2 reduce-menu d-none d-md-block\">
+                     <button class=\"btn btn-sm btn-ghost-secondary mb-2 reduce-menu d-none d-md-block menu\">
                         <span class=\"menu-label\">";
                 // line 84
                 echo twig_escape_filter($this->env, __("Collapse menu"), "html", null, true);

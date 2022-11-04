@@ -36,6 +36,7 @@ use PluginFormcreatorAbstractField;
 use Html;
 use Session;
 use Toolbox;
+use PluginFormcreatorFormAnswer;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Toolbox\Sanitizer;
@@ -60,10 +61,11 @@ class DescriptionField extends PluginFormcreatorAbstractField
    public function getRenderedHtml($domain, $canEdit = true): string {
       $value = Toolbox::convertTagToImage(__($this->question->fields['description'], $domain), $this->getQuestion());
       $value = Sanitizer::unsanitize($value);
-      return nl2br(html_entity_decode($value));
+      $value = '<div class="plugin_formcreator_description">' . $value . '</div>';
+      return $value;
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       return '';
    }
 
@@ -78,10 +80,10 @@ class DescriptionField extends PluginFormcreatorAbstractField
    public function getValueForTargetText($domain, $richText): ?string {
       $text = $this->question->fields['description'];
       if (!$richText) {
-         $text = nl2br(strip_tags(html_entity_decode(__($text, $domain))));
+         $text = Sanitizer::unsanitize(strip_tags(html_entity_decode(__($text, $domain))));
       }
 
-      return $text;
+      return Sanitizer::unsanitize(__($text, $domain));
    }
 
    public function moveUploads() {

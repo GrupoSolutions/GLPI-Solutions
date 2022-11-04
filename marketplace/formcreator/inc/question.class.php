@@ -52,7 +52,7 @@ PluginFormcreatorTranslatableInterface
    static public $items_id = 'plugin_formcreator_sections_id';
 
    /** @var PluginFormcreatorFieldInterface|null $field a field describing the question denpending on its field type  */
-   private $field = null;
+   private ?PluginFormcreatorFieldInterface $field = null;
 
    private $skipChecks = false;
 
@@ -383,7 +383,7 @@ PluginFormcreatorTranslatableInterface
 
       // Might need to merge $this->fields and $input, $input having precedence
       // over $this->fields
-      //$input['default_values'] = $this->field->serializeValue();
+      //$input['default_values'] = $this->field->serializeValue($formanswer);
 
       return $input;
    }
@@ -427,33 +427,6 @@ PluginFormcreatorTranslatableInterface
          }
       }
 
-      // handle description field and its inline pictures
-      if (isset($input['_description'])) {
-         foreach ($input['_description'] as $id => $filename) {
-            $document = new Document();
-            if ($document->getDuplicateOf(Session::getActiveEntity(), GLPI_TMP_DIR . '/' . $filename)) {
-               $this->value = str_replace('id="' .  $input['_tag_description'] . '"', $document->fields['tag'], $this->value);
-               $input['_tag_description'][$id] = $document->fields['tag'];
-            }
-         }
-
-         $input = $this->addFiles(
-            $input,
-            [
-               'force_update'  => true,
-               'content_field' => null,
-               'name'          => 'description',
-            ]
-         );
-
-         $input['description'] = Html::entity_decode_deep($input['description']);
-         foreach ($input['_tag_description'] as $tag) {
-            $regex = '/<img[^>]+' . preg_quote($tag, '/') . '[^<]+>/im';
-            $input['description'] = preg_replace($regex, "#$tag#", $input['description']);
-         }
-         $input['description'] = Html::entities_deep($input['description']);
-      }
-
       // generate a unique id
       if (!isset($input['uuid'])
           || empty($input['uuid'])) {
@@ -488,23 +461,6 @@ PluginFormcreatorTranslatableInterface
 
       if (!is_array($input) || count($input) == 0) {
          return false;
-      }
-
-      // handle description field and its inline pictures
-      if (isset($input['_description'])) {
-         foreach ($input['_description'] as $id => $filename) {
-            // TODO :replace PluginFormcreatorCommon::getDuplicateOf by Document::getDuplicateOf
-            // when is merged https://github.com/glpi-project/glpi/pull/9335
-            if ($document = PluginFormcreatorCommon::getDuplicateOf(Session::getActiveEntity(), GLPI_TMP_DIR . '/' . $filename)) {
-               $this->value = str_replace('id="' .  $input['_tag_description'] . '"', $document->fields['tag'], $this->value);
-               $input['_tag_description'][$id] = $document->fields['tag'];
-            }
-         }
-
-         foreach ($input['_tag_description'] as $tag) {
-            $regex = '/<img[^>]+' . preg_quote($tag, '/') . '[^<]+>/im';
-            $input['description'] = preg_replace($regex, "#$tag#", $input['description']);
-         }
       }
 
       // generate a unique id
@@ -651,6 +607,26 @@ PluginFormcreatorTranslatableInterface
    }
 
    public function post_addItem() {
+      $this->input = $this->addFiles(
+         $this->input,
+         [
+            'force_update'  => true,
+            'content_field' => 'description',
+            'name'          => 'description',
+         ]
+      );
+
+      if ($this->input['fieldtype'] == 'textarea') {
+         $this->input = $this->addFiles(
+            $this->input,
+            [
+               'force_update'  => true,
+               'content_field' => 'default_values',
+               'name'          => 'default_values',
+            ]
+         );
+      }
+
       $this->updateConditions($this->input);
       if (!$this->skipChecks) {
          $this->updateParameters($this->input);
@@ -658,6 +634,26 @@ PluginFormcreatorTranslatableInterface
    }
 
    public function post_updateItem($history = 1) {
+      $this->input = $this->addFiles(
+         $this->input,
+         [
+            'force_update'  => true,
+            'content_field' => 'description',
+            'name'          => 'description',
+         ]
+      );
+
+      if (($this->input['fieldtype'] ?? $this->fields['fieldtype']) == 'textarea') {
+         $this->input = $this->addFiles(
+            $this->input,
+            [
+               'force_update'  => true,
+               'content_field' => 'default_values',
+               'name'          => 'default_values',
+            ]
+         );
+      }
+
       $this->updateConditions($this->input);
       if (!$this->skipChecks) {
          $this->updateParameters($this->input);
@@ -1097,98 +1093,6 @@ PluginFormcreatorTranslatableInterface
    }
 
    /**
-    * Get either:
-    *  - questions, conditions, regexes and range of target parent sections
-    *  - conditions, regexes and range of target question
-    *
-    * @param int $parents target parent sections
-    * @param int $id target question
-    * @return array
-    */
-   public static function getFullData($parents, $id = null) {
-      global $DB;
-
-      $data = [];
-
-      if ($parents) {
-         // Load questions
-         $data['_questions'] = iterator_to_array($DB->request([
-            'FROM' => \PluginFormcreatorQuestion::getTable(),
-            'WHERE' => [
-               "plugin_formcreator_sections_id" => $parents
-            ]
-         ]));
-
-         $questionIds = [];
-         foreach ($data['_questions'] as $question) {
-            $questionIds[] = $question['id'];
-         }
-
-         if (!count($questionIds)) {
-            $questionIds[] = -1;
-         }
-
-         $id = $questionIds;
-      }
-
-      if ($id == null) {
-         throw new \InvalidArgumentException(
-            "Parameter 'id' can't be null if parameter 'parents' is not specified"
-         );
-      }
-
-      if (isset($data['_questions'])) {
-         foreach ($data['_questions'] as $key => $question) {
-            if (in_array($question['fieldtype'], ['dropdown', 'glpiselect'])) {
-               $question = new PluginFormcreatorQuestion();
-               $question->getFromDB($key);
-
-               /** @var PluginFormcreatorDropdownField */
-               $field = $question->getSubField();
-
-               $decodedValues = json_decode($question->fields['values'], JSON_OBJECT_AS_ARRAY);
-               if ($decodedValues === null) {
-                  $itemtype = $question->fields['values'];
-               } else {
-                  $itemtype = $decodedValues['itemtype'];
-               }
-
-               $searchParams = $field->buildParams();
-               $searchParams['itemtype'] = $itemtype;
-               $searchParams['show_empty'] = false;
-               $data['_questions'][$key]['_values'] = Dropdown::getDropdownValue($searchParams, false)['results'];
-            }
-         }
-      }
-
-      // Load conditions, regexes and ranges
-      $data['_conditions'] = self::getQuestionDataById(
-         \PluginFormcreatorCondition::getTable(),
-         $id
-      );
-      $data['_regexes'] = self::getQuestionDataById(
-         \PluginFormcreatorQuestionRegex::getTable(),
-         $id
-      );
-      $data['_ranges'] = self::getQuestionDataById(
-         \PluginFormcreatorQuestionRange::getTable(),
-         $id
-      );
-
-      // Load ip, may be needed for some questions
-      $data['_ip'] = \Toolbox::getRemoteIpAddress();
-
-      return $data;
-   }
-
-   public function post_getFromDB() {
-      // Set additional data for the API
-      if (isAPI()) {
-         $this->fields += self::getFullData(null, $this->fields['id']);
-      }
-   }
-
-   /**
     * load instance of field associated to the question
     *
     * @return bool true on sucess, false otherwise
@@ -1218,7 +1122,7 @@ PluginFormcreatorTranslatableInterface
     * Get the field object representing the question
     * @return PluginFormcreatorFieldInterface|null
     */
-   public function getSubField(): PluginFormcreatorFieldInterface {
+   public function getSubField(): ?PluginFormcreatorFieldInterface {
       if ($this->isNewItem()) {
          return null;
       }
@@ -1307,6 +1211,7 @@ PluginFormcreatorTranslatableInterface
          __("Assistance") => [
             Ticket::class             => Ticket::getTypeName(2),
             Problem::class            => Problem::getTypeName(2),
+            Change::class             => Change::getTypeName(2),
             TicketRecurrent::class    => TicketRecurrent::getTypeName(2)
          ],
          __("Management") => [
@@ -1369,5 +1274,4 @@ PluginFormcreatorTranslatableInterface
          ],
       ] + $options);
    }
-
 }

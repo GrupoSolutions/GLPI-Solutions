@@ -47,7 +47,7 @@
 
 {% if links['search'] is defined %}
 <li class="nav-item">
-   <a href="{{ path(links['search']) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Search') }}">
+   <a href="{{ path(links['search']) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Search') }}">
       <i class="ti ti-search"></i>
       <span class="d-none d-xxl-block">{{ __('Search') }}</span>
    </a>
@@ -56,7 +56,7 @@
 
 {% if links['lists'] is defined %}
 <li class="nav-item">
-   <a href="#" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 show-saved-searches"
+   <a href="#" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa show-saved-searches"
       data-itemtype="{{ item }}" title="{{ __('Lists') }}">
       <i class="ti ti-star"></i>
       <span class="d-none d-xxl-block">{{ __('Lists') }}</span>
@@ -68,49 +68,49 @@
    {% if type == 'add' or type == 'search' or type == 'lists' %}
    {% elseif type == 'template' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Manage templates...') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Manage templates...') }}">
             <i class="ti ti-template"></i>
             <span class="d-none d-xxl-block">{{ __('Templates') }}</span>
          </a>
       </li>
    {% elseif type == 'showall' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Show all') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Show all') }}">
             <i class="ti ti-eye-check"></i>
             <span class="d-none d-xxl-block">{{ __('Show all') }}</span>
          </a>
       </li>
    {% elseif type == 'summary' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Summary') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Summary') }}">
             <i class="ti ti-notes"></i>
             <span class="d-none d-xxl-block">{{ __('Summary') }}</span>
          </a>
       </li>
    {% elseif type == 'summary_kanban' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Global Kanban') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa " title="{{ __('Global Kanban') }}">
             <i class="ti ti-layout-columns"></i>
             <span class="d-none d-xxl-block">{{ __('Global Kanban') }}</span>
          </a>
       </li>
    {% elseif type == 'transfer_list' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Transfer list') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Transfer list') }}">
             <i class="ti ti-list-check"></i>
             <span class="d-none d-xxl-block">{{ __('Transfer list') }}</span>
          </a>
       </li>
    {% elseif type == 'config' %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2" title="{{ __('Setup') }}">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Setup') }}">
             <i class="ti ti-tool"></i>
             <span class="d-none d-xxl-block">{{ __('Setup') }}</span>
          </a>
       </li>
    {% else %}
       <li class="nav-item">
-         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2">
+         <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa">
             {{ type|raw }}
          </a>
       </li>

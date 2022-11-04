@@ -37,6 +37,7 @@ use Document;
 use Html;
 use Toolbox;
 use Session;
+use PluginFormcreatorFormAnswer;
 use PluginFormcreatorForm;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
 use Glpi\Application\View\TemplateRenderer;
@@ -95,7 +96,7 @@ class FileField extends PluginFormcreatorAbstractField
       ]);
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       return json_encode($this->uploadData, true);
    }
 
@@ -106,7 +107,7 @@ class FileField extends PluginFormcreatorAbstractField
          return;
       }
       $this->uploadData = json_decode($value, true);
-      if ($this->uploadData === null) {
+      if (!is_array($this->uploadData)) {
          $this->uploadData = [];
       }
       if (count($this->uploadData) > 0) {
@@ -151,7 +152,7 @@ class FileField extends PluginFormcreatorAbstractField
 
       // If the field is required it can't be empty
       $key = '_formcreator_field_' . $this->question->getID();
-      if (($this->isRequired() && count($this->uploads[$key]) < 1)) {
+      if (($this->isRequired() && (!isset($this->uploads[$key]) || count($this->uploads[$key]) < 1))) {
          Session::addMessageAfterRedirect(
             sprintf(__('A required file is missing: %s', 'formcreator'), $this->getLabel()),
             false,
@@ -214,32 +215,8 @@ class FileField extends PluginFormcreatorAbstractField
     * @return integer|NULL
     */
    private function saveDocument($file, $prefix) {
-      $sectionTable = PluginFormcreatorSection::getTable();
-      $sectionFk = PluginFormcreatorSection::getForeignKeyField();
-      $questionTable = PluginFormcreatorQuestion::getTable();
-      $formTable = PluginFormcreatorForm::getTable();
-      $formFk = PluginFormcreatorForm::getForeignKeyField();
-      $form = PluginFormcreatorCommon::getForm();
-      $form->getFromDBByRequest([
-         'LEFT JOIN' => [
-            $sectionTable => [
-               'FKEY' => [
-                  $sectionTable => $formFk,
-                  $formTable => 'id'
-               ]
-            ],
-            $questionTable => [
-               'FKEY' => [
-                  $sectionTable => 'id',
-                  $questionTable => $sectionFk
-               ]
-            ]
-         ],
-         'WHERE' => [
-            "$questionTable.id" => $this->question->getID(),
-         ],
-      ]);
-      if ($form->isNewItem()) {
+      $form = PluginFormcreatorForm::getByItem($this->question);
+      if ($form === null) {
          // A problem occured while finding the form of the field
          return;
       }

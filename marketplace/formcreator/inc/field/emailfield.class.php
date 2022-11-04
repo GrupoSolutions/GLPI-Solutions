@@ -34,6 +34,7 @@ namespace GlpiPlugin\Formcreator\Field;
 
 use Html;
 use Session;
+use PluginFormcreatorFormAnswer;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
 use Glpi\Application\View\TemplateRenderer;
 use PluginFormcreatorAbstractField;
@@ -150,7 +151,7 @@ class EmailField extends TextField
    }
 
    public function regex($value): bool {
-      return (preg_grep($value, $this->value)) ? true : false;
+      return (preg_match($value, $this->value) === 1) ? true : false;
    }
 
    public function isPublicFormCompatible(): bool {

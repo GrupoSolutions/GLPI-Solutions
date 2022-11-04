@@ -77,15 +77,7 @@ $(function() {
    });
 
    if (location.pathname.indexOf("helpdesk.public.php") != -1) {
-      $('.ui-tabs-panel:visible').ready(function() {
-         showHomepageFormList();
-      });
-
-      $('#tabspanel + div.ui-tabs').on("tabsload", function(event, ui) {
-         showHomepageFormList();
-      });
-
-      showHomepageFormList();
+      plugin_formcreator.showHomepageFormList();
 
    } else if ($('#plugin_formcreator_wizard_categories').length > 0) {
       updateCategoriesView();
@@ -148,20 +140,6 @@ $(function() {
       });
    }
 });
-
-function showHomepageFormList() {
-   if ($('#plugin_formcreatorHomepageForms').length) {
-      return;
-   }
-
-   $.get({
-      url: formcreatorRootDoc + '/ajax/homepage_forms.php',
-   }).done(function(response){
-      if (!$('#plugin_formcreatorHomepageForms').length) {
-         $('.central > tbody:first').first().prepend(response);
-      }
-   });
-}
 
 function updateCategoriesView() {
    $.post({
@@ -233,6 +211,9 @@ function updateKbCategoriesView() {
             $(this).addClass('category_active');
          }
       );
+
+      //preselect see all
+      $('#wizard_seeall').click();
    });
 }
 
@@ -508,6 +489,21 @@ var plugin_formcreator = new function() {
    this.changingItemId = 0;
    this.questionsColumns = 4; // @see PluginFormcreatorSection::COLUMNS
    this.dirty = false;
+
+
+   this.showHomepageFormList = function () {
+      if ($('#plugin_formcreatorHomepageForms').length) {
+         return;
+      }
+
+      $.get({
+         url: formcreatorRootDoc + '/ajax/homepage_forms.php',
+      }).done(function(response){
+         // $('.central').first().prepend(response);
+         var card = $(response);
+         $('table.central').append(card)
+      });
+   }
 
    this.setupGridStack = function(group) {
       var that = this;
@@ -1381,7 +1377,49 @@ var plugin_formcreator = new function() {
       });
    };
 
-   this.submitUserForm = function (event) {
+   this.submitUserForm = function () {
+      var form     = document.querySelector('form[role="form"][data-itemtype]');
+      var data     = new FormData(form);
+      data.append('submit_formcreator', '');
+      $.post({
+         url: formcreatorRootDoc + '/ajax/formanswer.php',
+         processData: false,
+         contentType: false,
+         data: data,
+         dataType: 'json'
+      }).done(function (data) {
+         if (typeof(data.redirect) == 'string') {
+            window.location = data.redirect;
+         }
+      }).fail(function (xhr, data) {
+         $(form).find('[type="submit"]')
+            .html(i18n.textdomain('formcreator').__('Send', 'formcreator'))
+            .off('click');
+         $(form).removeAttr('data-submitted');
+
+         if (xhr.responseText == '') {
+            displayAjaxMessageAfterRedirect();
+            return;
+         }
+         if (typeof(xhr.responseJSON) == 'undefined') {
+            alert(i18n.textdomain('formcreator').__('An internal error occurred. Please report it to administrator.', 'formcreator'));
+         }
+         if (typeof(xhr.responseJSON.message) == 'undefined') {
+            displayAjaxMessageAfterRedirect();
+            return;
+         }
+         var display_container = ($('#messages_after_redirect').length  == 0);
+         var html = xhr.responseJSON.message;
+         if (display_container) {
+            $('body').append(html);
+         } else {
+            $('#messages_after_redirect').append(html);
+            initMessagesAfterRedirectToasts();
+         }
+      });
+   };
+
+   this.submitUserFormByKeyPress = function (event) {
       var keyPressed = event.keyCode || event.which;
       if (keyPressed === 13 && $('[name="submit_formcreator"]').is(':hidden')) {
          event.preventDefault();
@@ -1719,10 +1757,21 @@ function pluginFormcreatorInitializeTag(fieldName, rand) {
  * Initialize a textarea field
  */
 function pluginFormcreatorInitializeTextarea(fieldName, rand) {
-   var field = $('[name="' + fieldName + '"]');
-   field.on("change", function(e) {
-      plugin_formcreator.showFields($(field[0].form));
-   });
+   var i = 0;
+   var e;
+   while (e = tinymce.get(i++)) {
+      var field = $('[name="' + fieldName + '"]');
+      var form = field[0].form;
+      if (e.formElement != form) {
+         continue;
+      }
+      // https://stackoverflow.com/a/63342064
+      e.on('input NodeChange', function(e) {
+         tinyMCE.triggerSave();
+         plugin_formcreator.showFields($(form));
+      });
+      return;
+  }
 }
 
 /**

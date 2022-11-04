@@ -38,6 +38,7 @@ class PluginFormcreatorUpgradeTo2_13 {
    public function upgrade(Migration $migration) {
       $this->migration = $migration;
       $this->fixTables();
+      $this->updateShortText();
       $this->migrateEntityConfig();
       $this->addDefaultFormListMode();
       $this->addDashboardVisibility();
@@ -137,6 +138,36 @@ class PluginFormcreatorUpgradeTo2_13 {
          ['destination_entity_value' => '0'],
          ['destination_entity_value' => null]
       );
+      $DB->update(
+         $table,
+         ['sla_question_tto' => '0'],
+         ['sla_question_tto' => null]
+      );
+      $DB->update(
+         $table,
+         ['sla_question_ttr' => '0'],
+         ['sla_question_ttr' => null]
+      );
+      $DB->update(
+         $table,
+         ['ola_question_tto' => '0'],
+         ['ola_question_tto' => null]
+      );
+      $DB->update(
+         $table,
+         ['ola_question_ttr' => '0'],
+         ['ola_question_ttr' => null]
+      );
+      $DB->update(
+         $table,
+         ['sla_rule' => '0'],
+         ['sla_rule' => null]
+      );
+      $DB->update(
+         $table,
+         ['ola_rule' => '0'],
+         ['ola_rule' => null]
+      );
       $this->migration->changeField($table, 'validation_followup', 'validation_followup', 'bool', ['after' => 'urgency_question', 'value' => '1']);
       $this->migration->changeField($table, 'destination_entity', 'destination_entity', 'integer', ['after' => 'validation_followup', 'value' => '1']);
       $this->migration->changeField($table, 'destination_entity_value', 'destination_entity_value', $unsignedIntType, ['after' => 'destination_entity', 'default' => '1']);
@@ -160,13 +191,30 @@ class PluginFormcreatorUpgradeTo2_13 {
       $this->migration->migrationOneTable($table);
 
       $table = 'glpi_plugin_formcreator_questiondependencies';
-      $this->migration->changeField($table, 'plugin_formcreator_questions_id', 'plugin_formcreator_questions_id', $unsignedIntType);
-      $this->migration->changeField($table, 'plugin_formcreator_questions_id_2', 'plugin_formcreator_questions_id_2', $unsignedIntType);
-      $this->migration->migrationOneTable($table);
+      if ($DB->tableExists($table)) {
+         // Table may be created at the very end when upgrading from < 2.12
+         $this->migration->changeField($table, 'plugin_formcreator_questions_id', 'plugin_formcreator_questions_id', $unsignedIntType);
+         $this->migration->changeField($table, 'plugin_formcreator_questions_id_2', 'plugin_formcreator_questions_id_2', $unsignedIntType);
+         $this->migration->migrationOneTable($table);
+      }
 
       $table = 'glpi_plugin_formcreator_forms_languages';
-      $this->migration->changeField($table, 'plugin_formcreator_forms_id', 'plugin_formcreator_forms_id', $unsignedIntType);
-      $this->migration->migrationOneTable($table);
+      if ($DB->tableExists($table)) {
+         // Table may be created at the very end when upgrading from < 2.12
+         $this->migration->changeField($table, 'plugin_formcreator_forms_id', 'plugin_formcreator_forms_id', $unsignedIntType);
+         $this->migration->migrationOneTable($table);
+      }
+   }
+
+   public function updateShortText() {
+      $table = 'glpi_plugin_formcreator_categories';
+      $this->migration->changeField($table, 'comment', 'comment', 'mediumtext');
+
+      $table = 'glpi_plugin_formcreator_formanswers';
+      $this->migration->changeField($table, 'comment', 'comment', 'mediumtext');
+
+      $table = 'glpi_plugin_formcreator_questionregexes';
+      $this->migration->changeField($table, 'regex', 'regex', 'mediumtext');
    }
 
    public function addEntityOption() {
@@ -399,6 +447,9 @@ class PluginFormcreatorUpgradeTo2_13 {
       ];
 
       foreach ($tables as $table => $fields) {
+         if (!$DB->tableExists($table)) {
+            continue;
+         }
          foreach ($fields as $field) {
             if ($field == 'id') {
                $type = 'autoincrement';
@@ -459,7 +510,7 @@ class PluginFormcreatorUpgradeTo2_13 {
       $this->migration->changeField($table, 'status', 'status', 'string', ['value' => '']);
    }
 
-   public function isResyncIssuesRequiresd() {
+   public function isResyncIssuesRequired() {
       return false;
    }
 

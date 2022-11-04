@@ -33,7 +33,7 @@ use Glpi\Plugin\Hooks;
 
 global $CFG_GLPI;
 // Version of the plugin (major.minor.bugfix)
-define('PLUGIN_FORMCREATOR_VERSION', '2.13.0-rc.2');
+define('PLUGIN_FORMCREATOR_VERSION', '2.13.2');
 // Schema version of this version (major.minor only)
 define('PLUGIN_FORMCREATOR_SCHEMA_VERSION', '2.13');
 // is or is not an official release of the plugin
@@ -344,7 +344,6 @@ function plugin_formcreator_hook(): void {
                || strpos($_SERVER['REQUEST_URI'], 'formcreator/front/knowbaseitem.php') !== false
                || strpos($_SERVER['REQUEST_URI'], 'formcreator/front/wizard.php') !== false) {
             $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['formcreator'][] = 'lib/jquery-slinky/dist/slinky.min.js';
-            $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['formcreator'][] = 'lib/masonry-layout/dist/masonry.pkgd.min.js';
             $CFG_GLPI['javascript']['self-service']['none'] = [
                'dashboard',
                'gridstack'
@@ -425,61 +424,82 @@ function plugin_formcreator_redirect() {
       return;
    }
 
+   if (!plugin_formcreator_replaceHelpdesk()) {
+      return;
+   }
+
    if (strpos($_SERVER['REQUEST_URI'], "front/ticket.form.php") !== false) {
-      if (!isset($_POST['update']) && plugin_formcreator_replaceHelpdesk()) {
-         $decodedUrl = [];
-         $openItilFollowup = '';
-         if (isset($_GET['_openfollowup'])) {
-            $openItilFollowup = '&_openfollowup=1';
-         }
-         if (isset($_SERVER['QUERY_STRING'])) {
-            parse_str($_SERVER['QUERY_STRING'], $decodedUrl);
-            if (isset($decodedUrl['forcetab'])) {
-               Session::setActiveTab(Ticket::class, $decodedUrl['forcetab']);
-            }
-         }
-         if (!isset($_GET['id'])) {
-            // invalid url
-            Html::redirect($CFG_GLPI["root_doc"]);
-         }
+      if (isset($_POST['update']) || isset($_POST['delete'])) {
+         return;
+      }
 
-         // When an ticket has a matching issue (it means that the ticket is the only generated ticket)
-         $issue = new PluginFormcreatorIssue();
-         $issues = $issue->find([
-            'itemtype' => Ticket::class,
-            'items_id'  => (int) $_GET['id']
-         ]);
-         if (count($issues) == 1) {
-            $issueId = array_pop($issues)['id'];
-            $issue->getFromDB($issueId);
-            Html::redirect($issue->getFormURLWithID($issue->getID()) . $openItilFollowup);
+      $decodedUrl = [];
+      $openItilFollowup = '';
+      if (isset($_GET['_openfollowup'])) {
+         $openItilFollowup = '&_openfollowup=1';
+      }
+      if (isset($_SERVER['QUERY_STRING'])) {
+         parse_str($_SERVER['QUERY_STRING'], $decodedUrl);
+         if (isset($decodedUrl['forcetab'])) {
+            Session::setActiveTab(Ticket::class, $decodedUrl['forcetab']);
          }
+      }
+      if (!isset($_GET['id'])) {
+         // invalid url
+         Html::redirect($CFG_GLPI["root_doc"]);
+      }
 
-         // When no or several tickets matches an issue, rely use the Form Answer
-         $itemTicket = new Item_Ticket();
-         $itemTicket->getFromDBByCrit([
-            'itemtype' => PluginFormcreatorFormAnswer::class,
-            'tickets_id'  => (int) $_GET['id']
-         ]);
-         if ($itemTicket->isNewItem()) {
-            // No formanswer found
-            Html::displayNotFoundError();
-         }
+      // When an ticket has a matching issue (it means that the ticket is the only generated ticket)
+      $issue = new PluginFormcreatorIssue();
+      $issues = $issue->find([
+         'itemtype' => Ticket::class,
+         'items_id'  => (int) $_GET['id']
+      ]);
+      if (count($issues) == 1) {
+         $issueId = array_pop($issues)['id'];
+         $issue->getFromDB($issueId);
+         Html::redirect($issue->getFormURLWithID($issue->getID()) . $openItilFollowup);
+      }
 
-         $issue->getFromDBByCrit([
-            'itemtype' => PluginFormcreatorFormAnswer::class,
-            'items_id'  => $itemTicket->fields['items_id']
-         ]);
-         if ($issue->isNewItem()) {
-            // No formanswer found
-            Html::displayNotFoundError();
-         }
-         $ticket = Ticket::getById($itemTicket->fields['tickets_id']);
-         if ($ticket === false) {
-            Html::redirect($issue->getFormURLWithID($itemTicket->fields['items_id']) . $openItilFollowup);
-         }
+      // When no or several tickets matches an issue, rely use the Form Answer
+      $itemTicket = new Item_Ticket();
+      $itemTicket->getFromDBByCrit([
+         'itemtype' => PluginFormcreatorFormAnswer::class,
+         'tickets_id'  => (int) $_GET['id']
+      ]);
+      if ($itemTicket->isNewItem()) {
+         // No formanswer found
+         Html::displayNotFoundError();
+      }
 
-         Html::redirect($issue->getFormURLWithID($issue->getID()) . '&tickets_id=' . $itemTicket->fields['tickets_id']);
+      $issue->getFromDBByCrit([
+         'itemtype' => PluginFormcreatorFormAnswer::class,
+         'items_id'  => $itemTicket->fields['items_id']
+      ]);
+      if ($issue->isNewItem()) {
+         // No formanswer found
+         Html::displayNotFoundError();
+      }
+      $ticket = Ticket::getById($itemTicket->fields['tickets_id']);
+      if ($ticket === false) {
+         Html::redirect($issue->getFormURLWithID($itemTicket->fields['items_id']) . $openItilFollowup);
+      }
+
+      Html::redirect($issue->getFormURLWithID($issue->getID()) . '&tickets_id=' . $itemTicket->fields['tickets_id']);
+   }
+
+   $pages = [
+      'front/reservationitem.php' => FORMCREATOR_ROOTDOC . '/front/reservationitem.php',
+      'front/helpdesk.faq.php' => FORMCREATOR_ROOTDOC . '/front/wizard.php',
+      'front/ticket.php' => FORMCREATOR_ROOTDOC . '/front/issue.php',
+   ];
+   foreach ($pages as $srcPage => $dstPage) {
+      if (strpos($_SERVER['REQUEST_URI'], $srcPage) !== false && strpos($_SERVER['REQUEST_URI'], $dstPage) === false) {
+         if ($srcPage == 'front/reservationitem.php') {
+            $_SESSION['plugin_formcreator']['redirected']['POST'] = $_POST;
+         }
+         Html::redirect($dstPage);
+         break;
       }
    }
 }
@@ -505,7 +525,7 @@ function plugin_formcreator_getSchemaPath(string $version = null): ?string {
    preg_match('/^(\d+\.\d+\.\d+)/', $version, $matches);
    $version = $matches[1];
 
-   return Plugin::getPhpDir('formcreator') . "/install/mysql/plugin_formcreator_${version}_empty.sql";
+   return Plugin::getPhpDir('formcreator') . "/install/mysql/plugin_formcreator_{$version}_empty.sql";
 }
 
 /**

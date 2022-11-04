@@ -171,7 +171,7 @@ PluginFormcreatorTranslatableInterface
          'id'                 => '5',
          'table'              => 'glpi_entities',
          'field'              => 'completename',
-         'name'               => __('Entity'),
+         'name'               => Entity::getTypeName(1),
          'datatype'           => 'dropdown',
          'massiveaction'      => false
       ];
@@ -227,7 +227,7 @@ PluginFormcreatorTranslatableInterface
          'id'                 => '10',
          'table'              => PluginFormcreatorCategory::getTable(),
          'field'              => 'name',
-         'name'               => __('Form category', 'formcreator'),
+         'name'               => PluginFormcreatorCategory::getTypeName(1),
          'datatype'           => 'dropdown',
          'massiveaction'      => true
       ];
@@ -500,7 +500,7 @@ PluginFormcreatorTranslatableInterface
       echo '<table class="tab_cadrehov">';
       echo '<tr>';
       echo '<th>'._n('Target', 'Targets', 2, 'formcreator').'</th>';
-      echo '<th>'.__('Type', 'formcreator').'</th>';
+      echo '<th>'._n('Type', 'Types', 1).'</th>';
       echo '<th class="right">'.__('Actions', 'formcreator').'</th>';
       echo '</tr>';
 
@@ -887,17 +887,42 @@ PluginFormcreatorTranslatableInterface
 
    protected function showMyLastForms() : void {
       $limit = 5;
-      $userId = Session::getLoginUserID();
+      $formanswerUrl = PluginFormcreatorFormAnswer::getSearchURL();
+      $rawKeyBase = 'ITEM_' . PluginFormcreatorFormAnswer::class;
       echo '<div id="plugin_formcreator_last_req_forms" class="card">';
       echo '<div class="card-title">'.sprintf(__('My %1$d last forms (requester)', 'formcreator'), $limit).'</div>';
-      $result = PluginFormcreatorFormAnswer::getMyLastAnswersAsRequester($limit);
-      if ($result->count() == 0) {
+      $criteria = [
+         'criteria' => [
+            0 => [
+               'field'      => 4,
+               'searchtype' => 'equals',
+               'value'      => 'myself',
+            ],
+         ],
+         'sort' => [
+            0 => 6
+         ],
+         'order' => [
+            0 => 'DESC'
+         ],
+      ];
+      $showColumns = [
+         2, // id
+         1, // name
+         6, // request date
+         8, // status
+      ];
+      $backupListLimit = $_SESSION['glpilist_limit'];
+      $_SESSION['glpilist_limit'] = 5;
+      $search = Search::getDatas(PluginFormcreatorFormAnswer::class, $criteria, $showColumns);
+      $_SESSION['glpilist_limit'] = $backupListLimit;
+      if ($search['data']['count'] == 0) {
          echo '<div class="card-body text-center text-muted">'.__('No form posted yet', 'formcreator').'</div>';
       } else {
          echo '<div class="card-body">';
          echo '<ul class="list-group">';
-         foreach ($result as $formAnswer) {
-            switch ($formAnswer['status']) {
+         foreach ($search['data']['rows'] as $formAnswer) {
+            switch ($formAnswer['raw']["{$rawKeyBase}_8"]) {
                case PluginFormcreatorFormAnswer::STATUS_WAITING:
                   $status = CommonITILObject::WAITING;
                   break;
@@ -908,20 +933,18 @@ PluginFormcreatorTranslatableInterface
                   $status = CommonITILObject::ACCEPTED;
                   break;
                default:
-                  $status = $formAnswer['status'];
+                  $status = $formAnswer['raw']["{$rawKeyBase}_8"];
             }
             $status = CommonITILObject::getStatusClass($status);
-            echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="' . $formAnswer['id'] . '">';
-            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='.$formAnswer['id'].'">'.$formAnswer['name'].'</a>';
-            echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['request_date']).'</span>';
+            echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="'  . $formAnswer['raw']["{$rawKeyBase}_2"] . '">';
+            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='. $formAnswer['raw']["{$rawKeyBase}_2"] .'">'. $formAnswer['raw']["{$rawKeyBase}_1"] .'</a>';
+            echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['raw']["{$rawKeyBase}_6"]).'</span>';
             echo '</li>';
          }
          echo '</ul>';
          echo '<div class="text-center  card-footer">';
-         $criteria = 'criteria[0][field]=4'
-         . '&criteria[0][searchtype]=equals'
-         . '&criteria[0][value]=' . $userId;
-         echo '<a href="formanswer.php?' . $criteria . '">';
+         $criteria = Toolbox::append_params($criteria, '&amp;');
+         echo '<a href="' . $formanswerUrl . '?' . $criteria . '">';
          echo __('All my forms (requester)', 'formcreator');
          echo '</a>';
          echo '</div>';
@@ -936,19 +959,38 @@ PluginFormcreatorTranslatableInterface
 
       echo '<div id="plugin_formcreator_val_forms" class="card mt-0 mt-sm-2">';
       echo '<div class="card-title">'.sprintf(__('My %1$d last forms (validator)', 'formcreator'), $limit).'</div>';
-      $groupList = Group_User::getUserGroups($userId);
-      $groupIdList = [];
-      foreach ($groupList as $group) {
-         $groupIdList[] = $group['id'];
-      }
-      $result = PluginFormcreatorFormAnswer::getMyLastAnswersAsValidator($limit);
-      if ($result->count() == 0) {
+      $criteria = [
+         'criteria' => [
+            0 => [
+               'field'      => 5,
+               'searchtype' => 'equals',
+               'value'      => 'myself',
+            ],
+            1 => [
+               'link'       => 'OR',
+               'field'      => 7,
+               'searchtype' => 'equals',
+               'value'      => 'mygroups',
+            ],
+         ],
+         'sort' => [
+            0 => 6
+         ],
+         'order' => [
+            0 => 'DESC'
+         ],
+      ];
+      $backupListLimit = $_SESSION['glpilist_limit'];
+      $_SESSION['glpilist_limit'] = 5;
+      $search = Search::getDatas(PluginFormcreatorFormAnswer::class, $criteria, $showColumns);
+      $_SESSION['glpilist_limit'] = $backupListLimit;
+      if ($search['data']['count'] == 0) {
          echo '<div class="card-body text-center text-muted" >'.__('No form waiting for validation', 'formcreator').'</div>';
       } else {
          echo '<div class="card-body">';
          echo '<ul class="list-group">';
-         foreach ($result as $formAnswer) {
-            switch ($formAnswer['status']) {
+         foreach ($search['data']['rows'] as $formAnswer) {
+            switch ($formAnswer['raw']["{$rawKeyBase}_8"]) {
                case PluginFormcreatorFormAnswer::STATUS_WAITING:
                   $status = CommonITILObject::WAITING;
                   break;
@@ -959,25 +1001,18 @@ PluginFormcreatorTranslatableInterface
                   $status = CommonITILObject::ACCEPTED;
                   break;
                default:
-                  $status = $formAnswer['status'];
+                  $status = $formAnswer['raw']["{$rawKeyBase}_8"];
             }
             $status = CommonITILObject::getStatusClass($status);
-            echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="' . $formAnswer['id'] . '">';
-            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='.$formAnswer['id'].'">'.$formAnswer['name'].'</a>';
-            echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['request_date']).'</span>';
+            echo '<li data-itemtype="PluginFormcreatorFormanswer" data-id="'  . $formAnswer['raw']["{$rawKeyBase}_2"] . '">';
+            echo '<i class="'.$status.'"></i><a href="formanswer.form.php?id='. $formAnswer['raw']["{$rawKeyBase}_2"] .'">'. $formAnswer['raw']["{$rawKeyBase}_1"] .'</a>';
+            echo '<span class="plugin_formcreator_date">'.Html::convDateTime($formAnswer['raw']["{$rawKeyBase}_6"]).'</span>';
             echo '</li>';
          }
          echo '</ul>';
          echo '<div class="text-center card-footer">';
-         $criteria = 'criteria[0][field]=5'
-                     . '&criteria[0][searchtype]=equals'
-                     . '&criteria[0][value]=' . $userId;
-         $criteria.= "&criteria[1][link]=OR"
-                     . "&criteria[1][field]=7"
-                     . "&criteria[1][searchtype]=equals"
-                     . "&criteria[1][value]=mygroups";
-
-         echo '<a href="formanswer.php?' . $criteria . '">';
+         $criteria = Toolbox::append_params($criteria, '&amp;');
+         echo '<a href="' . $formanswerUrl . '?' . $criteria . '">';
          echo __('All my forms (validator)', 'formcreator');
          echo '</a>';
          echo '</div>';
@@ -1004,11 +1039,8 @@ PluginFormcreatorTranslatableInterface
       if (file_exists($phpfile)) {
          $TRANSLATE->addTranslationFile('phparray', $phpfile, $domain, $_SESSION['glpilanguage']);
       }
-      if (!isset($_SESSION['formcreator']['data'])) {
-         $_SESSION['formcreator']['data'] = [];
-      }
+
       $formanswer = new PluginFormcreatorFormAnswer();
-      $formanswer->loadAnswersFromSession();
       TemplateRenderer::getInstance()->display('@formcreator/pages/userform.html.twig', [
          'item'    => $this,
          'options' => [
@@ -1020,8 +1052,6 @@ PluginFormcreatorTranslatableInterface
                               && $this->fields['is_captcha_enabled'] != '0'),
          ]
       ]);
-      // Delete saved answers if any
-      unset($_SESSION['formcreator']['data']);
    }
 
    /**
@@ -1953,17 +1983,18 @@ PluginFormcreatorTranslatableInterface
          echo '<td><div>' . __($row['description'], $domain) . '&nbsp;</div></td>';
          echo '</tr>';
       }
-
       echo '</table>';
-      echo '<br />';
-      echo Html::scriptBlock('function showDescription(id, img){
-         if(i.alt == "+") {
-            i.alt = "-";
-            i.class = "class="fas fa-minus-circle"";
+
+      echo Html::scriptBlock('function showDescription(id, img) {
+         if(img.getAttribute("alt") == "+") {
+            img.setAttribute("alt", "-");
+            img.classList.remove("fa-plus-circle");
+            img.classList.add("fa-minus-circle");
             document.getElementById("desc" + id).style.display = "table-row";
          } else {
-            i.alt = "+";
-            i.src = "class="fas fa-plus-circle"";
+            img.setAttribute("alt", "+");
+            img.classList.remove("fa-minus-circle");
+            img.classList.add("fa-plus-circle");
             document.getElementById("desc" + id).style.display = "none";
          }
       }');
@@ -1990,7 +2021,7 @@ PluginFormcreatorTranslatableInterface
    public static function getByItem(?CommonDBTM $item): ?self {
       global $DB;
 
-      if ($item::getType() == self::getType()) {
+      if ($item instanceof self) {
          return $item;
       }
 
@@ -2108,7 +2139,7 @@ PluginFormcreatorTranslatableInterface
    }
 
    public function showAddTargetForm() {
-      echo '<form name="form_target" method="post" action="'.self::getFormURL().'">';
+      echo '<form name="form_target" method="post" action="'. static::getFormURL() . '">';
       echo '<table class="tab_cadre_fixe">';
 
       echo '<tr><th colspan="4">'.__('Add a target', 'formcreator').'</th></tr>';
@@ -2197,11 +2228,6 @@ PluginFormcreatorTranslatableInterface
 
    public function post_getFromDB() {
       global $TRANSLATE;
-
-      // Set additional data for the API
-      if (isAPI()) {
-         $this->fields += \PluginFormcreatorSection::getFullData($this->fields['id']);
-      }
 
       // Load translation for the current language if different from origianl form's language
       $language = $_SESSION['glpilanguage'];
@@ -2359,7 +2385,7 @@ PluginFormcreatorTranslatableInterface
       if ($language == '') {
          $language = $_SESSION['glpilanguage'];
       }
-      return "form_${id}_${language}";
+      return "form_{$id}_{$language}";
    }
 
    /**

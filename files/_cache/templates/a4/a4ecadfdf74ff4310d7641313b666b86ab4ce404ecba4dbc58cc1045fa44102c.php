@@ -48,7 +48,7 @@ class __TwigTemplate_aead880ba14f5609f7a3fbe57dae9f23c3e387bc527135f838c99f5e804
             echo twig_escape_filter($this->env, __("Search…"), "html", null, true);
             echo "\" />
       <span class=\"input-group-text\">
-         <button type=\"submit\" class=\"btn btn-link p-0 m-0 pesquisa\" title=\"";
+         <button type=\"submit\" class=\"btn btn-link p-0 m-0 lupa\" title=\"";
             // line 39
             echo twig_escape_filter($this->env, __("Search…"), "html", null, true);
             echo "\">

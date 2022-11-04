@@ -279,6 +279,6 @@ class __TwigTemplate_d5f9ec80d2c5afca355c193bab12f8f27a42e5c8f535fbc4efbe7bc433d
 
     public function getSourceContext()
     {
-        return new Source("", "pages/setup/setup_notifications.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\pages\\setup\\setup_notifications.html.twig");
+        return new Source("", "pages/setup/setup_notifications.html.twig", "C:\\wamp64\\www\\glpi\\templates\\pages\\setup\\setup_notifications.html.twig");
     }
 }

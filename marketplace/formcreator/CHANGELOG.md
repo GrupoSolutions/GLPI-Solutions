@@ -1,3 +1,120 @@
+<a name="2.13.2"></a>
+## [2.13.2](https://github.com/pluginsGLPI/formcreator/compare/2.13.1..2.13.2) (2022-10-17)
+
+
+### Bug Fixes
+
+*  just reencode br ([cce2e7e1c](https://github.com/pluginsGLPI/formcreator/commit/cce2e7e1c))
+*  show KB items without category ([91f4deb75](https://github.com/pluginsGLPI/formcreator/commit/91f4deb75))
+* **abstractitiltarget:** email addresses were ignored ([4c28a09b8](https://github.com/pluginsGLPI/formcreator/commit/4c28a09b8))
+* **docs:** mix of single and singular/plural locales ([dc8f38cc3](https://github.com/pluginsGLPI/formcreator/commit/dc8f38cc3))
+* **dropdownfield:** tree depth not restored in design dialog ([af4096bba](https://github.com/pluginsGLPI/formcreator/commit/af4096bba))
+* **entityfilter:** bad namespace for 2 classes ([75d759940](https://github.com/pluginsGLPI/formcreator/commit/75d759940))
+* **fields:** add default value to prevent SQL error (#2965) ([19f039569](https://github.com/pluginsGLPI/formcreator/commit/19f039569))
+* **form:** re-enable submit on validation failure ([e39f6184c](https://github.com/pluginsGLPI/formcreator/commit/e39f6184c))
+* **form:** risk of selecting the wrong form in DOM ([bb31fd163](https://github.com/pluginsGLPI/formcreator/commit/bb31fd163))
+* **form:** submit once ([b00844208](https://github.com/pluginsGLPI/formcreator/commit/b00844208))
+* **form:** unescape form name ([5b802658a](https://github.com/pluginsGLPI/formcreator/commit/5b802658a))
+* **formanswer:** PHP 8.1 compatbility, error message if invalid JSON detected ([8ff7ff91a](https://github.com/pluginsGLPI/formcreator/commit/8ff7ff91a))
+* **formanswer:** PHP 8.1 compatibility: null passed instead of string ([297fb2713](https://github.com/pluginsGLPI/formcreator/commit/297fb2713))
+* **formanswer:** redirect after submission of targetless form ([4d60239d1](https://github.com/pluginsGLPI/formcreator/commit/4d60239d1))
+* **requesttypefield:** warning if comparing against empty value ([dca5afb82](https://github.com/pluginsGLPI/formcreator/commit/dca5afb82))
+* **section:** label for conditions in designer ([01e570319](https://github.com/pluginsGLPI/formcreator/commit/01e570319))
+* **ticket satisfaction:** missing satisfaction field ([6f252bf91](https://github.com/pluginsGLPI/formcreator/commit/6f252bf91))
+* **wizard:** FAQ list (#3031) ([bb0732ca7](https://github.com/pluginsGLPI/formcreator/commit/bb0732ca7))
+
+
+### Features
+
+*  tool to repair escaping problem in some tickets ([68db0ffda](https://github.com/pluginsGLPI/formcreator/commit/68db0ffda))
+* **form:** submit forms once ([abed86101](https://github.com/pluginsGLPI/formcreator/commit/abed86101))
+* **formanswer:** notification with URL to generated objets ([fa6a360f0](https://github.com/pluginsGLPI/formcreator/commit/fa6a360f0))
+* **formanswer:** restore toasts when craeting targets ([f43df3ebb](https://github.com/pluginsGLPI/formcreator/commit/f43df3ebb))
+* **glpiselectfield:** support change objects ([e1514b00e](https://github.com/pluginsGLPI/formcreator/commit/e1514b00e))
+* **install:** show the DB diff when upgrade runs from CLI (#2994) ([4abb099a6](https://github.com/pluginsGLPI/formcreator/commit/4abb099a6))
+
+
+
+## [2.13.1](https://github.com/pluginsGLPI/formcreator/compare/2.13.0..2.13.1) (2022-09-19)
+
+
+### Bug Fixes
+
+*  inverted existence test on ticket update ([2acc5cd4](https://github.com/pluginsGLPI/formcreator/commit/2acc5cd4))
+*  log more errors, and update obsolete error logging ([ae28ed6d](https://github.com/pluginsGLPI/formcreator/commit/ae28ed6d))
+*  restore page redirections existing in v2.12 ([582f926c](https://github.com/pluginsGLPI/formcreator/commit/582f926c))
+*  update obsolete error logging ([da8929e0](https://github.com/pluginsGLPI/formcreator/commit/da8929e0))
+* **abstractitiltarget:** glpi 10.0.3 will require a data with a valid value ([5f385bb8](https://github.com/pluginsGLPI/formcreator/commit/5f385bb8))
+* **actorfield:** default value not saved ([c3baebbe](https://github.com/pluginsGLPI/formcreator/commit/c3baebbe))
+* **actorfield:** php warning ([6d3e98d1](https://github.com/pluginsGLPI/formcreator/commit/6d3e98d1))
+* **checkboxesfield:** replace div with p in checkbowes answers ([9ef95343](https://github.com/pluginsGLPI/formcreator/commit/9ef95343))
+* **composite:** php warning breaks JSON if a ticket is not generated ([2108983c](https://github.com/pluginsGLPI/formcreator/commit/2108983c))
+* **descriptionfield:** bad form rendering ([87a74058](https://github.com/pluginsGLPI/formcreator/commit/87a74058))
+* **filefield:** php error when switching field type to file ([a03c7a0a](https://github.com/pluginsGLPI/formcreator/commit/a03c7a0a))
+* **form:** javascript ([f05bc697](https://github.com/pluginsGLPI/formcreator/commit/f05bc697))
+* **form:** list on self service homepage ([ba6d4a58](https://github.com/pluginsGLPI/formcreator/commit/ba6d4a58))
+* **form:** undefined var ([169d2c8e](https://github.com/pluginsGLPI/formcreator/commit/169d2c8e))
+* **form:** url to form answer lists may be invalid ([6cd29e6d](https://github.com/pluginsGLPI/formcreator/commit/6cd29e6d))
+* **install:** avoid alter table fail ([4dadea8a](https://github.com/pluginsGLPI/formcreator/commit/4dadea8a))
+* **install:** missing method in upgrade to 2.13.1 ([7e9cdcd5](https://github.com/pluginsGLPI/formcreator/commit/7e9cdcd5))
+* **issue:** issue not deleted when tichet goes to trash bin ([c977b1ca](https://github.com/pluginsGLPI/formcreator/commit/c977b1ca))
+* **issue:** purge issue when deleting associated ticket ([76444ecc](https://github.com/pluginsGLPI/formcreator/commit/76444ecc))
+* **issue:** recreate when restore ticket ([2656e284](https://github.com/pluginsGLPI/formcreator/commit/2656e284))
+* **item_targetticket:** uuid to ID conversion ([e9f326c0](https://github.com/pluginsGLPI/formcreator/commit/e9f326c0))
+* **section:** name encoding in designer and rendered form" ([491dcb69](https://github.com/pluginsGLPI/formcreator/commit/491dcb69))
+* **targetticket:** bad constant name ([48dda4f3](https://github.com/pluginsGLPI/formcreator/commit/48dda4f3))
+* **targetticket:** table structure inconsistency ([ff56f3f1](https://github.com/pluginsGLPI/formcreator/commit/ff56f3f1))
+* **targetticket:** table structure inconsistency ([892a83c3](https://github.com/pluginsGLPI/formcreator/commit/892a83c3))
+* **targetticket,targetchange:** tags from queestion or specific tags not saved ([ec08d95e](https://github.com/pluginsGLPI/formcreator/commit/ec08d95e))
+
+
+### Features
+
+*  prepare compatibility with PHP 8.2 (#2966) ([4bb7f3c3](https://github.com/pluginsGLPI/formcreator/commit/4bb7f3c3))
+* **formanswer,issue:** show title in navigation header ([1878e4b0](https://github.com/pluginsGLPI/formcreator/commit/1878e4b0))
+* **kb:** preselect see all categorie ([1b669d4f](https://github.com/pluginsGLPI/formcreator/commit/1b669d4f))
+
+
+
+<a name="2.13.0"></a>
+## [2.13.0](https://github.com/pluginsGLPI/formcreator/compare/2.13.0-rc.2..2.13.0) (2022-08-18)
+
+
+### Bug Fixes
+
+*  cannot delete a ticket from service catalog ([acec9bb8](https://github.com/pluginsGLPI/formcreator/commit/acec9bb8))
+* **abstractitiltarget:** alternative email lost if no requester user ([78fd8450](https://github.com/pluginsGLPI/formcreator/commit/78fd8450))
+* **abstracttarget:** uuid should not be updated ([b1e492d3](https://github.com/pluginsGLPI/formcreator/commit/b1e492d3))
+* **checkboxesfield:** avoid HTML br tag ([c3a60bbb](https://github.com/pluginsGLPI/formcreator/commit/c3a60bbb))
+* **condition:** compatibility with Advanced forms validation ([6685b943](https://github.com/pluginsGLPI/formcreator/commit/6685b943))
+* **descriptinfield:** conversion to target requires escaping ([b79cfa95](https://github.com/pluginsGLPI/formcreator/commit/b79cfa95))
+* **filefield:** mandatory check may cause exception ([3f711a54](https://github.com/pluginsGLPI/formcreator/commit/3f711a54))
+* **form:** PHP warning ([844ef96c](https://github.com/pluginsGLPI/formcreator/commit/844ef96c))
+* **form:** bad URL when using advanced form validation plugin ([adb9fba5](https://github.com/pluginsGLPI/formcreator/commit/adb9fba5))
+* **formanswer:** grid style updated for current version of gridstack ([85b6a686](https://github.com/pluginsGLPI/formcreator/commit/85b6a686))
+* **formanswer:** select inherited class if needed ([955dc969](https://github.com/pluginsGLPI/formcreator/commit/955dc969))
+* **formanswer:** update gridstack css ([70deaa06](https://github.com/pluginsGLPI/formcreator/commit/70deaa06))
+* **glpiselectfield:** missing entity restrict ([40c9ab73](https://github.com/pluginsGLPI/formcreator/commit/40c9ab73))
+* **install:** prevent useless warnings ([001d12f5](https://github.com/pluginsGLPI/formcreator/commit/001d12f5))
+* **install:** use modern settings for tables ([f04e4181](https://github.com/pluginsGLPI/formcreator/commit/f04e4181))
+* **issue:** remove duplicate item in status dropdown ([27f9f313](https://github.com/pluginsGLPI/formcreator/commit/27f9f313))
+* **ldapselectfield:** log LDAP error instead of showing it to user ([e170dc6f](https://github.com/pluginsGLPI/formcreator/commit/e170dc6f))
+* **ldapselectfield:** no translation for items ([d170c79c](https://github.com/pluginsGLPI/formcreator/commit/d170c79c))
+* **targetticket:** prevent exception in inconsistent target ticket ([ba6ed88e](https://github.com/pluginsGLPI/formcreator/commit/ba6ed88e))
+* **textarea:** on change event broken ([9fb70edb](https://github.com/pluginsGLPI/formcreator/commit/9fb70edb))
+* **textarea:** rn chars added between lines ([66571b80](https://github.com/pluginsGLPI/formcreator/commit/66571b80))
+* **textarea, entityconfig:** embedded image question description (#2901) ([0d78db1a](https://github.com/pluginsGLPI/formcreator/commit/0d78db1a))
+* **textareafield:** embedded image upload broken ([d58075cd](https://github.com/pluginsGLPI/formcreator/commit/d58075cd))
+* **textareafield:** missing escape before compare ([ba78e935](https://github.com/pluginsGLPI/formcreator/commit/ba78e935))
+
+
+### Features
+
+* **formanswer:** order formanswers by date desc ([7fdeda51](https://github.com/pluginsGLPI/formcreator/commit/7fdeda51))
+* **ldapselectfield:** lazy loading ([bffcb5b7](https://github.com/pluginsGLPI/formcreator/commit/bffcb5b7))
+
+
+
 <a name="2.13.0-rc.2"></a>
 ## [2.13.0-rc.2](https://github.com/pluginsGLPI/formcreator/compare/2.13.0-rc.1..2.13.0-rc.2) (2022-07-20)
 

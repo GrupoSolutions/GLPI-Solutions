@@ -144,6 +144,6 @@ class __TwigTemplate_aa79e4dff8295217eef2803811994a845e53beb72e96485b9d21897abb6
 
     public function getSourceContext()
     {
-        return new Source("", "pages/setup/authentication.html.twig", "C:\\xampp\\htdocs\\glpi\\templates\\pages\\setup\\authentication.html.twig");
+        return new Source("", "pages/setup/authentication.html.twig", "C:\\wamp64\\www\\glpi\\templates\\pages\\setup\\authentication.html.twig");
     }
 }

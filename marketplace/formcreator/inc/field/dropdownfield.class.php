@@ -34,6 +34,7 @@ namespace GlpiPlugin\Formcreator\Field;
 
 use PluginFormcreatorAbstractField;
 use PluginFormcreatorForm;
+use PluginFormcreatorFormAnswer;
 use Html;
 use Toolbox;
 use Session;
@@ -67,8 +68,8 @@ class DropdownField extends PluginFormcreatorAbstractField
 
    public function getEnumEntityRestriction() {
       return [
-         self::ENTITY_RESTRICT_USER =>  __('User', 'formcreator'),
-         self::ENTITY_RESTRICT_FORM =>  __('Form', 'formcreator'),
+         self::ENTITY_RESTRICT_USER =>  User::getTypeName(1),
+         self::ENTITY_RESTRICT_FORM =>  PluginFormcreatorForm::getTypeName(1),
          self::ENTITY_RESTRICT_BOTH =>  __('User and form', 'formcreator'),
       ];
    }
@@ -83,6 +84,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       $template = '@formcreator/field/' . $this->question->fields['fieldtype'] . 'field.html.twig';
 
       $decodedValues = json_decode($this->question->fields['values'], JSON_OBJECT_AS_ARRAY);
+
       $this->question->fields['_tree_root'] = $decodedValues['show_tree_root'] ?? Dropdown::EMPTY_VALUE;
       $this->question->fields['_tree_root_selectable'] = $decodedValues['selectable_tree_root'] ?? '0';
       $this->question->fields['_tree_max_depth'] = $decodedValues['show_tree_depth'] ?? Dropdown::EMPTY_VALUE;
@@ -153,13 +155,11 @@ class DropdownField extends PluginFormcreatorAbstractField
             $decodedValues['entity_restrict'] = $decodedValues['entity_restrict'] ?? 2;
             switch ($decodedValues['entity_restrict']) {
                case self::ENTITY_RESTRICT_FORM:
-                  $form = PluginFormcreatorForm::getByItem($this->getQuestion());
                   $currentEntity = $form->fields['entities_id'];
                   $ancestorEntities = getAncestorsOf(Entity::getTable(), $currentEntity);
                   break;
 
                case self::ENTITY_RESTRICT_BOTH:
-                  $form = PluginFormcreatorForm::getByItem($this->getQuestion());
                   $currentEntity = [$currentEntity, $form->fields['entities_id']];
                   $ancestorEntities = array_merge($ancestorEntities, getAncestorsOf(Entity::getTable(), $currentEntity));
                   break;
@@ -387,7 +387,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       return $html;
    }
 
-   public function serializeValue(): string {
+   public function serializeValue(PluginFormcreatorFormAnswer $formanswer): string {
       if ($this->value === null || $this->value === '') {
          return '';
       }
