@@ -10,7 +10,7 @@
 	$hostname="localhost:3306";
 	$username="root";
 	$password="";
-	$dbname="ativo";
+	$dbname="base_104";
 	$acao = $_POST["acao"];
 	$conn = mysqli_connect($hostname,$username, $password) or die ("html>script language='JavaScript'>alert('Unable to connect to database! Please try again later.'),history.go(-1)/script>/html>");
 	function get_post_action($name)
@@ -23,7 +23,7 @@
 			}
 		}
 	}
-	mysqli_select_db($conn, "ativo");
+	mysqli_select_db($conn, "base_104");
 
 	function getData($tipo, $entity_id){
 		if($tipo == "Computador"){

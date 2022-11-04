@@ -59,6 +59,7 @@ class NetworkPort extends CommonDBChild
     protected static $forward_entity_to = ['NetworkName'];
 
     public static $rightname                   = 'networking';
+    protected $displaylist = false;
 
     /**
      * Subset of input that will be used for NetworkPortInstantiation.
@@ -95,6 +96,11 @@ class NetworkPort extends CommonDBChild
                 break;
         }
         return $value;
+    }
+
+    public function useDeletedToLockIfDynamic()
+    {
+        return false;
     }
 
     public function __set(string $property, $value)
@@ -563,6 +569,7 @@ class NetworkPort extends CommonDBChild
         $this->addStandardTab('NetworkPortMetrics', $ong, $options);
         $this->addStandardTab('NetworkName', $ong, $options);
         $this->addStandardTab('NetworkPort_Vlan', $ong, $options);
+        $this->addStandardTab('Lock', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
         $this->addStandardTab('NetworkPortConnectionLog', $ong, $options);
         $this->addStandardTab('NetworkPortInstantiation', $ong, $options);
@@ -578,9 +585,12 @@ class NetworkPort extends CommonDBChild
      * @param integer $ID ID of the port
      *
      * @return boolean true on success
+     *
+     * @FIXME Deprecate this method in GLPI 10.1, it is not used.
      **/
     public function resetConnections($ID)
     {
+        return false;
     }
 
 
@@ -1747,8 +1757,8 @@ class NetworkPort extends CommonDBChild
             || ($item->getType() == 'NetworkPort')
         ) {
             self::showForItem($item, $withtemplate);
-            return true;
         }
+        return true;
     }
 
 

@@ -222,19 +222,20 @@ class Html
     /**
      * Convert a date YY-MM-DD HH:MM to DD-MM-YY HH:MM for display in a html table
      *
-     * @param string       $time    Datetime to convert
-     * @param integer|null $format  Datetime format
+     * @param string       $time            Datetime to convert
+     * @param integer|null $format          Datetime format
+     * @param bool         $with_seconds    Indicates if seconds should be present in output
      *
      * @return null|string
      **/
-    public static function convDateTime($time, $format = null)
+    public static function convDateTime($time, $format = null, bool $with_seconds = false)
     {
 
         if (is_null($time) || ($time == 'NULL')) {
             return null;
         }
 
-        return self::convDate($time, $format) . ' ' . substr($time, 11, 5);
+        return self::convDate($time, $format) . ' ' . substr($time, 11, $with_seconds ? 8 : 5);
     }
 
 
@@ -571,7 +572,11 @@ class Html
         }
 
         if (!empty($params)) {
-            $dest .= '&' . $params;
+            if (str_contains('?', $dest)) {
+                $dest .= '&' . $params;
+            } else {
+                $dest .= '?' . $params;
+            }
         }
 
         self::redirect($dest);
@@ -583,7 +588,7 @@ class Html
      *
      * @return void
      **/
-    public static function displayNotFoundError()
+    public static function displayNotFoundError(string $additional_info = '')
     {
         global $CFG_GLPI, $HEADER_LOADED;
 
@@ -599,6 +604,15 @@ class Html
         echo "<div class='center'><br><br>";
         echo "<img src='" . $CFG_GLPI["root_doc"] . "/pics/warning.png' alt='" . __s('Warning') . "'>";
         echo "<br><br><span class='b'>" . __('Item not found') . "</span></div>";
+        $requested_url = $_SERVER['REQUEST_URI'] ?? 'Unknown';
+        $user_id = Session::getLoginUserID() ?? 'Anonymous';
+        $internal_message = "User ID: $user_id tried to access a non-existent item $requested_url. Additional information: $additional_info\n";
+        $internal_message .= "\tStack Trace:\n";
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        foreach ($backtrace as $frame) {
+            $internal_message .= "\t\t" . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . '()' . "\n";
+        }
+        Toolbox::logInFile('access-errors', $internal_message);
         self::nullFooter();
         exit();
     }
@@ -1009,7 +1023,7 @@ class Html
      *                    - percent   current level
      *
      *
-     * @return void
+     * @return string|void Generated HTML if `display` param is true, void otherwise.
      **/
     public static function progressBar($id, array $options = [])
     {
@@ -1517,7 +1531,7 @@ HTML;
                             if (is_array($val)) {
                                 foreach ($val as $k => $object) {
                                     $menu[$key]['types'][] = $object;
-                                    if (method_exists($object, 'getIcon')) {
+                                    if (empty($menu[$key]['icon']) && method_exists($object, 'getIcon')) {
                                         $menu[$key]['icon']    = $object::getIcon();
                                     }
                                 }
@@ -2519,10 +2533,12 @@ HTML;
             $options['specific_tags']['data-glpicore-ma-tags'] = 'common';
         }
 
-       // encode quotes and brackets to prevent maformed name attribute
-        $id = htmlspecialchars($id, ENT_QUOTES);
-        $id = str_replace(['[', ']'], ['&amp;#91;', '&amp;#93;'], $id);
-        $options['name']          = "item[$itemtype][" . $id . "]";
+        if (empty($options['name'])) {
+            // encode quotes and brackets to prevent maformed name attribute
+            $id = htmlspecialchars($id, ENT_QUOTES);
+            $id = str_replace(['[', ']'], ['&amp;#91;', '&amp;#93;'], $id);
+            $options['name'] = "item[$itemtype][" . $id . "]";
+        }
 
         $options['zero_on_empty'] = false;
 
@@ -2710,7 +2726,7 @@ HTML;
                         $js_modal_fields .= '#' . $p['container'] . ' ';
                     }
                     $js_modal_fields .= "[data-glpicore-ma-tags~=" . $p['tag_to_send'] . "]').each(function( index ) {
-                  fields[$(this).attr('name')] = $(this).attr('value');
+                  fields[$(this).attr('name')] = $(this).val();
                   if (($(this).attr('type') == 'checkbox') && (!$(this).is(':checked'))) {
                      fields[$(this).attr('name')] = 0;
                   }
@@ -3549,7 +3565,9 @@ JS;
      *      - add_now, boolean to precise if we need to add to dates array, an entry for now time
      *        (with now class)
      *
-     * @return array of posible values
+     * @return void|string
+     *    void if option display=true
+     *    string if option display=false (HTML code)
      *
      * @see self::showGenericDateTimeSearch()
      **/
@@ -3789,7 +3807,7 @@ JS;
     /**
      * Init the Editor System to a textarea
      *
-     * @param string  $name          name of the html textarea to use
+     * @param string  $id            id of the html textarea to use
      * @param string  $rand          rand of the html textarea to use (if empty no image paste system)(default '')
      * @param boolean $display       display or get js script (true by default)
      * @param boolean $readonly      editor will be readonly or not
@@ -3799,7 +3817,7 @@ JS;
      *    integer if param display=true
      *    string if param display=false (HTML code)
      **/
-    public static function initEditorSystem($name, $rand = '', $display = true, $readonly = false, $enable_images = true)
+    public static function initEditorSystem($id, $rand = '', $display = true, $readonly = false, $enable_images = true)
     {
         global $CFG_GLPI, $DB;
 
@@ -3816,8 +3834,8 @@ JS;
         $language_url = $CFG_GLPI['root_doc'] . '/public/lib/tinymce-i18n/langs6/' . $language . '.js';
 
        // Apply all GLPI styles to editor content
-        $content_css = preg_replace('/^.*href="([^"]+)".*$/', '$1', self::scss('css/palettes/' . $_SESSION['glpipalette'] ?? 'auror'))
-         . ',' . preg_replace('/^.*href="([^"]+)".*$/', '$1', self::css('public/lib/base.css'));
+        $content_css = preg_replace('/^.*href="([^"]+)".*$/', '$1', self::scss(('css/palettes/' . $_SESSION['glpipalette'] ?? 'auror') . '.scss', ['force_no_version' => true]))
+         . ',' . preg_replace('/^.*href="([^"]+)".*$/', '$1', self::css('public/lib/base.css', ['force_no_version' => true]));
 
         $cache_suffix = '?v=' . FrontEnd::getVersionCacheKey(GLPI_VERSION);
         $readonlyjs   = $readonly ? 'true' : 'false';
@@ -3865,8 +3883,10 @@ JS;
 
             // init editor
             tinyMCE.init(Object.assign({
+               link_default_target: '_blank',
                branding: false,
-               selector: '#{$name}',
+               selector: '#{$id}',
+               text_patterns: false,
 
                plugins: {$pluginsjs},
 
@@ -3894,7 +3914,9 @@ JS;
                quickbars_selection_toolbar: richtext_layout == 'inline'
                   ? 'bold italic | styles | forecolor backcolor '
                   : false,
-               contextmenu: 'copy paste | emoticons table image link | undo redo | code fullscreen',
+               contextmenu: richtext_layout == 'classic'
+                  ? false
+                  : 'copy paste | emoticons table image link | undo redo | code fullscreen',
 
                // Content settings
                entity_encoding: 'raw',
@@ -3909,11 +3931,11 @@ JS;
 
                setup: function(editor) {
                   // "required" state handling
-                  if ($('#$name').attr('required') == 'required') {
-                     $('#$name').removeAttr('required'); // Necessary to bypass browser validation
+                  if ($('#$id').attr('required') == 'required') {
+                     $('#$id').removeAttr('required'); // Necessary to bypass browser validation
 
                      editor.on('submit', function (e) {
-                        if ($('#$name').val() == '') {
+                        if ($('#$id').val() == '') {
                            alert(__('The description field is mandatory'));
                            e.preventDefault();
 
@@ -3924,14 +3946,14 @@ JS;
                      });
                      editor.on('keyup', function (e) {
                         editor.save();
-                        if ($('#$name').val() == '') {
+                        if ($('#$id').val() == '') {
                            $(editor.container).addClass('required');
                         } else {
                            $(editor.container).removeClass('required');
                         }
                      });
                      editor.on('init', function (e) {
-                        if (strip_tags($('#$name').val()) == '') {
+                        if (strip_tags($('#$id').val()) == '') {
                            $(editor.container).addClass('required');
                         }
                      });
@@ -3951,7 +3973,7 @@ JS;
                   // ctrl + enter submit the parent form
                   editor.addShortcut('ctrl+13', 'submit', function() {
                      editor.save();
-                     submitparentForm($('#$name'));
+                     submitparentForm($('#$id'));
                   });
                }
             }, {$language_opts}));
@@ -4811,7 +4833,6 @@ JAVASCRIPT
             'display_emptychoice' => false,
             'specific_tags'       => [],
             'parent_id_field'     => null,
-            'multiple'            => false,
         ];
         $params = array_merge($default_options, $params);
 
@@ -5388,6 +5409,9 @@ HTML;
             $url .= '?v=' . FrontEnd::getVersionCacheKey($version);
         }
 
+        // Convert filesystem path to URL path (fix issues with Windows directory separator)
+        $url = str_replace(DIRECTORY_SEPARATOR, '/', $url);
+
         return sprintf('<script type="%s" src="%s"></script>', $type, $url);
     }
 
@@ -5462,13 +5486,18 @@ HTML;
             $options['media'] = 'all';
         }
 
-        $version = GLPI_VERSION;
-        if (isset($options['version'])) {
-            $version = $options['version'];
-            unset($options['version']);
+        if (!isset($options['force_no_version']) || !$options['force_no_version']) {
+            $version = GLPI_VERSION;
+            if (isset($options['version'])) {
+                $version = $options['version'];
+                unset($options['version']);
+            }
+
+            $url .= ((strpos($url, '?') !== false) ? '&' : '?') . 'v=' . FrontEnd::getVersionCacheKey($version);
         }
 
-        $url .= ((strpos($url, '?') !== false) ? '&' : '?') . 'v=' . FrontEnd::getVersionCacheKey($version);
+        // Convert filesystem path to URL path (fix issues with Windows directory separator)
+        $url = str_replace(DIRECTORY_SEPARATOR, '/', $url);
 
         return sprintf(
             '<link rel="stylesheet" type="text/css" href="%s" %s>',
@@ -5576,6 +5605,7 @@ HTML;
         $display .= "<input id='fileupload{$p['rand']}' type='file' name='_uploader_" . $p['name'] . "[]'
                       class='form-control'
                       $required
+                      data-uploader-name=\"{$p['name']}\"
                       data-url='" . $CFG_GLPI["root_doc"] . "/ajax/fileupload.php'
                       data-form-data='{\"name\": \"_uploader_" . $p['name'] . "\", \"showfilesize\": \"" . $p['showfilesize'] . "\"}'"
                       . ($p['multiple'] ? " multiple='multiple'" : "")
@@ -5875,7 +5905,8 @@ HTML;
             $number_columns += 1;
         }
 
-       // count checked
+        // count checked
+        $nb_cb_per_col = [];
         foreach ($columns as $col_name => $column) {
             $nb_cb_per_col[$col_name] = [
                 'total'   => 0,
@@ -5883,6 +5914,7 @@ HTML;
             ];
         }
 
+        $nb_cb_per_row = [];
         foreach ($rows as $row_name => $row) {
             if ((!is_string($row)) && (!is_array($row))) {
                 continue;
@@ -6455,10 +6487,13 @@ HTML;
     {
         global $CFG_GLPI;
 
+        // prevent leak of data for non logged sessions
+        $full = $full && (Session::getLoginUserID(true) !== false);
+
         $cfg_glpi = "var CFG_GLPI  = {
-         'url_base': '" . (isset($CFG_GLPI['url_base']) ? $CFG_GLPI["url_base"] : '') . "',
-         'root_doc': '" . $CFG_GLPI["root_doc"] . "',
-      };";
+            'url_base': '" . (isset($CFG_GLPI['url_base']) ? $CFG_GLPI["url_base"] : '') . "',
+            'root_doc': '" . $CFG_GLPI["root_doc"] . "',
+        };";
 
         if ($full) {
             $debug = (isset($_SESSION['glpi_use_mode'])
@@ -6473,9 +6508,9 @@ HTML;
         $plugins_path = 'var GLPI_PLUGINS_PATH = ' . json_encode($plugins_path) . ';';
 
         return self::scriptBlock("
-         $cfg_glpi
-         $plugins_path
-      ");
+            $cfg_glpi
+            $plugins_path
+        ");
     }
 
     /**
@@ -6913,13 +6948,7 @@ CSS;
     {
         $file = preg_replace('/\.scss$/', '', $file);
 
-        return implode(
-            DIRECTORY_SEPARATOR,
-            [
-                self::getScssCompileDir(),
-                str_replace('/', '_', $file) . '.min.css',
-            ]
-        );
+        return self::getScssCompileDir() . '/' . str_replace('/', '_', $file) . '.min.css';
     }
 
     /**

@@ -38,8 +38,8 @@
  **/
 class NotificationTargetTicket extends NotificationTargetCommonITILObject
 {
-    const HEADERTAG = '';
-    const FOOTERTAG = '';
+    const HEADERTAG = '=-=-=-=';
+    const FOOTERTAG = '=_=_=_=';
 
     public function validateSendTo($event, array $infos, $notify_me = false, $emitter = null)
     {
@@ -83,7 +83,7 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
             && MailCollector::countActiveCollectors()
             && $this->allowResponse()
         ) {
-            return self::HEADERTAG . ' ' . __('') . ' ' .
+            return self::HEADERTAG . ' ' . __('To answer by email, write above this line') . ' ' .
                 self::HEADERTAG;
         }
 
@@ -102,21 +102,13 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
             && MailCollector::countActiveCollectors()
             && $this->allowResponse()
         ) {
-            return self::FOOTERTAG . ' ' . __('') . ' ' .
+            return self::FOOTERTAG . ' ' . __('To answer by email, write under this line') . ' ' .
                 self::FOOTERTAG;
         }
 
         return '';
     }
 
-
-    /**
-     * Get item associated with the object on which the event was raised
-     *
-     * @param $event  (default '')
-     *
-     * @return the object associated with the itemtype
-     **/
     public function getObjectItem($event = '')
     {
 

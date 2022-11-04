@@ -78,6 +78,6 @@
     'normal' => $fontDir . '/DejaVuSerif',
   ),
   'libre' => array(
-    'normal' => $fontDir . '/libre-normal_262790f5fdbfb22c520dfd4cbaf4ea81',
+    'normal' => $fontDir . '/libre-normal_2e866ab5906112f9c515ce44aaf1dd89',
   ),
 ) ?>

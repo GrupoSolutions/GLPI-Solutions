@@ -215,7 +215,14 @@ abstract class AbstractRequest
                     $data = gzdecode($data);
                     break;
                 case self::COMPRESS_BR:
-                    $data = brotli_uncompress($data);
+                    if (!function_exists('brotli_uncompress')) {
+                        trigger_error(
+                            'Brotli PHP extension is required to handle Brotli compression algorithm in inventory feature.',
+                            E_USER_WARNING
+                        );
+                    } else {
+                        $data = brotli_uncompress($data);
+                    }
                     break;
                 case self::COMPRESS_DEFLATE:
                     $data = gzinflate($data);
@@ -271,7 +278,7 @@ abstract class AbstractRequest
         libxml_use_internal_errors(true);
 
         if (mb_detect_encoding($data, 'UTF-8', true) === false) {
-            $data = utf8_encode($data);
+            $data = iconv('ISO-8859-1', 'UTF-8', $data);
         }
         $xml = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
         if (!$xml) {
@@ -307,12 +314,12 @@ abstract class AbstractRequest
      */
     public function handleJSONRequest($data): bool
     {
-        $jdata = json_decode($data);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (!\Toolbox::isJSON($data)) {
             $this->addError('JSON not well formed!', 400);
             return false;
         }
+
+        $jdata = json_decode($data);
 
         $this->deviceid = $jdata->deviceid ?? null;
         $action = self::INVENT_ACTION;
@@ -357,7 +364,15 @@ abstract class AbstractRequest
                     'expiration' => self::DEFAULT_FREQUENCY
                 ]);
             } else {
-                $this->addToResponse(['ERROR' => \Html::resume_text($message, 250)]);
+                $message = \Html::resume_text($message, 250);
+
+                $this->addToResponse([
+                    'ERROR' => [
+                        'content'    => $message,
+                        'attributes' => [],
+                        'type'       => XML_CDATA_SECTION_NODE,
+                    ]
+                ]);
             }
         }
     }
@@ -408,16 +423,25 @@ abstract class AbstractRequest
                 $this->addNode($node, $sname, $scontent);
             }
         } else {
+            $type = $content['type'] ?? null;
             $attributes = [];
             if (is_array($content) && isset($content['content']) && isset($content['attributes'])) {
                 $attributes = $content['attributes'];
                 $content = $content['content'];
             }
 
-            $new_node = $this->response->createElement(
-                $name,
-                $content
-            );
+            if ($type == XML_CDATA_SECTION_NODE) {
+                // Handle CDATA sections
+                $new_node = $this->response->createElement($name);
+                $cdata = $this->response->createCDATASection($content);
+                $new_node->appendChild($cdata);
+            } else {
+                // Normal sections
+                $new_node = $this->response->createElement(
+                    $name,
+                    $content
+                );
+            }
 
             if (count($attributes)) {
                 foreach ($attributes as $aname => $avalue) {
@@ -482,7 +506,7 @@ abstract class AbstractRequest
 
             switch ($this->mode) {
                 case self::XML_MODE:
-                    $data = $this->response->saveXML();
+                    $data = trim($this->response->saveXML());
                     break;
                 case self::JSON_MODE:
                     $data = json_encode($this->response);
@@ -504,7 +528,14 @@ abstract class AbstractRequest
                         $data = gzencode($data);
                         break;
                     case self::COMPRESS_BR:
-                        $data = brotli_compress($data);
+                        if (!function_exists('brotli_compress')) {
+                            trigger_error(
+                                'Brotli PHP extension is required to handle Brotli compression algorithm in inventory feature.',
+                                E_USER_WARNING
+                            );
+                        } else {
+                            $data = brotli_compress($data);
+                        }
                         break;
                     case self::COMPRESS_DEFLATE:
                         $data = gzdeflate($data);

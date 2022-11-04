@@ -100,7 +100,7 @@ class Knowbase extends CommonGLPI
     /**
      * Show the knowbase search view
      **/
-    /*public static function showSearchView()
+    public static function showSearchView()
     {
 
         global $CFG_GLPI;
@@ -140,7 +140,7 @@ class Knowbase extends CommonGLPI
         }
     }
 
-*/
+
     /**
      * Show the knowbase browse view
      **/

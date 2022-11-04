@@ -230,7 +230,7 @@ class Config extends CommonDBTM
 
             for ($urgency = 1; $urgency <= 5; $urgency++) {
                 for ($impact = 1; $impact <= 5; $impact++) {
-                    $priority               = $input["_matrix_${urgency}_${impact}"];
+                    $priority               = $input["_matrix_{$urgency}_{$impact}"];
                     $tab[$urgency][$impact] = $priority;
                 }
             }
@@ -240,11 +240,11 @@ class Config extends CommonDBTM
             $input['impact_mask']     = 0;
 
             for ($i = 1; $i <= 5; $i++) {
-                if ($input["_urgency_${i}"]) {
+                if ($input["_urgency_{$i}"]) {
                     $input['urgency_mask'] += (1 << $i);
                 }
 
-                if ($input["_impact_${i}"]) {
+                if ($input["_impact_{$i}"]) {
                     $input['impact_mask'] += (1 << $i);
                 }
             }
@@ -1059,7 +1059,7 @@ class Config extends CommonDBTM
                 echo "<input type='hidden' name='_impact_3' value='1'>";
             } else {
                 $isimpact[$impact] = (($CFG_GLPI['impact_mask'] & (1 << $impact)) > 0);
-                Dropdown::showYesNo("_impact_${impact}", $isimpact[$impact]);
+                Dropdown::showYesNo("_impact_{$impact}", $isimpact[$impact]);
             }
             echo "</td>";
         }
@@ -1084,7 +1084,7 @@ class Config extends CommonDBTM
                 echo "<input type='hidden' name='_urgency_3' value='1'>";
             } else {
                 $isurgency[$urgency] = (($CFG_GLPI['urgency_mask'] & (1 << $urgency)) > 0);
-                Dropdown::showYesNo("_urgency_${urgency}", $isurgency[$urgency]);
+                Dropdown::showYesNo("_urgency_{$urgency}", $isurgency[$urgency]);
             }
             echo "</td>";
 
@@ -1098,12 +1098,14 @@ class Config extends CommonDBTM
                 if ($isurgency[$urgency] && $isimpact[$impact]) {
                     $bgcolor = $_SESSION["glpipriority_$pri"];
                     echo "<td class='center' bgcolor='$bgcolor'>";
-                    Ticket::dropdownPriority(['value' => $pri,
-                        'name'  => "_matrix_${urgency}_${impact}"
+                    Ticket::dropdownPriority([
+                        'value' => $pri,
+                        'name'  => "_matrix_{$urgency}_{$impact}",
+                        'enable_filtering' => false,
                     ]);
                     echo "</td>";
                 } else {
-                    echo "<td><input type='hidden' name='_matrix_${urgency}_${impact}' value='$pri'>
+                    echo "<td><input type='hidden' name='_matrix_{$urgency}_{$impact}' value='$pri'>
                      </td>";
                 }
             }
@@ -2068,7 +2070,7 @@ class Config extends CommonDBTM
         echo "<tr class='tab_bg_1'><td><pre class='section-content'>\n&nbsp;\n";
         foreach (get_defined_constants() as $constant_name => $constant_value) {
             if (preg_match('/^GLPI_/', $constant_name)) {
-                echo $constant_name . ': ' . $constant_value . "\n";
+                echo $constant_name . ': ' . json_encode($constant_value, JSON_UNESCAPED_SLASHES) . "\n";
             }
         }
         echo "\n</pre></td></tr>";
@@ -2394,6 +2396,10 @@ HTML;
             [
                 'name'  => 'symfony/polyfill-php81',
                 'check' => 'array_is_list'
+            ],
+            [
+                'name'  => 'symfony/polyfill-php82',
+                'check' => 'Symfony\\Polyfill\\Php82\\SensitiveParameterValue'
             ],
         ];
         if (Toolbox::canUseCAS()) {
@@ -2832,10 +2838,6 @@ HTML;
                 'simplexml' => [
                     'required'  => true,
                 ],
-                'xml'        => [
-                    'required'  => true,
-                    'function'  => 'utf8_decode'
-                ],
             //to sync/connect from LDAP
                 'ldap'       => [
                     'required'  => false,
@@ -3025,8 +3027,9 @@ HTML;
         } else {
            // multiple rows = 0.85+ config
             $values = [];
+            $allowed_context = ['core', 'inventory'];
             foreach ($iterator as $row) {
-                if ('core' !== $row['context']) {
+                if (!in_array($row['context'], $allowed_context)) {
                     continue;
                 }
                 $values[$row['name']] = $row['value'];
@@ -3237,7 +3240,8 @@ HTML;
             ]
         );
         echo "</td></tr>";
-        echo "<input type='hidden' name='id' value='1'>";
+        $config_id = self::getConfigIDForContext('core');
+        echo "<input type='hidden' name='id' value='{$config_id}'>";
 
         echo "<tr class='tab_bg_1'><th colspan='4'>" . __("General") . "</th></tr>";
         echo "<tr class='tab_bg_1'><td class='center'>" . __("Add/update relation between items") .
@@ -3738,11 +3742,26 @@ HTML;
         }
 
         if (array_key_exists('value', $this->oldvalues)) {
+            $newvalue = (string)$this->fields['value'];
+            $oldvalue = (string)$this->oldvalues['value'];
+
+            if ($newvalue === $oldvalue) {
+                return;
+            }
+
+            // avoid inserting truncated json in logs
+            if (strlen($newvalue) > 255 && Toolbox::isJSON($newvalue)) {
+                $newvalue = "{...}";
+            }
+            if (strlen($oldvalue) > 255 && Toolbox::isJSON($oldvalue)) {
+                $oldvalue = "{...}";
+            }
+
             $this->logConfigChange(
                 $this->fields['context'],
                 $this->fields['name'],
-                (string)$this->fields['value'],
-                (string)$this->oldvalues['value']
+                $newvalue,
+                $oldvalue
             );
         }
     }
@@ -4001,5 +4020,30 @@ HTML;
     public function getBrowserTabName(): string
     {
         return self::getTypeName(1);
+    }
+
+    /**
+     * Gets the ID of a random record from the config table with the specified context.
+     *
+     * Used as a hacky workaround when we require a valid glpi_configs record for rights checks.
+     * We cannot rely on something being in ID 1 for the core context for example, because some clustering solutions may change how autoincrement works.
+     * @return ?int
+     * @internal
+     */
+    public static function getConfigIDForContext(string $context)
+    {
+        global $DB;
+        $iterator = $DB->request([
+            'SELECT' => 'id',
+            'FROM'   => self::getTable(),
+            'WHERE'  => [
+                'context' => $context,
+            ],
+            'LIMIT'  => 1,
+        ]);
+        if (count($iterator)) {
+            return $iterator->current()['id'];
+        }
+        return null;
     }
 }

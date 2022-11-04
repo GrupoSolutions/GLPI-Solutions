@@ -84,6 +84,7 @@ class DatabaseInstance extends CommonDBTM
          ->addStandardTab('Item_Problem', $ong, $options)
          ->addStandardTab('Change_Item', $ong, $options)
          ->addStandardTab('Certificate_Item', $ong, $options)
+         ->addStandardTab('Lock', $ong, $options)
          ->addStandardTab('Notepad', $ong, $options)
          ->addStandardTab('Domain_Item', $ong, $options)
          ->addStandardTab('Appliance_Item', $ong, $options)
@@ -286,6 +287,22 @@ class DatabaseInstance extends CommonDBTM
         );
         echo "</td></tr>\n";
 
+        echo "<tr class='tab_bg_1'>";
+        echo "<td><label for='port$rand'>" . _n('Port', 'Ports', 1) . "</label></td>";
+        echo "<td>";
+        echo Html::input('port', [
+            'value' => $this->fields['port'],
+            'id'    => "port$rand"
+        ]);
+        echo "</td>";
+        echo "<td><label for='path$rand'>" . __('Path') . "</label></td>";
+        echo "<td>";
+        echo Html::input('path', [
+            'value' => $this->fields['path'],
+            'id'    => "path$rand"
+        ]);
+        echo "</td></tr>\n";
+
         $this->showInventoryInfo();
 
         $this->showFormButtons($options);
@@ -355,6 +372,14 @@ class DatabaseInstance extends CommonDBTM
             'searchtype'       => 'equals',
             'additionalfields' => ['itemtype'],
             'joinparams'       => ['jointype' => 'child']
+        ];
+
+        $tab[] = [
+            'id'                 => '6',
+            'table'              => DatabaseInstance::getTable(),
+            'field'              => 'version',
+            'name'               => _n('Version', 'Versions', 1),
+            'datatype'           => 'text'
         ];
 
         $tab[] = [
@@ -519,6 +544,7 @@ class DatabaseInstance extends CommonDBTM
             }
             return self::createTabEntry(self::getTypeName(Session::getPluralNumber()), $nb);
         }
+        return '';
     }
 
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)

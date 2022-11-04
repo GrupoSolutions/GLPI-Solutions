@@ -73,7 +73,7 @@ class NotificationTemplateTranslation extends CommonDBChild
         if ($this->getField('language') != '') {
             return $CFG_GLPI['languages'][$this->getField('language')][0];
         } else {
-            return self::getTypeName(1);
+            return __('Default translation');
         }
 
         return '';
@@ -271,7 +271,7 @@ class NotificationTemplateTranslation extends CommonDBChild
         $txt = Sanitizer::unsanitize($input['content_html']);
 
        // Get as text plain text
-        $txt = RichText::getTextFromHtml($txt, true);
+        $txt = RichText::getTextFromHtml($txt, true, false, false, true);
 
        // Sanitize result
         $txt = Sanitizer::sanitize($txt);

@@ -36,8 +36,10 @@
 namespace Glpi\System\Diagnostic;
 
 use DBmysql;
-use RuntimeException;
+use Glpi\Toolbox\VersionParser;
+use Plugin;
 use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 
 /**
  * @since 10.0.0
@@ -119,6 +121,13 @@ class DatabaseSchemaIntegrityChecker
     private $normalized = [];
 
     /**
+     * Differ instance.
+     *
+     * @var Differ
+     */
+    private $differ;
+
+    /**
      * @param DBmysql $db                                 DB instance.
      * @param bool $strict                                Ignore differences that has no effect on application (columns and keys order for instance).
      * @param bool $ignore_innodb_migration               Do not check tokens related to migration from "MyISAM" to "InnoDB".
@@ -143,6 +152,16 @@ class DatabaseSchemaIntegrityChecker
         $this->ignore_timestamps_migration = $ignore_timestamps_migration;
         $this->ignore_unsigned_keys_migration = $ignore_unsigned_keys_migration;
         $this->ignore_utf8mb4_migration = $ignore_utf8mb4_migration;
+
+        $this->differ = new Differ(
+            new UnifiedDiffOutputBuilder(
+                sprintf(
+                    "--- %s\n+++ %s\n",
+                    __('Expected database schema'),
+                    __('Current database schema')
+                )
+            )
+        );
     }
 
     /**
@@ -177,8 +196,7 @@ class DatabaseSchemaIntegrityChecker
             return '';
         }
 
-        $differ = new Differ();
-        return $differ->diff(
+        return $this->differ->diff(
             $proper_create_table_sql,
             $effective_create_table_sql
         );
@@ -192,7 +210,7 @@ class DatabaseSchemaIntegrityChecker
      * @return array    The parsed contents of the schema file.
      *                  Keys contains table names and values contains CREATE TABLE SQL queries.
      *
-     * @throws RuntimeException Thrown if the specified schema file cannot be read.
+     * @throws \RuntimeException Thrown if the specified schema file cannot be read.
      */
     public function extractSchemaFromFile(string $schema_path): array
     {
@@ -201,7 +219,7 @@ class DatabaseSchemaIntegrityChecker
             || !is_readable($schema_path)
             || ($schema_sql = file_get_contents($schema_path)) === false
         ) {
-            throw new RuntimeException(sprintf(__('Unable to read installation file "%s".'), $schema_path));
+            throw new \RuntimeException(sprintf(__('Unable to read installation file "%s".'), $schema_path));
         }
 
         $matches = [];
@@ -237,7 +255,6 @@ class DatabaseSchemaIntegrityChecker
 
         $this->db->clearSchemaCache(); // Ensure fetched table list is up-to-date
 
-        $differ = new Differ();
         $result = [];
 
         foreach ($schema as $table_name => $create_table_sql) {
@@ -246,7 +263,7 @@ class DatabaseSchemaIntegrityChecker
             if (!$this->db->tableExists($table_name)) {
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_MISSING_TABLE,
-                    'diff' => $differ->diff($create_table_sql, '')
+                    'diff' => $this->differ->diff($create_table_sql, '')
                 ];
                 continue;
             }
@@ -255,7 +272,7 @@ class DatabaseSchemaIntegrityChecker
             if ($create_table_sql !== $effective_create_table_sql) {
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_ALTERED_TABLE,
-                    'diff' => $differ->diff($create_table_sql, $effective_create_table_sql)
+                    'diff' => $this->differ->diff($create_table_sql, $effective_create_table_sql)
                 ];
             }
         }
@@ -289,12 +306,39 @@ class DatabaseSchemaIntegrityChecker
                 $effective_create_table_sql = $this->getNomalizedSql($this->getEffectiveCreateTableSql($table_name));
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_UNKNOWN_TABLE,
-                    'diff' => $differ->diff('', $effective_create_table_sql)
+                    'diff' => $this->differ->diff('', $effective_create_table_sql)
                 ];
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Check if there is differences between effective schema and expected schema for given version/context.
+     *
+     * @param string|null $schema_version   Installed schema version
+     * @param bool $include_unknown_tables  Indicates whether unknown existing tables should be include in results
+     * @param string $context               Context used for unknown tables identification (could be 'core' or 'plugin:plugin_key')
+     *
+     * @return array    List of tables that differs from the expected schema.
+     *                  Keys are table names, and each entry has following properties:
+     *                      - `type`:       difference type, see self::RESULT_TYPE_* constants;
+     *                      - `diff`:       diff string.
+     *
+     * @throws \RuntimeException Thrown if schema file is not available.
+     */
+    final public function checkCompleteSchemaForVersion(
+        ?string $schema_version = null,
+        bool $include_unknown_tables = false,
+        string $context = 'core'
+    ): array {
+        $schema_path = $this->getSchemaPath($schema_version, $context);
+        if ($schema_path === null) {
+            throw new \RuntimeException('Schema file not available.');
+        }
+
+        return $this->checkCompleteSchema($schema_path, $include_unknown_tables, $context);
     }
 
     /**
@@ -437,10 +481,41 @@ class DatabaseSchemaIntegrityChecker
         if ($this->ignore_unsigned_keys_migration) {
             $column_replacements['/(`id`|`.+_id(_.+)?`) int unsigned/i'] = '$1 int';
         }
+
+        if (
+            $table_name === 'glpi_impactcontexts'
+            && $this->db->tableExists('glpi_configs') && $this->db->fieldExists('glpi_configs', 'context')
+        ) {
+            // Remove default value on glpi_impactcontexts.positions column.
+            // The default cannot be added on MySQL server, so it is impossible to fix this diff prior to migration.
+            //
+            // Apply this "hack" only when current DB version is < 10.0.1, which is the version that removed
+            // this default value on GLPI firstly installed in version <= 9.5.3.
+            // see https://github.com/glpi-project/glpi/pull/8415
+            // see https://github.com/glpi-project/glpi/pull/11662
+            $dbversion_res = $this->db->request(
+                [
+                    'FROM'   => 'glpi_configs',
+                    'WHERE'  => [
+                        'context' => 'core',
+                        'name'    => 'dbversion',
+                    ]
+                ]
+            )->current();
+            if (
+                $dbversion_res !== null
+                && version_compare(VersionParser::getNormalizedVersion($dbversion_res['value']), '10.0.1', '<')
+            ) {
+                $column_replacements['/(`positions`.*)\s*DEFAULT\s*\'\'\s*(.*)/'] = '$1 $2';
+            }
+        }
+
         $columns = preg_replace(array_keys($column_replacements), array_values($column_replacements), $columns);
 
         // Normalize indexes definitions
         $indexes_replacements = [
+            // Remove comments
+            '/ COMMENT \'.+\'/i' => '',
             // Always use `KEY` word
             '/INDEX\s*(`\w+`)/' => 'KEY $1',
             // Add `KEY` word when missing from UNIQUE/FULLTEXT
@@ -622,5 +697,59 @@ class DatabaseSchemaIntegrityChecker
         }
 
         return $sql;
+    }
+
+    /**
+     * Get schema file path for given version.
+     *
+     * @param string|null $schema_version   Installed schema version
+     * @param string $context               Context used for unknown tables identification (could be 'core' or 'plugin:plugin_key')
+     *
+     * @return string|null
+     */
+    private function getSchemaPath(?string $schema_version = null, string $context = 'core'): ?string
+    {
+        $schema_path = null;
+
+        if ($context === 'core') {
+            $schema_version_nohash = preg_replace('/@.+$/', '', $schema_version); // strip hash
+            $schema_version_clean  = VersionParser::getNormalizedVersion($schema_version_nohash, false); // strip stability flag
+            $schema_path = sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, $schema_version_clean);
+        } elseif (preg_match('/^plugin:(?<plugin_key>\w+)$/', $context) === 1) {
+            $plugin_key = str_replace('plugin:', '', $context);
+            Plugin::load($plugin_key); // Load setup file, to be able to check schema even on inactive plugins
+            $function_name = sprintf('plugin_%s_getSchemaPath', $plugin_key);
+            if (!function_exists($function_name)) {
+                return null;
+            }
+            $schema_path = $function_name($schema_version);
+        }
+
+        return !empty($schema_path) && file_exists($schema_path)
+            ? $schema_path
+            : null;
+    }
+
+    /**
+     * Check if schema integrity can be checked for given version/context.
+     *
+     * @param string|null $schema_version   Installed schema version
+     * @param string $context               Context used for unknown tables identification (could be 'core' or 'plugin:plugin_key')
+     *
+     * @return bool
+     */
+    final public function canCheckIntegrity(?string $schema_version = null, string $context = 'core'): bool
+    {
+        if ($context === 'core') {
+            $schema_version_nohash = preg_replace('/@.+$/', '', $schema_version); // strip hash
+            $is_stable_version     = VersionParser::isStableRelease($schema_version_nohash);
+            $is_latest_version     = $schema_version === GLPI_SCHEMA_VERSION;
+
+            if (!$is_stable_version && !$is_latest_version) {
+                // Cannot check integrity if version is not stable, unless installed version is latest one.
+                return false;
+            }
+        }
+        return $this->getSchemaPath($schema_version, $context) !== null;
     }
 }

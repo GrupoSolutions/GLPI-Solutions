@@ -213,7 +213,6 @@ class Document_Item extends CommonDBRelation
             $input  = [
                 'id'              => $this->fields['items_id'],
                 'date_mod'        => $_SESSION["glpi_currenttime"],
-                '_donotadddocs'   => true
             ];
 
             if (!isset($this->input['_do_notif']) || $this->input['_do_notif']) {
@@ -242,7 +241,6 @@ class Document_Item extends CommonDBRelation
             $input = [
                 'id'              => $this->fields['items_id'],
                 'date_mod'        => $_SESSION["glpi_currenttime"],
-                '_donotadddocs'   => true
             ];
 
             if (!isset($this->input['_do_notif']) || $this->input['_do_notif']) {
@@ -325,11 +323,13 @@ class Document_Item extends CommonDBRelation
                         self::showForItem($item, $withtemplate);
                         break;
                 }
-                return true;
+                break;
 
             default:
                 self::showForitem($item, $withtemplate);
+                break;
         }
+        return true;
     }
 
 
@@ -723,6 +723,8 @@ class Document_Item extends CommonDBRelation
 
             echo "</div>";
         }
+
+        return true;
     }
 
 

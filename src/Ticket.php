@@ -295,11 +295,6 @@ class Ticket extends CommonITILObject
         switch ($action) {
             case 'update':
                 switch ($field) {
-                    case 'status':
-                        if (!self::isAllowedStatus($this->fields['status'], $value)) {
-                            return false;
-                        }
-                        break;
                     case 'itilcategories_id':
                         $cat = new ITILCategory();
                         if ($cat->getFromDB($value)) {
@@ -322,7 +317,7 @@ class Ticket extends CommonITILObject
                 }
                 break;
         }
-        return true;
+        return parent::canMassiveAction($action, $field, $value);
     }
 
     /**
@@ -1146,6 +1141,8 @@ class Ticket extends CommonITILObject
             foreach ($existing_actors as $actor_itemtype => $actors) {
                 $field = getForeignKeyFieldForItemType($actor_itemtype);
                 $input_key = '_' . $field . '_' . $t;
+                $deleted_key = $input_key . '_deleted';
+                $deleted_actors = array_key_exists($deleted_key, $input) && is_array($input[$deleted_key]) ? array_column($input[$deleted_key], 'items_id') : [];
                 foreach ($actors as $actor) {
                     if (
                         !isset($input[$input_key])
@@ -1160,8 +1157,10 @@ class Ticket extends CommonITILObject
                         } elseif (!is_array($input[$input_key])) {
                             $input[$input_key] = [$input[$input_key]];
                         }
-                        $input[$input_key][]             = $actor[$field];
-                        $tocleanafterrules[$input_key][] = $actor[$field];
+                        if (!in_array($actor[$field], $deleted_actors)) {
+                            $input[$input_key][]             = $actor[$field];
+                            $tocleanafterrules[$input_key][] = $actor[$field];
+                        }
                     }
                 }
             }
@@ -1275,8 +1274,6 @@ class Ticket extends CommonITILObject
         if (isset($input['content'])) {
             if (isset($input['_filename']) || isset($input['_content'])) {
                 $input['_disablenotif'] = true;
-            } else {
-                $input['_donotadddocs'] = true;
             }
         }
 
@@ -1532,8 +1529,20 @@ class Ticket extends CommonITILObject
             && $this->canTakeIntoAccount()
             && !$this->isNew()
         ) {
+            $this->updates[]                            = "takeintoaccountdate";
+            $this->fields['takeintoaccountdate']        = $_SESSION["glpi_currenttime"];
             $this->updates[]                            = "takeintoaccount_delay_stat";
             $this->fields['takeintoaccount_delay_stat'] = $this->computeTakeIntoAccountDelayStat();
+        }
+
+        if (
+            in_array("takeintoaccount_delay_stat", $this->updates) &&
+            $this->fields['takeintoaccount_delay_stat'] == 0
+        ) {
+            if (!in_array("takeintoaccountdate", $this->updates)) {
+                $this->updates[] = "takeintoaccountdate";
+            }
+            $this->fields["takeintoaccountdate"] = null;
         }
 
         parent::pre_updateInDB();
@@ -1550,9 +1559,9 @@ class Ticket extends CommonITILObject
             isset($this->fields['id'])
             && !empty($this->fields['date'])
         ) {
-            $calendars_id = $this->getCalendar();
+           // Use SLA TTO calendar
+            $calendars_id = $this->getCalendar(SLM::TTO);
             $calendar     = new Calendar();
-
            // Using calendar
             if (($calendars_id > 0) && $calendar->getFromDB($calendars_id)) {
                 return max(1, $calendar->getActiveTimeBetween(
@@ -1676,6 +1685,7 @@ class Ticket extends CommonITILObject
            // Read again ticket to be sure that all data are up to date
             $this->getFromDB($this->fields['id']);
             NotificationEvent::raiseEvent($mailtype, $this);
+            $this->input['_disablenotif'] = true;
         }
 
        // inquest created immediatly if delay = O
@@ -1730,10 +1740,21 @@ class Ticket extends CommonITILObject
         if (
             isset($input['check_delegatee'], $input['_users_id_requester'])
             && $input['check_delegatee']
-            && !self::canDelegateeCreateTicket($input['_users_id_requester'], ($input['entities_id'] ?? -2))
         ) {
-            Session::addMessageAfterRedirect(__("You cannot create a ticket for this user"));
-            return false;
+            $requesters_ids = is_array($input['_users_id_requester'])
+                ? $input['_users_id_requester']
+                : [$input['_users_id_requester']];
+            $can_delegatee_create_ticket = false;
+            foreach ($requesters_ids as $requester_id) {
+                if (self::canDelegateeCreateTicket($requester_id, ($input['entities_id'] ?? -2))) {
+                    $can_delegatee_create_ticket = true;
+                    break;
+                }
+            }
+            if (!$can_delegatee_create_ticket) {
+                Session::addMessageAfterRedirect(__("You cannot create a ticket for this user"));
+                return false;
+            }
         }
 
         if (!isset($input["requesttypes_id"])) {
@@ -1804,10 +1825,10 @@ class Ticket extends CommonITILObject
             $input['itilcategories_id_code'] = ITILCategory::getById($cat_id)->fields['code'];
         }
 
-       // Set default contract if not specified
+        // Set default contract if not specified
         if (
-            !isset($input['_contracts_id']) &&
-            (!isset($input['_skip_default_contract']) || $input['_skip_default_contract'] === false)
+            (!isset($input['_contracts_id']) || (int)$input['_contracts_id'] == 0)
+            && (!isset($input['_skip_default_contract']) || $input['_skip_default_contract'] === false)
         ) {
             $input['_contracts_id'] = Entity::getDefaultContract($this->input['entities_id'] ?? 0);
         }
@@ -1912,8 +1933,6 @@ class Ticket extends CommonITILObject
                     $input = $this->setTechAndGroupFromHardware($input, $item);
                     break;
             }
-
-            $input = $this->assign($input);
         }
 
         if (!isset($input['_skip_sla_assign']) || $input['_skip_sla_assign'] === false) {
@@ -1942,8 +1961,6 @@ class Ticket extends CommonITILObject
 
     public function post_addItem()
     {
-        global $CFG_GLPI;
-
        // Log this event
         $username = 'anonymous';
         if (isset($_SESSION["glpiname"])) {
@@ -2111,30 +2128,7 @@ class Ticket extends CommonITILObject
 
         parent::post_addItem();
 
-       // Processing Email
-        if (!isset($this->input['_disablenotif']) && $CFG_GLPI["use_notifications"]) {
-           // Clean reload of the ticket
-            $this->getFromDB($this->fields['id']);
-
-            $type = "new";
-            if (isset($this->fields["status"]) && ($this->fields["status"] == self::SOLVED)) {
-                $type = "solved";
-            }
-            NotificationEvent::raiseEvent($type, $this);
-        }
-
-        if (isset($_SESSION['glpiis_ids_visible']) && !$_SESSION['glpiis_ids_visible']) {
-            Session::addMessageAfterRedirect(sprintf(
-                __('%1$s (%2$s)'),
-                __('Your ticket has been registered.'),
-                sprintf(
-                    __('%1$s: %2$s'),
-                    Ticket::getTypeName(1),
-                    "<a href='" . Ticket::getFormURLWithID($this->fields['id']) . "'>" .
-                    $this->fields['id'] . "</a>"
-                )
-            ));
-        }
+        $this->handleNewItemNotifications();
     }
 
 
@@ -2347,6 +2341,7 @@ class Ticket extends CommonITILObject
                     [
                         'id'                         => $ID,
                         'takeintoaccount_delay_stat' => $this->computeTakeIntoAccountDelayStat(),
+                        'takeintoaccountdate'        => $_SESSION["glpi_currenttime"],
                         '_disablenotif'              => true
                     ]
                 );
@@ -2972,7 +2967,7 @@ JAVASCRIPT;
             'datatype'           => 'datetime',
             'maybefuture'        => true,
             'massiveaction'      => false,
-            'additionalfields'   => ['date', 'status', 'takeintoaccount_delay_stat']
+            'additionalfields'   => ['date', 'status', 'takeintoaccount_delay_stat', 'takeintoaccountdate']
         ];
 
         $tab[] = [
@@ -3034,7 +3029,7 @@ JAVASCRIPT;
             'datatype'           => 'datetime',
             'maybefuture'        => true,
             'massiveaction'      => false,
-            'additionalfields'   => ['date', 'status', 'takeintoaccount_delay_stat'],
+            'additionalfields'   => ['date', 'status', 'takeintoaccount_delay_stat', 'takeintoaccountdate'],
         ];
 
         $tab[] = [
@@ -3911,6 +3906,7 @@ JAVASCRIPT;
             '_tag_filename'             => [],
             '_tasktemplates_id'         => []
         ];
+        $options = [];
 
        // Get default values from posted values on reload form
         if (!$ticket_template) {
@@ -3925,17 +3921,7 @@ JAVASCRIPT;
             $options['name'] = str_replace($order, $replace, $options['name']);
         }
 
-       // Restore saved value or override with page parameter
-        $saved = $this->restoreInput();
-        foreach ($default_values as $name => $value) {
-            if (!isset($options[$name])) {
-                if (isset($saved[$name])) {
-                    $options[$name] = $saved[$name];
-                } else {
-                    $options[$name] = $value;
-                }
-            }
-        }
+        $this->restoreInputAndDefaults($ID, $options, $default_values, true);
 
        // Check category / type validity
         if ($options['itilcategories_id']) {
@@ -3985,6 +3971,7 @@ JAVASCRIPT;
             'selfservice'             => true,
             'item'                    => $this,
             'params'                  => $options,
+            'entities_id'             => $options['entities_id'],
             'itiltemplate_key'        => self::getTemplateFormFieldName(),
             'itiltemplate'            => $tt,
             'delegating'              => $delegating,
@@ -4130,7 +4117,7 @@ JAVASCRIPT;
             'priority'                  => self::computePriority(3, 3),
             'requesttypes_id'           => $requesttype,
             'actiontime'                => 0,
-            'date'                      => null,
+            'date'                      => 'NULL',
             'entities_id'               => $entity,
             'status'                    => self::INCOMING,
             'followup'                  => [],
@@ -4175,23 +4162,7 @@ JAVASCRIPT;
             $options['entities_id'] = $item->fields['entities_id'];
         }
 
-        $default_values = self::getDefaultValues();
-
-        // Restore saved value or override with page parameter
-        $options['_saved'] = $this->restoreInput();
-
-        // Restore saved values and override $this->fields
-        $this->restoreSavedValues($options['_saved']);
-
-        foreach ($default_values as $name => $value) {
-            if (!isset($options[$name])) {
-                if (isset($options['_saved'][$name])) {
-                    $options[$name] = $options['_saved'][$name];
-                } else {
-                    $options[$name] = $value;
-                }
-            }
-        }
+        $this->restoreInputAndDefaults($ID, $options, null, true);
 
         if (isset($options['content'])) {
             $order              = ["\\'", '\\"', "\\\\"];
@@ -4336,7 +4307,7 @@ JAVASCRIPT;
         );
 
         // override current fields in options with template fields and return the array of these predefined fields
-        $predefined_fields = $this->setPredefinedFields($tt, $options, $default_values);
+        $predefined_fields = $this->setPredefinedFields($tt, $options, self::getDefaultValues());
 
         // check right used for this ticket
         $canupdate     = !$ID
@@ -4986,8 +4957,7 @@ JAVASCRIPT;
                     $bgcolor = $_SESSION["glpipriority_" . $job->fields["priority"]];
                     $name    = sprintf(__('%1$s: %2$s'), __('ID'), $job->fields["id"]);
                     $row['values'][] = [
-                        'class'   => 'priority_block',
-                        'content' => "<span style='background: $bgcolor'></span>&nbsp;$name"
+                        'content' => "<div class='priority_block' style='border-color: $bgcolor'><span style='background: $bgcolor'></span>&nbsp;$name</div>"
                     ];
 
                     $requesters = [];
@@ -6207,16 +6177,20 @@ JAVASCRIPT;
      * Get correct Calendar: Entity or Sla
      *
      * @since 0.90.4
+     * @since 10.0.4 $slm_type parameter added
+     *
+     * @param int $slm_type Type of SLA, can be SLM::TTO or SLM::TTR
      *
      **/
-    public function getCalendar()
+    public function getCalendar(int $slm_type = SLM::TTR)
     {
+        list($date_field, $sla_field) = SLA::getFieldNames($slm_type);
 
-        if (isset($this->fields['slas_id_ttr']) && $this->fields['slas_id_ttr'] > 0) {
+        if (isset($this->fields[$sla_field]) && $this->fields[$sla_field] > 0) {
             $sla = new SLA();
-            if ($sla->getFromDB($this->fields['slas_id_ttr'])) {
+            if ($sla->getFromDB($this->fields[$sla_field])) {
                 if (!$sla->fields['use_ticket_calendar']) {
-                    return $sla->getField('calendars_id');
+                    return $sla->fields['calendars_id'];
                 }
             }
         }
@@ -6264,9 +6238,12 @@ JAVASCRIPT;
     {
         $now                      = time();
         $date_creation            = strtotime($this->fields['date'] ?? '');
-        $date_takeintoaccount     = $date_creation + $this->fields['takeintoaccount_delay_stat'];
-        if ($date_takeintoaccount == $date_creation) {
-            $date_takeintoaccount  = 0;
+       // Tickets created before 10.0.4 do not have takeintoaccountdate field, use old and incorrect computation for those cases
+        $date_takeintoaccount     = 0;
+        if ($this->fields['takeintoaccountdate'] !== null) {
+            $date_takeintoaccount = strtotime($this->fields['takeintoaccountdate']);
+        } elseif ($this->fields['takeintoaccount_delay_stat'] > 0) {
+            $date_takeintoaccount = $date_creation + $this->fields['takeintoaccount_delay_stat'];
         }
         $internal_time_to_own     = strtotime($this->fields['internal_time_to_own'] ?? '');
         $time_to_own              = strtotime($this->fields['time_to_own'] ?? '');

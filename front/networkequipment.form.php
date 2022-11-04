@@ -50,32 +50,20 @@ $netdevice = new NetworkEquipment();
 if (isset($_POST["add"])) {
     $netdevice->check(-1, CREATE, $_POST);
 
-    $networktypeid = $_POST['networkequipmenttypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['networkequipmentmodels_id'];
-
-   
-    if($networktypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao atualizar !\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
-        if ($newID = $netdevice->add($_POST)) {
-            Event::log(
-                $newID,
-                "networkequipment",
-                4,
-                "inventory",
-                sprintf(__('%1$s adds the item %2$s'), $_SESSION["glpiname"], $_POST["name"])
-            );
-            if ($_SESSION['glpibackcreated']) {
-                Html::redirect($netdevice->getLinkURL());
-            }
+    if ($newID = $netdevice->add($_POST)) {
+        Event::log(
+            $newID,
+            "networkequipment",
+            4,
+            "inventory",
+            sprintf(__('%1$s adds the item %2$s'), $_SESSION["glpiname"], $_POST["name"])
+        );
+        if ($_SESSION['glpibackcreated']) {
+            Html::redirect($netdevice->getLinkURL());
+        }
     }
     Html::back();
-}} else if (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
     $netdevice->check($_POST["id"], DELETE);
     $netdevice->delete($_POST);
 
@@ -118,19 +106,6 @@ if (isset($_POST["add"])) {
 } else if (isset($_POST["update"])) {
     $netdevice->check($_POST["id"], UPDATE);
 
-    $networktypeid = $_POST['networkequipmenttypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['networkequipmentmodels_id'];
-
-   
-    if($networktypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao atualizar !\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
-
     $netdevice->update($_POST);
     Event::log(
         $_POST["id"],
@@ -141,7 +116,7 @@ if (isset($_POST["add"])) {
         sprintf(__('%s updates an item'), $_SESSION["glpiname"])
     );
     Html::back();
-}}else {
+} else {
     $menus = ["assets", "networkequipment"];
     NetworkEquipment::displayFullPageForItem($_GET["id"], $menus, [
         'withtemplate' => $_GET["withtemplate"],

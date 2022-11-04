@@ -1785,16 +1785,56 @@ class Profile extends CommonDBTM
                 'label'     => __('Notification queue'),
                 'field'     => 'queuednotification'
             ], [
-                'itemtype'  => 'Glpi\Inventory\Conf',
-                'label'     => __('Inventory'),
-                'field'     => 'inventory'
-            ], [
                 'itemtype'  => 'Log',
                 'label'     => Log::getTypeName(Session::getPluralNumber()),
                 'field'     => 'logs'
             ]
         ];
         $matrix_options['title'] = __('Administration');
+        $this->displayRightsChoiceMatrix($rights, $matrix_options);
+
+        $rights = [
+            [
+                'itemtype'  => 'Glpi\Inventory\Conf',
+                'label'     => __('Inventory'),
+                'field'     => 'inventory'
+            ], [
+                'itemtype'  => 'LockedField',
+                'label'     => Lockedfield::getTypeName(Session::getPluralNumber()),
+                'field'     => 'locked_field',
+                'rights'  => [
+                    CREATE => __('Create'), // For READ / CREATE
+                    UPDATE => __('Update'), //for CREATE / PURGE global lock
+                ],
+            ], [
+                'itemtype'  => 'SNMPCredential',
+                'label'     => SNMPCredential::getTypeName(Session::getPluralNumber()),
+                'field'     => 'snmpcredential',
+            ], [
+                'itemtype'  => 'RefusedEquipment',
+                'label'     => RefusedEquipment::getTypeName(Session::getPluralNumber()),
+                'field'     => 'refusedequipment',
+                'rights'  => [
+                    READ  => __('Read'),
+                    UPDATE  => __('Update'),
+                    PURGE   => ['short' => __('Purge'),
+                        'long'  => _x('button', 'Delete permanently')
+                    ]
+                ],
+            ], [
+                'itemtype'  => 'Agent',
+                'label'     => Agent::getTypeName(Session::getPluralNumber()),
+                'field'     => 'agent',
+                'rights'  => [
+                    READ    => __('Read'),
+                    UPDATE  => __('Update'),
+                    PURGE   => ['short' => __('Purge'),
+                        'long'  => _x('button', 'Delete permanently')
+                    ]
+                ],
+            ]
+        ];
+        $matrix_options['title'] = __('Inventory');
         $this->displayRightsChoiceMatrix($rights, $matrix_options);
 
         $rights = [['itemtype'  => 'Rule',
@@ -3424,7 +3464,7 @@ class Profile extends CommonDBTM
      * @param $itemtype   string   itemtype
      * @param $interface  string   (default 'central')
      *
-     * @return rights
+     * @return array
      **/
     public static function getRightsFor($itemtype, $interface = 'central')
     {
@@ -3433,6 +3473,8 @@ class Profile extends CommonDBTM
             $item = new $itemtype();
             return $item->getRights($interface);
         }
+
+        return [];
     }
 
 
@@ -3592,7 +3634,7 @@ class Profile extends CommonDBTM
      *             'display'
      *             'check_method'  method used to check the right
      *
-     * @return content if !display
+     * @return string|void Return generated content if `display` parameter is true.
      **/
     public static function getLinearRightChoice(array $elements, array $options = [])
     {

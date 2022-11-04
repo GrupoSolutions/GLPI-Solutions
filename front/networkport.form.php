@@ -117,6 +117,22 @@ if (isset($_POST["add"])) {
         Html::redirect($item->getFormURLWithID($np->fields['items_id']));
     }
     Html::redirect($CFG_GLPI["root_doc"] . "/front/central.php");
+} else if (isset($_POST["delete"])) {
+    $np->check($_POST['id'], DELETE);
+    $np->delete($_POST, 0);
+    Event::log(
+        $_POST['id'],
+        "networkport",
+        5,
+        "inventory",
+        //TRANS: %s is the user login
+        sprintf(__('%s deletes an item'), $_SESSION["glpiname"])
+    );
+
+    if ($item = getItemForItemtype($np->fields['itemtype'])) {
+        Html::redirect($item->getFormURLWithID($np->fields['items_id']));
+    }
+    Html::redirect($CFG_GLPI["root_doc"] . "/front/central.php");
 } else if (isset($_POST["update"])) {
     $np->check($_POST['id'], UPDATE);
 
@@ -151,6 +167,7 @@ if (isset($_POST["add"])) {
         $_GET["instantiation_type"] = "";
     }
 
-    $menus = ['assets'];
+    $menus[0] = 'assets';
+    $menus[1] = 'networkport';
     NetworkPort::displayFullPageForItem($_GET["id"], $menus, $_GET);
 }

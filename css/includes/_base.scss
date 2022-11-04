@@ -92,7 +92,7 @@ body.iframed {
     .glpi-logo {
         background: url($logo) no-repeat;
         height: 55px;
-        width: 350px;
+        width: 100px;
     }
 
     .page-body {
@@ -317,4 +317,18 @@ table {
 
 kbd {
     white-space: nowrap;
+}
+
+body,
+body input {
+    font-variant-ligatures: no-contextual;
+}
+
+/** Bootstrap visibility classes (The utility class behavior is different in _styles.scss) */
+.bs-visible {
+    visibility: visible !important;
+}
+
+.bs-invisible {
+    visibility: hidden !important;
 }

@@ -580,7 +580,15 @@ class DBmysql
      */
     public function insertId()
     {
-        return $this->dbh->insert_id;
+        $insert_id = $this->dbh->insert_id;
+
+        if ($insert_id === 0) {
+            // See https://www.php.net/manual/en/mysqli.insert-id.php
+            // `$this->dbh->insert_id` will return 0 value if `INSERT` statement did not change the `AUTO_INCREMENT` value.
+            // We have to retrieve it manually via `LAST_INSERT_ID()`.
+            $insert_id = $this->dbh->query('SELECT LAST_INSERT_ID()')->fetch_row()[0];
+        }
+        return $insert_id;
     }
 
     /**
@@ -1687,16 +1695,24 @@ class DBmysql
     {
         if (!$savepoint) {
             $this->in_transaction = false;
-            $this->dbh->rollback();
+            return $this->dbh->rollback();
         } else {
-            $this->rollbackTo($savepoint);
+            return $this->rollbackTo($savepoint);
         }
     }
 
+    /**
+     * Rollbacks a transaction to a specified savepoint
+     *
+     * @param string $name
+     *
+     * @return boolean
+     */
     protected function rollbackTo($name)
     {
-       // No proper rollback to savepoint support in mysqli extension?
-        $this->query('ROLLBACK TO ' . self::quoteName($name));
+        // No proper rollback to savepoint support in mysqli extension?
+        $result = $this->query('ROLLBACK TO ' . self::quoteName($name));
+        return $result !== false;
     }
 
     /**

@@ -51,19 +51,6 @@ $peripheral = new Peripheral();
 if (isset($_POST["add"])) {
     $peripheral->check(-1, CREATE, $_POST);
 
-    $peripheraltypeid = $_POST['peripheraltypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['peripheralmodels_id'];
-
-   
-    if($peripheraltypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao adicionar Dispositivo!\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
-
     if ($newID = $peripheral->add($_POST)) {
         Event::log(
             $newID,
@@ -77,7 +64,7 @@ if (isset($_POST["add"])) {
         }
     }
     Html::back();
-}} else if (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
     $peripheral->check($_POST["id"], DELETE);
     $peripheral->delete($_POST);
 
@@ -119,19 +106,6 @@ if (isset($_POST["add"])) {
 } else if (isset($_POST["update"])) {
     $peripheral->check($_POST["id"], UPDATE);
 
-    $peripheraltypeid = $_POST['peripheraltypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['peripheralmodels_id'];
-
-   
-    if($peripheraltypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao atualizar dispositivo!\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
-
     $peripheral->update($_POST);
     Event::log(
         $_POST["id"],
@@ -142,7 +116,7 @@ if (isset($_POST["add"])) {
         sprintf(__('%s updates an item'), $_SESSION["glpiname"])
     );
     Html::back();
-}} else if (isset($_POST["unglobalize"])) {
+} else if (isset($_POST["unglobalize"])) {
     $peripheral->check($_POST["id"], UPDATE);
 
     Computer_Item::unglobalizeItem($peripheral);

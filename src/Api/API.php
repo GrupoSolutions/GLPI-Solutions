@@ -231,7 +231,7 @@ abstract class API
 
             if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
                 header("Access-Control-Allow-Headers: " .
-                   "origin, content-type, accept, session-token, authorization");
+                   "origin, content-type, accept, session-token, authorization, app-token");
             }
             exit(0);
         }
@@ -282,7 +282,7 @@ abstract class API
 
         $noAuto = true;
         if (isset($params['user_token']) && !empty($params['user_token'])) {
-            $_REQUEST['user_token'] = $params['user_token'];
+            $_REQUEST['user_token'] = Sanitizer::dbEscape($params['user_token']);
             $noAuto = false;
         } else if (!$CFG_GLPI['enable_api_login_credentials']) {
             $this->returnError(
@@ -299,7 +299,7 @@ abstract class API
 
        // login on glpi
         if (!$auth->login($params['login'], $params['password'], $noAuto, false, $params['auth'])) {
-            $err = Toolbox::stripTags($auth->getErr());
+            $err = implode(' ', $auth->getErrors());
             if (
                 isset($params['user_token'])
                 && !empty($params['user_token'])
@@ -1027,6 +1027,14 @@ abstract class API
             );
         }
 
+        // Decode HTML
+        if (!$this->returnSanitizedContent()) {
+            $fields = array_map(
+                fn ($f) => is_string($f) ? Sanitizer::decodeHtmlSpecialChars($f) : $f,
+                $fields
+            );
+        }
+
         return $fields;
     }
 
@@ -1294,6 +1302,14 @@ abstract class API
                         'href' => self::$api_url . "/$itemtype/" . $fields['id'] . "/$hclass/"
                     ];
                 }
+            }
+
+            // Decode HTML
+            if (!$this->returnSanitizedContent()) {
+                $fields = array_map(
+                    fn ($f) => is_string($f) ? Sanitizer::decodeHtmlSpecialChars($f) : $f,
+                    $fields
+                );
             }
         }
        // Break reference
@@ -1829,8 +1845,15 @@ abstract class API
                     if ($new_id === false) {
                         $failed++;
                     }
+
+                    $message = $this->getGlpiLastMessage();
+                    if (!$this->returnSanitizedContent()) {
+                        // Message may contains the created item name, which may
+                        // contains some encoded html
+                        $message = Sanitizer::decodeHtmlSpecialChars($message);
+                    }
                     $current_res = ['id'      => $new_id,
-                        'message' => $this->getGlpiLastMessage()
+                        'message' => $message
                     ];
                 }
 
@@ -1958,7 +1981,7 @@ abstract class API
                         }
 
                      //update item
-                        $object = Sanitizer::sanitize((array)$object);
+                        $object = Sanitizer::sanitize($this->inputObjectToArray($object));
                         $update_return = $item->update($object);
                         if ($update_return === false) {
                              $failed++;
@@ -1968,7 +1991,6 @@ abstract class API
                         ];
                     }
                 }
-
                // attach fileupload answer
                 if (
                     isset($params['upload_result'])
@@ -2314,7 +2336,7 @@ abstract class API
     /**
      * Get last message added in $_SESSION by Session::addMessageAfterRedirect
      *
-     * @return array  of messages
+     * @return string Last message
      */
     private function getGlpiLastMessage()
     {
@@ -2343,7 +2365,7 @@ abstract class API
        // get sql errors
         if (
             count($all_messages) <= 0
-            && $DEBUG_SQL['errors'] !== null
+            && ($DEBUG_SQL['errors'] ?? null) !== null
         ) {
             $all_messages = $DEBUG_SQL['errors'];
         }
@@ -3355,5 +3377,15 @@ abstract class API
             "changeActiveEntities",
             "changeActiveProfile",
         ];
+    }
+
+    /**
+     * Will the API content be sanitized ?
+     *
+     * @return bool
+     */
+    public function returnSanitizedContent(): bool
+    {
+        return true;
     }
 }

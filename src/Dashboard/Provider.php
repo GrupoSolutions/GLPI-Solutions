@@ -1758,16 +1758,19 @@ class Provider
 
         if (
             isset($apply_filters['user_tech'])
-            && (int) $apply_filters['user_tech'] > 0
+            && (
+                (int) $apply_filters['user_tech'] > 0
+                || $apply_filters['user_tech'] == 'myself'
+            )
         ) {
             if ($DB->fieldExists($table, 'users_id_tech')) {
                 $s_criteria['criteria'][] = [
                     'link'       => 'AND',
                     'field'      => self::getSearchOptionID($table, 'users_id_tech', 'glpi_users'),// tech
                     'searchtype' => 'equals',
-                    'value'      =>  (int) $apply_filters['user_tech']
+                    'value'      =>  $apply_filters['user_tech'] == 'myself' ? (int) Session::getLoginUserID() : (int) $apply_filters['user_tech']
                 ];
-            } else if (
+            } elseif (
                 in_array($table, [
                     Ticket::getTable(),
                     Change::getTable(),
@@ -1778,9 +1781,35 @@ class Provider
                     'link'       => 'AND',
                     'field'      => 5,// tech
                     'searchtype' => 'equals',
-                    'value'      =>  (int) $apply_filters['user_tech']
+                    'value'      =>  is_numeric($apply_filters['user_tech']) ? (int) $apply_filters['user_tech'] : $apply_filters['user_tech']
                 ];
             }
+        }
+
+        if (
+            $DB->fieldExists($table, 'states_id')
+            && isset($apply_filters['state'])
+            && (int) $apply_filters['state'] > 0
+        ) {
+            $s_criteria['criteria'][] = [
+                'link'       => 'AND',
+                'field'      => self::getSearchOptionID($table, 'states_id', 'glpi_states'), // state
+                'searchtype' => 'equals',
+                'value'      => (int) $apply_filters['state']
+            ];
+        }
+
+        if (
+            $DB->fieldExists($table, 'type')
+            && isset($apply_filters['tickettype'])
+            && (int) $apply_filters['tickettype'] > 0
+        ) {
+            $s_criteria['criteria'][] = [
+                'link'       => 'AND',
+                'field'      => 'type',
+                'searchtype' => 'equals',
+                'value'      => (int) $apply_filters['tickettype']
+            ];
         }
 
         return $s_criteria;
@@ -1859,6 +1888,26 @@ class Provider
         ) {
             $where += [
                 "$table.manufacturers_id" => (int) $apply_filters['manufacturer']
+            ];
+        }
+
+        if (
+            $DB->fieldExists($table, 'states_id')
+            && isset($apply_filters['state'])
+            && (int) $apply_filters['state'] > 0
+        ) {
+            $where += [
+                "$table.states_id" => (int) $apply_filters['state']
+            ];
+        }
+
+        if (
+            $DB->fieldExists($table, 'type')
+            && isset($apply_filters['tickettype'])
+            && (int) $apply_filters['tickettype'] > 0
+        ) {
+            $where += [
+                "$table.type" => (int) $apply_filters['tickettype']
             ];
         }
 

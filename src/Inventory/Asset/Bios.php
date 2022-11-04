@@ -42,19 +42,8 @@ use Glpi\Inventory\Conf;
 
 class Bios extends Device
 {
-    public function __construct(CommonDBTM $item, array $data = null)
-    {
-        parent::__construct($item, $data, 'Item_DeviceFirmware');
-    }
-
     public function prepare(): array
     {
-        $type = new DeviceFirmwareType();
-        $type->getFromDBByCrit([
-            'name' => 'BIOS'
-        ]);
-        $type_id = $type->getID();
-
         $mapping = [
             'bdate'           => 'date',
             'bversion'        => 'version',
@@ -73,7 +62,7 @@ class Bios extends Device
             __('%1$s BIOS'),
             property_exists($val, 'bmanufacturer') ? $val->bmanufacturer : ''
         );
-        $val->devicefirmwaretypes_id = $type_id;
+        $val->devicefirmwaretypes_id = 'BIOS';
 
         $this->data = [$val];
         return $this->data;
@@ -91,5 +80,10 @@ class Bios extends Device
     public function checkConf(Conf $conf): bool
     {
         return true;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Item_DeviceFirmware::class;
     }
 }

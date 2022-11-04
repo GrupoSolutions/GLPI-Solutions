@@ -649,6 +649,8 @@ class Auth extends CommonGLPI
      * Get the current identification error
      *
      * @return string current identification error
+     *
+     * @TODO Deprecate this in GLPI 10.1.
      */
     public function getErr()
     {
@@ -813,7 +815,7 @@ class Auth extends CommonGLPI
                                      'basedn'            => $ldap_method["basedn"],
                                      'login_field'       => $ldap_method['login_field'],
                                      'search_parameters' => $params,
-                                     'condition'         => $ldap_method["condition"],
+                                     'condition'         => Sanitizer::unsanitize($ldap_method["condition"]),
                                      'user_params'       => [
                                          'method' => AuthLDAP::IDENTIFIER_LOGIN,
                                          'value'  => $login_name
@@ -1326,7 +1328,7 @@ class Auth extends CommonGLPI
         }
         $redir_string = "";
         if (!empty($redirect_string)) {
-            $redir_string = "?redirect=" . $redirect_string;
+            $redir_string = "?redirect=" . rawurlencode($redirect_string);
         }
        // Using x509 server
         if (
@@ -1407,6 +1409,7 @@ class Auth extends CommonGLPI
             } else if (isset($_GET['redirect']) && strlen($_GET['redirect']) > 0) {
                 $redirect = $_GET['redirect'];
             }
+            $redirect = $redirect ? Sanitizer::unsanitize($redirect) : '';
         }
 
        //Direct redirect
@@ -1575,7 +1578,7 @@ class Auth extends CommonGLPI
            //TRANS: for CAS SSO system
             echo "<tr class='tab_bg_2'><td class='center'>" . __('CAS Version') . "</td>";
             echo "<td>";
-            Auth::dropdownCasVersion($CFG_GLPI["cas_version"]);
+            Auth::dropdownCasVersion($CFG_GLPI["cas_version"] ?? null);
             echo "</td>";
             echo "</tr>";
            //TRANS: for CAS SSO system
@@ -1712,7 +1715,7 @@ class Auth extends CommonGLPI
         echo "</tr>";
 
         echo "<tr class='tab_bg_2'>";
-        echo "<td class='center'>" .  __('Teste') . "</td>";
+        echo "<td class='center'>" .  __('Phone 2') . "</td>";
         echo "<td><input type='text' class='form-control' name='phone2_ssofield' value='" . $CFG_GLPI['phone2_ssofield'] . "'>";
         echo "</td>";
         echo "</tr>";
@@ -1841,12 +1844,25 @@ class Auth extends CommonGLPI
         $cookie_path     = ini_get('session.cookie_path');
         $cookie_domain   = ini_get('session.cookie_domain');
         $cookie_secure   = (bool)ini_get('session.cookie_secure');
+        $cookie_httponly = (bool)ini_get('session.cookie_httponly');
+        $cookie_samesite = ini_get('session.cookie_samesite');
 
         if (empty($cookie_value) && !isset($_COOKIE[$cookie_name])) {
             return;
         }
 
-        setcookie($cookie_name, $cookie_value, $cookie_lifetime, $cookie_path, $cookie_domain, $cookie_secure, true);
+        setcookie(
+            $cookie_name,
+            $cookie_value,
+            [
+                'expires'  => $cookie_lifetime,
+                'path'     => $cookie_path,
+                'domain'   => $cookie_domain,
+                'secure'   => $cookie_secure,
+                'httponly' => $cookie_httponly,
+                'samesite' => $cookie_samesite,
+            ]
+        );
 
         if (empty($cookie_value)) {
             unset($_COOKIE[$cookie_name]);

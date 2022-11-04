@@ -37,13 +37,14 @@
 namespace Glpi\Inventory\Asset;
 
 use CommonDBTM;
+use Glpi\Toolbox\Sanitizer;
+use IPAddress;
 use Printer as GPrinter;
 use PrinterLog;
 use PrinterModel;
 use PrinterType;
 use RuleDictionnaryPrinterCollection;
 use RuleImportAssetCollection;
-use Toolbox;
 
 class Printer extends NetworkEquipment
 {
@@ -123,6 +124,11 @@ class Printer extends NetworkEquipment
                 unset($val->ram);
             }
 
+            if (property_exists($val, 'credentials')) {
+                $val->snmpcredentials_id = $val->credentials;
+                unset($val->credentials);
+            }
+
             $res_rule = $rulecollection->processAllRules(['name' => $val->name]);
             if (
                 (!isset($res_rule['_ignore_ocs_import']) || $res_rule['_ignore_ocs_import'] != "1")
@@ -133,6 +139,8 @@ class Printer extends NetworkEquipment
                 }
                 if (isset($res_rule['manufacturer'])) {
                     $val->manufacturers_id = $res_rule['manufacturer'];
+                    $known_key = md5('manufacturers_id' . $res_rule['manufacturer']);
+                    $this->known_links[$known_key] = $res_rule['manufacturer'];
                 }
 
                 if (isset($this->extra_data['pagecounters'])) {
@@ -152,6 +160,30 @@ class Printer extends NetworkEquipment
                 unset($this->data[$k]);
             }
         }
+
+        //try to know if management port IP is already known as IP port
+        //if yes remove it from management port
+        $known_ports = $port_managment = $this->getManagementPorts();
+        if (isset($known_ports['management']) && property_exists($known_ports['management'], 'ipaddress')) {
+            foreach ($known_ports['management']->ipaddress as $pa_ip_key => $pa_ip_val) {
+                if (property_exists($this->raw_data->content, 'network_ports')) {
+                    foreach ($this->raw_data->content->network_ports as $port_obj) {
+                        if (property_exists($port_obj, 'ips')) {
+                            foreach ($port_obj->ips as $port_ip) {
+                                if ($pa_ip_val == $port_ip) {
+                                    unset($port_managment['management']->ipaddress[$pa_ip_key]);
+                                    if (empty($port_managment['management']->ipaddress)) {
+                                        unset($port_managment['management']);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->setManagementPorts($port_managment);
 
         return $this->data;
     }
@@ -208,7 +240,7 @@ class Printer extends NetworkEquipment
                    // add printer
                     $val->entities_id = $entities_id;
                     $val->is_dynamic = 1;
-                    $items_id = $printer->add(Toolbox::addslashes_deep((array)$val));
+                    $items_id = $printer->add(Sanitizer::sanitize($this->handleInput($val, $printer)));
                 } else {
                     $items_id = $data['found_inventories'][0];
                 }
@@ -320,9 +352,39 @@ class Printer extends NetworkEquipment
         $metrics = new PrinterLog();
         if ($metrics->getFromDBByCrit($unicity_input)) {
             $input['id'] = $metrics->fields['id'];
-            $metrics->update($input, false);
+            $metrics->update(Sanitizer::sanitize($input), false);
         } else {
-            $metrics->add($input, [], false);
+            $metrics->add(Sanitizer::sanitize($input), [], false);
         }
+    }
+
+    /**
+     * Try to know if printer need to be updated from discovery
+     * Only if IP has changed
+     * @return boolean
+     */
+    public static function needToBeUpdatedFromDiscovery(CommonDBTM $item, $val)
+    {
+        if (property_exists($val, 'ips') && isset($val->ips[0])) {
+            $ip = $val->ips[0];
+            //try to find IP (get from discovery) from known IP of Printer
+            //if found refuse update
+            //if no, printer IP have changed so  we allow the update from discovery
+            $ipadress = new IPAddress($ip);
+            $tmp['mainitems_id'] = $item->fields['id'];
+            $tmp['mainitemtype'] = $item::getType();
+            $tmp['is_dynamic']   = 1;
+            $tmp['name']         = $ipadress->getTextual();
+            if ($ipadress->getFromDBByCrit(Sanitizer::sanitize($tmp))) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Printer::class;
     }
 }

@@ -37,7 +37,7 @@ namespace Glpi\Inventory\Asset;
 
 use ComputerAntivirus;
 use Glpi\Inventory\Conf;
-use Toolbox;
+use Glpi\Toolbox\Sanitizer;
 
 class Antivirus extends InventoryAsset
 {
@@ -109,8 +109,6 @@ class Antivirus extends InventoryAsset
 
     public function handle()
     {
-        global $DB;
-
         $db_antivirus = $this->getExisting();
         $value = $this->data;
         $computerAntivirus = new ComputerAntivirus();
@@ -122,10 +120,11 @@ class Antivirus extends InventoryAsset
             foreach ($db_antivirus as $keydb => $arraydb) {
                 unset($arraydb['is_dynamic']);
                 if ($compare == $arraydb) {
-                    $input = (array)$val + [
+                    $computerAntivirus->getFromDB($keydb);
+                    $input = $this->handleInput($val, $computerAntivirus) + [
                         'id'           => $keydb
                     ];
-                    $computerAntivirus->update(Toolbox::addslashes_deep($input));
+                    $computerAntivirus->update(Sanitizer::sanitize($input));
                     unset($value[$k]);
                     unset($db_antivirus[$keydb]);
                     break;
@@ -145,7 +144,8 @@ class Antivirus extends InventoryAsset
             foreach ($value as $val) {
                 $val->computers_id = $this->item->fields['id'];
                 $val->is_dynamic = 1;
-                $computerAntivirus->add(Toolbox::addslashes_deep((array)$val));
+                $input = $this->handleInput($val, $computerAntivirus);
+                $computerAntivirus->add(Sanitizer::sanitize($input));
             }
         }
     }
@@ -153,5 +153,10 @@ class Antivirus extends InventoryAsset
     public function checkConf(Conf $conf): bool
     {
         return $conf->import_antivirus == 1;
+    }
+
+    public function getItemtype(): string
+    {
+        return \ComputerAntivirus::class;
     }
 }

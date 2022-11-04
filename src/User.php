@@ -627,6 +627,14 @@ class User extends CommonDBTM
      */
     public function getFromDBbyToken($token, $field = 'personal_token')
     {
+        if (!is_string($token)) {
+            trigger_error(
+                sprintf('Unexpected token value received: "string" expected, received "%s".', gettype($token)),
+                E_USER_WARNING
+            );
+            return false;
+        }
+
         $fields = ['personal_token', 'api_token'];
         if (!in_array($field, $fields)) {
             trigger_error(
@@ -845,16 +853,16 @@ class User extends CommonDBTM
                     : 'jpg';
 
                     @mkdir(GLPI_PICTURE_DIR . "/$sub");
-                    $picture_path = GLPI_PICTURE_DIR  . "/$sub/${filename}.$extension";
-                    self::dropPictureFiles("$sub/${filename}.$extension");
+                    $picture_path = GLPI_PICTURE_DIR  . "/{$sub}/{$filename}.{$extension}";
+                    self::dropPictureFiles("{$sub}/{$filename}.{$extension}");
 
                     if (Document::renameForce($fullpath, $picture_path)) {
                         Session::addMessageAfterRedirect(__('The file is valid. Upload is successful.'));
                         // For display
-                        $input['picture'] = "$sub/${filename}.$extension";
+                        $input['picture'] = "{$sub}/{$filename}.{$extension}";
 
                         //prepare a thumbnail
-                        $thumb_path = GLPI_PICTURE_DIR . "/$sub/${filename}_min.$extension";
+                        $thumb_path = GLPI_PICTURE_DIR . "/{$sub}/{$filename}_min.{$extension}";
                         Toolbox::resizePicture($picture_path, $thumb_path);
                     } else {
                         Session::addMessageAfterRedirect(
@@ -1340,7 +1348,7 @@ class User extends CommonDBTM
                     $img       = array_pop($info[$picture_field]);
                     $filename  = uniqid($this->fields['id'] . '_');
                     $sub       = substr($filename, -2); /* 2 hex digit */
-                    $file      = GLPI_PICTURE_DIR . "/$sub/${filename}.jpg";
+                    $file      = GLPI_PICTURE_DIR . "/{$sub}/{$filename}.jpg";
 
                     if (array_key_exists('picture', $this->fields)) {
                         $oldfile = GLPI_PICTURE_DIR . "/" . $this->fields["picture"];
@@ -1364,10 +1372,10 @@ class User extends CommonDBTM
                         fclose($outjpeg);
 
                        //save thumbnail
-                        $thumb = GLPI_PICTURE_DIR . "/$sub/${filename}_min.jpg";
+                        $thumb = GLPI_PICTURE_DIR . "/{$sub}/{$filename}_min.jpg";
                         Toolbox::resizePicture($file, $thumb);
 
-                        return "$sub/${filename}.jpg";
+                        return "{$sub}/{$filename}.jpg";
                     }
                     return $this->fields["picture"];
                 }
@@ -1690,7 +1698,7 @@ class User extends CommonDBTM
             $ldap_connection,
             $ldap_method["basedn"],
             $user_tmp,
-            $ldap_method["group_condition"],
+            Sanitizer::unsanitize($ldap_method["group_condition"]),
             $ldap_method["group_member_field"],
             $ldap_method["use_dn"],
             $ldap_method["login_field"]
@@ -1986,12 +1994,8 @@ class User extends CommonDBTM
         $groups     = [];
         $listgroups = [];
 
-       //User dn may contain ( or ), need to espace it!
-        $user_dn = str_replace(
-            ["(", ")", "\,", "\+"],
-            ["\(", "\)", "\\\,", "\\\+"],
-            $user_dn
-        );
+       //User dn may contain ['(', ')', ',', '\'] then it needs to be escaped!
+        $user_dn = ldap_escape($user_dn, "", LDAP_ESCAPE_FILTER);
 
        //Only retrive cn and member attributes from groups
         $attrs = ['dn'];
@@ -2109,11 +2113,9 @@ class User extends CommonDBTM
             return true;
         }
         $this->fields['_ruleright_process'] = true;
-        foreach ($a_field as $field => $value) {
-            if (
-                !isset($_SERVER[$value])
-                || empty($_SERVER[$value])
-            ) {
+        foreach ($a_field as $field => $key) {
+            $value = $_SERVER[$key] ?? null;
+            if (empty($value)) {
                 switch ($field) {
                     case "title":
                         $this->fields['usertitles_id'] = 0;
@@ -2127,38 +2129,43 @@ class User extends CommonDBTM
                         $this->fields[$field] = "";
                 }
             } else {
+                if (!mb_check_encoding($value, 'UTF-8') && mb_check_encoding($value, 'ISO-8859-1')) {
+                    // Some applications, like Microsoft Azure Enterprise Applications (Header-based Single sign-on),
+                    // will provide ISO-8859-1 encoded values. They have to be converted into UTF-8 to prevent
+                    // encoding issues (see #12898).
+                    $value = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+                }
+                $value = Sanitizer::sanitize($value); // $_SERVER is not automatically sanitized
                 switch ($field) {
                     case "email1":
                     case "email2":
                     case "email3":
                     case "email4":
                         // Manage multivaluable fields
-                        if (!preg_match('/count/', $_SERVER[$value])) {
-                            $this->fields["_emails"][] = addslashes($_SERVER[$value]);
+                        if (!preg_match('/count/', $value)) {
+                            $this->fields["_emails"][] = $value;
                         }
                         // Only get them once if duplicated
                         $this->fields["_emails"] = array_unique($this->fields["_emails"]);
                         break;
 
                     case "language":
-                        $language = Config::getLanguage($_SERVER[$value]);
+                        $language = Config::getLanguage($value);
                         if ($language != '') {
                             $this->fields[$field] = $language;
                         }
                         break;
 
                     case "title":
-                        $this->fields['usertitles_id']
-                        = Dropdown::importExternal('UserTitle', addslashes($_SERVER[$value]));
+                        $this->fields['usertitles_id'] = Dropdown::importExternal('UserTitle', $value);
                         break;
 
                     case "category":
-                        $this->fields['usercategories_id']
-                        = Dropdown::importExternal('UserCategory', addslashes($_SERVER[$value]));
+                        $this->fields['usercategories_id'] = Dropdown::importExternal('UserCategory', $value);
                         break;
 
                     default:
-                        $this->fields[$field] = $_SERVER[$value];
+                        $this->fields[$field] = $value;
                         break;
                 }
             }
@@ -2167,8 +2174,10 @@ class User extends CommonDBTM
         if (!$DB->isSlave()) {
            //Instanciate the affectation's rule
             $rule = new RuleRightCollection();
+            $groups = Group_User::getUserGroups($this->fields['id']);
+            $groups_id = array_column($groups, 'id');
 
-            $this->fields = $rule->processAllRules([], Toolbox::stripslashes_deep($this->fields), [
+            $this->fields = $rule->processAllRules($groups_id, Toolbox::stripslashes_deep($this->fields), [
                 'type'   => Auth::EXTERNAL,
                 'email'  => $this->fields["_emails"],
                 'login'  => $this->fields["name"]
@@ -2262,6 +2271,70 @@ class User extends CommonDBTM
         return Profile::currentUserHaveMoreRightThan($user_prof);
     }
 
+    protected function getFormHeaderToolbar(): array
+    {
+        $ID = $this->getID();
+        $toolbar = [];
+
+        if ($ID > 0) {
+            $vcard_lbl = __s('Download user VCard');
+            $vcard_url = self::getFormURLWithID($ID) . "&amp;getvcard=1";
+            $vcard_btn = <<<HTML
+            <a href="{$vcard_url}" target="_blank"
+                     class="btn btn-icon btn-sm btn-ghost-secondary"
+                     title="{$vcard_lbl}"
+                     data-bs-toggle="tooltip" data-bs-placement="bottom">
+               <i class="far fa-address-card fa-lg"></i>
+            </a>
+HTML;
+            $toolbar[] = $vcard_btn;
+
+            $error_message = null;
+            $impersonate_form = self::getFormURLWithID($ID);
+            if (Session::canImpersonate($ID, $error_message)) {
+                $impersonate_lbl = __s('Impersonate');
+                $csrf_token = Session::getNewCSRFToken();
+                $impersonate_btn = <<<HTML
+                    <form method="post" action="{$impersonate_form}">
+                        <input type="hidden" name="id" value="{$ID}">
+                        <input type="hidden" name="_glpi_csrf_token" value="{$csrf_token}">
+                        <button type="button" name="impersonate" value="1"
+                            class="btn btn-icon btn-sm btn-ghost-secondary btn-impersonate"
+                            title="{$impersonate_lbl}"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="fas fa-user-secret fa-lg"></i>
+                        </button>
+                    </form>
+HTML;
+
+                // "impersonate" button type is set to "button" on form display to prevent it to be used
+                // by default (as it is the first found in current form) when pressing "enter" key.
+                // When clicking it, switch to "submit" type to make it submit current user form.
+                $impersonate_js = <<<JAVASCRIPT
+               (function($) {
+                  $('button[type="button"][name="impersonate"]').click(
+                     function () {
+                        $(this).attr('type', 'submit');
+                     }
+                  );
+               })(jQuery);
+JAVASCRIPT;
+                $toolbar[] = $impersonate_btn . Html::scriptBlock($impersonate_js);
+            } elseif ($error_message !== null) {
+                $impersonate_btn = <<<HTML
+               <button type="button" name="impersonate" value="1"
+                       class="btn btn-icon btn-sm  btn-ghost-danger btn-impersonate"
+                       title="{$error_message}"
+                       data-bs-toggle="tooltip" data-bs-placement="bottom">
+                  <i class="fas fa-user-secret fa-lg"></i>
+               </button>
+HTML;
+                $toolbar[] = $impersonate_btn;
+            }
+        }
+        return $toolbar;
+    }
+
     /**
      * Print the user form.
      *
@@ -2303,61 +2376,11 @@ class User extends CommonDBTM
 
         $formtitle = $this->getTypeName(1);
 
-        $header_toolbar = [];
-        if ($ID > 0) {
-            $vcard_lbl = __s('Download user VCard');
-            $vcard_url = User::getFormURLWithID($ID) . "&amp;getvcard=1";
-            $vcard_btn = <<<HTML
-            <a href="{$vcard_url}" target="_blank"
-                     class="btn btn-icon btn-sm btn-ghost-secondary"
-                     title="{$vcard_lbl}"
-                     data-bs-toggle="tooltip" data-bs-placement="bottom">
-               <i class="far fa-address-card fa-lg"></i>
-            </a>
-HTML;
-            $header_toolbar[] = $vcard_btn;
-
-            $error_message = null;
-            if (Session::canImpersonate($ID, $error_message)) {
-                $impersonate_lbl = __s('Impersonate');
-                $impersonate_btn = <<<HTML
-               <button type="button" name="impersonate" value="1"
-                       class="btn btn-icon btn-sm btn-ghost-secondary btn-impersonate"
-                       title="{$impersonate_lbl}"
-                       data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <i class="fas fa-user-secret fa-lg"></i>
-               </button>
-HTML;
-
-               // "impersonate" button type is set to "button" on form display to prevent it to be used
-               // by default (as it is the first found in current form) when pressing "enter" key.
-               // When clicking it, switch to "submit" type to make it submit current user form.
-                $impersonate_js = <<<JAVASCRIPT
-               (function($) {
-                  $('button[type="button"][name="impersonate"]').click(
-                     function () {
-                        $(this).attr('type', 'submit');
-                     }
-                  );
-               })(jQuery);
-JAVASCRIPT;
-                $header_toolbar[] = $impersonate_btn . Html::scriptBlock($impersonate_js);
-            } elseif ($error_message !== null) {
-                $impersonate_btn = <<<HTML
-               <button type="button" name="impersonate" value="1"
-                       class="btn btn-icon btn-sm  btn-ghost-danger btn-impersonate"
-                       title="{$error_message}"
-                       data-bs-toggle="tooltip" data-bs-placement="bottom">
-                  <i class="fas fa-user-secret fa-lg"></i>
-               </button>
-HTML;
-                $header_toolbar[] = $impersonate_btn;
-            }
-        }
-
         $options['formtitle']      = $formtitle;
         $options['formoptions']    = ($options['formoptions'] ?? '') . " enctype='multipart/form-data'";
-        $options['header_toolbar'] = $header_toolbar;
+        if (!self::isNewID($ID)) {
+            $options['no_header'] = true;
+        }
         $this->showFormHeader($options);
         $rand = mt_rand();
 
@@ -4815,7 +4838,7 @@ HTML;
 
                 foreach ($item_iterator as $data) {
                     $cansee = $item->can($data["id"], READ);
-                    $link   = $data["name"];
+                    $link   = $data[$item->getNameField()];
                     if ($cansee) {
                         $link_item = $item::getFormURLWithID($data['id']);
                         if ($_SESSION["glpiis_ids_visible"] || empty($link)) {
@@ -5068,6 +5091,12 @@ HTML;
                 $tmp['is_active'] = 0;
                 $myuser->update($tmp);
                 Profile_User::deleteRights($users_id, true);
+                Group_User::deleteGroups($users_id, true);
+                break;
+
+            case AuthLDAP::DELETED_USER_DISABLEANDDELETEGROUPS:
+                $tmp['is_active'] = 0;
+                $myuser->update($tmp);
                 Group_User::deleteGroups($users_id, true);
                 break;
         }
@@ -5326,8 +5355,8 @@ HTML;
 
         // Same check but for the account activation dates
         if (
-            ($user->fields['begin_date'] !== null && $user->fields['begin_date'] < $_SESSION['glpi_currenttime'])
-            || ($user->fields['end_date'] !== null && $user->fields['end_date'] > $_SESSION['glpi_currenttime'])
+            ($user->fields['begin_date'] !== null && $user->fields['begin_date'] > $_SESSION['glpi_currenttime'])
+            || ($user->fields['end_date'] !== null && $user->fields['end_date'] < $_SESSION['glpi_currenttime'])
         ) {
             throw new ForgetPasswordException(
                 __("Unable to reset password, please contact your administrator")
@@ -6477,5 +6506,41 @@ HTML;
         }
 
         return $user;
+    }
+
+    /**
+     * Get name of the user with ID
+     *
+     * @param integer $ID   ID of the user.
+     *
+     * @return string username string (realname if not empty and name if realname is empty).
+     */
+    public static function getNameForLog(int $ID): string
+    {
+        global $DB;
+
+        $iterator = $DB->request(
+            'glpi_users',
+            [
+                'WHERE' => ['id' => $ID]
+            ]
+        );
+
+        if (count($iterator) === 1) {
+            $data     = $iterator->current();
+
+            if (!empty($data['realname'])) {
+                $formatted = $data['realname'];
+
+                if (!empty($data['firstname'])) {
+                    $formatted .= " " . $data["firstname"];
+                }
+            } else {
+                $formatted = $data["name"];
+            }
+            return sprintf(__('%1$s (%2$s)'), $formatted, $ID);
+        }
+
+        return __('Unknown user');
     }
 }

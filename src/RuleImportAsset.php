@@ -331,8 +331,6 @@ class RuleImportAsset extends Rule
 
             case Rule::PATTERN_EXISTS:
             case Rule::PATTERN_DOES_NOT_EXISTS:
-            case Rule::PATTERN_FIND:
-            case RuleImportAsset::PATTERN_IS_EMPTY:
                 Dropdown::showYesNo($name, 1, 0);
                 return true;
         }
@@ -381,7 +379,7 @@ class RuleImportAsset extends Rule
             $criteria = $this->getCriteriaByID($criterion);
             if (!empty($criteria)) {
                 foreach ($criteria as $crit) {
-                    if (!isset($input[$criterion]) || $input[$criterion] == '') {
+                    if (!isset($input[$criterion]) || ($input[$criterion] == '' && $crit->fields['condition'] != self::PATTERN_IS_EMPTY)) {
                         $definition_criteria = $this->getCriteria($crit->fields['criteria']);
                         if ($crit->fields["criteria"] == 'link_criteria_port') {
                             $this->link_criteria_port = true;
@@ -395,7 +393,7 @@ class RuleImportAsset extends Rule
                             trigger_error('A value seems missing, criterion was: ' . $criterion, E_USER_WARNING);
                             return false;
                         }
-                    } else if ($crit->fields["condition"] == Rule::PATTERN_FIND) {
+                    } else if (in_array($crit->fields["condition"], [Rule::PATTERN_FIND, Rule::PATTERN_IS_EMPTY])) {
                         $this->complex_criteria[] = $crit;
                         ++$this->found_criteria;
                     } else if ($crit->fields["condition"] == Rule::PATTERN_EXISTS) {
@@ -474,7 +472,7 @@ class RuleImportAsset extends Rule
         ) {
             $itemtypeselected[] = $input['itemtype'];
         } else {
-            foreach ($CFG_GLPI["state_types"] as $itemtype) {
+            foreach ($CFG_GLPI["asset_types"] as $itemtype) {
                 if (
                     class_exists($itemtype)
                     && $itemtype != 'SoftwareLicense'
@@ -837,7 +835,16 @@ class RuleImportAsset extends Rule
                     break;
 
                 case 'uuid':
-                    $it_criteria['WHERE'][] = ['uuid' => $input['uuid']];
+                    if ($criterion->fields['condition'] == self::PATTERN_IS_EMPTY) {
+                        $it_criteria['WHERE'][] = [
+                            'OR' => [
+                                ["$itemtable.uuid" => ''],
+                                ["$itemtable.uuid" => null]
+                            ]
+                        ];
+                    } else {
+                        $it_criteria['WHERE'][] = ["$itemtable.uuid" => $input['uuid']];
+                    }
                     break;
 
                 case 'device_id':
@@ -919,10 +926,14 @@ class RuleImportAsset extends Rule
                         }
                     }
 
-                    if ($class && !isset($params['return'])) {
-                        $class->rulepassed("0", "Unmanaged", $rules_id);
+                    $back_class = Unmanaged::class;
+                    if (is_a($class, \Glpi\Inventory\Asset\MainAsset::class)) {
+                        $back_class = $class->getItemtype();
                     }
-                    $output['found_inventories'] = [0, 'Unmanaged', $rules_id];
+                    if ($class && !isset($params['return'])) {
+                        $class->rulepassed("0", $back_class, $rules_id);
+                    }
+                    $output['found_inventories'] = [0, $back_class, $rules_id];
                     return $output;
                 }
 
@@ -935,14 +946,15 @@ class RuleImportAsset extends Rule
                              $items_id = current($inventory);
                              $output['found_inventories'] = [$items_id, $itemtype, $rules_id];
                             if (!isset($params['return'])) {
-                                $inputrulelog = $inputrulelog + [
-                                    'items_id'  => $items_id,
-                                    'itemtype'  => $itemtype
-                                ];
-                                $rulesmatched->add($inputrulelog);
-                                $rulesmatched->cleanOlddata($items_id, $itemtype);
                                 if ($class) {
                                     $class->rulepassed($items_id, $itemtype, $rules_id, $this->criterias_results['found_port']);
+                                } else {
+                                    $inputrulelog = $inputrulelog + [
+                                        'items_id'  => $items_id,
+                                        'itemtype'  => $itemtype
+                                    ];
+                                    $rulesmatched->add($inputrulelog);
+                                    $rulesmatched->cleanOlddata($items_id, $itemtype);
                                 }
                             }
                             return $output;
@@ -962,10 +974,14 @@ class RuleImportAsset extends Rule
                             }
                         }
 
-                        if ($class && !isset($params['return'])) {
-                            $class->rulepassed("0", "Unmanaged", $rules_id);
+                        $back_class = Unmanaged::class;
+                        if (is_a($class, \Glpi\Inventory\Asset\MainAsset::class)) {
+                            $back_class = $class->getItemtype();
                         }
-                        $output['found_inventories'] = [0, "Unmanaged", $rules_id];
+                        if ($class && !isset($params['return'])) {
+                            $class->rulepassed("0", $back_class, $rules_id);
+                        }
+                        $output['found_inventories'] = [0, $back_class, $rules_id];
                         return $output;
                     }
                 }
@@ -1047,7 +1063,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device update (by mac+ifnumber restricted port)',
+            'name'      => 'Global update (by mac+ifnumber restricted port)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1086,7 +1102,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device update (by mac+ifnumber not restricted port)',
+            'name'      => 'Global update (by mac+ifnumber not restricted port)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1120,7 +1136,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device import (by mac+ifnumber)',
+            'name'      => 'Global import (by mac+ifnumber)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1144,7 +1160,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device update (by ip+ifdescr restricted port)',
+            'name'      => 'Global update (by ip+ifdescr restricted port)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1183,7 +1199,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device update (by ip+ifdescr not restricted port)',
+            'name'      => 'Global update (by ip+ifdescr not restricted port)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1217,7 +1233,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Device import (by ip+ifdescr)',
+            'name'      => 'Global import (by ip+ifdescr)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1340,6 +1356,35 @@ class RuleImportAsset extends Rule
                 [
                     'criteria'  => 'uuid',
                     'condition' => Rule::PATTERN_EXISTS,
+                    'pattern'   => 1
+                ]
+            ],
+            'action'    => '_link'
+        ];
+
+        $rules[] = [
+            'name'      => 'Computer update (by serial + uuid is empty in GLPI)',
+            'match'     => 'AND',
+            'is_active' => 1,
+            'criteria'  => [
+                [
+                    'criteria'  => 'itemtype',
+                    'condition' => Rule::PATTERN_IS,
+                    'pattern'   => 'Computer'
+                ],
+                [
+                    'criteria'  => 'serial',
+                    'condition' => Rule::PATTERN_FIND,
+                    'pattern'   => 1
+                ],
+                [
+                    'criteria'  => 'serial',
+                    'condition' => Rule::PATTERN_EXISTS,
+                    'pattern'   => 1
+                ],
+                [
+                    'criteria'  => 'uuid',
+                    'condition' => Rule::PATTERN_IS_EMPTY,
                     'pattern'   => 1
                 ]
             ],
@@ -1795,7 +1840,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Peripheral update (by serial)',
+            'name'      => 'Device update (by serial)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1819,7 +1864,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Peripheral import (by serial)',
+            'name'      => 'Device import (by serial)',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -1838,7 +1883,7 @@ class RuleImportAsset extends Rule
         ];
 
         $rules[] = [
-            'name'      => 'Peripheral import denied',
+            'name'      => 'Device import denied',
             'match'     => 'AND',
             'is_active' => 1,
             'criteria'  => [
@@ -2258,7 +2303,7 @@ class RuleImportAsset extends Rule
         if ($with_plugins && isset($PLUGIN_HOOKS['add_rules'])) {
             $ria = new self();
             foreach ($PLUGIN_HOOKS['add_rules'] as $plugin => $val) {
-                if (!Plugin::isPluginLoaded($plugin)) {
+                if (!Plugin::isPluginActive($plugin)) {
                     continue;
                 }
                 $rules = array_merge(

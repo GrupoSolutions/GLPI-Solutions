@@ -37,6 +37,7 @@ namespace Glpi\Console;
 
 use Config;
 use DB;
+use DBmysql;
 use GLPI;
 use Glpi\Application\ErrorHandler;
 use Glpi\Cache\CacheManager;
@@ -86,7 +87,7 @@ class Application extends BaseApplication
     private $error_handler;
 
     /**
-     * @var DB
+     * @var DBmysql
      */
     private $db;
 
@@ -238,7 +239,11 @@ class Application extends BaseApplication
         if ($command instanceof GlpiCommandInterface && $command->requiresUpToDateDb() && !Update::isDbUpToDate()) {
             $output->writeln(
                 '<error>'
-                . __('The version of the database is not compatible with the version of the installed files. An update is necessary.')
+                . __('The GLPI codebase has been updated. The update of the GLPI database is necessary.')
+                . '</error>'
+                . PHP_EOL
+                . '<error>'
+                . sprintf(__('Run the "php bin/console %1$s" command to process to the update.'), 'glpi:database:update')
                 . '</error>',
                 OutputInterface::VERBOSITY_QUIET
             );
@@ -307,7 +312,7 @@ class Application extends BaseApplication
     /**
      * Initialize database connection.
      *
-     * @global DB $DB
+     * @global DBmysql $DB
      *
      * @return void
      *
@@ -391,7 +396,7 @@ class Application extends BaseApplication
 
         Config::detectRootDoc();
 
-        if (!($this->db instanceof DB) || !$this->db->connected) {
+        if (!($this->db instanceof DBmysql) || !$this->db->connected) {
             return;
         }
 
@@ -456,7 +461,7 @@ class Application extends BaseApplication
      */
     private function usePlugins()
     {
-        if (!($this->db instanceof DB) || !$this->db->connected) {
+        if (!($this->db instanceof DBmysql) || !$this->db->connected) {
             return false;
         }
 
@@ -486,7 +491,7 @@ class Application extends BaseApplication
 
         $requirements_manager = new RequirementsManager();
         $core_requirements = $requirements_manager->getCoreRequirementList(
-            $db instanceof \DBmysql && $db->connected ? $db : null
+            $db instanceof DBmysql && $db->connected ? $db : null
         );
 
         if ($core_requirements->hasMissingMandatoryRequirements()) {

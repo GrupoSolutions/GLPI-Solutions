@@ -55,7 +55,6 @@ class Unmanaged extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong)
-         ->addStandardTab('NetworkPort', $ong, $options)
          ->addStandardTab('Log', $ong, $options);
         return $ong;
     }
@@ -171,14 +170,6 @@ class Unmanaged extends CommonDBTM
             'field'     => 'date_mod',
             'name'      => __('Last update'),
             'datatype'  => 'datetime',
-        ];
-
-        $tab[] = [
-            'id'        => '15',
-            'table'     => $this->getTable(),
-            'field'     => 'sysdescr',
-            'name'      => __('Sysdescr'),
-            'datatype'  => 'text',
         ];
 
         $tab[] = [

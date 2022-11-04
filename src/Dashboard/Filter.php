@@ -35,6 +35,7 @@
 
 namespace Glpi\Dashboard;
 
+use Glpi\Plugin\Hooks;
 use Group;
 use Html;
 use ITILCategory;
@@ -43,6 +44,8 @@ use Manufacturer;
 use Plugin;
 use RequestType;
 use Session;
+use State;
+use Ticket;
 use User;
 
 /**
@@ -68,11 +71,13 @@ class Filter extends \CommonDBChild
             'requesttype'  => RequestType::getTypeName(Session::getPluralNumber()),
             'location'     => Location::getTypeName(Session::getPluralNumber()),
             'manufacturer' => Manufacturer::getTypeName(Session::getPluralNumber()),
+            'state'        => State::getTypeName(Session::getPluralNumber()),
+            'tickettype'   => _n("Ticket type", "Ticket types", Session::getPluralNumber()),
             'group_tech'   => __("Technician group"),
             'user_tech'    => __("Technician"),
         ];
 
-        $more_filters = Plugin::doHookFunction("dashboard_filters");
+        $more_filters = Plugin::doHookFunction(Hooks::DASHBOARD_FILTERS);
         if (is_array($more_filters)) {
             $filters = array_merge($filters, $more_filters);
         }
@@ -172,6 +177,19 @@ JAVASCRIPT;
                     'text'  => __('Myself'),
                 ]
             ]
+        ]);
+    }
+
+    public static function state(string $value = ""): string
+    {
+        return self::displayList($value, 'state', State::class);
+    }
+
+    public static function tickettype(string $value = ""): string
+    {
+        return self::displayList($value, 'tickettype', Ticket::class, [
+            'condition' => ['id' => -1],
+            'toadd'     => Ticket::getTypes()
         ]);
     }
 

@@ -62,7 +62,7 @@ class ITILSolution extends CommonDBChild
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
         if ($item->isNewItem()) {
-            return;
+            return '';
         }
         if ($item->maySolve()) {
             $nb    = 0;
@@ -72,6 +72,7 @@ class ITILSolution extends CommonDBChild
             }
             return self::createTabEntry($title, $nb);
         }
+        return '';
     }
 
     public static function canView()
@@ -241,8 +242,8 @@ class ITILSolution extends CommonDBChild
                 Entity::CONFIG_NEVER
             );
 
-           // 0 = immediatly
-            if ($autoclosedelay != 0) {
+           // 0  or ticket status CLOSED = immediately
+            if ($autoclosedelay != 0 && $this->item->fields["status"] != $this->item::CLOSED) {
                 $status = CommonITILValidation::WAITING;
             }
         }
@@ -268,7 +269,7 @@ class ITILSolution extends CommonDBChild
                 return false;
             }
 
-            $input['content'] = $html;
+            $input['content'] = Sanitizer::sanitize($html);
         }
 
         return $input;
@@ -286,21 +287,9 @@ class ITILSolution extends CommonDBChild
 
         $item = $this->item;
 
-       // Replace inline pictures
+        // Handle rich-text images and uploaded documents
         $this->input["_job"] = $this->item;
-        $this->input = $this->addFiles(
-            $this->input,
-            [
-                'force_update' => true,
-                'name' => 'content',
-                'content_field' => 'content',
-            ]
-        );
-
-        // Add documents if needed, without notification
-        $this->input = $this->addFiles($this->input, [
-            'force_update' => true,
-        ]);
+        $this->input = $this->addFiles($this->input, ['force_update' => true]);
 
         // Add solution to duplicates
         if ($this->item->getType() == 'Ticket' && !isset($this->input['_linked_ticket'])) {
@@ -319,8 +308,8 @@ class ITILSolution extends CommonDBChild
                     Entity::CONFIG_NEVER
                 );
 
-                // 0 = immediatly
-                if ($autoclosedelay == 0) {
+                // 0 = immediately or ticket status CLOSED force status
+                if ($autoclosedelay == 0 || $this->item->fields["status"] == $this->item::CLOSED) {
                      $status = $item::CLOSED;
                 }
             }
@@ -354,18 +343,8 @@ class ITILSolution extends CommonDBChild
 
     public function post_updateItem($history = 1)
     {
-       // Replace inline pictures
-        $options = [
-            'force_update' => true,
-            'name' => 'content',
-            'content_field' => 'content',
-        ];
-        $this->input = $this->addFiles($this->input, $options);
-
-        // Add documents if needed, without notification
-        $this->input = $this->addFiles($this->input, [
-            'force_update' => true,
-        ]);
+        // Handle rich-text images and uploaded documents
+        $this->input = $this->addFiles($this->input, ['force_update' => true]);
 
         parent::post_updateItem($history);
     }

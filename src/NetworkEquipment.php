@@ -80,11 +80,6 @@ class NetworkEquipment extends CommonDBTM
     }
 
 
-    /**
-     * @see CommonGLPI::getAdditionalMenuOptions()
-     *
-     * @since 0.85
-     **/
     public static function getAdditionalMenuOptions()
     {
 
@@ -140,13 +135,9 @@ class NetworkEquipment extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong)
-        ->addStandardTab('Infocom', $ong, $options)
-        ->addStandardTab('Contract_Item', $ong, $options)
-        ->addStandardTab('Document_Item', $ong, $options)
-        ->addStandardTab('Lock', $ong, $options)
-        ->addStandardTab('Notepad', $ong, $options)
-        ->addStandardTab('RuleMatchedLog', $ong, $options)
-        ->addStandardTab('Log', $ong, $options);
+         ->addImpactTab($ong, $options)
+         ->addStandardTab('Infocom', $ong, $options)
+         ->addStandardTab('Log', $ong, $options);
 
         return $ong;
     }
@@ -496,6 +487,8 @@ class NetworkEquipment extends CommonDBTM
         $tab = array_merge($tab, Rack::rawSearchOptionsToAdd(get_class($this)));
 
         $tab = array_merge($tab, Socket::rawSearchOptionsToAdd(get_class($this)));
+
+        $tab = array_merge($tab, SNMPCredential::rawSearchOptionsToAdd(get_class($this)));
 
         return $tab;
     }

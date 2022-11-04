@@ -3,6 +3,29 @@
 The present file will list all changes made to the project; according to the
 [Keep a Changelog](http://keepachangelog.com/) project.
 
+## [1.1.21] - 2022-10-21
+
+Fix last boot date format
+
+## [1.1.20] - 2022-09-23
+
+Drop storage interface pattern
+Remove unneeded files from release
+
+## [1.1.19] - 2022-07-13
+
+Add new examples
+
+## [1.1.18] - 2022-07-11
+
+Update examples
+
+## [1.1.17] - 2022-06-29
+
+Propely handle standalone components
+Fix tag conversion
+Improve schema documentation
+
 ## [1.1.16] - 2022-06-10
 
 vmtype is no longer required

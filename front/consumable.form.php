@@ -44,28 +44,11 @@ $constype = new ConsumableItem();
 
 if (isset($_POST["add_several"])) {
     $constype->check($_POST["consumableitems_id"], UPDATE);
-    $data = date("Y-m-d h:i:s");
+
     for ($i = 0; $i < $_POST["to_add"]; $i++) {
         unset($con->fields["id"]);
-        $con->fields["user"] = $_SESSION["glpiname"];
         $con->add($_POST);
     }
-
-    // global $DB;
-        
-    // $reqcount = ['UPDATE'=> 'glpi_consumables',
-    // 'SET' => ['user' => [$_SESSION["glpiname"]]],
-    // 'WHERE' => ['date_creation' => $data]];
-        
-    // $reqs = $DB->request($reqcount);
-
-    //$query = "UPDATE `glpi_consumables` SET `user =` " . $_SESSION["glpiname"] . " WHERE `date_creation`= " . $data . "";
-    $user = $_SESSION["glpiname"];
-    $query = "UPDATE `glpi_consumables`
-                   SET `user` = '$user'
-                   WHERE `date_creation` = '$data'"; 
-    $result = $DB->query($query);
-    
     Event::log(
         $_POST["consumableitems_id"],
         "consumableitems",
@@ -77,5 +60,5 @@ if (isset($_POST["add_several"])) {
 
     Html::back();
 } else {
-   Html::back();
+    Html::back();
 }

@@ -476,10 +476,14 @@ class Dashboard extends \CommonDBTM
         ];
         $rights = array_merge_recursive($default_rights, $rights);
 
+        if (!Session::getLoginUserID()) {
+            return false;
+        }
+
        // check specific rights
         if (
             count(array_intersect($rights['entities_id'], $_SESSION['glpiactiveentities']))
-            || count(array_intersect($rights['profiles_id'], array_keys($_SESSION['glpiprofiles'])))
+            || in_array($_SESSION["glpiactiveprofile"]['id'], $rights['profiles_id'])
             || in_array($_SESSION['glpiID'], $rights['users_id'])
             || count(array_intersect($rights['groups_id'], $_SESSION['glpigroups']))
         ) {
@@ -509,10 +513,10 @@ class Dashboard extends \CommonDBTM
     public static function importFromJson($import = null)
     {
         if (!is_array($import)) {
-            $import = json_decode($import, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
+            if (!\Toolbox::isJSON($import)) {
                 return false;
             }
+            $import = json_decode($import, true);
         }
 
         foreach ($import as $key => $dashboard) {

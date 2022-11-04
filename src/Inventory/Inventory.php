@@ -197,6 +197,7 @@ class Inventory
             'deviceid' => $this->raw_data->deviceid,
             'version' => $this->raw_data->version ?? $this->raw_data->content->versionclient ?? null,
             'itemtype' => $this->raw_data->itemtype ?? 'Computer',
+            'port'      => $this->raw_data->{'httpd-port'} ?? null,
         ];
 
         if (property_exists($this->raw_data, 'content') && property_exists($this->raw_data->content, 'versionprovider')) {
@@ -261,11 +262,16 @@ class Inventory
             $schema = $converter->buildSchema();
 
             $properties = array_keys((array)$schema->properties->content->properties);
-            unset($properties['versionclient'], $properties['versionprovider']); //already handled in extractMetadata
+            $properties = array_filter(
+                $properties,
+                function ($property_name) {
+                    return !in_array($property_name, ['versionclient', 'versionprovider']); //already handled in extractMetadata
+                }
+            );
             if (method_exists($this, 'getSchemaExtraProps')) {
                 $properties = array_merge(
                     $properties,
-                    $this->getSchemaExtraProps()
+                    array_keys($this->getSchemaExtraProps())
                 );
             }
             $contents = $this->raw_data->content;
@@ -452,8 +458,7 @@ class Inventory
 
     public static function getMenuContent()
     {
-        // Require config update permission globally
-        if (!Session::haveRight('config', UPDATE)) {
+        if (!Session::haveRight(Conf::$rightname, Conf::IMPORTFROMFILE)) {
             return false;
         }
 
@@ -489,7 +494,7 @@ class Inventory
             ];
         }
 
-        if (Session::haveRight(Lockedfield::$rightname, READ)) {
+        if (Session::haveRight(Lockedfield::$rightname, UPDATE)) {
             $menu['options']['lockedfield'] = [
                 'icon'  => Lockedfield::getIcon(),
                 'title' => Lockedfield::getTypeName(Session::getPluralNumber()),

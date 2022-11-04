@@ -230,7 +230,7 @@ class Log extends CommonDBTM
 
         if ($uid = Session::getLoginUserID(false)) {
             if (is_numeric($uid)) {
-                $username = sprintf(__('%1$s (%2$s)'), getUserName($uid), $uid);
+                $username = User::getNameForLog($uid);
             } else { // For cron management
                 $username = $uid;
             }
@@ -243,7 +243,7 @@ class Log extends CommonDBTM
             $username = sprintf(
                 __('%1$s impersonated by %2$s'),
                 $username,
-                sprintf(__('%1$s (%2$s)'), getUserName($impersonator_id), $impersonator_id)
+                User::getNameForLog($impersonator_id)
             );
         }
 
@@ -295,18 +295,9 @@ class Log extends CommonDBTM
     public static function showForItem(CommonDBTM $item, $withtemplate = 0)
     {
         global $CFG_GLPI;
-        $DBread = DBConnection::getReadConnection();
-        $reqcount = ['SELECT'=> ['consumableitems_id', 'date_mod', 'user'],
-        'COUNT' => 'items_id',
-        'FROM' => 'glpi_consumables', 
-        'GROUPBY'=> 'date_mod',
-        'ORDERBY'=> 'date_mod DESC'];
-        
-        $reqs = $DBread->request($reqcount);
 
         $itemtype = $item->getType();
         $items_id = $item->getField('id');
-        
 
         $start       = intval(($_GET["start"] ?? 0));
         $filters     = $_GET['filters'] ?? [];
@@ -318,7 +309,6 @@ class Log extends CommonDBTM
         $filtered_number = countElementsInTable("glpi_logs", ['items_id' => $items_id, 'itemtype' => $itemtype ] + $sql_filters);
 
         TemplateRenderer::getInstance()->display('components/logs.html.twig', [
-            'reqs' => $reqs,
             'total_number'      => $total_number,
             'filtered_number'   => $filtered_number,
             'logs'              => $filtered_number > 0
@@ -367,8 +357,6 @@ class Log extends CommonDBTM
         $itemtable = $item->getTable();
 
         $SEARCHOPTION = Search::getOptions($itemtype);
-
-        
 
         $query = [
             'FROM'   => self::getTable(),
@@ -655,7 +643,7 @@ class Log extends CommonDBTM
                         $tmp['change'] = sprintf(
                             __('%1$s: %2$s'),
                             $action_label,
-                            sprintf(__('%1$s (%2$s)'), $tmp['field'], $data["new_value"])
+                            sprintf(__('%1$s (%2$s)'), $tmp['field'], $data["old_value"])
                         );
                         break;
 

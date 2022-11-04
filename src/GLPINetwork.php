@@ -33,6 +33,7 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Toolbox\Sanitizer;
 use Glpi\Toolbox\VersionParser;
 
 class GLPINetwork extends CommonGLPI
@@ -48,6 +49,7 @@ class GLPINetwork extends CommonGLPI
             $glpiNetwork = new self();
             $glpiNetwork->showForConfig();
         }
+        return true;
     }
 
     public static function showForConfig()
@@ -104,7 +106,7 @@ class GLPINetwork extends CommonGLPI
                 echo "<td>";
                 echo "<div class=' " . (($informations['is_valid'] && $informations['subscription']['is_running'] ?? false) ? 'ok' : 'red') . "'> ";
                 echo "<i class='fa fa-info-circle'></i>";
-                echo $informations['validation_message'];
+                echo Sanitizer::encodeHtmlSpecialChars($informations['validation_message']);
                 echo "</div>";
                 echo "</td>";
                 echo "</tr>";
@@ -112,12 +114,12 @@ class GLPINetwork extends CommonGLPI
 
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . __('Subscription') . "</td>";
-            echo "<td>" . ($informations['subscription'] !== null ? $informations['subscription']['title'] : __('Unknown')) . "</td>";
+            echo "<td>" . ($informations['subscription'] !== null ? Sanitizer::encodeHtmlSpecialChars($informations['subscription']['title']) : __('Unknown')) . "</td>";
             echo "</tr>";
 
             echo "<tr class='tab_bg_2'>";
             echo "<td>" . __('Registered by') . "</td>";
-            echo "<td>" . ($informations['owner'] !== null ? $informations['owner']['name'] : __('Unknown')) . "</td>";
+            echo "<td>" . ($informations['owner'] !== null ? Sanitizer::encodeHtmlSpecialChars($informations['owner']['name']) : __('Unknown')) . "</td>";
             echo "</tr>";
         }
 
@@ -222,9 +224,17 @@ class GLPINetwork extends CommonGLPI
             ],
             $error_message
         );
-        $registration_data = $error_message === null ? json_decode($registration_response, true) : null;
+
+        $valid_json = false;
+        if ($error_message === null) {
+            if (\Toolbox::isJSON($registration_response)) {
+                $valid_json = true;
+                $registration_data = json_decode($registration_response, true);
+            }
+        }
+
         if (
-            $error_message !== null || json_last_error() !== JSON_ERROR_NONE
+            $error_message !== null || !$valid_json
             || !is_array($registration_data) || !array_key_exists('is_valid', $registration_data)
         ) {
             $informations['validation_message'] = __('Unable to fetch registration information.');
@@ -329,9 +339,16 @@ class GLPINetwork extends CommonGLPI
             $error_message
         );
 
-        $offers = $error_message === null ? json_decode($response) : null;
+        $valid_json = false;
+        $offers = null;
+        if ($error_message === null) {
+            if (\Toolbox::isJSON($response)) {
+                $valid_json = true;
+                $offers = json_decode($response);
+            }
+        }
 
-        if ($error_message !== null || json_last_error() !== JSON_ERROR_NONE || !is_array($offers)) {
+        if ($error_message !== null || !$valid_json || !is_array($offers)) {
             trigger_error(
                 sprintf(
                     "Unable to fetch offers information.\nError message:%s\nResponse:\n%s",

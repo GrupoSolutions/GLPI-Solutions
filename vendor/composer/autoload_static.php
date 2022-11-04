@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
+class ComposerStaticInite9c6752201ef2132c09ae0a48cd426c7
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -17,8 +17,8 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'a1cce3d26cc15c00fcd0b3354bd72c88' => __DIR__ . '/..' . '/sabre/event/lib/Promise/functions.php',
         '3569eecfeed3bcf0bad3c998a494ecb8' => __DIR__ . '/..' . '/sabre/xml/lib/Deserializer/functions.php',
         '93aa591bc4ca510c520999e34229ee79' => __DIR__ . '/..' . '/sabre/xml/lib/Serializer/functions.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'ebdb698ed4152ae445614b69b5e4bb6a' => __DIR__ . '/..' . '/sabre/http/lib/functions.php',
@@ -32,6 +32,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
+        '5897ea0ac4cccf14d323035e65887801' => __DIR__ . '/..' . '/symfony/polyfill-php82/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -55,6 +56,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php82\\' => 23,
             'Symfony\\Polyfill\\Php81\\' => 23,
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -162,6 +164,10 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'TrueBV\\' => 
         array (
             0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'Symfony\\Polyfill\\Php82\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php82',
         ),
         'Symfony\\Polyfill\\Php81\\' => 
         array (
@@ -402,6 +408,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
     );
 
     public static $classMap = array (
+        'AllowDynamicProperties' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/AllowDynamicProperties.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Brick\\Math\\BigDecimal' => __DIR__ . '/..' . '/brick/math/src/BigDecimal.php',
         'Brick\\Math\\BigInteger' => __DIR__ . '/..' . '/brick/math/src/BigInteger.php',
@@ -478,6 +485,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\Console\\Database\\CheckSchemaIntegrityCommand' => __DIR__ . '/../..' . '/src/Console/Database/CheckSchemaIntegrityCommand.php',
         'Glpi\\Console\\Database\\ConfigureCommand' => __DIR__ . '/../..' . '/src/Console/Database/ConfigureCommand.php',
         'Glpi\\Console\\Database\\EnableTimezonesCommand' => __DIR__ . '/../..' . '/src/Console/Database/EnableTimezonesCommand.php',
+        'Glpi\\Console\\Database\\FixHtmlEncodingCommand' => __DIR__ . '/../..' . '/src/Console/Database/FixHtmlEncodingCommand.php',
         'Glpi\\Console\\Database\\InstallCommand' => __DIR__ . '/../..' . '/src/Console/Database/InstallCommand.php',
         'Glpi\\Console\\Database\\UpdateCommand' => __DIR__ . '/../..' . '/src/Console/Database/UpdateCommand.php',
         'Glpi\\Console\\Exception\\EarlyExitException' => __DIR__ . '/../..' . '/src/Console/Exception/EarlyExitException.php',
@@ -564,6 +572,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\Features\\DCBreadcrumb' => __DIR__ . '/../..' . '/src/Features/DCBreadcrumb.php',
         'Glpi\\Features\\Inventoriable' => __DIR__ . '/../..' . '/src/Features/Inventoriable.php',
         'Glpi\\Features\\Kanban' => __DIR__ . '/../..' . '/src/Features/Kanban.php',
+        'Glpi\\Features\\ParentStatus' => __DIR__ . '/../..' . '/src/Features/ParentStatus.php',
         'Glpi\\Features\\PlanningEvent' => __DIR__ . '/../..' . '/src/Features/PlanningEvent.php',
         'Glpi\\Features\\Teamwork' => __DIR__ . '/../..' . '/src/Features/Teamwork.php',
         'Glpi\\Features\\Timeline' => __DIR__ . '/../..' . '/src/Features/Timeline.php',
@@ -638,6 +647,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\System\\Diagnostic\\DatabaseSchemaConsistencyChecker' => __DIR__ . '/../..' . '/src/System/Diagnostic/DatabaseSchemaConsistencyChecker.php',
         'Glpi\\System\\Diagnostic\\DatabaseSchemaIntegrityChecker' => __DIR__ . '/../..' . '/src/System/Diagnostic/DatabaseSchemaIntegrityChecker.php',
         'Glpi\\System\\Requirement\\AbstractRequirement' => __DIR__ . '/../..' . '/src/System/Requirement/AbstractRequirement.php',
+        'Glpi\\System\\Requirement\\DataDirectoriesProtectedPath' => __DIR__ . '/../..' . '/src/System/Requirement/DataDirectoriesProtectedPath.php',
         'Glpi\\System\\Requirement\\DbConfiguration' => __DIR__ . '/../..' . '/src/System/Requirement/DbConfiguration.php',
         'Glpi\\System\\Requirement\\DbEngine' => __DIR__ . '/../..' . '/src/System/Requirement/DbEngine.php',
         'Glpi\\System\\Requirement\\DbTimezones' => __DIR__ . '/../..' . '/src/System/Requirement/DbTimezones.php',
@@ -648,6 +658,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\System\\Requirement\\ExtensionConstant' => __DIR__ . '/../..' . '/src/System/Requirement/ExtensionConstant.php',
         'Glpi\\System\\Requirement\\ExtensionFunction' => __DIR__ . '/../..' . '/src/System/Requirement/ExtensionFunction.php',
         'Glpi\\System\\Requirement\\ExtensionGroup' => __DIR__ . '/../..' . '/src/System/Requirement/ExtensionGroup.php',
+        'Glpi\\System\\Requirement\\InstallationNotOverriden' => __DIR__ . '/../..' . '/src/System/Requirement/InstallationNotOverriden.php',
         'Glpi\\System\\Requirement\\LogsWriteAccess' => __DIR__ . '/../..' . '/src/System/Requirement/LogsWriteAccess.php',
         'Glpi\\System\\Requirement\\MemoryLimit' => __DIR__ . '/../..' . '/src/System/Requirement/MemoryLimit.php',
         'Glpi\\System\\Requirement\\MysqliMysqlnd' => __DIR__ . '/../..' . '/src/System/Requirement/MysqliMysqlnd.php',
@@ -656,6 +667,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\System\\Requirement\\RequirementInterface' => __DIR__ . '/../..' . '/src/System/Requirement/RequirementInterface.php',
         'Glpi\\System\\Requirement\\SeLinux' => __DIR__ . '/../..' . '/src/System/Requirement/SeLinux.php',
         'Glpi\\System\\Requirement\\SessionsConfiguration' => __DIR__ . '/../..' . '/src/System/Requirement/SessionsConfiguration.php',
+        'Glpi\\System\\Requirement\\SessionsSecurityConfiguration' => __DIR__ . '/../..' . '/src/System/Requirement/SessionsSecurityConfiguration.php',
         'Glpi\\System\\RequirementsList' => __DIR__ . '/../..' . '/src/System/RequirementsList.php',
         'Glpi\\System\\RequirementsManager' => __DIR__ . '/../..' . '/src/System/RequirementsManager.php',
         'Glpi\\System\\Status\\StatusChecker' => __DIR__ . '/../..' . '/src/System/Status/StatusChecker.php',
@@ -665,6 +677,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Glpi\\Toolbox\\FrontEnd' => __DIR__ . '/../..' . '/src/Toolbox/FrontEnd.php',
         'Glpi\\Toolbox\\MarkdownBuilder' => __DIR__ . '/../..' . '/src/Toolbox/MarkdownBuilder.php',
         'Glpi\\Toolbox\\Sanitizer' => __DIR__ . '/../..' . '/src/Toolbox/Sanitizer.php',
+        'Glpi\\Toolbox\\URL' => __DIR__ . '/../..' . '/src/Toolbox/URL.php',
         'Glpi\\Toolbox\\VersionParser' => __DIR__ . '/../..' . '/src/Toolbox/VersionParser.php',
         'GuzzleHttp\\BodySummarizer' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizer.php',
         'GuzzleHttp\\BodySummarizerInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizerInterface.php',
@@ -1172,6 +1185,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Monolog\\Formatter\\FluentdFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/FluentdFormatter.php',
         'Monolog\\Formatter\\FormatterInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/FormatterInterface.php',
         'Monolog\\Formatter\\GelfMessageFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/GelfMessageFormatter.php',
+        'Monolog\\Formatter\\GoogleCloudLoggingFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/GoogleCloudLoggingFormatter.php',
         'Monolog\\Formatter\\HtmlFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/HtmlFormatter.php',
         'Monolog\\Formatter\\JsonFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/JsonFormatter.php',
         'Monolog\\Formatter\\LineFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/LineFormatter.php',
@@ -1247,6 +1261,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Monolog\\Handler\\SqsHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SqsHandler.php',
         'Monolog\\Handler\\StreamHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/StreamHandler.php',
         'Monolog\\Handler\\SwiftMailerHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SwiftMailerHandler.php',
+        'Monolog\\Handler\\SymfonyMailerHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SymfonyMailerHandler.php',
         'Monolog\\Handler\\SyslogHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SyslogHandler.php',
         'Monolog\\Handler\\SyslogUdpHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SyslogUdpHandler.php',
         'Monolog\\Handler\\SyslogUdp\\UdpSocket' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Handler/SyslogUdp/UdpSocket.php',
@@ -1884,6 +1899,8 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Seld\\JsonLint\\Lexer' => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint/Lexer.php',
         'Seld\\JsonLint\\ParsingException' => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint/ParsingException.php',
         'Seld\\JsonLint\\Undefined' => __DIR__ . '/..' . '/seld/jsonlint/src/Seld/JsonLint/Undefined.php',
+        'SensitiveParameter' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameter.php',
+        'SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameterValue.php',
         'SimplePie' => __DIR__ . '/..' . '/simplepie/simplepie/library/SimplePie.php',
         'SimplePie_Author' => __DIR__ . '/..' . '/simplepie/simplepie/library/SimplePie/Author.php',
         'SimplePie_Cache' => __DIR__ . '/..' . '/simplepie/simplepie/library/SimplePie/Cache.php',
@@ -2263,6 +2280,7 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Symfony\\Polyfill\\Php81\\Php81' => __DIR__ . '/..' . '/symfony/polyfill-php81/Php81.php',
+        'Symfony\\Polyfill\\Php82\\SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/SensitiveParameterValue.php',
         'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
         'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
         'TCPDFBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_1d.php',
@@ -2498,10 +2516,10 @@ class ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit3b80b70befb55cb42e9ff2d00b8ee135::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite9c6752201ef2132c09ae0a48cd426c7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite9c6752201ef2132c09ae0a48cd426c7::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite9c6752201ef2132c09ae0a48cd426c7::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInite9c6752201ef2132c09ae0a48cd426c7::$classMap;
 
         }, null, ClassLoader::class);
     }

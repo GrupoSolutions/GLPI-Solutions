@@ -48,10 +48,6 @@ class Item_SoftwareVersion extends CommonDBRelation
     public static $log_history_2_add    = Log::HISTORY_INSTALL_SOFTWARE;
     public static $log_history_2_delete = Log::HISTORY_UNINSTALL_SOFTWARE;
 
-    public function useDeletedToLockIfDynamic()
-    {
-        return false;
-    }
 
     public static function getTypeName($nb = 0)
     {
@@ -1224,6 +1220,7 @@ class Item_SoftwareVersion extends CommonDBRelation
             echo "</tfoot>";
             echo "</table>";
             echo "</div>";
+            Html::printAjaxPager('', $start, $number);
             if ($canedit) {
                 $massiveactionparams['ontop'] = false;
                 Html::showMassiveActions($massiveactionparams);

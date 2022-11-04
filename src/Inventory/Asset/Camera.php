@@ -35,17 +35,12 @@
 
 namespace Glpi\Inventory\Asset;
 
-use CommonDBTM;
 use Glpi\Inventory\Conf;
+use Glpi\Toolbox\Sanitizer;
 use Item_Devices;
 
 class Camera extends Device
 {
-    public function __construct(CommonDBTM $item, array $data = null)
-    {
-        parent::__construct($item, $data, 'Item_DeviceCamera');
-    }
-
     public function prepare(): array
     {
 
@@ -100,10 +95,12 @@ class Camera extends Device
                 continue;
             }
 
+            $rsl = Sanitizer::sanitize($rsl);
+
             $resolution = new \ImageResolution();
-            if (!$resolution->getFromDBByCrit(['name' => addslashes($rsl)])) {
+            if (!$resolution->getFromDBByCrit(['name' => $rsl])) {
                 $resolution->add([
-                    'name'         => addslashes($rsl),
+                    'name'         => $rsl,
                     'is_video'     => $is_video,
                     'is_dynamic'   => 1
                 ]);
@@ -133,9 +130,12 @@ class Camera extends Device
             if (empty($fmt)) {
                 continue;
             }
-            if (!$format->getFromDBByCrit(['name' => addslashes($fmt)])) {
+
+            $fmt = Sanitizer::sanitize($fmt);
+
+            if (!$format->getFromDBByCrit(['name' => $fmt])) {
                 $format->add([
-                    'name' => addslashes($fmt),
+                    'name' => $fmt,
                     'is_dynamic' => 1
                 ]);
             }
@@ -156,5 +156,10 @@ class Camera extends Device
     public function checkConf(Conf $conf): bool
     {
         return true;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Item_DeviceCamera::class;
     }
 }

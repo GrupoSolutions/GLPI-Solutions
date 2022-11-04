@@ -33,6 +33,7 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Inventory\Conf;
 use Glpi\Socket;
 use Glpi\Toolbox\Sanitizer;
 
@@ -150,6 +151,7 @@ $empty_data_builder = new class
             'cas_port' => '443',
             'cas_uri' => '',
             'cas_logout' => '',
+            'cas_version' => 'CAS_VERSION_2_0',
             'existing_auth_server_field_clean_domain' => '0',
             'planning_begin' => '08:00:00',
             'planning_end' => '20:00:00',
@@ -277,7 +279,7 @@ $empty_data_builder = new class
             'savedsearches_pinned' => '0',
             'timeline_order' => 'natural',
             'itil_layout' => '',
-            'richtext_layout' => 'inline',
+            'richtext_layout' => 'classic',
             'lock_use_lock_item' => '0',
             'lock_autolock_mode' => '1',
             'lock_directunlock_notification' => '0',
@@ -3860,7 +3862,7 @@ $empty_data_builder = new class
                 'notifications_id' => '63',
             ], [
                 'id' => '129',
-                'items_id' => '23',
+                'items_id' => '9',
                 'type' => '1',
                 'notifications_id' => '64',
             ], [
@@ -4296,15 +4298,17 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
                 'notificationtemplates_id' => '6',
                 'language' => '',
                 'subject' => '##ticket.action## ##ticket.entity##',
-                'content_text' => '##lang.ticket.entity## : ##ticket.entity##
-
-##FOREACHtickets##
-
-##lang.ticket.title## : ##ticket.title##
- ##lang.ticket.status## : ##ticket.status##
-
- ##ticket.url##
- ##ENDFOREACHtickets##',
+                'content_text' => '##FOREACHtickets##
+##lang.ticket.authors##: ##ticket.authors##
+##lang.ticket.title##: ##ticket.title##
+##lang.ticket.priority##: ##ticket.priority##
+##lang.ticket.status##: ##ticket.status##
+##lang.ticket.attribution##: ##IFticket.assigntousers####ticket.assigntousers##
+##ENDIFticket.assigntousers####IFticket.assigntogroups##
+##ticket.assigntogroups## ##ENDIFticket.assigntogroups####IFticket.assigntosupplier##
+##ticket.assigntosupplier## ##ENDIFticket.assigntosupplier##
+##lang.ticket.creationdate##: ##ticket.creationdate##
+##lang.ticket.content##: ##ticket.content## ##ENDFOREACHtickets##',
                 'content_html' => '&lt;table class="tab_cadre" border="1" cellspacing="2" cellpadding="3"&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
@@ -4314,9 +4318,8 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
 &lt;td style="text-align: left;" width="auto" bgcolor="#cccccc"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##lang.ticket.status##&lt;/span&gt;&lt;/td&gt;
 &lt;td style="text-align: left;" width="auto" bgcolor="#cccccc"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##lang.ticket.attribution##&lt;/span&gt;&lt;/td&gt;
 &lt;td style="text-align: left;" width="auto" bgcolor="#cccccc"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##lang.ticket.creationdate##&lt;/span&gt;&lt;/td&gt;
-&lt;td style="text-align: left;" width="auto" bgcolor="#cccccc"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##lang.ticket.content##&lt;/span&gt;&lt;/td&gt;
+&lt;td style="text-align: left;" width="auto" bgcolor="#cccccc"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##lang.ticket.content##&lt;/span&gt;##FOREACHtickets##&lt;/td&gt;
 &lt;/tr&gt;
-##FOREACHtickets##
 &lt;tr&gt;
 &lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##ticket.authors##&lt;/span&gt;&lt;/td&gt;
 &lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;&lt;a href="##ticket.url##"&gt;##ticket.title##&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
@@ -4324,9 +4327,8 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
 &lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##ticket.status##&lt;/span&gt;&lt;/td&gt;
 &lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##IFticket.assigntousers####ticket.assigntousers##&lt;br /&gt;##ENDIFticket.assigntousers####IFticket.assigntogroups##&lt;br /&gt;##ticket.assigntogroups## ##ENDIFticket.assigntogroups####IFticket.assigntosupplier##&lt;br /&gt;##ticket.assigntosupplier## ##ENDIFticket.assigntosupplier##&lt;/span&gt;&lt;/td&gt;
 &lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##ticket.creationdate##&lt;/span&gt;&lt;/td&gt;
-&lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##ticket.content##&lt;/span&gt;&lt;/td&gt;
+&lt;td width="auto"&gt;&lt;span style="font-size: 11px; text-align: left;"&gt;##ticket.content##&lt;/span&gt;##ENDFOREACHtickets##&lt;/td&gt;
 &lt;/tr&gt;
-##ENDFOREACHtickets##
 &lt;/tbody&gt;
 &lt;/table&gt;',
             ], [
@@ -7641,11 +7643,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_ADMIN,
                 'name' => 'inventory',
-                'rights' => READ,
+                'rights' => READ | Conf::IMPORTFROMFILE | Conf::UPDATECONFIG,
             ], [
                 'profiles_id' => self::PROFILE_SUPER_ADMIN,
                 'name' => 'inventory',
-                'rights' => READ,
+                'rights' => READ | Conf::IMPORTFROMFILE | Conf::UPDATECONFIG,
             ], [
                 'profiles_id' => self::PROFILE_HOTLINER,
                 'name' => 'inventory',
@@ -7767,6 +7769,165 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
                 'name' => 'recurrentchange',
                 'rights' => READ,
             ],
+            [
+                'profiles_id' => self::PROFILE_SELF_SERVICE,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_OBSERVER,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_ADMIN,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPER_ADMIN,
+                'name' => 'locked_field',
+                'rights' => CREATE | UPDATE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_HOTLINER,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_TECHNICIAN,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPERVISOR,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_READ_ONLY,
+                'name' => 'locked_field',
+                'rights' => self::RIGHT_NONE,
+            ],            [
+                'profiles_id' => self::PROFILE_SELF_SERVICE,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_OBSERVER,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_ADMIN,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPER_ADMIN,
+                'name' => 'snmpcredential',
+                'rights' => ALLSTANDARDRIGHT,
+            ],
+            [
+                'profiles_id' => self::PROFILE_HOTLINER,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_TECHNICIAN,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPERVISOR,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_READ_ONLY,
+                'name' => 'snmpcredential',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SELF_SERVICE,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_OBSERVER,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_ADMIN,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPER_ADMIN,
+                'name' => 'refusedequipment',
+                'rights' => READ | UPDATE | PURGE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_HOTLINER,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_TECHNICIAN,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPERVISOR,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_READ_ONLY,
+                'name' => 'refusedequipment',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SELF_SERVICE,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_OBSERVER,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_ADMIN,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPER_ADMIN,
+                'name' => 'agent',
+                'rights' => READ | UPDATE | PURGE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_HOTLINER,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_TECHNICIAN,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPERVISOR,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_READ_ONLY,
+                'name' => 'agent',
+                'rights' => self::RIGHT_NONE,
+            ]
         ];
 
 

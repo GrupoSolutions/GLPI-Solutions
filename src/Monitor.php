@@ -92,16 +92,14 @@ class Monitor extends CommonDBTM
     {
 
         $ong = [];
-        $this->addDefaultFormTab($ong)
-        ->addStandardTab('Item_Devices', $ong, $options)
-        ->addStandardTab('Computer_Item', $ong, $options)
-        ->addStandardTab('Infocom', $ong, $options)
-        ->addStandardTab('Contract_Item', $ong, $options)
-        ->addStandardTab('Document_Item', $ong, $options)
-        ->addStandardTab('Lock', $ong, $options)
-        ->addStandardTab('Notepad', $ong, $options)
-        ->addStandardTab('RuleMatchedLog', $ong, $options)
-        ->addStandardTab('Log', $ong, $options);
+        $this->addDefaultFormTab($ong);
+        $this->addImpactTab($ong, $options);
+        $this->addStandardTab('Item_Devices', $ong, $options);
+        $this->addStandardTab('Computer_Item', $ong, $options);
+        
+        $this->addStandardTab('Infocom', $ong, $options);
+        
+        $this->addStandardTab('Log', $ong, $options);
 
         return $ong;
     }
@@ -274,6 +272,14 @@ class Monitor extends CommonDBTM
             'table'              => $this->getTable(),
             'field'              => 'contact_num',
             'name'               => __('Alternate username number'),
+            'datatype'           => 'string',
+        ];
+
+        $tab[] = [
+            'id'                 => '10',
+            'table'              => $this->getTable(),
+            'field'              => 'uuid',
+            'name'               => __('UUID'),
             'datatype'           => 'string',
         ];
 

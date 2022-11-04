@@ -46,11 +46,21 @@ class Lockedfield extends CommonDBTM
    // From CommonDBTM
     public $dohistory                   = false;
 
-    public static $rightname                   = 'config';
+    public static $rightname                   = 'locked_field';
 
     public static function getTypeName($nb = 0)
     {
         return _n('Locked field', 'Locked fields', $nb);
+    }
+
+    public static function canPurge()
+    {
+        return Session::haveRight(self::$rightname, UPDATE);
+    }
+
+    public static function canCreate()
+    {
+        return Session::haveRight(self::$rightname, UPDATE);
     }
 
     public function rawSearchOptions()
@@ -138,6 +148,16 @@ class Lockedfield extends CommonDBTM
         return (bool)$item->isDynamic();
     }
 
+    public function getLockedNames($itemtype, $items_id)
+    {
+        return $this->getLocks($itemtype, $items_id, true);
+    }
+
+    public function getLockedValues($itemtype, $items_id)
+    {
+        return $this->getLocks($itemtype, $items_id, false);
+    }
+
     /**
      * Get locked fields
      *
@@ -146,7 +166,7 @@ class Lockedfield extends CommonDBTM
      *
      * return array
      */
-    public function getLocks($itemtype, $items_id)
+    public function getLocks($itemtype, $items_id, bool $fields_only = true)
     {
         global $DB;
 
@@ -165,7 +185,11 @@ class Lockedfield extends CommonDBTM
 
         $locks = [];
         foreach ($iterator as $row) {
-            $locks[] = $row['field'];
+            if ($fields_only === true) {
+                $locks[] = $row['field'];
+            } else {
+                $locks[$row['field']] = $row['value'];
+            }
         }
         return $locks;
     }
@@ -235,11 +259,6 @@ class Lockedfield extends CommonDBTM
         return ['update', 'clone'];
     }
 
-    public static function canPurge()
-    {
-        return Session::haveRight(static::$rightname, UPDATE);
-    }
-
     public function prepareInputForAdd($input)
     {
         return $this->prepareInput($input);
@@ -274,20 +293,13 @@ class Lockedfield extends CommonDBTM
         return true;
     }
 
-    public static function canCreate()
-    {
-        if (static::$rightname) {
-            return Session::haveRight(static::$rightname, UPDATE);
-        }
-        return false;
-    }
 
     /**
      * List of itemtypes/fields that can be locked globally
      *
      * @return array
      */
-    public function getFieldsToLock(): array
+    public function getFieldsToLock(string $specific_itemtype = null): array
     {
         global $CFG_GLPI, $DB;
 
@@ -321,6 +333,10 @@ class Lockedfield extends CommonDBTM
             'entities_id'
         ];
         $itemtypes = $CFG_GLPI['inventory_types'] + $CFG_GLPI['inventory_lockable_objects'];
+
+        if ($specific_itemtype !== null && in_array($specific_itemtype, $itemtypes)) {
+            $itemtypes = [$specific_itemtype];
+        }
 
         foreach ($itemtypes as $itemtype) {
             $search_options = Search::getOptions($itemtype);

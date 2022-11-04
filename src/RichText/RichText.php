@@ -103,7 +103,8 @@ final class RichText
         string $content,
         bool $keep_presentation = true,
         bool $compact = false,
-        bool $encode_output_entities = false
+        bool $encode_output_entities = false,
+        bool $preserve_case = false
     ): string {
         global $CFG_GLPI;
 
@@ -123,7 +124,18 @@ final class RichText
                 );
             }
 
-            $html = new Html2Text($content, $options);
+            $options['preserve_case'] = $preserve_case;
+
+            $html = new class ($content, $options) extends Html2Text {
+                protected function toupper($str)
+                {
+                    if ($this->options['preserve_case'] === true) {
+                        return $str;
+                    }
+
+                    return parent::toupper($str);
+                }
+            };
             $content = $html->getText();
         } else {
            // Remove HTML tags using htmLawed
@@ -234,11 +246,11 @@ final class RichText
 
            // Plain text line breaks have to be transformed into <br /> tags.
             $content = '<p>' . nl2br($content) . '</p>';
+        }
 
-            if ($enhanced_html) {
-               // URLs have to be transformed into <a> tags.
-                $content = autolink($content, false);
-            }
+        if ($enhanced_html) {
+            // URLs have to be transformed into <a> tags.
+            $content = autolink($content, false, ' target="_blank"');
         }
 
         return $content;
@@ -257,23 +269,61 @@ final class RichText
     public static function getEnhancedHtml(?string $content, array $params = []): string
     {
         $p = [
-            'images_gallery'           => false,
-            'user_mentions'            => true,
+            'images_gallery' => false,
+            'user_mentions'  => true,
+            'images_lazy'    => true,
+            'text_maxsize'   => 2000,
         ];
         $p = array_replace($p, $params);
+
+        $content_size = strlen($content);
 
        // Sanitize content first (security and to decode HTML entities)
         $content = self::getSafeHtml($content);
 
-        if (isset($p['user_mentions'])) {
+        if ($p['user_mentions']) {
             $content = UserMention::refreshUserMentionsHtmlToDisplay($content);
         }
 
-        if (isset($p['images_gallery'])) {
+        if ($p['images_lazy']) {
+            $content = self::loadImagesLazy($content);
+        }
+
+        if ($p['images_gallery']) {
             $content = self::replaceImagesByGallery($content);
         }
 
+        if ($content_size > $p['text_maxsize']) {
+            $content = <<<HTML
+<div class="long_text">$content
+    <p class='read_more'>
+        <span class='read_more_button'>...</span>
+    </p>
+</div>
+HTML;
+            $content .= HTML::scriptBlock('$(function() { read_more(); });');
+        }
+
         return $content;
+    }
+
+
+    /**
+     * insert `loading="lazy" into img tag
+     *
+     * @since 10.0.3
+     *
+     * @param string  $content
+     *
+     * @return string
+     */
+    private static function loadImagesLazy(string $content): string
+    {
+        return preg_replace(
+            '/<img([\w\W]+?)\/+>/',
+            '<img$1 loading="lazy">',
+            $content
+        );
     }
 
     /**
@@ -303,12 +353,26 @@ final class RichText
             if ($document->getFromDB($docid)) {
                 $docpath = GLPI_DOC_DIR . '/' . $document->fields['filepath'];
                 if (Document::isImage($docpath)) {
+                    //find width / height define by user
+                    $width = null;
+                    if (preg_match("/width=[\"|'](\d+)(\.\d+)?[\"|']/", $img_tag, $wmatches)) {
+                        $width = intval($wmatches[1]);
+                    }
+                    $height = null;
+                    if (preg_match("/height=[\"|'](\d+)(\.\d+)?[\"|']/", $img_tag, $hmatches)) {
+                        $height = intval($hmatches[1]);
+                    }
+
+                    //find real size from image
                     $imgsize = getimagesize($docpath);
+
                     $gallery = self::imageGallery([
                         [
                             'src' => $docsrc,
                             'w'   => $imgsize[0],
-                            'h'   => $imgsize[1]
+                            'h'   => $imgsize[1],
+                            'thumbnail_w' => $width,
+                            'thumbnail_h' => $height,
                         ]
                     ]);
                     $content = str_replace($img_tag, $gallery, $content);
@@ -403,7 +467,9 @@ final class RichText
             }
             $out .= "<figure itemprop='associatedMedia' itemscope itemtype='http://schema.org/ImageObject'>";
             $out .= "<a href='{$img['src']}' itemprop='contentUrl' data-index='0'>";
-            $out .= "<img src='{$img['thumbnail_src']}' itemprop='thumbnail'>";
+            $width_attr = isset($img['thumbnail_w']) ? "width='{$img['thumbnail_w']}'" : "";
+            $height_attr = isset($img['thumbnail_h']) ? "height='{$img['thumbnail_h']}'" : "";
+            $out .= "<img src='{$img['thumbnail_src']}' itemprop='thumbnail' loading='lazy' {$width_attr} {$height_attr}>";
             $out .= "</a>";
             $out .= "</figure>";
         }

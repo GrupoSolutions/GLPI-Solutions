@@ -50,18 +50,6 @@ $print = new Printer();
 if (isset($_POST["add"])) {
     $print->check(-1, CREATE, $_POST);
 
-    $printertypeid = $_POST['printertypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['printermodels_id'];
-
-   
-    if($printertypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao adicionar Impressora!\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
     if ($newID = $print->add($_POST)) {
         Event::log(
             $newID,
@@ -75,7 +63,7 @@ if (isset($_POST["add"])) {
         }
     }
     Html::back();
-}} else if (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
     $print->check($_POST["id"], DELETE);
     $print->delete($_POST);
 
@@ -117,19 +105,6 @@ if (isset($_POST["add"])) {
 } else if (isset($_POST["update"])) {
     $print->check($_POST["id"], UPDATE);
 
-    $printertypeid = $_POST['printertypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['printermodels_id'];
-
-   
-    if($peripheraltypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao atualizar impressora!\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else {
-
     $print->update($_POST);
     Event::log(
         $_POST["id"],
@@ -140,7 +115,7 @@ if (isset($_POST["add"])) {
         sprintf(__('%s updates an item'), $_SESSION["glpiname"])
     );
     Html::back();
-}} else if (isset($_POST["unglobalize"])) {
+} else if (isset($_POST["unglobalize"])) {
     $print->check($_POST["id"], UPDATE);
 
     Computer_Item::unglobalizeItem($print);

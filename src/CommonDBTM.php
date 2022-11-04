@@ -483,11 +483,25 @@ class CommonDBTM extends CommonGLPI
     public function showForm($ID, array $options = [])
     {
         $this->initForm($ID, $options);
+        $new_item = static::isNewID($ID);
+        $in_modal = (bool) ($_GET['_in_modal'] ?? false);
         TemplateRenderer::getInstance()->display('generic_show_form.html.twig', [
             'item'   => $this,
             'params' => $options,
+            'no_header' => !$new_item && !$in_modal
         ]);
         return true;
+    }
+
+
+    public function getSNMPCredential()
+    {
+        if ($this->isField('snmpcredentials_id') && $this->fields['snmpcredentials_id']) {
+            $snmp_credential = new SNMPCredential();
+            $snmp_credential->getFromDB($this->fields['snmpcredentials_id']);
+            return $snmp_credential;
+        }
+        return false;
     }
 
 
@@ -505,7 +519,7 @@ class CommonDBTM extends CommonGLPI
             && !$this->isNewItem()
             && $lockedfield->isHandled($this)
         ) {
-            $locks = $lockedfield->getLocks($this->getType(), $this->fields['id']);
+            $locks = $lockedfield->getLockedValues($this->getType(), $this->fields['id']);
         }
 
         return $locks;
@@ -647,7 +661,7 @@ class CommonDBTM extends CommonGLPI
      * @param string[] $updates   fields to update
      * @param string[] $oldvalues array of old values of the updated fields
      *
-     * @return void
+     * @return bool
      **/
     public function updateInDB($updates, $oldvalues = [])
     {
@@ -1174,7 +1188,7 @@ class CommonDBTM extends CommonGLPI
      *
      * @param array $saved Array of values saved in session
      *
-     * @return array Array of values
+     * @return void
      **/
     protected function restoreSavedValues(array $saved = [])
     {
@@ -1218,7 +1232,10 @@ class CommonDBTM extends CommonGLPI
         }
 
         // This means we are not adding a cloned object
-        if (!Toolbox::hasTrait($this, \Glpi\Features\Clonable::class) || !isset($input['clone'])) {
+        if (
+            (!Toolbox::hasTrait($this, \Glpi\Features\Clonable::class) || !isset($input['clone']))
+            && method_exists($this, 'clone')
+        ) {
             // This means we are asked to clone the object (old way). This will clone the clone method
             // that will set the clone parameter to true
             if (isset($input['_oldID'])) {
@@ -1280,7 +1297,10 @@ class CommonDBTM extends CommonGLPI
             $this->fields = [];
             $table_fields = $DB->listFields($this->getTable());
 
+            $this->pre_addInDB();
+
             // fill array for add
+            $this->cleanLockedsOnAdd();
             foreach (array_keys($this->input) as $key) {
                 if (
                     ($key[0] != '_')
@@ -1468,8 +1488,9 @@ class CommonDBTM extends CommonGLPI
                     $this->fields['id']
                 );
             }
-            $display = (isset($this->input['_no_message_link']) ? $this->getNameID()
-                                                            : $this->getLink());
+            $opt = [ 'forceid' => $this instanceof CommonITILObject ];
+            $display = (isset($this->input['_no_message_link']) ? $this->getNameID($opt)
+                                                            : $this->getLink($opt));
 
            // Do not display quotes
            //TRANS : %s is the description of the added item
@@ -1708,6 +1729,25 @@ class CommonDBTM extends CommonGLPI
     }
 
     /**
+     * Clean locked fields from add, if needed
+     *
+     * @return void
+     */
+    protected function cleanLockedsOnAdd()
+    {
+        if (isset($this->input['is_dynamic']) && $this->input['is_dynamic'] == true) {
+            $lockedfield = new Lockedfield();
+            $locks = $lockedfield->getLockedNames($this->getType(), 0);
+            foreach ($locks as $lock) {
+                if (array_key_exists($lock, $this->input)) {
+                    $lockedfield->setLastValue($this->getType(), 0, $lock, $this->input[$lock]);
+                    unset($this->input[$lock]);
+                }
+            }
+        }
+    }
+
+    /**
      * Clean locked fields from update, if needed
      *
      * @return void
@@ -1716,12 +1756,15 @@ class CommonDBTM extends CommonGLPI
     {
         if ($this->isDynamic() && (in_array('is_dynamic', $this->updates) || isset($this->input['is_dynamic']) && $this->input['is_dynamic'] == true)) {
             $lockedfield = new Lockedfield();
-            $locks = $lockedfield->getLocks($this->getType(), $this->fields['id']);
+            $locks = $lockedfield->getLockedNames($this->getType(), $this->fields['id']);
             foreach ($locks as $lock) {
                 $idx = array_search($lock, $this->updates);
                 if ($idx !== false) {
                     $lockedfield->setLastValue($this->getType(), $this->fields['id'], $lock, $this->input[$lock]);
                     unset($this->updates[$idx]);
+                    unset($this->input[$lock]);
+                    $this->fields[$lock] = $this->oldvalues[$lock];
+                    unset($this->oldvalues[$lock]);
                 }
             }
             $this->updates = array_values($this->updates);
@@ -1896,6 +1939,18 @@ class CommonDBTM extends CommonGLPI
 
 
     /**
+     * Actions done before the ADD of the item in the database
+     *
+     * @since 10.0.3
+     *
+     * @return void
+     */
+    public function pre_addInDB()
+    {
+    }
+
+
+     /**
      * Actions done before the UPDATE of the item in the database
      *
      * @return void
@@ -3001,7 +3056,7 @@ class CommonDBTM extends CommonGLPI
      *
      * @param mixed $right Right to check : c / r / w / d / READ / UPDATE / CREATE / DELETE
      *
-     * @return void
+     * @return bool
      **/
     public function canGlobal($right)
     {
@@ -4288,7 +4343,7 @@ class CommonDBTM extends CommonGLPI
         $message_text .= '<br>' . __('Other item exist');
 
         foreach ($doubles as $double) {
-            if (in_array('CommonDBChild', class_parents($this))) {
+            if ($this instanceof CommonDBChild) {
                 if ($this->getField($this->itemtype)) {
                     $item = new $double['itemtype']();
                 } else {
@@ -4564,8 +4619,9 @@ class CommonDBTM extends CommonGLPI
 
         switch ($field) {
             case '_virtual_datacenter_position':
-                if (method_exists(static::class, 'getDcBreadcrumbSpecificValueToDisplay')) {
-                    return static::getDcBreadcrumbSpecificValueToDisplay($values['id']);
+                $static = new static();
+                if (method_exists($static, 'getDcBreadcrumbSpecificValueToDisplay')) {
+                    return $static::getDcBreadcrumbSpecificValueToDisplay($values['id']);
                 }
         }
 
@@ -5289,18 +5345,19 @@ class CommonDBTM extends CommonGLPI
     }
 
     /**
-     * Generate link
+     * Generate link(s).
      *
      * @since 9.1
      *
-     * @param string     $link original string content
-     * @param CommonDBTM $item item used to make replacements
+     * @param string        $link       original string content
+     * @param CommonDBTM    $item       item used to make replacements
+     * @param bool          $safe_url   indicates whether URL should be sanitized or not
      *
      * @return array of link contents (may have several when item have several IP / MAC cases)
-     **/
-    public static function generateLinkContents($link, CommonDBTM $item)
+     */
+    public static function generateLinkContents($link, CommonDBTM $item, bool $safe_url = true)
     {
-        return Link::generateLinkContents($link, $item);
+        return Link::generateLinkContents($link, $item, $safe_url);
     }
 
 
@@ -5382,7 +5439,7 @@ class CommonDBTM extends CommonGLPI
                 $is_recursive = $input['_job']->fields['is_recursive'];
             }
 
-           // Check for duplicate
+           // Check for duplicate and availability (e.g. file deleted in _files)
             if ($doc->getDuplicateOf($entities_id, $filename)) {
                 $docID = $doc->fields["id"];
                // File already exist, we replace the tag by the existing one
@@ -5397,6 +5454,14 @@ class CommonDBTM extends CommonGLPI
                         $input[$options['content_field']]
                     );
                     $docadded[$docID]['tag'] = $doc->fields["tag"];
+                }
+                if (!$doc->checkAvailability($filename)) {
+                    $doc->update([
+                        'id'                      => $docID,
+                        '_only_if_upload_succeed' => 1,
+                        '_filename'               => [$file],
+                        'current_filepath'        => $filename,
+                    ]);
                 }
             } else {
                 if ($this->getType() == 'Ticket') {
@@ -6214,7 +6279,7 @@ class CommonDBTM extends CommonGLPI
             static::displayHelpdeskHeader($title, $menus);
         }
 
-        Html::displayNotFoundError();
+        Html::displayNotFoundError('The item could not be found in the database');
     }
 
     /**
@@ -6223,9 +6288,10 @@ class CommonDBTM extends CommonGLPI
      * @param array $menus   Menu path used to load specific JS file and show
      *                       breadcumbs, see $CFG_GLPI['javascript'] and
      *                       Html::includeHeader()
+     * @param string $additional_info Additional information about the error for the access log
      * @return void
      */
-    public static function displayAccessDeniedPage(array $menus): void
+    public static function displayAccessDeniedPage(array $menus, string $additional_info = ''): void
     {
         $helpdesk = Session::getCurrentInterface() == "helpdesk";
         $title = __('Access denied');
@@ -6237,7 +6303,7 @@ class CommonDBTM extends CommonGLPI
             static::displayHelpdeskHeader($title, $menus);
         }
 
-        Html::displayRightError();
+        Html::displayRightError($additional_info);
     }
 
     /**
@@ -6301,6 +6367,8 @@ class CommonDBTM extends CommonGLPI
         $id = (int) $id;
         $item = new static();
 
+        $menus = is_array($menus) ? $menus : [];
+
         // Check current interface
         $interface = Session::getCurrentInterface();
         if (isset($menus[Session::getCurrentInterface()])) {
@@ -6311,7 +6379,7 @@ class CommonDBTM extends CommonGLPI
         if (static::isNewID($id)) {
             // New item, check create rights
             if (!static::canCreate()) {
-                static::displayAccessDeniedPage($menus);
+                static::displayAccessDeniedPage($menus, 'Missing CREATE right. Cannot view the new item form.');
                 return;
             }
 
@@ -6325,7 +6393,7 @@ class CommonDBTM extends CommonGLPI
             }
 
             if (!$item->can($id, READ)) {
-                static::displayAccessDeniedPage($menus);
+                static::displayAccessDeniedPage($menus, 'Missing READ right. Cannot view the item.');
                 return;
             }
 
@@ -6340,6 +6408,9 @@ class CommonDBTM extends CommonGLPI
             static::displayHelpdeskHeader($title, $menus);
         }
 
+        if (!isset($options['id'])) {
+            $options['id'] = $id;
+        }
         // Show item
         $options['loaded'] = true;
         $item->display($options);

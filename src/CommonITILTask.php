@@ -43,6 +43,7 @@ use Sabre\VObject\Component\VCalendar;
 /// TODO extends it from CommonDBChild
 abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItemInterface
 {
+    use Glpi\Features\ParentStatus;
     use Glpi\Features\PlanningEvent;
     use VobjectConverterTrait;
 
@@ -360,10 +361,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
     {
         global $CFG_GLPI;
 
-       // Add document if needed, without notification for file input
+        // Handle rich-text images and uploaded documents
         $this->input = $this->addFiles($this->input, ['force_update' => true]);
-       // Add document if needed, without notification for textarea
-        $this->input = $this->addFiles($this->input, ['name' => 'content', 'force_update' => true]);
 
         if (in_array("begin", $this->updates)) {
             PlanningRecall::managePlanningUpdates(
@@ -403,7 +402,7 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                 $update_done = true;
 
                 if (in_array("actiontime", $this->updates)) {
-                    $item->updateActionTime($this->input[$item->getForeignKeyField()]);
+                    $item->updateActionTime($this->fields[$item->getForeignKeyField()]);
                 }
 
                // change ticket status (from splitted button)
@@ -548,7 +547,7 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
             $input["users_id"] = $uid;
         }
 
-        if (!isset($input["date"])) {
+        if (!isset($input["date"]) || empty($input["date"])) {
             $input["date"] = $_SESSION["glpi_currenttime"];
         }
         if (!isset($input["is_private"])) {
@@ -568,10 +567,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
     {
         global $CFG_GLPI;
 
-       // Add document if needed, without notification for file input
+        // Handle rich-text images and uploaded documents
         $this->input = $this->addFiles($this->input, ['force_update' => true]);
-       // Add document if needed, without notification for textarea
-        $this->input = $this->addFiles($this->input, ['name' => 'content', 'force_update' => true]);
 
         if (isset($this->input['_planningrecall'])) {
             $this->input['_planningrecall']['items_id'] = $this->fields['id'];
@@ -624,49 +621,7 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
             $this->input["_job"]->updateActionTime($this->input[$this->input["_job"]->getForeignKeyField()]);
         }
 
-       // Set pending reason data on parent and self
-        if ($this->input['pending'] ?? 0) {
-            PendingReason_Item::createForItem($this->input["_job"], [
-                'pendingreasons_id'           => $this->input['pendingreasons_id'],
-                'followup_frequency'          => $this->input['followup_frequency'] ?? 0,
-                'followups_before_resolution' => $this->input['followups_before_resolution'] ?? 0,
-            ]);
-            PendingReason_Item::createForItem($this, [
-                'pendingreasons_id'           => $this->input['pendingreasons_id'],
-                'followup_frequency'          => $this->input['followup_frequency'] ?? 0,
-                'followups_before_resolution' => $this->input['followups_before_resolution'] ?? 0,
-            ]);
-
-           // Set parent status to pending
-            $this->input['_status'] = CommonITILObject::WAITING;
-        }
-
-       //change status only if input change
-        if (
-            isset($this->input['_status'])
-            && ($this->input['_status'] != $this->input['_job']->fields['status'])
-        ) {
-            $update = [
-                'status'        => $this->input['_status'],
-                'id'            => $this->input['_job']->fields['id'],
-                '_disablenotif' => true
-            ];
-            $this->input['_job']->update($update);
-        }
-
-        if (
-            !empty($this->fields['begin'])
-            && $this->input["_job"]->isStatusExists(CommonITILObject::PLANNED)
-            && (($this->input["_job"]->fields["status"] == CommonITILObject::INCOMING)
-              || ($this->input["_job"]->fields["status"] == CommonITILObject::ASSIGNED))
-        ) {
-            $input2 = [
-                'id'            => $this->input["_job"]->getID(),
-                'status'        => CommonITILObject::PLANNED,
-                '_disablenotif' => true,
-            ];
-            $this->input["_job"]->update($input2);
-        }
+        $this->updateParentStatus($this->input['_job'], $this->input);
 
         if ($donotif) {
             $options = ['task_id'             => $this->fields["id"],
@@ -1644,10 +1599,13 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                         'link'       => 'AND',
                     ];
 
+                    $title = '';
                     if ($itemtype == "TicketTask") {
                         $title = __("Ticket tasks to do");
                     } else if ($itemtype == "ProblemTask") {
                         $title = __("Problem tasks to do");
+                    } else if ($itemtype == "ChangeTask") {
+                        $title = __("Change tasks to do");
                     }
                     $linked_itemtype = str_replace("Task", "", $itemtype);
                     echo "<a href=\"" . $linked_itemtype::getSearchURL() . "?" .
@@ -1664,6 +1622,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                 $type = Ticket::getTypeName();
             } else if ($itemtype == "ProblemTask") {
                 $type = Problem::getTypeName();
+            } else if ($itemtype == "ChangeTask") {
+                $type = Change::getTypeName();
             }
             echo "<th style='width: 20%;'>" . __('Title') . " (" . strtolower($type) . ")</th>";
             echo "<th>" . __('Description') . "</th>";
@@ -1708,6 +1668,10 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                 $item_link = new Problem();
                 $item_link->getFromDB($job->fields['problems_id']);
                 $tab_name = "ProblemTask";
+            } else if ($DB->fieldExists($job->getTable(), 'changes_id')) {
+                $item_link = new Change();
+                $item_link->getFromDB($job->fields['changes_id']);
+                $tab_name = "ChangeTask";
             }
 
             $bgcolor = $_SESSION["glpipriority_" . $item_link->fields["priority"]];
@@ -1866,5 +1830,15 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         }
 
         return $input;
+    }
+
+    final public function unplan(): bool
+    {
+        return $this->update([
+            'id'         => $this->fields['id'],
+            'begin'      => 'NULL',
+            'end'        => 'NULL',
+            'actiontime' => 0,
+        ]);
     }
 }

@@ -84,10 +84,6 @@ class Update
             $_SESSION = ['glpilanguage' => (isset($this->args['lang']) ? $this->args['lang'] : 'en_GB')];
             $_SESSION["glpi_currenttime"] = date("Y-m-d H:i:s");
         }
-
-       // Init debug variable
-       // Only show errors
-        Toolbox::setDebugMode(Session::DEBUG_MODE, 0, 0, 1);
     }
 
     /**
@@ -167,9 +163,11 @@ class Update
     {
         global $DB;
 
+        $normalized_nersion = VersionParser::getNormalizedVersion(GLPI_VERSION, false);
+
         $checker = new DatabaseSchemaIntegrityChecker($DB, false, true, true, true, true, true);
         $differences = $checker->checkCompleteSchema(
-            sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, GLPI_VERSION),
+            sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, $normalized_nersion),
             true
         );
 

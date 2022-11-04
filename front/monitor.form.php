@@ -49,19 +49,6 @@ if (!isset($_GET["withtemplate"])) {
 $monitor = new Monitor();
 
 if (isset($_POST["add"])) {
-    $monitortypeid = $_POST['monitortypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['monitormodels_id'];
-
-   
-    if($monitortypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao adicionar monitor !\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else{
-
     $monitor->check(-1, CREATE, $_POST);
 
     if ($newID = $monitor->add($_POST)) {
@@ -77,7 +64,7 @@ if (isset($_POST["add"])) {
         }
     }
     Html::back();
-}} else if (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
     $monitor->check($_POST["id"], DELETE);
     $monitor->delete($_POST);
 
@@ -117,21 +104,8 @@ if (isset($_POST["add"])) {
     );
     $monitor->redirectToList();
 } else if (isset($_POST["update"])) {
-
-    
     $monitor->check($_POST["id"], UPDATE);
-    $monitortypeid = $_POST['monitortypes_id'];
-    $manufacturesid = $_POST['manufacturers_id'];
-    $modelid = $_POST['monitormodels_id'];
 
-   
-    if($monitortypeid == 0 || $manufacturesid == 0 || $modelid == 0){
-        echo '<script language="javascript">';
-        echo 'if(confirm("Erro ao atualizar monitor!\nOs campos Modelo, Fabricante e Tipo devem ser preenchidos.") == true){ history.go(-1)}';
-        //echo 'else{javascript:window.history.back();}';
-        echo '</script>';
-    }
-    else{
     $monitor->update($_POST);
     Event::log(
         $_POST["id"],
@@ -142,7 +116,7 @@ if (isset($_POST["add"])) {
         sprintf(__('%s updates an item'), $_SESSION["glpiname"])
     );
     Html::back();
-}} else if (isset($_POST["unglobalize"])) {
+} else if (isset($_POST["unglobalize"])) {
     $monitor->check($_POST["id"], UPDATE);
 
     Computer_Item::unglobalizeItem($monitor);

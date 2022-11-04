@@ -40,6 +40,7 @@ use DBmysqlIterator;
 use Dropdown;
 use Entity;
 use Glpi\Inventory\Conf;
+use Glpi\Toolbox\Sanitizer;
 use QueryParam;
 use RuleDictionnarySoftwareCollection;
 use Software as GSoftware;
@@ -145,8 +146,25 @@ class Software extends InventoryAsset
                     $val->version = $res_rule["version"];
                 }
 
+                //If the software categorie has been modified or set by the rules engine
                 if (isset($res_rule["softwarecategories_id"])) {
                     $val->softwarecategories_id = $res_rule["softwarecategories_id"];
+                } else if (
+                    property_exists($val, '_system_category')
+                    && $val->_system_category != ''
+                    && $val->_system_category != '0'
+                ) {
+                    if (!isset($mids[$val->_system_category])) {
+                        $new_value = Dropdown::importExternal(
+                            'SoftwareCategory',
+                            addslashes($val->_system_category),
+                            $this->entities_id
+                        );
+                        $mids[$val->_system_category] = $new_value;
+                    }
+                    $val->softwarecategories_id = $mids[$val->_system_category];
+                } else {
+                    $val->softwarecategories_id = 0;
                 }
 
                 //If the manufacturer has been modified or set by the rules engine
@@ -272,6 +290,7 @@ class Software extends InventoryAsset
                 'glpi_softwareversions.arch',
                 'glpi_softwares.manufacturers_id',
                 'glpi_softwares.entities_id',
+                'glpi_softwares.softwarecategories_id',
                 'glpi_softwares.is_recursive',
                 'glpi_softwareversions.operatingsystems_id',
             ],
@@ -309,6 +328,12 @@ class Software extends InventoryAsset
                 'version'   => $data['version'],
                 'name'      => $data['name'],
             ];
+            $db_software_data[$key_wo_version] = [
+                'softid'             => $data['softid'],
+                'softwarecategories' => $data['softwarecategories_id'],
+                'name'               => $data['name'],
+                'manufacturer'       => $data['manufacturers_id'],
+            ];
         }
 
         //check for existing links
@@ -327,6 +352,20 @@ class Software extends InventoryAsset
             $new_version = $val->version;
 
             $dedup_vkey = $key_w_version . $this->getVersionKey($val, 0);
+
+            //update softwarecategories if needed
+            //reconciles the software without the version (no needed here)
+            if (
+                isset($db_software_data[$key_wo_version])
+                && $db_software_data[$key_wo_version]['softwarecategories'] != $val->softwarecategories_id
+            ) {
+                $software_to_update = new GSoftware();
+                $software_to_update->update([
+                    "id" => $db_software_data[$key_wo_version]['softid'],
+                    "softwarecategories_id" => $val->softwarecategories_id
+                ], 0);
+            }
+
             if (isset($db_software[$key_w_version])) {
                 // software exist with the same version
                 unset($this->data[$k]);
@@ -518,10 +557,15 @@ class Software extends InventoryAsset
                 continue;
             }
 
+            $input = Sanitizer::encodeHtmlSpecialCharsRecursive([
+                'name'             => $val->name,
+                'manufacturers_id' => $val->manufacturers_id,
+            ]);
+
             $stmt->bind_param(
                 'ss',
-                $val->name,
-                $val->manufacturers_id
+                $input['name'],
+                $input['manufacturers_id'],
             );
             $DB->executeStatement($stmt);
             $results = $stmt->get_result();
@@ -586,14 +630,19 @@ class Software extends InventoryAsset
                 continue;
             }
 
-            $osid = $this->getOsForKey($val);
-            $arch = $val->arch ?? '';
+            $input = Sanitizer::encodeHtmlSpecialCharsRecursive([
+                'version'      => $val->version,
+                'arch'         => $val->arch ?? '',
+                'softwares_id' => $softwares_id,
+                'osid'         => $this->getOsForKey($val),
+            ]);
+
             $stmt->bind_param(
                 'ssss',
-                $val->version,
-                $arch,
-                $softwares_id,
-                $osid
+                $input['version'],
+                $input['arch'],
+                $input['softwares_id'],
+                $input['osid']
             );
             $DB->executeStatement($stmt);
             $results = $stmt->get_result();
@@ -638,7 +687,7 @@ class Software extends InventoryAsset
                     $stmt = $DB->prepare($insert_query);
                 }
 
-                $stmt_values = array_values($stmt_columns);
+                $stmt_values = Sanitizer::encodeHtmlSpecialCharsRecursive(array_values($stmt_columns));
                 $stmt->bind_param($stmt_types, ...$stmt_values);
                 $DB->executeStatement($stmt);
                 $softwares_id = $DB->insertId();
@@ -703,7 +752,7 @@ class Software extends InventoryAsset
                     $stmt = $DB->prepare($insert_query);
                 }
 
-                 $stmt_values = array_values($stmt_columns);
+                 $stmt_values = Sanitizer::encodeHtmlSpecialCharsRecursive(array_values($stmt_columns));
                  $stmt->bind_param($stmt_types, ...$stmt_values);
                  $DB->executeStatement($stmt);
                  $versions_id = $DB->insertId();
@@ -781,12 +830,12 @@ class Software extends InventoryAsset
                  $stmt = $DB->prepare($insert_query);
             }
 
-            $input = [
+            $input = Sanitizer::encodeHtmlSpecialCharsRecursive([
                 'softwareversions_id'   => $versions_id,
                 'is_dynamic'            => 1,
                 'entities_id'           => $this->item->fields['entities_id'],
                 'date_install'          => $val->date_install ?? null
-            ];
+            ]);
 
             $stmt->bind_param(
                 'ssss',
@@ -889,5 +938,10 @@ class Software extends InventoryAsset
     public function checkConf(Conf $conf): bool
     {
         return $conf->import_software == 1;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Item_SoftwareVersion::class;
     }
 }

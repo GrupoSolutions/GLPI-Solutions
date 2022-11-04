@@ -33,7 +33,7 @@
  * ---------------------------------------------------------------------
  */
 
-abstract class NotificationEventAbstract
+abstract class NotificationEventAbstract implements NotificationEventInterface
 {
     /**
      * Raise an ajax notification event
@@ -69,7 +69,6 @@ abstract class NotificationEventAbstract
             } else { // Compat with GLPI < 9.4.2 TODO: remove in 9.5
                 $processed = [];
             }
-            $notprocessed = [];
 
             $targets = getAllDataFromTable(
                 'glpi_notificationtargets',
@@ -102,14 +101,7 @@ abstract class NotificationEventAbstract
                     ) {
                         //If the user have not yet been notified
                         if (!isset($processed[$users_infos['language']][$key])) {
-                      //If ther user's language is the same as the template's one
-                            if (
-                                isset($notprocessed[$users_infos['language']]
-                                                  [$key])
-                            ) {
-                                  unset($notprocessed[$users_infos['language']]
-                                                   [$key]);
-                            }
+                            //If ther user's language is the same as the template's one
                             $options['item'] = $item;
 
                       // set timezone from user
@@ -163,9 +155,6 @@ abstract class NotificationEventAbstract
                                 }
                                 $processed[$users_infos['language']][$key]
                                                                   = $users_infos;
-                            } else {
-                                $notprocessed[$users_infos['language']][$key]
-                                                               = $users_infos;
                             }
                         }
                     }
@@ -173,7 +162,6 @@ abstract class NotificationEventAbstract
             }
 
             unset($processed);
-            unset($notprocessed);
         }
     }
 

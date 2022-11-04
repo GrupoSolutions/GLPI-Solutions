@@ -101,6 +101,7 @@ class Conf extends CommonGLPI
 {
     private $currents = [];
     public static $defaults = [
+        'enabled_inventory'              => 0,
         'import_software'                => 1,
         'import_volume'                  => 1,
         'import_antivirus'               => 1,
@@ -140,6 +141,11 @@ class Conf extends CommonGLPI
     public const STALE_AGENT_ACTION_CLEAN = 0;
 
     public const STALE_AGENT_ACTION_STATUS = 1;
+
+    public static $rightname = 'inventory';
+
+    const IMPORTFROMFILE     = 1024;
+    const UPDATECONFIG       = 2048;
 
     /**
      * Display form for import the XML
@@ -296,10 +302,13 @@ class Conf extends CommonGLPI
     {
         switch ($item->getType()) {
             case __CLASS__:
-                $tabs = [
-                    1 => __('Configuration'),
-                    2 => __('Import from file')
-                ];
+                $tabs = [];
+                if (Session::haveRight(self::$rightname, self::UPDATECONFIG)) {
+                    $tabs[1] = __('Configuration');
+                }
+                if ($item->enabled_inventory && Session::haveRight(self::$rightname, self::IMPORTFROMFILE)) {
+                    $tabs[2] = __('Import from file');
+                }
                 return $tabs;
         }
         return '';
@@ -315,7 +324,9 @@ class Conf extends CommonGLPI
                     break;
 
                 case 2:
-                    $item->showUploadForm();
+                    if ($item->enabled_inventory) {
+                        $item->showUploadForm();
+                    }
                     break;
             }
         }
@@ -342,6 +353,22 @@ class Conf extends CommonGLPI
 
         echo "<div class='center spaced' id='tabsbody'>";
         echo "<table class='tab_cadre_fixe'>";
+
+        echo "<tr>";
+
+        echo "<th>";
+        echo "<label for='enabled_inventory'>";
+        echo __('Enable inventory');
+        echo "</label>";
+        echo "</th>";
+        echo "<td width='360'>";
+        Html::showCheckbox([
+            'name'      => 'enabled_inventory',
+            'id'        => 'enabled_inventory',
+            'checked'   => $config['enabled_inventory']
+        ]);
+        echo "</td>";
+        echo "</tr>";
 
         echo "<tr>";
         echo "<th colspan='4'>";
@@ -442,12 +469,14 @@ class Conf extends CommonGLPI
         echo "</label>";
         echo "</td>";
         echo "<td>";
+
         \Dropdown::show(
             'State',
             [
                 'name'   => 'states_id_default',
                 'id'     => 'states_id_default',
                 'value'  => $config['states_id_default'],
+                'toadd'  => ['-1' => __('Do not change')],
                 'rand' => $rand
             ]
         );
@@ -580,7 +609,7 @@ class Conf extends CommonGLPI
         echo "</tr>";
 
         echo "<tr class='tab_bg_1'>";
-        echo "<td colspan='4'>";
+        echo "<td colspan='4' style='text-align:right;'>";
         echo "<span class='red'>" . __('Will attempt to create components from VM information sent from host, do not use if you plan to inventory any VM directly!') . "</span>";
         echo "</td>";
         echo "</tr>";
@@ -938,7 +967,15 @@ class Conf extends CommonGLPI
 
     public function getRights($interface = 'central')
     {
-        return [ READ => __('Read')];
+        $values = [ READ => __('Read')];
+        $values[self::IMPORTFROMFILE] = ['short' => __('Import'),
+            'long'  => __('Import from file')
+        ];
+        $values[self::UPDATECONFIG] = ['short' => __('Configure'),
+            'long'  => __('Import configuration')
+        ];
+
+        return $values;
     }
 
     /**

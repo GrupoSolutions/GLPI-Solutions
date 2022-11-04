@@ -445,9 +445,7 @@
                         ) }}
                      {% endif %}#}
 
-                     {% if item.isField('sysdescr') %}
-                        {{ fields.textareaField('sysdescr', item.fields['sysdescr'], __('Sysdescr')) }}
-                     {% endif %}
+                   
 
                      {% if item.isField('users_id') %}
                         {{ fields.dropdownField(
@@ -462,34 +460,7 @@
                         ) }}
                      {% endif %}
 
-                     {% if item.isField('is_global') %}
-                        {% set management_restrict = 0 %}
-                        {% if item_type == 'Monitor' %}
-                           {% set management_restrict = config('monitors_management_restrict') %}
-                        {% elseif item_type == 'Peripheral' %}
-                           {% set management_restrict = config('peripherals_management_restrict') %}
-                        {% elseif item_type == 'Phone' %}
-                           {% set management_restrict = config('phones_management_restrict') %}
-                        {% elseif item_type == 'Printer' %}
-                           {% set management_restrict = config('printers_management_restrict') %}
-                        {% else %}
-                           {% set management_restrict = 0 %}
-                        {% endif %}
-                        {% set dd_globalswitch %}
-                           {% do call('Dropdown::showGlobalSwitch', [item.fields['id'], {
-                              'withtemplate': withtemplate,
-                              'value': item.fields['is_global'],
-                              'management_restrict': management_restrict,
-                              'target': target,
-                              'width': '100%',
-                           }]) %}
-                        {% endset %}
-                        {{ fields.htmlField(
-                           'is_global',
-                           dd_globalswitch,
-                           __('Management type'),
-                        ) }}
-                     {% endif %}
+                     
 
                      {% if item.isField('size') %}
                         {{ fields.numberField(
@@ -554,14 +525,6 @@
                         ) }}
                      {% endif %}
 
-                     {% if item.isField('ram') %}
-                        {{ fields.numberField(
-                           'ram',
-                           item.fields['ram'],
-                           __('%1$s (%2$s)')|format(_n('Memory', 'Memories', 1), __('Mio')),
-                           field_options
-                        ) }}
-                     {% endif %}
 
                      {% if item.isField('alarm_threshold') %}
                         {% set dd_alarm_treshold %}

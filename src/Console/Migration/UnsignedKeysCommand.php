@@ -51,6 +51,13 @@ class UnsignedKeysCommand extends AbstractCommand
      */
     const ERROR_COLUMN_MIGRATION_FAILED = 1;
 
+    /**
+     * Error code returned if DB configuration file cannot be updated.
+     *
+     * @var integer
+     */
+    const ERROR_UNABLE_TO_UPDATE_CONFIG = 2;
+
     protected function configure()
     {
         parent::configure();
@@ -258,9 +265,11 @@ class UnsignedKeysCommand extends AbstractCommand
                 }
                 $message .= "\n";
                 $message .= sprintf(
-                    '<comment>' . __('You should try to update following plugins to their latest version and run the command again: %s.') . '</comment>',
+                    '<comment>' . __('Some errors are related to following plugins: %s.') . '</comment>',
                     implode(', ', $plugins_names)
                 );
+                $message .= "\n";
+                $message .= '<comment>' . __('You should try to update these plugins to their latest version and run the command again.') . '</comment>';
             }
             throw new \Glpi\Console\Exception\EarlyExitException(
                 $message,

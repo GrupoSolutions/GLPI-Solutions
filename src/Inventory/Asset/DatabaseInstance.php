@@ -37,9 +37,9 @@ namespace Glpi\Inventory\Asset;
 
 use DatabaseInstance as GDatabaseInstance;
 use Glpi\Inventory\Conf;
+use Glpi\Toolbox\Sanitizer;
 use RuleImportAssetCollection;
 use RuleMatchedLog;
-use Toolbox;
 
 class DatabaseInstance extends InventoryAsset
 {
@@ -103,8 +103,6 @@ class DatabaseInstance extends InventoryAsset
 
     public function handle()
     {
-        global $DB;
-
         $rule = new RuleImportAssetCollection();
         $value = $this->data;
         $instance = new GDatabaseInstance();
@@ -128,34 +126,35 @@ class DatabaseInstance extends InventoryAsset
 
             if (isset($data['found_inventories'])) {
                 $databases = $val->databases ?? [];
-                $input = (array)$val;
 
                 $items_id = null;
                 $itemtype = 'DatabaseInstance';
                 if ($data['found_inventories'][0] == 0) {
+                    $input = $this->handleInput($val, $instance);
                     // add instance
                     $input += [
                         'entities_id'  => $this->entities_id,
                         'itemtype'     => $this->item->getType(),
                         'items_id'     => $this->item->fields['id']
                     ];
-                    $items_id = $instance->add(Toolbox::addslashes_deep($input));
+                    $items_id = $instance->add(Sanitizer::sanitize($input));
                 } else {
                     $items_id = $data['found_inventories'][0];
                     $databases = $val->databases ?? [];
 
                     $instance->getFromDB($items_id);
+                    $input = $this->handleInput($val, $instance);
                     $input += ['id' => $instance->fields['id']];
-                    $instance->update(Toolbox::addslashes_deep($input));
+                    $instance->update(Sanitizer::sanitize($input));
 
                     $existing_databases = $instance->getDatabases();
-                   //update databases, relying on name
+                    //update databases, relying on name
                     foreach ($existing_databases as $dbkey => $existing_database) {
                         foreach ($databases as $key => $database) {
                             if ($existing_database['name'] == $database->name) {
                                  $dbinput = (array)$database;
                                  $dbinput += ['id' => $dbkey, 'is_deleted' => 0, 'is_dynamic' => 1];
-                                 $odatabase->update(Toolbox::addslashes_deep($dbinput));
+                                 $odatabase->update(Sanitizer::sanitize($dbinput));
                                  unset(
                                      $existing_databases[$dbkey],
                                      $databases[$key]
@@ -165,7 +164,7 @@ class DatabaseInstance extends InventoryAsset
                         }
                     }
 
-                   //cleanup associated databases
+                    //cleanup associated databases
                     if (count($existing_databases)) {
                         foreach ($existing_databases as $dbkey => $existing_database) {
                             $odatabase->delete(['id' => $dbkey]);
@@ -173,14 +172,14 @@ class DatabaseInstance extends InventoryAsset
                     }
                 }
 
-               //create new databases
+                //create new databases
                 foreach ($databases as $database) {
                     $dbinput = (array)$database;
                     $dbinput += [
                         'databaseinstances_id' => $instance->fields['id'],
                         'is_dynamic' => 1
                     ];
-                    $odatabase->add(Toolbox::addslashes_deep($dbinput));
+                    $odatabase->add(Sanitizer::sanitize($dbinput));
                 }
 
                 $instances[$items_id] = $items_id;
@@ -227,5 +226,10 @@ class DatabaseInstance extends InventoryAsset
     public function checkConf(Conf $conf): bool
     {
         return true;
+    }
+
+    public function getItemtype(): string
+    {
+        return \DatabaseInstance::class;
     }
 }

@@ -38,10 +38,10 @@ namespace Glpi\Inventory\Asset;
 
 use Computer_Item;
 use Glpi\Inventory\Conf;
+use Glpi\Toolbox\Sanitizer;
 use Peripheral as GPeripheral;
 use RuleImportAssetCollection;
 use RuleMatchedLog;
-use Toolbox;
 
 class Peripheral extends InventoryAsset
 {
@@ -162,11 +162,13 @@ class Peripheral extends InventoryAsset
                 $itemtype = 'Peripheral';
                 if ($data['found_inventories'][0] == 0) {
                     // add peripheral
-                    $val->entities_id = $this->entities_id;
-                    $items_id = $peripheral->add(Toolbox::addslashes_deep((array)$val), [], false);
+                    $handled_input = $this->handleInput($val, $peripheral) + ['entities_id' => $this->entities_id];
+                    $items_id = $peripheral->add(Sanitizer::sanitize($handled_input), [], false);
                 } else {
                     $items_id = $data['found_inventories'][0];
-                    $peripheral->update(Toolbox::addslashes_deep(['id' => $items_id] + (array)$val), false);
+                    $peripheral->getFromDB($items_id);
+                    $handled_input = $this->handleInput($val, $peripheral);
+                    $peripheral->update(Sanitizer::sanitize(['id' => $items_id] + $handled_input), false);
                 }
 
                 $peripherals[] = $items_id;
@@ -255,5 +257,10 @@ class Peripheral extends InventoryAsset
     public function checkConf(Conf $conf): bool
     {
         return $conf->import_peripheral == 1;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Peripheral::class;
     }
 }

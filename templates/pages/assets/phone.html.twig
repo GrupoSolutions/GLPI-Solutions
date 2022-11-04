@@ -36,20 +36,9 @@
 {% set params  = params ?? [] %}
 
 {% block more_fields %}
-    {{ fields.numberField(
-        'number_line',
-        item.fields['number_line'],
-        _x('quantity', 'Number of lines'),
-        field_options
-    ) }}
+    
 
-    {{ fields.dropdownField(
-        'PhonePowerSupply',
-        'phonepowersupplies_id',
-        item.fields['phonepowersupplies_id'],
-        'PhonePowerSupply'|itemtype_name,
-        field_options
-    ) }}
+
 
     {% set flags_html %}
     {{ include('components/form/flags.html.twig') }}

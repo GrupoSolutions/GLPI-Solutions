@@ -34,6 +34,7 @@
  */
 
 use Glpi\Event;
+
 include('../inc/includes.php');
 
 Session::checkRight("consumable", READ);

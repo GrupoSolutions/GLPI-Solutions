@@ -37,8 +37,8 @@
 namespace Glpi\Inventory\Asset;
 
 use Glpi\Inventory\Conf;
+use Glpi\Toolbox\Sanitizer;
 use Item_Disk;
-use Toolbox;
 
 class Volume extends InventoryAsset
 {
@@ -159,10 +159,11 @@ class Volume extends InventoryAsset
             foreach ($db_itemdisk as $keydb => $arraydb) {
                 unset($arraydb['is_dynamic']);
                 if ($db_elt == $arraydb) {
-                    $input = (array)$val + [
+                    $itemDisk->getFromDB($keydb);
+                    $input = $this->handleInput($val, $itemDisk) + [
                         'id'           => $keydb,
                     ];
-                    $itemDisk->update(Toolbox::addslashes_deep($input));
+                    $itemDisk->update(Sanitizer::sanitize($input));
                     unset($value[$key]);
                     unset($db_itemdisk[$keydb]);
                     break;
@@ -181,12 +182,12 @@ class Volume extends InventoryAsset
         }
         if (count($value)) {
             foreach ($value as $val) {
-                $input = (array)$val + [
+                $input = $this->handleInput($val, $itemDisk) + [
                     'items_id'     => $this->item->fields['id'],
                     'itemtype'     => $this->item->getType()
                 ];
 
-                $itemDisk->add(Toolbox::addslashes_deep($input));
+                $itemDisk->add(Sanitizer::sanitize($input));
             }
         }
     }
@@ -213,5 +214,10 @@ class Volume extends InventoryAsset
     {
         $this->conf = $conf;
         return $conf->import_volume == 1;
+    }
+
+    public function getItemtype(): string
+    {
+        return \Item_Disk::class;
     }
 }

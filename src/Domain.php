@@ -33,6 +33,8 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Toolbox\URL;
+
 /// Class Domain
 class Domain extends CommonDBTM
 {
@@ -88,48 +90,6 @@ class Domain extends CommonDBTM
             $row['_linked_purge'] = 1;//flag call when we remove a record from a domain
             $record->delete($row, true);
         }
-    }
-
-    public function getAdditionalFields()
-    {
-        $fields = parent::getAdditionalFields();
-        $fields[] = [
-            'name'  => 'is_active',
-            'label' => __('Is active'),
-            'type'  => 'bool',
-        ];
-
-        $fields[] = [
-            'name'  => 'domaintypes_id',
-            'label' => _n('Type', 'Types', 1),
-            'type'  => 'dropdownValue',
-        ];
-
-        $fields[] = [
-            'name'  => 'date_creation',
-            'label' => __('Creation date'),
-            'type'  => 'datetime',
-        ];
-
-        $fields[] = [
-            'name'  => 'date_expiration',
-            'label' => __('Expiration date'),
-            'type'  => 'datetime',
-        ];
-
-        $fields[] = [
-            'name'  => 'users_id_tech',
-            'label' => __('Technician in charge'),
-            'type'  => 'UserDropdown',
-        ];
-
-        $fields[] = [
-            'name'  => 'groups_id_tech',
-            'label' => __('Group in charge'),
-            'type'  => 'dropdownValue',
-        ];
-
-        return $fields;
     }
 
     public function rawSearchOptions()
@@ -767,14 +727,17 @@ class Domain extends CommonDBTM
         return $types;
     }
 
-    public static function generateLinkContents($link, CommonDBTM $item)
+    public static function generateLinkContents($link, CommonDBTM $item, bool $safe_url = true)
     {
         if (strstr($link, "[DOMAIN]")) {
             $link = str_replace("[DOMAIN]", $item->getName(), $link);
+            if ($safe_url) {
+                $link = URL::sanitizeURL($link) ?: '#';
+            }
             return [$link];
         }
 
-        return parent::generateLinkContents($link, $item);
+        return parent::generateLinkContents($link, $item, $safe_url);
     }
 
     public static function getUsed(array $used, $domaintype)
@@ -797,10 +760,15 @@ class Domain extends CommonDBTM
         return $used;
     }
 
+    public static function canManageRecords()
+    {
+        return static::canView() && count($_SESSION['glpiactiveprofile']['managed_domainrecordtypes'] ?? []) > 0;
+    }
+
     public static function getAdditionalMenuLinks()
     {
         $links = [];
-        if (static::canView()) {
+        if (static::canManageRecords()) {
             $rooms = "<i class='fa fa-clipboard-list pointer' title=\"" . DomainRecord::getTypeName(Session::getPluralNumber()) . "\"></i>
             <span class='d-none d-xxl-block ps-1'>
                " . DomainRecord::getTypeName(Session::getPluralNumber()) . "
@@ -815,7 +783,7 @@ class Domain extends CommonDBTM
 
     public static function getAdditionalMenuOptions()
     {
-        if (static::canView()) {
+        if (static::canManageRecords()) {
             return [
                 'domainrecord' => [
                     'icon'  => DomainRecord::getIcon(),
@@ -828,6 +796,7 @@ class Domain extends CommonDBTM
                 ]
             ];
         }
+        return false;
     }
 
     public function getCanonicalName()

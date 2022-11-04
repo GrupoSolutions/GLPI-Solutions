@@ -35,6 +35,7 @@
 
 namespace Glpi\Dashboard;
 
+use Glpi\Plugin\Hooks;
 use Glpi\RichText\RichText;
 use Html;
 use Mexitek\PHPColors\Color;
@@ -247,7 +248,7 @@ class Widget
             ],
         ];
 
-        $more_types = Plugin::doHookFunction("dashboard_types");
+        $more_types = Plugin::doHookFunction(Hooks::DASHBOARD_TYPES);
         if (is_array($more_types)) {
             $types = array_merge($types, $more_types);
         }
@@ -592,11 +593,13 @@ HTML;
 
          {$palette_style}
       </style>
-      <div class="card g-chart {$class}"
-           id="{$chart_id}">
-         <div class="chart ct-chart">{$no_data_html}</div>
-         <span class="main-label">{$p['label']}</span>
-         <i class="main-icon {$p['icon']}"></i>
+      <div style="height: 100%">
+         <div class="card g-chart {$class}"
+            id="{$chart_id}">
+            <div class="chart ct-chart">{$no_data_html}</div>
+            <span class="main-label">{$p['label']}</span>
+            <i class="main-icon {$p['icon']}"></i>
+         </div>
       </div>
 HTML;
 
@@ -649,7 +652,6 @@ HTML;
         }
 
         $donut  = $p['donut'] ? 'true' : 'false';
-        $height = $p['half'] ? '180%' : '100%';
         $animation_duration = self::$animation_duration;
 
         $js = <<<JAVASCRIPT
@@ -659,7 +661,6 @@ HTML;
             series: {$series},
          }, {
             width: 'calc(100% - 5px)',
-            height: 'calc({$height} - 5px)',
             chartPadding: {$chartPadding},
             donut: {$donut},
             $donut_opts
@@ -1056,10 +1057,8 @@ JAVASCRIPT;
             <span>";
         }
 
-        $height = "calc(100% - 5px)";
         $legend_options = "";
         if ($p['legend']) {
-            $height = "calc(100% - 40px)";
             $legend_options = "
             Chartist.plugins.legend(),";
         }
@@ -1092,18 +1091,16 @@ JAVASCRIPT;
          stroke: {$dark_line_color};
       }
 
-      /** fix chrome resizing height when animating svg (don't know why) **/
-      #{$chart_id} .ct-chart-bar {
-         min-height: $height;
-      }
       {$palette_style}
       </style>
 
-      <div class="card g-chart $class"
-            id="{$chart_id}">
-         <div class="chart ct-chart">$no_data_html</div>
-         <span class="main-label">{$p['label']}</span>
-         <i class="main-icon {$p['icon']}"></i>
+      <div style="height: 100%">
+         <div class="card g-chart $class"
+               id="{$chart_id}">
+            <div class="chart ct-chart">$no_data_html</div>
+            <span class="main-label">{$p['label']}</span>
+            <i class="main-icon {$p['icon']}"></i>
+         </div>
       </div>
 HTML;
 
@@ -1155,7 +1152,6 @@ HTML;
             series: {$json_series},
          }, {
             width: '100%',
-            height: '{$height}',
             seriesBarDistance: 10,
             chartPadding: 0,
             $distributed_options
@@ -1512,20 +1508,14 @@ JAVASCRIPT;
             })";
         }
 
-        $height = "calc(100% - 1px)";
         $legend_options = "";
         if ($p['legend']) {
-            $height = "calc(100% - 40px)";
             $legend_options = "
             Chartist.plugins.legend(),";
         }
 
         $html = <<<HTML
       <style>
-         /** fix chrome resizing height when animating svg (don't know why) **/
-      #{$chart_id} .ct-chart-line {
-         min-height: $height;
-      }
 
       #{$chart_id} {
          background-color: {$p['color']};
@@ -1563,11 +1553,13 @@ JAVASCRIPT;
       {$palette_style}
       </style>
 
-      <div class="card g-chart $class"
-           id="{$chart_id}">
-         <div class="chart ct-chart"></div>
-         <span class="main-label">{$p['label']}</span>
-         <i class="main-icon {$p['icon']}"></i>
+      <div style="height: 100%">
+          <div class="card g-chart $class"
+               id="{$chart_id}">
+             <div class="chart ct-chart"></div>
+             <span class="main-label">{$p['label']}</span>
+             <i class="main-icon {$p['icon']}"></i>
+          </div>
       </div>
 HTML;
 
@@ -1584,10 +1576,23 @@ HTML;
             series: {$json_series},
          }, {
             width: '100%',
-            height: '{$height}',
             fullWidth: true,
             chartPadding: {
                right: 40
+            },
+            axisY: {
+               labelInterpolationFnc: function(value) {
+                  if (value < 1e3) {
+                     // less than 1K
+                     return value;
+                  } else if (value < 1e6) {
+                     // More than 1k, less than 1M
+                     return value / 1e3 + "K";
+                  } else {
+                     // More than 1M
+                     return value / 1e6 + "M";
+                  }
+               },
             },
             {$area_options}
             plugins: [

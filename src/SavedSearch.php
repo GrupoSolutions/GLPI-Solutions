@@ -796,30 +796,18 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria
             ],
             'FROM'      => $table,
             'LEFT JOIN' => [
-                $utable => ['ON' => [
-                    $utable  => 'savedsearches_id',
-                    $table   => 'id', [
-                        'AND' => [
-                            "$table.itemtype"  => new \QueryExpression("$utable.itemtype"),
-                            "$utable.users_id" => Session::getLoginUserID()
-                        ]
+                $utable => [
+                    'ON' => [
+                        $utable  => 'savedsearches_id',
+                        $table   => 'id'
                     ]
-                ]
-                ]
-            ],
-            'WHERE'     => [
-                'OR' => [
-                    [
-                        "$table.is_private" => 0,
-                    ] + getEntitiesRestrictCriteria($table, '', '', true),
-                    "$table.users_id"   => Session::getLoginUserID()
                 ]
             ],
             'ORDERBY'   => [
                 'itemtype',
                 'name'
             ]
-        ];
+        ] + self::getVisibilityCriteriaForMine();
 
         if ($itemtype != null) {
             if (!$inverse) {
@@ -837,8 +825,6 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria
         foreach ($iterator as $data) {
             if ($_SESSION['glpishow_count_on_tabs']) {
                 $this->fields = $data;
-                $search_data = $this->execute(false, $enable_partial_warnings);
-
                 $count = null;
                 try {
                     $search_data = $this->execute(false, $enable_partial_warnings);
@@ -1265,6 +1251,8 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria
                     $this->getField('itemtype'),
                     $params
                 );
+                // force saved search ID to indicate to Search to save execution time
+                $data['search']['savedsearches_id'] = $this->getID();
                 $data['search']['sort'] = [];
                 $search->constructSQL($data);
                 $search->constructData($data, true);
@@ -1327,22 +1315,9 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria
         return $sql;
     }
 
-    /**
-     * Return visibility joins to add to DBIterator parameters
-     *
-     * @since 9.4
-     *
-     * @param boolean $forceall force all joins (false by default)
-     *
-     * @return array
-     */
-    public static function getVisibilityCriteria(bool $forceall = false): array
+    private static function getVisibilityCriteriaForMine(): array
     {
         $criteria = ['WHERE' => []];
-        if (Session::haveRight('config', UPDATE)) {
-            return $criteria;
-        }
-
         $restrict = [
             self::getTable() . '.is_private' => 1,
             self::getTable() . '.users_id'    => Session::getLoginUserID()
@@ -1359,6 +1334,24 @@ class SavedSearch extends CommonDBTM implements ExtraVisibilityCriteria
 
         $criteria['WHERE'] = $restrict;
         return $criteria;
+    }
+
+    /**
+     * Return visibility joins to add to DBIterator parameters
+     *
+     * @since 9.4
+     *
+     * @param boolean $forceall force all joins (false by default)
+     *
+     * @return array
+     */
+    public static function getVisibilityCriteria(bool $forceall = false): array
+    {
+        if (Session::haveRight('config', UPDATE)) {
+            return ['WHERE' => []];
+        }
+
+        return self::getVisibilityCriteriaForMine();
     }
 
 

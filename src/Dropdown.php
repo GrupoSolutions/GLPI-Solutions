@@ -155,8 +155,7 @@ class Dropdown
             $name = $params['toadd'][$params['value']];
         } else if (
             !$params['multiple']
-            && $params['value'] > 0
-            || ($itemtype == "Entity" && $params['value'] >= 0)
+            && ($params['value'] > 0 || ($itemtype == "Entity" && $params['value'] >= 0))
         ) {
             $tmpname = self::getDropdownName($table, $params['value'], 1);
 
@@ -252,13 +251,6 @@ class Dropdown
             }
         }
 
-        $output .= Html::jsAjaxDropdown(
-            $params['name'],
-            $field_id,
-            $params['url'],
-            $p
-        );
-
         // Add icon
         $add_item_icon = "";
         if (
@@ -278,7 +270,7 @@ class Dropdown
         }
 
        // Display comment
-        $icons = "";
+        $icon_array = [];
         if ($params['comments']) {
             $comment_id      = Html::cleanId("comment_" . $params['name'] . $params['rand']);
             $link_id         = Html::cleanId("comment_link_" . $params['name'] . $params['rand']);
@@ -318,7 +310,7 @@ class Dropdown
             }
 
             // Comment icon
-            $icons .= Ajax::updateItemOnSelectEvent(
+            $comment_icon = Ajax::updateItemOnSelectEvent(
                 $field_id,
                 $comment_id,
                 $CFG_GLPI["root_doc"] . "/ajax/comments.php",
@@ -326,7 +318,8 @@ class Dropdown
                 false
             );
             $options_tooltip['link_class'] = 'btn btn-outline-secondary';
-            $icons .= Html::showToolTip($comment, $options_tooltip);
+            $comment_icon .= Html::showToolTip($comment, $options_tooltip);
+            $icon_array[] = $comment_icon;
 
             // Add icon
             if (
@@ -335,69 +328,101 @@ class Dropdown
                 && !isset($_REQUEST['_in_modal'])
                 && $params['addicon']
             ) {
-                  $icons .= $add_item_icon;
+                  $icon_array[] = $add_item_icon;
             }
 
            // Supplier Links
             if ($itemtype == "Supplier") {
                 if ($item->getFromDB($params['value'])) {
-                    $icons .= '<div>';
-                    $icons .= $item->getLinks();
-                    $icons .= '</div>';
+                    $link_icon = '<div>';
+                    $link_icon .= $item->getLinks();
+                    $link_icon .= '</div>';
+                    $icon_array[] = $link_icon;
                 }
             }
 
            // Location icon
             if ($itemtype == 'Location') {
-                $icons .= '<div class="btn btn-outline-secondary">';
-                $icons .= "<span title='" . __s('Display on map') . "' data-bs-toggle='tooltip' onclick='showMapForLocation(this)' data-fid='$field_id'>
+                $location_icon = '<div class="btn btn-outline-secondary">';
+                $location_icon .= "<span title='" . __s('Display on map') . "' data-bs-toggle='tooltip' onclick='showMapForLocation(this)' data-fid='$field_id'>
                <i class='fa-fw ti ti-map'></i>
             </span>";
-                $icons .= '</div>';
+                $location_icon .= '</div>';
+                $icon_array[] = $location_icon;
             }
 
             if ($params['display_dc_position']) {
                 if ($rack = $item->isRackPart($itemtype, $params['value'], true)) {
-                    $icons .= "<span id='" . $breadcrumb_id . "' title='" . __s('Display on datacenter') . "'>";
-                    $icons .= "&nbsp;<a class='fas fa-crosshairs' href='" . $rack->getLinkURL() . "'></a>";
-                    $icons .= "</span>";
+                    $dc_icon = "<span id='" . $breadcrumb_id . "' title='" . __s('Display on datacenter') . "'>";
+                    $dc_icon .= "&nbsp;<a class='fas fa-crosshairs' href='" . $rack->getLinkURL() . "'></a>";
+                    $dc_icon .= "</span>";
                     $paramscomment['with_dc_position'] = $breadcrumb_id;
+                    $icon_array[] = $dc_icon;
                 }
             }
 
            // KB links
             if (
-                $item->isField('knowbaseitemcategories_id') && Session::haveRight('knowbase', READ)
+                $item->isField('knowbaseitemcategories_id') && Session::haveRightsOr('knowbase', [READ, KnowbaseItem::READFAQ])
                 && method_exists($item, 'getLinks')
             ) {
-                $paramskblinks = [
-                    'value'       => '__VALUE__',
-                    'itemtype'    => $itemtype,
-                    '_idor_token' => Session::getNewIDORToken($itemtype),
-                    'withlink'    => $kblink_id,
-                ];
-                $icons .= '<div>';
-                $icons .= Ajax::updateItemOnSelectEvent(
-                    $field_id,
-                    $kblink_id,
-                    $CFG_GLPI["root_doc"] . "/ajax/kblink.php",
-                    $paramskblinks,
-                    false
-                );
-                $icons .= "<span id='$kblink_id'>";
-                $icons .= '&nbsp;' . $item->getLinks();
-                $icons .= "</span>";
-                $icons .= '</div>';
+                // With the self-service profile, $item (whose itemtype = ITILCategory) is empty,
+                //  as the profile does not have rights to ITILCategory to initialise it before.
+                if ($item->isNewItem()) {
+                    $item->getFromDB($params['value']);
+                }
+                if ($itemlinks = $item->getLinks()) {
+                    $paramskblinks = [
+                        'value'       => '__VALUE__',
+                        'itemtype'    => $itemtype,
+                        '_idor_token' => Session::getNewIDORToken($itemtype),
+                        'withlink'    => $kblink_id,
+                    ];
+                    $kb_link_icon = '<div class="btn btn-outline-secondary">';
+                    $kb_link_icon .= Ajax::updateItemOnSelectEvent(
+                        $field_id,
+                        $kblink_id,
+                        $CFG_GLPI["root_doc"] . "/ajax/kblink.php",
+                        $paramskblinks,
+                        false
+                    );
+                    $kb_link_icon .= "<span id='$kblink_id'>";
+                    $kb_link_icon .= $itemlinks;
+                    $kb_link_icon .= "</span>";
+                    $kb_link_icon .= '</div>';
+                    $icon_array[] = $kb_link_icon;
+                }
             }
         }
 
         // Trick to get the "+" button to work with dropdowns that support multiple values
-        if (strlen($icons) == 0 && strlen($add_item_icon) > 0) {
-            $icons .= $add_item_icon;
+        if (count($icon_array) === 0 && $add_item_icon !== '') {
+            $icon_array[] = $add_item_icon;
         }
 
-        if (strlen($icons) > 0) {
-            $output = "<div class='btn-group btn-group-sm " . ($params['width'] == "100%" ? "w-100" : "") . "' role='group'>{$output} {$icons}</div>";
+        if (count($icon_array) > 0) {
+            $icon_count = count($icon_array);
+            $original_width = $params['width'];
+            if ($original_width === '100%') {
+                $calc_width = "calc(100% - (({$icon_count} * 0.9em) + (18px * {$icon_count})))";
+                $p['width'] = $calc_width;
+            }
+            $output .= Html::jsAjaxDropdown(
+                $params['name'],
+                $field_id,
+                $params['url'],
+                $p
+            );
+            $icons = implode('', $icon_array);
+            $output = "<div class='btn-group btn-group-sm' role='group'
+                style='width: {$original_width}'>{$output} {$icons}</div>";
+        } else {
+            $output .= Html::jsAjaxDropdown(
+                $params['name'],
+                $field_id,
+                $params['url'],
+                $p
+            );
         }
 
         $output .= Ajax::commonDropdownUpdateItem($params, false);
@@ -838,6 +863,7 @@ class Dropdown
                         $values[$file] = $file;
                     }
                 }
+                $rand = mt_rand();
                 self::showFromArray(
                     $myname,
                     $values,
@@ -845,11 +871,35 @@ class Dropdown
                         [
                             'value'                 => $value,
                             'display_emptychoice'   => true,
-                            'display'               => $display
+                            'display'               => $display,
+                            'noselect2'             => true, // we will instanciate it later
+                            'rand'                  => $rand,
                         ],
                         $options
                     )
                 );
+
+                global $CFG_GLPI;
+
+                // templates for select2 dropdown
+                $js = <<<JAVASCRIPT
+                $(function() {
+                    const formatFormIcon = function(icon) {
+                        if (!icon.id || icon.id == '0') {
+                            return icon.text;
+                        }
+                        var img = '<span><img alt="" src="{$CFG_GLPI['typedoc_icon_dir']}/'+icon.id+'" />';
+                        var label = '<span>'+icon.text+'</span>';
+                        return $(img+'&nbsp;'+label);
+                    };
+                    $("#dropdown_{$myname}{$rand}").select2({
+                        width: '60%',
+                        templateSelection: formatFormIcon,
+                        templateResult: formatFormIcon
+                    });
+                });
+JAVASCRIPT;
+                echo Html::scriptBlock($js);
             } else {
                //TRANS: %s is the store path
                 printf(__('Error reading directory %s'), $store_path);
@@ -1114,7 +1164,8 @@ class Dropdown
                 __('Management') => [
                     'DocumentCategory' => null,
                     'DocumentType' => null,
-                    'BusinessCriticity' => null
+                    'BusinessCriticity' => null,
+                    'DatabaseInstanceCategory' => null,
                 ],
 
                 __('Tools') => [
@@ -2246,7 +2297,7 @@ class Dropdown
      * @param string  $name   select name
      * @param integer $value  default value (default 0)
      *
-     * @return string|integer HTML output, or random part of dropdown ID.
+     * @return void
      **/
     public static function showFrequency($name, $value = 0)
     {
@@ -3581,9 +3632,9 @@ class Dropdown
 
         if (isset($_POST['searchText']) && (strlen($post['searchText']) > 0)) {
             $search = ['LIKE', Search::makeTextSearchValue($post['searchText'])];
-            $orwhere = [
+            $orwhere = $item->isField('name') ? [
                 'name'   => $search
-            ];
+            ] : [];
             if (is_int($post['searchText']) || (is_string($post['searchText'] && ctype_digit($post['searchText'])))) {
                 $orwhere[] = ['id' => $post['searchText']];
             }
@@ -3926,6 +3977,8 @@ class Dropdown
 
     public static function getDropdownActors($post, $json = true)
     {
+        global $CFG_GLPI;
+
         if (!Session::validateIDOR($post)) {
             return;
         }
@@ -3942,6 +3995,7 @@ class Dropdown
             'itiltemplate_class' => 'TicketTemplate',
             'itiltemplates_id'   => 0,
             'returned_itemtypes' => ['User', 'Group', 'Supplier'],
+            'page_limit'         => $CFG_GLPI['dropdown_max'],
         ];
         $post = array_merge($defaults, $post);
 
@@ -4072,11 +4126,20 @@ class Dropdown
         ]);
 
         $results = $hook_results['actors'] ?? [];
+        $total_results = count($results);
+
+        $start = ($post['page'] - 1) * $post['page_limit'];
+        $results = array_slice($results, $start, $post['page_limit']);
 
         $return = [
             'results' => $results,
             'count'   => count($results),
         ];
+        if ($total_results > count($results)) {
+            $return['pagination'] = [
+                'more' => true,
+            ];
+        }
 
         return ($json === true)
          ? json_encode($return)

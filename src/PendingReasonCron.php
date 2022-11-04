@@ -33,6 +33,8 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Toolbox\Sanitizer;
+
 /**
  * @since 10.0.0
  */
@@ -107,7 +109,9 @@ class PendingReasonCron extends CommonDBTM
             }
 
             if ($item->fields['status'] != CommonITILObject::WAITING) {
-                trigger_error("Status is not pending", E_USER_WARNING);
+                $pending_item->delete([
+                    'id' => $pending_item->fields['id'],
+                ]);
                 continue;
             }
 
@@ -122,8 +126,15 @@ class PendingReasonCron extends CommonDBTM
                     continue;
                 }
 
-               // Load followup template
-                $fup_template = ITILFollowupTemplate::getById($pending_reason->fields['itilfollowuptemplates_id']);
+                $template_id = $pending_reason->fields['itilfollowuptemplates_id'];
+
+                // No template defined; can't bump
+                if (!$template_id) {
+                    continue;
+                }
+
+                // Load followup template
+                $fup_template = ITILFollowupTemplate::getById($template_id);
                 if (!$fup_template) {
                     trigger_error("Failed to load ITILFollowupTemplate::{$pending_reason->fields['itilfollowuptemplates_id']}", E_USER_WARNING);
                     continue;
@@ -146,7 +157,7 @@ class PendingReasonCron extends CommonDBTM
                     'itemtype' => $item::getType(),
                     'items_id' => $item->getID(),
                     'users_id' => $config['system_user'],
-                    'content' => addslashes($fup_template->fields['content']),
+                    'content' => Sanitizer::sanitize($fup_template->getRenderedContent($item)),
                     'is_private' => $fup_template->fields['is_private'],
                     'requesttypes_id' => $fup_template->fields['requesttypes_id'],
                     'timeline_position' => CommonITILObject::TIMELINE_RIGHT,
@@ -173,7 +184,7 @@ class PendingReasonCron extends CommonDBTM
                     'itemtype'         => $item::getType(),
                     'items_id'         => $item->getID(),
                     'solutiontypes_id' => $solution_template->fields['solutiontypes_id'],
-                    'content'          => addslashes($solution_template->fields['content']),
+                    'content'          => Sanitizer::sanitize($solution_template->getRenderedContent($item)),
                     'users_id'         => $config['system_user'],
                 ]);
                 $task->addVolume(1);

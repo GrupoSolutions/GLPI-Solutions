@@ -118,6 +118,10 @@
                 border-collapse: separate;
                 border-spacing: 0;
 
+                a {
+                    font-weight: 500;
+                }
+
                 @include media-breakpoint-up(lg) {
                     thead:first-child {
                         th {
@@ -220,10 +224,6 @@ body.horizontal-layout {
     span {
         width: 20px;
     }
-}
-
-td.priority_block {
-    display: table-cell;
 }
 
 table.search-results {

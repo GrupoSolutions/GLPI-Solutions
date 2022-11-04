@@ -38,10 +38,11 @@ namespace Glpi\Inventory\Asset;
 
 use Glpi\Inventory\Conf;
 use Glpi\Inventory\FilesToJSON;
+use Glpi\Toolbox\Sanitizer;
+use NetworkPort as GlobalNetworkPort;
 use NetworkPortType;
 use QueryParam;
 use RuleImportAssetCollection;
-use Toolbox;
 use Unmanaged;
 
 class NetworkPort extends InventoryAsset
@@ -263,7 +264,7 @@ class NetworkPort extends InventoryAsset
             return;
         }
 
-       //reset, will be populated from rulepassed
+        //reset, will be populated from rulepassed
         $this->connection_ports = [];
         $this->current_port = $port;
         $netport = new \NetworkPort();
@@ -280,7 +281,6 @@ class NetworkPort extends InventoryAsset
         }
 
         $found_macs = [];
-        //FIXME Static analysis says this property is always an empty array. I don't see it get set even within the rule(s)
         foreach ($this->connection_ports as $ids) {
             $found_macs += $ids;
         }
@@ -289,8 +289,7 @@ class NetworkPort extends InventoryAsset
             return;
         }
 
-       // Try detect phone + computer on this port
-        //FIXME Static analysis says this property is always an empty array. I don't see it get set even within the rule(s)
+        // Try to detect phone + computer on this port
         if (isset($this->connection_ports['Phone']) && count($found_macs) == 2) {
             trigger_error('Phone/Computer MAC linked', E_USER_WARNING);
             return;
@@ -302,7 +301,6 @@ class NetworkPort extends InventoryAsset
             }
             $this->handleHub($found_macs, $netports_id);
         } else { // One mac on port
-            //FIXME Static analysis says this property is always an empty array. I don't see it get set even within the rule(s)
             if (count($this->connection_ports)) {
                 $connections_id = current(current($this->connection_ports));
                 $this->addPortsWiring($netports_id, $connections_id);
@@ -407,7 +405,7 @@ class NetworkPort extends InventoryAsset
                     }
                 }
 
-                $stmt_values = array_values($stmt_columns);
+                $stmt_values = Sanitizer::encodeHtmlSpecialCharsRecursive(array_values($stmt_columns));
                 $this->vlan_stmt->bind_param($stmt_types, ...$stmt_values);
                 $DB->executeStatement($this->vlan_stmt);
                 $vlans_id = $DB->insertId();
@@ -437,9 +435,24 @@ class NetworkPort extends InventoryAsset
                 }
             }
 
-            $pvlan_stmt_values = array_values($pvlan_stmt_columns);
+            $pvlan_stmt_values = Sanitizer::encodeHtmlSpecialCharsRecursive(array_values($pvlan_stmt_columns));
             $this->pvlan_stmt->bind_param($pvlan_stmt_types, ...$pvlan_stmt_values);
             $DB->executeStatement($this->pvlan_stmt);
+        }
+    }
+
+    private function handleMetrics(\stdClass $port, int $netports_id)
+    {
+        $input = (array)$port;
+        //only update networkport metric if needed
+        if (isset($input['ifinbytes'], $input['ifoutbytes'], $input['ifinerrors'], $input['ifouterrors'])) {
+            $netport = new GlobalNetworkPort();
+            $input_db['id'] = $netports_id;
+            $input_db['ifinbytes']   = $input['ifinbytes'];
+            $input_db['ifoutbytes']  = $input['ifoutbytes'];
+            $input_db['ifinerrors']  = $input['ifinerrors'];
+            $input_db['ifouterrors'] = $input['ifouterrors'];
+            $netport->update($input_db);
         }
     }
 
@@ -491,7 +504,7 @@ class NetworkPort extends InventoryAsset
             }
 
             $input['networkports_id_list'] = array_values($aggregates);
-            $netport_aggregate->update($input, false);
+            $netport_aggregate->update(Sanitizer::sanitize($input), false);
         }
     }
 
@@ -525,6 +538,7 @@ class NetworkPort extends InventoryAsset
         $this->handleConnections($port, $netports_id);
         $this->handleVlans($port, $netports_id);
         $this->prepareAggregations($port, $netports_id);
+        $this->handleMetrics($port, $netports_id);
     }
 
     /**
@@ -552,7 +566,7 @@ class NetworkPort extends InventoryAsset
                     $input['name'] = $name;
                 }
             }
-            $items_id = $item->add(Toolbox::addslashes_deep($input));
+            $items_id = $item->add(Sanitizer::sanitize($input));
 
             $rulesmatched = new \RuleMatchedLog();
             $agents_id = $this->agent->fields['id'];
@@ -602,7 +616,7 @@ class NetworkPort extends InventoryAsset
             if (property_exists($port, 'mac') && !empty($port->mac)) {
                 $input['mac'] = $port->mac;
             }
-            $ports_id = $netport->add(Toolbox::addslashes_deep($input));
+            $ports_id = $netport->add(Sanitizer::sanitize($input));
         }
 
         if (!isset($this->connection_ports[$itemtype])) {
@@ -760,7 +774,8 @@ class NetworkPort extends InventoryAsset
     private function addPortsWiring(int $netports_id_1, int $netports_id_2): bool
     {
         if ($netports_id_1 == $netports_id_2) {
-            throw new \RuntimeException('Cannot wire a port to itself!');
+            //no wiring
+            return false;
         }
 
         $wire = new \NetworkPort_NetworkPort();
@@ -782,5 +797,10 @@ class NetworkPort extends InventoryAsset
             'networkports_id_1' => $netports_id_1,
             'networkports_id_2' => $netports_id_2,
         ]);
+    }
+
+    public function getItemtype(): string
+    {
+        return \NetworkPort::class;
     }
 }

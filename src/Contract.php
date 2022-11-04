@@ -66,7 +66,7 @@ class Contract extends CommonDBTM
 
     public static function getTypeName($nb = 0)
     {
-        return _n('Contrato', 'Contratos', $nb);
+        return _n('Contract', 'Contracts', $nb);
     }
 
 
@@ -407,6 +407,8 @@ class Contract extends CommonDBTM
             $prefix                    = 'Contract_Item' . MassiveAction::CLASS_ACTION_SEPARATOR;
             $actions[$prefix . 'add']    = _x('button', 'Add an item');
             $actions[$prefix . 'remove'] = _x('button', 'Remove an item');
+            $actions['Contract_Supplier' . MassiveAction::CLASS_ACTION_SEPARATOR . 'add']
+               = _x('button', 'Add a supplier');
         }
 
         return $actions;
@@ -849,7 +851,7 @@ class Contract extends CommonDBTM
      *
      * @param bool $display if false, return html
      *
-     * @return void
+     * @return string|void Return generated content if `display` parameter is true.
      **/
     public static function showCentral(bool $display = true)
     {

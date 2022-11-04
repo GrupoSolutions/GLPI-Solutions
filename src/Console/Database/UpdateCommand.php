@@ -47,7 +47,6 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Update;
 
 class UpdateCommand extends AbstractCommand implements ForceNoPluginsOptionCommandInterface
@@ -236,25 +235,9 @@ class UpdateCommand extends AbstractCommand implements ForceNoPluginsOptionComma
 
         $this->output->writeln('<comment>' . __('Checking database schema integrity...') . '</comment>');
 
-        $current_version   = GLPI_SCHEMA_VERSION;
-        // Normalize versions: remove @sha suffix and stability flags
-        $install_version_normalized = VersionParser::getNormalizedVersion(preg_replace('/@.+$/', '', $installed_version), false);
-        $current_version_normalized = VersionParser::getNormalizedVersion(preg_replace('/@.+$/', '', $current_version), false);
+        $checker = new DatabaseSchemaIntegrityChecker($this->db, false, true, true, true, true, true);
 
-        if (
-            $install_version_normalized === $current_version_normalized
-            && $installed_version !== $current_version
-        ) {
-            $msg = sprintf(
-                __('Database schema integrity check skipped as database was installed using an intermediate unstable version (%s).'),
-                $installed_version
-            );
-            $this->output->writeln('<comment>' . $msg . '</comment>', OutputInterface::VERBOSITY_QUIET);
-            return;
-        }
-
-        $schema_file = sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, $install_version_normalized);
-        if (!file_exists($schema_file)) {
+        if (!$checker->canCheckIntegrity($installed_version)) {
             $msg = sprintf(
                 __('Database schema integrity check skipped as version "%s" is not supported by checking process.'),
                 $installed_version
@@ -263,15 +246,15 @@ class UpdateCommand extends AbstractCommand implements ForceNoPluginsOptionComma
             return;
         }
 
-        $checker = new DatabaseSchemaIntegrityChecker($this->db, false, true, true, true, true, true);
         $error = null;
         try {
-            $differences = $checker->checkCompleteSchema($schema_file, true);
+            $differences = $checker->checkCompleteSchemaForVersion($installed_version, true);
         } catch (\Throwable $e) {
             $error = sprintf(__('Database integrity check failed with error (%s).'), $e->getMessage());
         }
         if (count($differences) > 0) {
-            $error = sprintf(__('The database schema is not consistent with the installed GLPI version (%s).'), $install_version_normalized)
+            $install_version_nohash = preg_replace('/@.+$/', '', $installed_version);
+            $error = sprintf(__('The database schema is not consistent with the installed GLPI version (%s).'), $install_version_nohash)
                 . ' '
                 . sprintf(__('Run the "php bin/console %1$s" command to view found differences.'), 'glpi:database:check_schema_integrity');
         }

@@ -36,8 +36,13 @@
 use Glpi\SocketModel;
 
 // Current version of GLPI
-define('GLPI_VERSION', '10.0.2');
-$schema_file = sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, GLPI_VERSION);
+define('GLPI_VERSION', '10.0.4');
+
+$schema_file = sprintf(
+    '%s/install/mysql/glpi-%s-empty.sql',
+    GLPI_ROOT,
+    preg_replace('/^(\d+\.\d+\.\d+)(-.+)?$/', '$1', GLPI_VERSION) // strip stability suffix
+);
 define(
     "GLPI_SCHEMA_VERSION",
     GLPI_VERSION . (is_readable($schema_file) ? '@' . sha1_file($schema_file) : '')
@@ -48,7 +53,7 @@ if (!defined('GLPI_MARKETPLACE_PRERELEASES')) {
 }
 
 define('GLPI_MIN_PHP', '7.4.0'); // Must also be changed in top of index.php
-define('GLPI_MAX_PHP', '8.2.0'); // (Exclusive) Must also be changed in top of index.php
+define('GLPI_MAX_PHP', '8.3.0'); // (Exclusive) Must also be changed in top of index.php
 define('GLPI_YEAR', '2022');
 
 //Define a global recipient address for email notifications
@@ -248,12 +253,12 @@ $CFG_GLPI["reservation_types"]            = ['Computer', 'Monitor', 'NetworkEqui
 
 $CFG_GLPI["linkuser_types"]               = ['Computer', 'Monitor', 'NetworkEquipment',
     'Peripheral', 'Phone', 'Printer', 'Software',
-    'SoftwareLicense', 'Certificate', 'Appliance', 'Item_DeviceSimcard'
+    'SoftwareLicense', 'Certificate', 'Appliance', 'Item_DeviceSimcard', 'Line'
 ];
 
 $CFG_GLPI["linkgroup_types"]              = ['Computer', 'Consumable', 'Monitor', 'NetworkEquipment',
     'Peripheral', 'Phone', 'Printer', 'Software',
-    'SoftwareLicense', 'Certificate', 'Appliance', 'Item_DeviceSimcard'
+    'SoftwareLicense', 'Certificate', 'Appliance', 'Item_DeviceSimcard', 'Line'
 ];
 
 $CFG_GLPI["linkuser_tech_types"]          = ['Computer', 'ConsumableItem', 'Monitor', 'NetworkEquipment',
@@ -485,8 +490,12 @@ $CFG_GLPI['inventory_types'] = [
 ];
 
 $CFG_GLPI['inventory_lockable_objects'] = ['Computer_Item',  'Item_SoftwareLicense',
-    'Item_SoftwareVersion', 'Item_Disk', 'ComputerVirtualMachine',
-    'NetworkPort', 'NetworkName', 'IPAddress'
+    'Item_SoftwareVersion', 'Item_Disk', 'ComputerVirtualMachine','ComputerAntivirus',
+    'NetworkPort', 'NetworkName', 'IPAddress', 'Item_OperatingSystem', 'Item_DeviceBattery', 'Item_DeviceCase',
+    'Item_DeviceControl', 'Item_DeviceDrive', 'Item_DeviceFirmware', 'Item_DeviceGeneric', 'Item_DeviceGraphicCard',
+    'Item_DeviceHardDrive', 'Item_DeviceMemory', 'Item_DeviceMotherboard', 'Item_DeviceNetworkCard', 'Item_DevicePci',
+    'Item_DevicePowerSupply', 'Item_DeviceProcessor', 'Item_DeviceSensor', 'Item_DeviceSimcard', 'Item_DeviceSoundCard',
+    'DatabaseInstance', 'Item_RemoteManagement','Monitor'
 ];
 
 $CFG_GLPI["kb_types"]              = ['Budget', 'Change', 'Computer',
@@ -548,11 +557,12 @@ $CFG_GLPI['javascript'] = [
         ], $dashboard_libs)
     ],
     'assets'    => [
-        'dashboard' => $dashboard_libs,
-        'rack'      => ['gridstack', 'rack'],
-        'printer'   => $dashboard_libs,
-        'cable'     => ['cable'],
-        'socket'    => ['cable'],
+        'dashboard'   => $dashboard_libs,
+        'rack'        => ['gridstack', 'rack'],
+        'printer'     => $dashboard_libs,
+        'cable'       => ['cable'],
+        'socket'      => ['cable'],
+        'networkport' => $dashboard_libs,
     ],
     'helpdesk'  => [
         'dashboard' => $dashboard_libs,

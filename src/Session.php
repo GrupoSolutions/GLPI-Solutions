@@ -218,9 +218,7 @@ class Session
     {
 
         if (session_status() === PHP_SESSION_NONE) {
-           // Force session to use cookies and prevent JS scripts to access to them
-            ini_set('session.cookie_httponly', '1');
-            ini_set('session.use_only_cookies', '1');
+            ini_set('session.use_only_cookies', '1'); // Force session to use cookies
 
             session_name("glpi_" . md5(realpath(GLPI_ROOT)));
 
@@ -306,24 +304,26 @@ class Session
      * @param string $itemtype Device type
      * @param string $title    List title (default '')
      **/
-    public static function initNavigateListItems($itemtype, $title = "")
+    public static function initNavigateListItems($itemtype, $title = "", $url = null)
     {
         global $AJAX_INCLUDE;
 
-        if (isset($AJAX_INCLUDE)) {
+        if (isset($AJAX_INCLUDE) && ($url === null)) {
             return;
         }
         if (empty($title)) {
             $title = __('List');
         }
-        $url = '';
+        if ($url === null) {
+            $url = '';
 
-        if (!isset($_SERVER['REQUEST_URI']) || (strpos($_SERVER['REQUEST_URI'], "tabs") > 0)) {
-            if (isset($_SERVER['HTTP_REFERER'])) {
-                $url = $_SERVER['HTTP_REFERER'];
+            if (!isset($_SERVER['REQUEST_URI']) || (strpos($_SERVER['REQUEST_URI'], "tabs") > 0)) {
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $url = $_SERVER['HTTP_REFERER'];
+                }
+            } else {
+                $url = $_SERVER['REQUEST_URI'];
             }
-        } else {
-            $url = $_SERVER['REQUEST_URI'];
         }
 
         $_SESSION['glpilisttitle'][$itemtype] = $title;
@@ -863,6 +863,7 @@ class Session
      **/
     public static function checkValidSessionId()
     {
+        global $DB;
 
         if (
             !isset($_SESSION['valid_id'])
@@ -870,9 +871,52 @@ class Session
         ) {
             Html::redirectToLogin('error=3');
         }
+
+        $user_id    = self::getLoginUserID();
+        $profile_id = $_SESSION['glpiactiveprofile']['id'] ?? null;
+        $entity_id  = $_SESSION['glpiactive_entity'] ?? null;
+
+        $valid_user = true;
+
+        if (!is_numeric($user_id) || $profile_id === null || $entity_id === null) {
+            $valid_user = false;
+        } else {
+            $user_table = User::getTable();
+            $pu_table   = Profile_User::getTable();
+            $result = $DB->request(
+                [
+                    'COUNT'     => 'count',
+                    'FROM'      => $user_table,
+                    'LEFT JOIN' => [
+                        $pu_table => [
+                            'FKEY'  => [
+                                Profile_User::getTable() => 'users_id',
+                                $user_table         => 'id'
+                            ]
+                        ]
+                    ],
+                    'WHERE'     => [
+                        $user_table . '.id'         => $user_id,
+                        $user_table . '.is_active'  => 1,
+                        $user_table . '.is_deleted' => 0,
+                        $pu_table . '.profiles_id'  => $profile_id,
+                        $pu_table . '.entities_id'  => $entity_id,
+                    ],
+                ]
+            );
+            if ($result->current()['count'] === 0) {
+                $valid_user = false;
+            }
+        }
+
+        if (!$valid_user) {
+            Session::destroy();
+            Auth::setRememberMeCookie('');
+            Html::redirectToLogin();
+        }
+
         return true;
     }
-
 
     /**
      * Check if I have access to the central interface
@@ -960,7 +1004,7 @@ class Session
             UPDATENOTE => 'UPDATENOTE',
             UNLOCK => 'UNLOCK',
         ];
-        if (in_array($right, $rights, true)) {
+        if (array_key_exists($right, $rights)) {
             return $rights[$right];
         }
         return "unknown right name";
@@ -1852,5 +1896,19 @@ class Session
         }
         $_SESSION['glpiactiveentities']        = $entities;
         $_SESSION['glpiactiveentities_string'] = "'" . implode("', '", $entities) . "'";
+    }
+
+     /**
+     * clean what needs to be cleaned on logout
+     *
+     * @since 10.0.4
+     *
+     * @return void
+     */
+    public static function cleanOnLogout()
+    {
+        Session::destroy();
+        //Remove cookie to allow new login
+        Auth::setRememberMeCookie('');
     }
 }

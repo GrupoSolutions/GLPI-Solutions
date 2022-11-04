@@ -19171,7 +19171,6 @@ a.card:hover {
 }
 .card-header {
   color: inherit;
-  display: flex;
   align-items: center;
   background: transparent;
 }
@@ -23133,11 +23132,10 @@ body.iframed {
   width: fit-content;
 }
 .page-anonymous .glpi-logo {
+  width: 250px;
   --logo: url(../pics/logos/logo-GLPI-250-black.png);
   content: var(--logo);
-  margin-right: 10%;
-  margin-top:10%;
-  height: 110px;
+  height: auto;
 }
 table td.active, table td.tab_bg_4 {
   background-color: rgba(32, 107, 196, 0.05)(0, 0, 0, 0.1);

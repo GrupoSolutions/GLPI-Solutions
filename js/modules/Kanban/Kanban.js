@@ -448,7 +448,9 @@ class GLPIKanbanRights {
             // Dropdown for single additions
             let add_itemtype_dropdown = "<ul id='kanban-add-dropdown' class='kanban-dropdown dropdown-menu' style='display: none'>";
             Object.keys(self.supported_itemtypes).forEach(function(itemtype) {
-                add_itemtype_dropdown += "<li id='kanban-add-" + itemtype + "' class='dropdown-item'><span>" + self.supported_itemtypes[itemtype]['name'] + '</span></li>';
+                if (self.supported_itemtypes[itemtype]['allow_create'] !== false) {
+                    add_itemtype_dropdown += "<li id='kanban-add-" + itemtype + "' class='dropdown-item'><span>" + self.supported_itemtypes[itemtype]['name'] + '</span></li>';
+                }
             });
             add_itemtype_dropdown += '</ul>';
             kanban_container.append(add_itemtype_dropdown);
@@ -457,7 +459,9 @@ class GLPIKanbanRights {
             let column_overflow_dropdown = "<ul id='kanban-overflow-dropdown' class='kanban-dropdown  dropdown-menu' style='display: none'>";
             let add_itemtype_bulk_dropdown = "<ul id='kanban-bulk-add-dropdown' class='dropdown-menu' style='display: none'>";
             Object.keys(self.supported_itemtypes).forEach(function(itemtype) {
-                add_itemtype_bulk_dropdown += "<li id='kanban-bulk-add-" + itemtype + "' class='dropdown-item'><span>" + self.supported_itemtypes[itemtype]['name'] + '</span></li>';
+                if (self.supported_itemtypes[itemtype]['allow_create'] !== false) {
+                    add_itemtype_bulk_dropdown += "<li id='kanban-bulk-add-" + itemtype + "' class='dropdown-item'><span>" + self.supported_itemtypes[itemtype]['name'] + '</span></li>';
+                }
             });
             add_itemtype_bulk_dropdown += '</ul>';
             const add_itemtype_bulk_link = '<a href="#">' + '<i class="fa-fw fas fa-list"></i>' + __('Bulk add') + '</a>';
@@ -1552,7 +1556,7 @@ class GLPIKanbanRights {
         /**
        * Generate a user image based on the user's initials.
        * @since 9.5.0
-       * @param {string} teammember The teammember array/object that represents the user.
+       * @param {{}} teammember The teammember array/object that represents the user.
        * @return {string} HTML image of the generated user badge.
        */
         const generateUserBadge = function(teammember) {
@@ -1586,7 +1590,8 @@ class GLPIKanbanRights {
             context.textBaseline = 'middle';
             context.fillText(initials, self.team_image_size / 2, self.team_image_size / 2);
             const src = canvas.toDataURL("image/png");
-            return "<span><img src='" + src + "' title='" + teammember['name'] + "'/></span>";
+            const name = teammember['name'].replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return "<span><img src='" + src + "' title='" + name + "'/></span>";
         };
 
         /**
@@ -1598,11 +1603,12 @@ class GLPIKanbanRights {
        */
         const generateOtherBadge = function(teammember, icon) {
             const bg_color = getBadgeColor(teammember);
+            const name = teammember['name'].replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
             return `
             <span class='fa-stack fa-lg' style='font-size: ${(self.team_image_size / 2)}px'>
                 <i class='fas fa-circle fa-stack-2x' style="color: ${bg_color}" title="${teammember['name']}"></i>
-                <i class='fas ${icon} fa-stack-1x' title="${teammember['name']}"></i>
+                <i class='fas ${icon} fa-stack-1x' title="${name}"></i>
             </span>
          `;
         };
@@ -2490,6 +2496,10 @@ class GLPIKanbanRights {
             <button type="button" name="add" class="btn btn-primary">${_x('button', 'Add')}</button>
          `;
             const modal = $('#kanban-modal');
+            // Remove old click handlers
+            modal.off('click', 'button[name="add"]');
+            modal.off('click', 'button[name="delete"]');
+
             modal.on('click', 'button[name="add"]', () => {
                 const itemtype = modal.find('select[name="itemtype"]').val();
                 const items_id = modal.find('select[name="items_id"]').val();

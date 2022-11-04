@@ -48,7 +48,7 @@ class GLPIPDF extends TCPDF
         'unit'               => 'mm',
         'mode'               => 'UTF-8',
         'format'             => 'A4',
-        'font_size'          => 9,
+        'font_size'          => 8,
         'font'               => 'helvetica',
 
         'margin_left'        => 10,
@@ -119,7 +119,7 @@ class GLPIPDF extends TCPDF
     {
         // Position at 15 mm from bottom
         $this->SetY(-$this->config['margin_bottom']);
-        $text = "São Paulo - SP ".date("d/m/Y") . "";
+        $text = sprintf("GLPI PDF export - %s", Html::convDate(date("Y-m-d")));
         if ($this->total_count != null) {
             $text .= " - " . sprintf(_n('%s item', '%s items', $this->total_count), $this->total_count);
         }
@@ -141,34 +141,45 @@ class GLPIPDF extends TCPDF
 
         $path = TCPDF_FONTS::_getfontpath();
 
-        foreach (glob($path . '/*.php') as $font) {
-            unset($name, $type);
-            include $font;
-            unset($cbbox, $cidinfo, $cw, $dw);
-            $font = basename($font, '.php');
+        // Includes will be made inside a function to ensure that declared variables are
+        // only available inside the function scope, and will so not affect other elements from loop.
+        // Also, varibales declared in font file will be automatically garbage collected (some are huge).
+        $include_fct = function ($font_path) use (&$list) {
+            $name = null;
+            $type = null;
+
+            include $font_path;
+
+            if ($name === null) {
+                return; // Not a font file
+            }
+
+            $font = basename($font_path, '.php');
 
             // skip subfonts
             if (
                 ((substr($font, -1) == 'b') || (substr($font, -1) == 'i'))
                 && isset($list[substr($font, 0, -1)])
             ) {
-                continue;
+                return;
             }
             if (
                 ((substr($font, -2) == 'bi'))
                 && isset($list[substr($font, 0, -2)])
             ) {
-                continue;
+                return;
             }
 
-            if (isset($name)) {
-                if (isset($type) && ($type == 'cidfont0')) {
-                    // cidfont often have the same name (ArialUnicodeMS)
-                    $list[$font] = sprintf(__('%1$s (%2$s)'), $name, $font);
-                } else {
-                    $list[$font] = $name;
-                }
+            if ($type == 'cidfont0') {
+                // cidfont often have the same name (ArialUnicodeMS)
+                $list[$font] = sprintf(__('%1$s (%2$s)'), $name, $font);
+            } else {
+                $list[$font] = $name;
             }
+        };
+
+        foreach (glob($path . '/*.php') as $font_path) {
+            $include_fct($font_path);
         }
         return $list;
     }

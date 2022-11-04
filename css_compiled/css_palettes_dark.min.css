@@ -1,36 +1,3 @@
-/**
- * ---------------------------------------------------------------------
- *
- * GLPI - Gestionnaire Libre de Parc Informatique
- *
- * http://glpi-project.org
- *
- * @copyright 2015-2022 Teclib' and contributors.
- * @copyright 2003-2014 by the INDEPNET Development Team.
- * @licence   https://www.gnu.org/licenses/gpl-3.0.html
- *
- * ---------------------------------------------------------------------
- *
- * LICENSE
- *
- * This file is part of GLPI.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- * ---------------------------------------------------------------------
- */
-
 @charset "UTF-8";
 /*!
  * ---------------------------------------------------------------------
@@ -23020,17 +22987,9 @@ body.iframed {
   overflow-x: hidden;
 }
 .page .glpi-logo {
-  background: url("../pics/logos/logo-GLPI-100-white.png") no-repeat center ;
-  background-size: contain;
-  height: 80px !important;
-  width: 200px !important;
-}
-.solutions span{
-  width: 200px !important;
-  max-width:200px;
-  max-height:150px;
-  width: auto;
-  height: auto;
+  background: url("../pics/logos/logo-GLPI-100-white.png") no-repeat;
+  height: 55px;
+  width: 100px;
 }
 .page .page-body {
   margin-bottom: 0;
@@ -23169,6 +23128,16 @@ table.deleted-results > :not(caption) > * > * {
 }
 kbd {
   white-space: nowrap;
+}
+body, body input {
+  font-variant-ligatures: no-contextual;
+}
+/** Bootstrap visibility classes (The utility class behavior is different in _styles.scss) */
+.bs-visible {
+  visibility: visible !important;
+}
+.bs-invisible {
+  visibility: hidden !important;
 }
 /*!
  * ---------------------------------------------------------------------
@@ -23941,15 +23910,15 @@ kbd {
  *
  * ---------------------------------------------------------------------
  */
-.asset .card-header {
+.asset .card-header, .navigationheader .card-header, #page div.objectlockmessage .card-header, .qtip div.objectlockmessage .card-header, .modal .modal-body div.objectlockmessage .card-header {
   background-color: rgba(32, 107, 196, 0.05);
   color: #206bc4;
   border-color: #c7daf0;
 }
-.asset .card-header:not(.main-header) {
+.asset .card-header:not(.main-header), .navigationheader .card-header:not(.main-header), #page div.objectlockmessage .card-header:not(.main-header), .qtip div.objectlockmessage .card-header:not(.main-header), .modal .modal-body div.objectlockmessage .card-header:not(.main-header) {
   border-top: 1px solid #c7daf0;
 }
-.asset .card-header .badge {
+.asset .card-header .badge, .navigationheader .card-header .badge, #page div.objectlockmessage .card-header .badge, .qtip div.objectlockmessage .card-header .badge, .modal .modal-body div.objectlockmessage .card-header .badge {
   display: inline-flex;
   font-size: 0.625rem;
   min-height: 1.25rem;
@@ -23957,31 +23926,51 @@ kbd {
   align-items: flex-start;
   vertical-align: middle;
 }
-.asset .card-header .badge .badge a {
+.asset .card-header .badge .badge a, .navigationheader .card-header .badge .badge a, #page div.objectlockmessage .card-header .badge .badge a, .qtip div.objectlockmessage .card-header .badge .badge a, .modal .modal-body div.objectlockmessage .card-header .badge .badge a {
   color: inherit;
 }
-.asset .card-header .badge.entity-name {
+.asset .card-header .badge.entity-name, .navigationheader .card-header .badge.entity-name, #page div.objectlockmessage .card-header .badge.entity-name, .qtip div.objectlockmessage .card-header .badge.entity-name, .modal .modal-body div.objectlockmessage .card-header .badge.entity-name {
   background-color: #d2e1f3;
   color: #123b6c;
 }
-.asset .card-header .badge .ribbon {
+.asset .card-header .badge .ribbon, .navigationheader .card-header .badge .ribbon, #page div.objectlockmessage .card-header .badge .ribbon, .qtip div.objectlockmessage .card-header .badge .ribbon, .modal .modal-body div.objectlockmessage .card-header .badge .ribbon {
   left: 0.5rem;
 }
-.asset.asset-deleted .card-header {
+@media (max-width: 575.98px) {
+  .asset .card-header .card-title, .navigationheader .card-header .card-title, #page div.objectlockmessage .card-header .card-title, .qtip div.objectlockmessage .card-header .card-title, .modal .modal-body div.objectlockmessage .card-header .card-title {
+    padding-left: 0 !important;
+  }
+  .asset .card-header .badge, .navigationheader .card-header .badge, #page div.objectlockmessage .card-header .badge, .qtip div.objectlockmessage .card-header .badge, .modal .modal-body div.objectlockmessage .card-header .badge {
+    margin-left: 0 !important;
+  }
+}
+.asset.asset-deleted .card-header, .navigationheader.asset-deleted .card-header, #page div.asset-deleted.objectlockmessage .card-header, .qtip div.asset-deleted.objectlockmessage .card-header, .modal .modal-body div.asset-deleted.objectlockmessage .card-header {
   background-color: #e27474;
   color: #6b1d1d;
   border-color: #6b1d1d;
 }
-.asset.asset-deleted .card-header .badge.entity-name {
+.asset.asset-deleted .card-header .badge.entity-name, .navigationheader.asset-deleted .card-header .badge.entity-name, #page div.asset-deleted.objectlockmessage .card-header .badge.entity-name, .qtip div.asset-deleted.objectlockmessage .card-header .badge.entity-name, .modal .modal-body div.asset-deleted.objectlockmessage .card-header .badge.entity-name {
   background-color: #f7d7d7;
   color: #6b1d1d;
 }
-.asset .asset-pictures {
+.asset .asset-pictures, .navigationheader .asset-pictures, #page div.objectlockmessage .asset-pictures, .qtip div.objectlockmessage .asset-pictures, .modal .modal-body div.objectlockmessage .asset-pictures {
   max-height: 40em;
   overflow-y: auto;
 }
 #page > .asset {
   margin-top: 15px;
+}
+.navigationheader .main-header, #page div.objectlockmessage .main-header, .qtip div.objectlockmessage .main-header, .modal .modal-body div.objectlockmessage .main-header {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.navigationheader .main-header .ribbon, #page div.objectlockmessage .main-header .ribbon, .qtip div.objectlockmessage .main-header .ribbon, .modal .modal-body div.objectlockmessage .main-header .ribbon {
+  position: relative;
+  left: -0.25rem;
+}
+.navigationheader .card-header, #page div.objectlockmessage .card-header, .qtip div.objectlockmessage .card-header, .modal .modal-body div.objectlockmessage .card-header {
+  background-color: transparent !important;
+  border-color: transparent !important;
 }
 /*!
  * ---------------------------------------------------------------------
@@ -24658,6 +24647,11 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
 .topbar .nav-item i {
   margin-right: 0.3em;
 }
+.navbar-vertical .trigger-fuzzy {
+  border: 0;
+  font-size: 1em;
+  font-weight: 400;
+}
 .sidebar ~ .navbar {
   z-index: 1030;
 }
@@ -24715,8 +24709,10 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
   .sidebar {
     transition: width var(--animate-duration) !important;
   }
+  body.navbar-collapsed #navbar-menu .nav-link {
+    padding: 0.58rem 1.5rem !important;
+  }
   body.navbar-collapsed .navbar-brand {
-    padding: 0.4rem !important;
     margin: 0 calc(-1 * var(--tblr-gutter-x, 1.5rem)) 0.5rem;
     width: calc(100% + var(--tblr-gutter-x, 1.5rem) * 2);
   }
@@ -24780,7 +24776,7 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
     border-left: 3px solid transparent;
   }
   body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link + .dropdown-menu .dropdown-item.active {
-    background-color: #232220;
+    background-color: #a6a19d;
     border-left-color: #585957;
   }
   body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link.show, body.navbar-collapsed .sidebar #navbar-menu .nav-item .nav-link.active {
@@ -25605,7 +25601,8 @@ ul.indexes {
   left: 45%;
   color: grey;
   top: 1px;
-  font: 1em var(--fa-font-solid);
+  font: var(--fa-font-solid);
+  font-size: 1em;
   position: absolute;
 }
 .cell_add:hover {
@@ -26015,6 +26012,22 @@ body.mce-content-body [data-user-mention="true"] {
 }
 .rich_text_container img {
   max-width: 100%;
+}
+.rich_text_container table {
+  word-break: normal;
+}
+.rich_text_container a[target="_blank"]::before {
+  font-family: tabler-icons;
+  content: "";
+  padding-right: 4px;
+}
+.rich_text_container .long_text {
+  max-height: 350px;
+  position: relative;
+  overflow: hidden;
+}
+.rich_text_container .long_text .read_more {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #f1f4e3 100%);
 }
 .user-mention, [data-user-mention="true"] {
   background: rgba(0, 0, 0, 0.2);
@@ -26934,16 +26947,6 @@ div.search-input span.search-input-tag-input:last-of-type {
     }
   }
 }
-.select2-container--focus.select2-container .select2-selection {
-  border-color: #acacab;
-  box-shadow: 0 0 0 0.25rem rgba(88, 89, 87, 0.25);
-}
-.select2-container--disabled.select2-container .select2-selection {
-  background-color: #fafbfc;
-  border-color: #d9dbde;
-  box-shadow: none;
-  cursor: not-allowed;
-}
 .select2-container .select2-selection.select2-selection--single {
   font-size: 0.875rem;
   height: calc(1.4285714286em + 0.875rem + 2px);
@@ -27055,6 +27058,19 @@ div.search-input span.search-input-tag-input:last-of-type {
       color: #fafbfc;
     }
   }
+}
+.select2-container.select2-container--focus .select2-selection {
+  border-color: #acacab;
+  box-shadow: 0 0 0 0.25rem rgba(88, 89, 87, 0.25);
+}
+.select2-container.select2-container--disabled .select2-selection {
+  background-color: #fafbfc;
+  border-color: #d9dbde;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.select2-container.select2-container--disabled .select2-selection .select2-selection__rendered {
+  color: #626976;
 }
 .select2-container .select2-dropdown {
   border-color: #d9dbde;
@@ -27359,12 +27375,12 @@ div.search-input span.search-input-tag-input:last-of-type {
 .itil-object .status-recall {
   display: none;
 }
-@media (max-width: 575.98px) {
+@media (max-width: 991.98px) {
   .itil-object {
     margin-bottom: 55px;
   }
 }
-@media (min-width: 576px) {
+@media (min-width: 992px) {
   .itil-object {
     height: calc(100vh - 187px);
   }
@@ -27416,7 +27432,7 @@ div.search-input span.search-input-tag-input:last-of-type {
   text-transform: none;
   margin: calc(-0.25rem + 1px) -0.25rem;
 }
-@media (min-width: 576px) {
+@media (min-width: 992px) {
   #itil-object-container.right-expanded .itil-footer .collapse-panel {
     display: none;
   }
@@ -27449,7 +27465,7 @@ div.search-input span.search-input-tag-input:last-of-type {
     display: none;
   }
 }
-@media (min-width: 576px) {
+@media (min-width: 992px) {
   .horizontal-layout .itil-object {
     height: calc(100vh - 257px);
   }
@@ -27550,7 +27566,8 @@ div.search-input span.search-input-tag-input:last-of-type {
 .timeline-item .timeline-content {
   position: relative;
   border-top-left-radius: 0;
-  max-width: 100%;
+  max-width: 820px;
+  min-width: 100%;
   word-break: break-word;
 }
 @media (min-width: 576px) {
@@ -27840,6 +27857,7 @@ div.search-input span.search-input-tag-input:last-of-type {
 }
 .timeline-todo-list .itil-left-side .timeline-item .content-part .timeline-content {
   border-radius: 0;
+  max-width: initial;
 }
 .timeline-todo-list .itil-left-side .timeline-item .content-part .timeline-content .card-body {
   padding: 0.5rem;
@@ -28043,7 +28061,7 @@ ul.legacy-timeline-actions li i {
 }
 .dates_timelines .passed .dot::before {
   content: "!";
-  padding-left: 4px;
+  padding-left: 8px;
   color: #e54e5a;
 }
 .dates_timelines .checked .dot::before {
@@ -28185,6 +28203,43 @@ ul.legacy-timeline-actions li i {
  *
  * ---------------------------------------------------------------------
  */
+@media screen and (min-width: 1400px) {
+  .printer_barchart .ct-label.ct-horizontal {
+    white-space: nowrap;
+  }
+}
+/*!
+ * ---------------------------------------------------------------------
+ *
+ * GLPI - Gestionnaire Libre de Parc Informatique
+ *
+ * http://glpi-project.org
+ *
+ * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2003-2014 by the INDEPNET Development Team.
+ * @licence   https://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * ---------------------------------------------------------------------
+ *
+ * LICENSE
+ *
+ * This file is part of GLPI.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * ---------------------------------------------------------------------
+ */
 .form-check-input[name="as_map"]:checked {
   background-color: #80abe4;
 }
@@ -28257,6 +28312,9 @@ ul.legacy-timeline-actions li i {
 .search_page .search-container .search-card .search-results {
   border-collapse: separate;
   border-spacing: 0;
+}
+.search_page .search-container .search-card .search-results a {
+  font-weight: 500;
 }
 @media (min-width: 992px) {
   .search_page .search-container .search-card .search-results thead:first-child th {
@@ -28337,9 +28395,6 @@ ul.legacy-timeline-actions li i {
 }
 .priority_block span {
   width: 20px;
-}
-td.priority_block {
-  display: table-cell;
 }
 table.search-results thead th[data-searchopt-id][data-nosort] {
   vertical-align: bottom !important;
@@ -28450,6 +28505,18 @@ input.submit:focus:not([disabled]):not(.disabled), .vsubmit:focus:not([disabled]
 }
 .form-control.warn {
   border-color: red !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}
+.form-control.not_expired {
+  border-color: #a1cf66 !important;
+  background-color: rgba(6, 255, 0, 0.1) !important;
+}
+.form-control.soon_expired {
+  border-color: #de5d06 !important;
+  background-color: rgba(255, 184, 0, 0.1) !important;
+}
+.form-control.expired {
+  border-color: #d63939 !important;
   background-color: rgba(255, 0, 0, 0.1) !important;
 }
 /*!
@@ -28996,6 +29063,7 @@ input.submit:focus:not([disabled]):not(.disabled), .vsubmit:focus:not([disabled]
 #page .faqadd_block, .qtip .faqadd_block, .modal .modal-body .faqadd_block {
   position: relative;
   display: inline-block;
+  width: max-content;
 }
 #page .faqadd_block .display_faq_chkbox, .qtip .faqadd_block .display_faq_chkbox, .modal .modal-body .faqadd_block .display_faq_chkbox {
   display: none;
@@ -29006,7 +29074,7 @@ input.submit:focus:not([disabled]):not(.disabled), .vsubmit:focus:not([disabled]
   box-shadow: 0px 1px 2px 1px #D2D2D2;
   position: absolute;
   padding: 5px;
-  width: 450px;
+  width: 420px;
   height: 40vh;
   right: -5px;
   z-index: 1000;
@@ -29042,13 +29110,15 @@ input.submit:focus:not([disabled]):not(.disabled), .vsubmit:focus:not([disabled]
   position: absolute;
 }
 #page .faqadd_block_content, .qtip .faqadd_block_content, .modal .modal-body .faqadd_block_content {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   position: absolute;
   top: 40px;
   bottom: 0;
   left: 0;
   right: 0;
+}
+#page .faqadd_entries, #page .faqadd_entries:hover, .qtip .faqadd_entries, .qtip .faqadd_entries:hover, .modal .modal-body .faqadd_entries, .modal .modal-body .faqadd_entries:hover {
+  color: initial;
 }
 #page .faqadd_entries .tab_cadre_fixe, .qtip .faqadd_entries .tab_cadre_fixe, .modal .modal-body .faqadd_entries .tab_cadre_fixe {
   width: 100%;
@@ -29823,6 +29893,10 @@ div.banner-need-update {
   text-overflow: ellipsis;
   display: inline-block;
   white-space: nowrap;
+}
+#planning_container #planning_filter ul.filters > li label > i {
+  color: #f76707;
+  float: right;
 }
 #planning_container #planning_filter ul.filters > li .filter-icon {
   float: right;
