@@ -1958,3 +1958,22 @@ Compile css/standalone/reservations.scss  {"user":"2@GS003021"}
   src\CronTask.php:1018                              MailCollector::cronMailgate()
   front\cron.php:64                                  CronTask::launch()
   
+[2022-11-07 11:59:59] glpiphplog.WARNING:   *** PHP User Warning (512): Unable to decrypt string. It may have been crypted with another key. in C:\wamp64\www\glpi\src\GLPIKey.php at line 428
+  Backtrace :
+  src\GLPIKey.php:428                                trigger_error()
+  src\MailCollector.php:1354                         GLPIKey->decrypt()
+  src\MailCollector.php:698                          MailCollector->connect()
+  src\MailCollector.php:1852                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  
+[2022-11-07 12:00:29] glpiphplog.CRITICAL:   *** Uncaught Exception Laminas\Mail\Protocol\Exception\RuntimeException: host doesn't allow connection in C:\wamp64\www\glpi\vendor\laminas\laminas-mail\src\Protocol\Imap.php at line 88
+  Backtrace :
+  ...r\laminas\laminas-mail\src\Storage\Imap.php:223 Laminas\Mail\Protocol\Imap->connect()
+  src\Toolbox.php:2196                               Laminas\Mail\Storage\Imap->__construct()
+  src\MailCollector.php:1375                         Toolbox::getMailServerStorageInstance()
+  src\MailCollector.php:698                          MailCollector->connect()
+  src\MailCollector.php:1852                         MailCollector->collect()
+  src\CronTask.php:1018                              MailCollector::cronMailgate()
+  front\cron.php:64                                  CronTask::launch()
+  

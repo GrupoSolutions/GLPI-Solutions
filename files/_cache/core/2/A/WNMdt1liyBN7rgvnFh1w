@@ -1,6 +1,6 @@
-1667508439
+1667843566
 13e3cde4145b9a1d329c4c282a07e4851d0edc1a
-a:1:{s:60:"top_ticket_ITILCategory_37736ba9-d429-4cb3-9058-ef4d111d9269";s:10382:"      <style>
+a:1:{s:60:"top_ticket_ITILCategory_37736ba9-d429-4cb3-9058-ef4d111d9269";s:10379:"      <style>
       #chart_dashboard_card_central_a1edd125c46d0eed851b23089a501d0e3a82fe90 {
          background-color: #fbf9f9;
          color: #a97f7f
@@ -97,7 +97,7 @@ a:1:{s:60:"top_ticket_ITILCategory_37736ba9-d429-4cb3-9058-ef4d111d9269";s:10382
       $(function () {
          var chart = new Chartist.Bar('#chart_dashboard_card_central_a1edd125c46d0eed851b23089a501d0e3a82fe90 .chart', {
             labels: ["sem"],
-            series: [{"meta":"sem","value":3,"url":"\/glpi104\/front\/ticket.php?reset&criteria%5B0%5D%5Bfield%5D=7&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=0&reset=reset"}],
+            series: [{"meta":"sem","value":3,"url":"\/glpi\/front\/ticket.php?reset&criteria%5B0%5D%5Bfield%5D=7&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=0&reset=reset"}],
          }, {
             width: '100%',
             seriesBarDistance: 10,

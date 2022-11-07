@@ -24751,6 +24751,7 @@ body .flatpickr-time input:hover, body .flatpickr-time .flatpickr-am-pm:hover, b
     background-size: contain;
     width: 40px;
     height: 40px;
+    filter: unset;
   }
   body.navbar-collapsed .sidebar {
     z-index: 1050;

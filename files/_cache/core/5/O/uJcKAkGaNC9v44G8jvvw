@@ -1,6 +1,6 @@
-1667508438
+1667843566
 39780288c29cd40ca74a29e0a3af804ccb47dca1
-a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:11888:"      <style>
+a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:11882:"      <style>
       #chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca {
          background-color: #f9fafb;
          color: #7f94a9
@@ -117,7 +117,7 @@ a:1:{s:62:"top_ticket_user_requester_c74f52a8-046a-4077-b1a6-c9f840d34b82";s:118
       $(function () {
          var chart = new Chartist.Bar('#chart_dashboard_card_central_abb9cb15f99318acde2359c8588694043d212cca .chart', {
             labels: [" "," "],
-            series: [{"meta":" ","value":2,"url":"\/glpi104\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=2&reset=reset"},{"meta":" ","value":1,"url":"\/glpi104\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=8&reset=reset"}],
+            series: [{"meta":" ","value":2,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=2&reset=reset"},{"meta":" ","value":1,"url":"\/glpi\/front\/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=8&reset=reset"}],
          }, {
             width: '100%',
             seriesBarDistance: 10,

@@ -49,7 +49,7 @@
 {{ include('layout/parts/head.html.twig') }}
 <body class="welcome-anonymous">
    <div class="page-anonymous">
-      <div class="flex-fill d-flex flex-column justify-content-center py-4 mt-4">
+      <div class="flex-fill d-flex flex-column justify-content-center">
          {% set style = null %}
          {% if card_md_width is defined %}
             {% set style = 'max-width: 40rem' %}
@@ -58,10 +58,10 @@
             {% set style = 'max-width: 60rem' %}
          {% endif %}
 
-         <div class="container-tight py-6" {% if style is not null %}style="{{ style }}"{% endif %}>
+         <div class="container-tight mt-5" {% if style is not null %}style="{{ style }}"{% endif %}>
             <div class="text-center">
                <div class="col-md">
-                  <span class="glpi-logo mb-4" title="GLPI"></span>
+                  <span class="glpi-logo mb-2" title="GLPI"></span>
                </div>
             </div>
             <div class="card card-md">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="text-center text-muted mt-3">
-               {% block footer_block %} Batatinha{% endblock %}
+               {% block footer_block %} {% endblock %}
             </div>
          </div>
       </div>

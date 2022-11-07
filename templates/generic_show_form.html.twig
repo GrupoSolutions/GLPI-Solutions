@@ -553,14 +553,6 @@
                         ) }}
                      {% endif %}
 
-                     {% if item.isField('brand') %}
-                        {{ fields.textField(
-                           'brand',
-                           item.fields['brand'],
-                           __('Brand'),
-                           field_options
-                        ) }}
-                     {% endif %}
 
                      {% if item.isField('begin_date') %}
                         {{ fields.dateField(

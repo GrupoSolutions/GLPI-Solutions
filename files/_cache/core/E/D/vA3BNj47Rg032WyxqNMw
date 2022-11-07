@@ -1,29 +1,29 @@
-1667508438
+1667843566
 7793c6867fdbb2506c3cb5bd95f510f7d5949aa2
-a:1:{s:54:"bn_count_Software_0690f524-e826-47a9-b50a-906451196b83";s:1144:"      <style>
-         #bn_1860260157 {
+a:1:{s:54:"bn_count_Software_0690f524-e826-47a9-b50a-906451196b83";s:1136:"      <style>
+         #bn_876549461 {
             background-color: #aaddac;
             color: #358639;
          }
 
-         #bn_1860260157:hover {
+         #bn_876549461:hover {
             background-color: #73c777;
             border: 1px solid #44aa48;
          }
 
-         .theme-dark #bn_1860260157 {
+         .theme-dark #bn_876549461 {
             background-color: #358639;
             color: #aaddac;
          }
 
-         .theme-dark #bn_1860260157:hover {
+         .theme-dark #bn_876549461:hover {
             background-color: #73c777;
             color: #358639;
             border: 1px solid #44aa48;
          }
       </style>
-      <a href='/glpi104/front/software.php?reset=reset'
-         id="bn_1860260157"
+      <a href='/glpi/front/software.php?reset=reset'
+         id="bn_876549461"
          class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech"
          title="">
          <span class="content">            <span title="0"

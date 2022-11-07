@@ -64,7 +64,7 @@ class __TwigTemplate_c4fa9004b7c9a2bac568ef726629f493d7a19b0f98f3ad0950a7cef9db5
         echo "
 <body class=\"welcome-anonymous\">
    <div class=\"page-anonymous\">
-      <div class=\"flex-fill d-flex flex-column justify-content-center py-4 mt-4\">
+      <div class=\"flex-fill d-flex flex-column justify-content-center\">
          ";
         // line 53
         $context["style"] = null;
@@ -88,7 +88,7 @@ class __TwigTemplate_c4fa9004b7c9a2bac568ef726629f493d7a19b0f98f3ad0950a7cef9db5
         }
         // line 60
         echo "
-         <div class=\"container-tight py-6\" ";
+         <div class=\"container-tight mt-5\" ";
         // line 61
         if ( !(null === ($context["style"] ?? null))) {
             echo "style=\"";
@@ -98,7 +98,7 @@ class __TwigTemplate_c4fa9004b7c9a2bac568ef726629f493d7a19b0f98f3ad0950a7cef9db5
         echo ">
             <div class=\"text-center\">
                <div class=\"col-md\">
-                  <span class=\"glpi-logo mb-4\" title=\"GLPI\"></span>
+                  <span class=\"glpi-logo mb-2\" title=\"GLPI\"></span>
                </div>
             </div>
             <div class=\"card card-md\">
@@ -139,7 +139,7 @@ class __TwigTemplate_c4fa9004b7c9a2bac568ef726629f493d7a19b0f98f3ad0950a7cef9db5
     public function block_footer_block($context, array $blocks = [])
     {
         $macros = $this->macros;
-        echo " Batatinha";
+        echo " ";
     }
 
     // line 80
@@ -165,6 +165,6 @@ class __TwigTemplate_c4fa9004b7c9a2bac568ef726629f493d7a19b0f98f3ad0950a7cef9db5
 
     public function getSourceContext()
     {
-        return new Source("", "layout/page_card_notlogged.html.twig", "C:\\wamp64\\www\\glpi104\\templates\\layout\\page_card_notlogged.html.twig");
+        return new Source("", "layout/page_card_notlogged.html.twig", "C:\\wamp64\\www\\glpi\\templates\\layout\\page_card_notlogged.html.twig");
     }
 }

@@ -97,69 +97,69 @@ class __TwigTemplate_cb23cfd1a525e5612caef2d25f47d1ef2779d05d3f619312948675d2f15
                   ";
         // line 59
         $this->displayBlock('form_fields', $context, $blocks);
-        // line 603
+        // line 595
         echo "               </div> ";
-        // line 604
+        // line 596
         echo "            </div> ";
-        // line 605
+        // line 597
         echo "         </div> ";
-        // line 606
+        // line 598
         echo "      </div>
       ";
-        // line 607
+        // line 599
         if (($context["item_has_pictures"] ?? null)) {
-            // line 608
+            // line 600
             echo "         <div class=\"col-12 col-xxl-3 flex-column\">
             <div class=\"flex-row asset-pictures\">
                ";
-            // line 610
+            // line 602
             echo twig_include($this->env, $context, "components/form/pictures.html.twig", ["gallery_type" => ""]);
             echo "
             </div>
          </div>
       ";
         }
-        // line 614
+        // line 606
         echo "   </div> ";
-        // line 615
+        // line 607
         echo "
    ";
-        // line 616
+        // line 608
         if ((0 === twig_compare(($context["item_type"] ?? null), "Contract"))) {
-            // line 617
+            // line 609
             echo "      ";
             echo twig_include($this->env, $context, "components/form/support_hours.html.twig");
             echo "
    ";
         }
-        // line 619
+        // line 611
         echo "   ";
         echo twig_include($this->env, $context, "components/form/buttons.html.twig");
         echo "
    ";
-        // line 620
+        // line 612
         if (( !array_key_exists("no_inventory_footer", $context) || (0 === twig_compare(($context["no_inventory_footer"] ?? null), false)))) {
-            // line 621
+            // line 613
             echo "      ";
             echo twig_include($this->env, $context, "components/form/inventory_info.html.twig");
             echo "
    ";
         }
-        // line 623
+        // line 615
         echo "
    ";
-        // line 624
+        // line 616
         if (((null === (($__internal_compile_4 = ($context["params"] ?? null)) && is_array($__internal_compile_4) || $__internal_compile_4 instanceof ArrayAccess ? ($__internal_compile_4["formfooter"] ?? null) : null)) || (0 === twig_compare((($__internal_compile_5 = ($context["params"] ?? null)) && is_array($__internal_compile_5) || $__internal_compile_5 instanceof ArrayAccess ? ($__internal_compile_5["formfooter"] ?? null) : null), true)))) {
-            // line 625
+            // line 617
             echo "      <div class=\"card-footer mx-n2 mb-n2 mt-4\">
          ";
-            // line 626
+            // line 618
             echo twig_include($this->env, $context, "components/form/dates.html.twig");
             echo "
       </div>
    ";
         }
-        // line 629
+        // line 621
         echo "</div>
 ";
     }
@@ -798,75 +798,62 @@ class __TwigTemplate_cb23cfd1a525e5612caef2d25f47d1ef2779d05d3f619312948675d2f15
         }
         // line 555
         echo "
+
                      ";
-        // line 556
-        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "brand"], "method", false, false, false, 556)) {
-            // line 557
+        // line 557
+        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "begin_date"], "method", false, false, false, 557)) {
+            // line 558
             echo "                        ";
-            echo twig_call_macro($macros["fields"], "macro_textField", ["brand", (($__internal_compile_34 = twig_get_attribute($this->env, $this->source,             // line 559
-($context["item"] ?? null), "fields", [], "any", false, false, false, 559)) && is_array($__internal_compile_34) || $__internal_compile_34 instanceof ArrayAccess ? ($__internal_compile_34["brand"] ?? null) : null), __("Brand"),             // line 561
-($context["field_options"] ?? null)], 557, $context, $this->getSourceContext());
-            // line 562
+            echo twig_call_macro($macros["fields"], "macro_dateField", ["begin_date", (($__internal_compile_34 = twig_get_attribute($this->env, $this->source,             // line 560
+($context["item"] ?? null), "fields", [], "any", false, false, false, 560)) && is_array($__internal_compile_34) || $__internal_compile_34 instanceof ArrayAccess ? ($__internal_compile_34["begin_date"] ?? null) : null), __("Start date"),             // line 562
+($context["field_options"] ?? null)], 558, $context, $this->getSourceContext());
+            // line 563
             echo "
                      ";
         }
-        // line 564
+        // line 565
         echo "
                      ";
-        // line 565
-        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "begin_date"], "method", false, false, false, 565)) {
-            // line 566
+        // line 575
+        echo "
+                     ";
+        // line 576
+        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "pictures"], "method", false, false, false, 576)) {
+            // line 577
             echo "                        ";
-            echo twig_call_macro($macros["fields"], "macro_dateField", ["begin_date", (($__internal_compile_35 = twig_get_attribute($this->env, $this->source,             // line 568
-($context["item"] ?? null), "fields", [], "any", false, false, false, 568)) && is_array($__internal_compile_35) || $__internal_compile_35 instanceof ArrayAccess ? ($__internal_compile_35["begin_date"] ?? null) : null), __("Start date"),             // line 570
-($context["field_options"] ?? null)], 566, $context, $this->getSourceContext());
-            // line 571
+            echo twig_call_macro($macros["fields"], "macro_fileField", ["pictures", null, _n("Picture", "Pictures", Session::getPluralNumber()), ["onlyimages" => true, "multiple" => true]], 577, $context, $this->getSourceContext());
+            // line 580
             echo "
                      ";
         }
-        // line 573
+        // line 582
         echo "
                      ";
         // line 583
-        echo "
-                     ";
-        // line 584
-        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "pictures"], "method", false, false, false, 584)) {
-            // line 585
+        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "is_active"], "method", false, false, false, 583)) {
+            // line 584
             echo "                        ";
-            echo twig_call_macro($macros["fields"], "macro_fileField", ["pictures", null, _n("Picture", "Pictures", Session::getPluralNumber()), ["onlyimages" => true, "multiple" => true]], 585, $context, $this->getSourceContext());
-            // line 588
+            echo twig_call_macro($macros["fields"], "macro_dropdownYesNo", ["is_active", (($__internal_compile_35 = twig_get_attribute($this->env, $this->source,             // line 586
+($context["item"] ?? null), "fields", [], "any", false, false, false, 586)) && is_array($__internal_compile_35) || $__internal_compile_35 instanceof ArrayAccess ? ($__internal_compile_35["is_active"] ?? null) : null), __("Active"),             // line 588
+($context["field_options"] ?? null)], 584, $context, $this->getSourceContext());
+            // line 589
             echo "
                      ";
         }
-        // line 590
-        echo "
-                     ";
         // line 591
-        if (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isField", [0 => "is_active"], "method", false, false, false, 591)) {
-            // line 592
-            echo "                        ";
-            echo twig_call_macro($macros["fields"], "macro_dropdownYesNo", ["is_active", (($__internal_compile_36 = twig_get_attribute($this->env, $this->source,             // line 594
-($context["item"] ?? null), "fields", [], "any", false, false, false, 594)) && is_array($__internal_compile_36) || $__internal_compile_36 instanceof ArrayAccess ? ($__internal_compile_36["is_active"] ?? null) : null), __("Active"),             // line 596
-($context["field_options"] ?? null)], 592, $context, $this->getSourceContext());
-            // line 597
-            echo "
-                     ";
-        }
-        // line 599
         echo "
                      ";
-        // line 600
+        // line 592
         $this->displayBlock('more_fields', $context, $blocks);
-        // line 602
+        // line 594
         echo "                  ";
     }
 
-    // line 600
+    // line 592
     public function block_more_fields($context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 601
+        // line 593
         echo "                     ";
     }
 
@@ -882,11 +869,11 @@ class __TwigTemplate_cb23cfd1a525e5612caef2d25f47d1ef2779d05d3f619312948675d2f15
 
     public function getDebugInfo()
     {
-        return array (  870 => 601,  866 => 600,  862 => 602,  860 => 600,  857 => 599,  853 => 597,  851 => 596,  850 => 594,  848 => 592,  846 => 591,  843 => 590,  839 => 588,  836 => 585,  834 => 584,  831 => 583,  828 => 573,  824 => 571,  822 => 570,  821 => 568,  819 => 566,  817 => 565,  814 => 564,  810 => 562,  808 => 561,  807 => 559,  805 => 557,  803 => 556,  800 => 555,  796 => 553,  794 => 551,  793 => 550,  792 => 548,  790 => 546,  786 => 544,  784 => 543,  781 => 542,  778 => 541,  775 => 540,  773 => 539,  772 => 533,  771 => 532,  769 => 531,  766 => 530,  764 => 529,  760 => 527,  756 => 525,  754 => 524,  753 => 522,  751 => 520,  749 => 519,  746 => 518,  743 => 508,  740 => 499,  737 => 486,  734 => 476,  730 => 474,  728 => 470,  727 => 468,  725 => 466,  723 => 465,  718 => 462,  714 => 460,  712 => 457,  711 => 456,  710 => 454,  708 => 451,  706 => 450,  701 => 447,  698 => 437,  695 => 427,  691 => 425,  689 => 422,  688 => 420,  686 => 418,  684 => 417,  681 => 416,  678 => 406,  674 => 404,  672 => 401,  671 => 399,  670 => 398,  669 => 397,  667 => 396,  664 => 395,  661 => 394,  659 => 393,  656 => 392,  653 => 379,  649 => 377,  647 => 376,  646 => 375,  645 => 374,  643 => 371,  641 => 370,  638 => 369,  635 => 356,  631 => 354,  629 => 353,  628 => 351,  626 => 349,  624 => 348,  621 => 347,  618 => 346,  614 => 344,  611 => 341,  607 => 339,  604 => 336,  601 => 335,  599 => 334,  596 => 333,  592 => 331,  590 => 330,  589 => 329,  588 => 327,  586 => 325,  584 => 324,  581 => 323,  577 => 321,  575 => 320,  574 => 319,  573 => 317,  571 => 315,  569 => 314,  566 => 313,  562 => 311,  560 => 310,  559 => 309,  558 => 307,  556 => 305,  553 => 304,  550 => 302,  546 => 300,  544 => 299,  543 => 298,  542 => 296,  540 => 294,  538 => 293,  535 => 292,  531 => 290,  529 => 289,  528 => 288,  527 => 286,  525 => 284,  523 => 283,  520 => 282,  514 => 280,  512 => 279,  509 => 278,  505 => 276,  503 => 275,  502 => 274,  501 => 272,  499 => 270,  497 => 269,  494 => 268,  490 => 266,  488 => 265,  487 => 264,  486 => 262,  484 => 260,  482 => 259,  479 => 258,  475 => 256,  473 => 255,  472 => 254,  471 => 252,  469 => 250,  467 => 249,  464 => 248,  460 => 246,  458 => 245,  457 => 244,  456 => 242,  454 => 240,  452 => 239,  449 => 238,  445 => 236,  443 => 235,  442 => 234,  441 => 232,  439 => 230,  437 => 229,  434 => 228,  430 => 226,  428 => 225,  427 => 224,  426 => 222,  424 => 220,  422 => 219,  419 => 218,  415 => 216,  413 => 215,  412 => 214,  411 => 212,  409 => 210,  407 => 209,  404 => 208,  401 => 198,  397 => 196,  395 => 194,  394 => 193,  393 => 191,  391 => 188,  389 => 187,  386 => 186,  382 => 184,  380 => 183,  379 => 181,  378 => 180,  377 => 179,  375 => 178,  372 => 177,  369 => 176,  367 => 175,  364 => 174,  358 => 172,  356 => 171,  353 => 170,  349 => 168,  347 => 167,  346 => 162,  344 => 160,  342 => 159,  339 => 158,  335 => 156,  333 => 154,  332 => 153,  331 => 151,  329 => 148,  327 => 147,  324 => 146,  321 => 145,  318 => 144,  314 => 142,  312 => 140,  311 => 138,  308 => 137,  304 => 135,  295 => 133,  291 => 132,  288 => 131,  285 => 130,  282 => 129,  280 => 128,  277 => 127,  273 => 125,  271 => 124,  270 => 122,  268 => 120,  266 => 119,  264 => 118,  261 => 117,  257 => 115,  255 => 113,  254 => 112,  253 => 110,  252 => 109,  251 => 108,  249 => 107,  246 => 106,  244 => 105,  241 => 104,  237 => 102,  235 => 100,  234 => 99,  233 => 98,  232 => 96,  230 => 93,  227 => 92,  225 => 91,  222 => 90,  219 => 89,  216 => 88,  212 => 86,  209 => 84,  206 => 83,  204 => 82,  201 => 81,  197 => 79,  195 => 78,  194 => 77,  193 => 75,  191 => 73,  189 => 72,  186 => 71,  182 => 69,  180 => 66,  179 => 65,  178 => 64,  177 => 63,  175 => 61,  172 => 60,  168 => 59,  163 => 629,  157 => 626,  154 => 625,  152 => 624,  149 => 623,  143 => 621,  141 => 620,  136 => 619,  130 => 617,  128 => 616,  125 => 615,  123 => 614,  116 => 610,  112 => 608,  110 => 607,  107 => 606,  105 => 605,  103 => 604,  101 => 603,  99 => 59,  92 => 55,  88 => 53,  86 => 51,  84 => 50,  81 => 49,  78 => 48,  75 => 47,  72 => 46,  69 => 45,  67 => 44,  62 => 42,  58 => 41,  55 => 40,  51 => 38,  49 => 37,  47 => 36,  44 => 35,  42 => 34,  39 => 33,);
+        return array (  857 => 593,  853 => 592,  849 => 594,  847 => 592,  844 => 591,  840 => 589,  838 => 588,  837 => 586,  835 => 584,  833 => 583,  830 => 582,  826 => 580,  823 => 577,  821 => 576,  818 => 575,  815 => 565,  811 => 563,  809 => 562,  808 => 560,  806 => 558,  804 => 557,  800 => 555,  796 => 553,  794 => 551,  793 => 550,  792 => 548,  790 => 546,  786 => 544,  784 => 543,  781 => 542,  778 => 541,  775 => 540,  773 => 539,  772 => 533,  771 => 532,  769 => 531,  766 => 530,  764 => 529,  760 => 527,  756 => 525,  754 => 524,  753 => 522,  751 => 520,  749 => 519,  746 => 518,  743 => 508,  740 => 499,  737 => 486,  734 => 476,  730 => 474,  728 => 470,  727 => 468,  725 => 466,  723 => 465,  718 => 462,  714 => 460,  712 => 457,  711 => 456,  710 => 454,  708 => 451,  706 => 450,  701 => 447,  698 => 437,  695 => 427,  691 => 425,  689 => 422,  688 => 420,  686 => 418,  684 => 417,  681 => 416,  678 => 406,  674 => 404,  672 => 401,  671 => 399,  670 => 398,  669 => 397,  667 => 396,  664 => 395,  661 => 394,  659 => 393,  656 => 392,  653 => 379,  649 => 377,  647 => 376,  646 => 375,  645 => 374,  643 => 371,  641 => 370,  638 => 369,  635 => 356,  631 => 354,  629 => 353,  628 => 351,  626 => 349,  624 => 348,  621 => 347,  618 => 346,  614 => 344,  611 => 341,  607 => 339,  604 => 336,  601 => 335,  599 => 334,  596 => 333,  592 => 331,  590 => 330,  589 => 329,  588 => 327,  586 => 325,  584 => 324,  581 => 323,  577 => 321,  575 => 320,  574 => 319,  573 => 317,  571 => 315,  569 => 314,  566 => 313,  562 => 311,  560 => 310,  559 => 309,  558 => 307,  556 => 305,  553 => 304,  550 => 302,  546 => 300,  544 => 299,  543 => 298,  542 => 296,  540 => 294,  538 => 293,  535 => 292,  531 => 290,  529 => 289,  528 => 288,  527 => 286,  525 => 284,  523 => 283,  520 => 282,  514 => 280,  512 => 279,  509 => 278,  505 => 276,  503 => 275,  502 => 274,  501 => 272,  499 => 270,  497 => 269,  494 => 268,  490 => 266,  488 => 265,  487 => 264,  486 => 262,  484 => 260,  482 => 259,  479 => 258,  475 => 256,  473 => 255,  472 => 254,  471 => 252,  469 => 250,  467 => 249,  464 => 248,  460 => 246,  458 => 245,  457 => 244,  456 => 242,  454 => 240,  452 => 239,  449 => 238,  445 => 236,  443 => 235,  442 => 234,  441 => 232,  439 => 230,  437 => 229,  434 => 228,  430 => 226,  428 => 225,  427 => 224,  426 => 222,  424 => 220,  422 => 219,  419 => 218,  415 => 216,  413 => 215,  412 => 214,  411 => 212,  409 => 210,  407 => 209,  404 => 208,  401 => 198,  397 => 196,  395 => 194,  394 => 193,  393 => 191,  391 => 188,  389 => 187,  386 => 186,  382 => 184,  380 => 183,  379 => 181,  378 => 180,  377 => 179,  375 => 178,  372 => 177,  369 => 176,  367 => 175,  364 => 174,  358 => 172,  356 => 171,  353 => 170,  349 => 168,  347 => 167,  346 => 162,  344 => 160,  342 => 159,  339 => 158,  335 => 156,  333 => 154,  332 => 153,  331 => 151,  329 => 148,  327 => 147,  324 => 146,  321 => 145,  318 => 144,  314 => 142,  312 => 140,  311 => 138,  308 => 137,  304 => 135,  295 => 133,  291 => 132,  288 => 131,  285 => 130,  282 => 129,  280 => 128,  277 => 127,  273 => 125,  271 => 124,  270 => 122,  268 => 120,  266 => 119,  264 => 118,  261 => 117,  257 => 115,  255 => 113,  254 => 112,  253 => 110,  252 => 109,  251 => 108,  249 => 107,  246 => 106,  244 => 105,  241 => 104,  237 => 102,  235 => 100,  234 => 99,  233 => 98,  232 => 96,  230 => 93,  227 => 92,  225 => 91,  222 => 90,  219 => 89,  216 => 88,  212 => 86,  209 => 84,  206 => 83,  204 => 82,  201 => 81,  197 => 79,  195 => 78,  194 => 77,  193 => 75,  191 => 73,  189 => 72,  186 => 71,  182 => 69,  180 => 66,  179 => 65,  178 => 64,  177 => 63,  175 => 61,  172 => 60,  168 => 59,  163 => 621,  157 => 618,  154 => 617,  152 => 616,  149 => 615,  143 => 613,  141 => 612,  136 => 611,  130 => 609,  128 => 608,  125 => 607,  123 => 606,  116 => 602,  112 => 600,  110 => 599,  107 => 598,  105 => 597,  103 => 596,  101 => 595,  99 => 59,  92 => 55,  88 => 53,  86 => 51,  84 => 50,  81 => 49,  78 => 48,  75 => 47,  72 => 46,  69 => 45,  67 => 44,  62 => 42,  58 => 41,  55 => 40,  51 => 38,  49 => 37,  47 => 36,  44 => 35,  42 => 34,  39 => 33,);
     }
 
     public function getSourceContext()
     {
-        return new Source("", "generic_show_form.html.twig", "C:\\wamp64\\www\\glpi104\\templates\\generic_show_form.html.twig");
+        return new Source("", "generic_show_form.html.twig", "C:\\wamp64\\www\\glpi\\templates\\generic_show_form.html.twig");
     }
 }

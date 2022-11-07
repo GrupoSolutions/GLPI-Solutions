@@ -88,3 +88,25 @@ Interno #1: Executar mailgate
 Ocorreu um erro ao tentar conectar ao coletor.<br/>host doesn't allow connection
 2022-11-04 09:07:56 [@GS003021]
 Interno #1: Executar olaticket
+2022-11-07 09:46:17 [@GS003021]
+Interno #1: Executar queuednotification
+2022-11-07 09:47:22 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2022-11-07 09:50:42 [@GS003021]
+Interno #1: Executar planningrecall
+2022-11-07 09:57:28 [@GS003021]
+Interno #1: Executar slaticket
+2022-11-07 11:59:58 [2@GS003021]
+Interno #1: Executar mailgate
+2022-11-07 12:00:29 [2@GS003021]
+Ocorreu um erro ao tentar conectar ao coletor.<br/>host doesn't allow connection
+2022-11-07 14:39:35 [2@GS003021]
+Interno #1: Executar mailgateerror
+2022-11-07 14:46:19 [2@GS003021]
+Interno #1: Executar olaticket
+2022-11-07 14:52:05 [2@GS003021]
+Interno #1: Executar temp
+2022-11-07 14:52:46 [@GS003021]
+Interno #1: Executar graph
+2022-11-07 14:53:22 [@GS003021]
+Interno #1: Executar reservation
