@@ -53,7 +53,7 @@
                      {% set entity_completename = session('glpiactive_entity_name')|verbatim_value %}
                      <div class="mt-1 small text-muted" title="{{ entity_completename }}"
                           data-bs-toggle="tooltip" data-bs-placement="bottom">
-                        {{ entity_completename|truncate_left }}
+                        {{ entity_completename }}
                      </div>
                   </div>
 

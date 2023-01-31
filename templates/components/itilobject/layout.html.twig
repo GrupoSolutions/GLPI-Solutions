@@ -54,7 +54,7 @@
 {% endif %}
 
 
-<div id="itil-object-container" class="mt-n1 {{ collapsed_cls }} {{ expanded_cls }}">
+<div id="itil-object-container" class="mt-n1 right-collapsed">
 
    {% if item.isNewItem and not params['template_preview'] %}
       {{ include('components/itilobject/mainform_open.html.twig') }}

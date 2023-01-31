@@ -69,11 +69,12 @@
 }
 .dashboard.fullscreen .glpi_logo, .dashboard.embed .glpi_logo {
   background: url("../pics/logos/logo-GLPI-100-black.png") no-repeat;
-  width: 100px;
-  height: 55px;
+  width: 300px;
+  height: 195px;
   position: absolute;
   top: 30px;
-  left: 100px;
+  left: 42%;
+  margin-right:58%;
 }
 .dashboard.fullscreen .toolbar, .dashboard.embed .toolbar {
   top: 50px;
@@ -173,7 +174,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 10;
+  z-index: 0;
 }
 .dashboard .toolbar.left-toolbar {
   top: 0;

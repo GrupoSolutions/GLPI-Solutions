@@ -1,0 +1,2 @@
+2022-11-30 14:48:49 [2@localhost]
+Atenção: um e-mail não foi entregue para suporte@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [GLPI #0000179] Novo chamado 0000179	, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

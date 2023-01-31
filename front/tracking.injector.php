@@ -88,6 +88,8 @@ if (isset($_POST['add'])) {
             echo "</div>";
         } else {
             echo "<div class='center b spaced'>";
+		echo "<p>Chamado criado com sucesso!</p>";
+            echo "<p>Para verificar os seus chamados, <a href='/front/ticket.php'>clique aqui</a></p>";
             echo "<img src='" . $CFG_GLPI["root_doc"] . "/pics/ok.png' alt='" . __s('OK') . "'>";
             Session::addMessageAfterRedirect(__('Thank you for using our automatic helpdesk system.'));
             Html::displayMessageAfterRedirect();

@@ -892,23 +892,8 @@ class Ticket extends CommonITILObject
         $ong = [];
         $this->addDefaultFormTab($ong);
         $this->addStandardTab(__CLASS__, $ong, $options);
-        $this->addStandardTab('TicketValidation', $ong, $options);
-        $this->addStandardTab('KnowbaseItem_Item', $ong, $options);
-        $this->addStandardTab('Item_Ticket', $ong, $options);
+      
 
-        if ($this->hasImpactTab()) {
-            $this->addStandardTab('Impact', $ong, $options);
-        }
-
-        $this->addStandardTab('TicketCost', $ong, $options);
-        $this->addStandardTab('Itil_Project', $ong, $options);
-        $this->addStandardTab('ProjectTask_Ticket', $ong, $options);
-        $this->addStandardTab('Problem_Ticket', $ong, $options);
-        $this->addStandardTab('Change_Ticket', $ong, $options);
-
-        if (Session::getCurrentInterface() == 'central') {
-            $this->addStandardTab(Ticket_Contract::class, $ong, $options);
-        }
 
         if (
             Entity::getAnonymizeConfig($this->getEntityID()) == Entity::ANONYMIZE_DISABLED
@@ -2486,7 +2471,7 @@ class Ticket extends CommonITILObject
         ]
         ],
             'sort'     => 19,
-            'order'    => 'DESC'
+            'order'    => 'asc'
         ];
 
         if (Session::haveRight(self::$rightname, self::READALL)) {
@@ -3872,7 +3857,7 @@ JAVASCRIPT;
 
         $email  = UserEmail::getDefaultForUser($ID);
         $default_use_notif = Entity::getUsedConfig('is_notif_enable_default', $_SESSION['glpiactive_entity'], '', 1);
-
+        
        // Set default values...
         $default_values = [
             '_users_id_requester_notif' => [
@@ -3904,7 +3889,7 @@ JAVASCRIPT;
             '_tag_content'              => [],
             '_filename'                 => [],
             '_tag_filename'             => [],
-            '_tasktemplates_id'         => []
+            '_tasktemplates_id'         => [],
         ];
         $options = [];
 
@@ -6245,11 +6230,11 @@ JAVASCRIPT;
         } elseif ($this->fields['takeintoaccount_delay_stat'] > 0) {
             $date_takeintoaccount = $date_creation + $this->fields['takeintoaccount_delay_stat'];
         }
-        $internal_time_to_own     = strtotime($this->fields['internal_time_to_own'] ?? '');
-        $time_to_own              = strtotime($this->fields['time_to_own'] ?? '');
+        $internal_time_to_own     = strtotime($now ?? '');
+        $time_to_own              = strtotime($now ?? '');
         $internal_time_to_resolve = strtotime($this->fields['internal_time_to_resolve'] ?? '');
-        $time_to_resolve          = strtotime($this->fields['time_to_resolve'] ?? '');
-        $solvedate                = strtotime($this->fields['solvedate'] ?? '');
+        $time_to_resolve          = strtotime($now ?? '');
+        $solvedate                = strtotime($now ?? '');
         $closedate                = strtotime($this->fields['closedate'] ?? '');
         $goal_takeintoaccount     = ($date_takeintoaccount > 0 ? $date_takeintoaccount : $now);
         $goal_solvedate           = ($solvedate > 0 ? $solvedate : $now);
@@ -6315,7 +6300,7 @@ JAVASCRIPT;
             ],
             $time_to_resolve . '_time_to_resolve' => [
                 'timestamp' => $time_to_resolve,
-                'label'     => __('Time to resolve') . " " . $sla_ttr_link,
+                'label'     => "__('Time to resolve')" . " " . $sla_ttr_link,
                 'class'     => ($time_to_resolve < $goal_solvedate
                                ? 'passed' : '') . " " .
                            ($solvedate != ''

@@ -8,6 +8,7 @@
 
 class PluginResourcesMenu extends CommonDBTM {
 
+    static $rightname = 'plugin_resources';
    /**
     * Return the localized name of the current Type
     * Should be overloaded in each new class
@@ -18,6 +19,14 @@ class PluginResourcesMenu extends CommonDBTM {
 
       return _n('Human resource', 'Human resources', $nb, 'resources');
    }
+
+    public static function canView()
+    {
+        if (static::$rightname) {
+            return Session::haveRight(static::$rightname, READ);
+        }
+        return false;
+    }
 
    /**
     * Display menu
@@ -30,14 +39,13 @@ class PluginResourcesMenu extends CommonDBTM {
 
       echo "<div align='center'>";
 
-      $plugin           = new Plugin();
       $canresting       = Session::haveright('plugin_resources_resting', UPDATE);
       $canholiday       = Session::haveright('plugin_resources_holiday', UPDATE);
       $canhabilitation  = Session::haveright('plugin_resources_habilitation', UPDATE);
       $canemployment    = Session::haveright('plugin_resources_employment', UPDATE);
       $canseeemployment = Session::haveright('plugin_resources_employment', READ);
       $canseebudget     = Session::haveright('plugin_resources_budget', READ);
-      $canbadges        = Session::haveright('plugin_badges', READ) && $plugin->isActivated("badges");
+      $canbadges        = Session::haveright('plugin_badges', READ) && Plugin::isPluginActive("badges");
       $canImport        = Session::haveright('plugin_resources_import', READ);
 
       if ($item->canCreate()) {
@@ -61,7 +69,7 @@ class PluginResourcesMenu extends CommonDBTM {
          //Add a change
          echo "<td class=' center' colspan='2'  width='200'>";
          $config = new PluginResourcesConfig();
-         if (!empty($config->fields["use_meta_for_changes"]) && $plugin->isActivated('metademands')) {
+         if (!empty($config->fields["use_meta_for_changes"]) && Plugin::isPluginActive('metademands')) {
             $url = PLUGIN_METADEMANDS_WEBDIR . "/front/wizard.form.php?step=2&metademands_id=" . $config->fields["use_meta_for_changes"];
             echo "<a href=\"" . $url . "\">";
          } else {
@@ -73,7 +81,7 @@ class PluginResourcesMenu extends CommonDBTM {
 
          //Remove resources
          echo "<td class=' center' colspan='2'  width='200'>";
-         if (!empty($config->fields["use_meta_for_leave"]) && $plugin->isActivated('metademands')) {
+         if (!empty($config->fields["use_meta_for_leave"]) && Plugin::isPluginActive('metademands')) {
             $url = PLUGIN_METADEMANDS_WEBDIR . "/front/wizard.form.php?step=2&metademands_id=" . $config->fields["use_meta_for_leave"];
             echo "<a href=\"" . $url . "\">";
          } else {
@@ -103,10 +111,10 @@ class PluginResourcesMenu extends CommonDBTM {
          if ($canholiday) {
             $num_col += 1;
          }
-         if ($canhabilitation && $plugin->isActivated("metademands")) {
+         if ($canhabilitation && Plugin::isPluginActive("metademands")) {
             $num_col += 1;
          }
-         if ($canbadges && $plugin->isActivated("badges")) {
+         if ($canbadges && Plugin::isPluginActive("badges")) {
             $num_col += 1;
          }
          if ($num_col == 0) {
@@ -137,7 +145,7 @@ class PluginResourcesMenu extends CommonDBTM {
             echo "</td>";
          }
 
-         if ($canhabilitation && $plugin->isActivated("metademands")) {
+         if ($canhabilitation && Plugin::isPluginActive("metademands")) {
             //Management of a super habilitation
             echo "<td colspan=$colspan class=' center'>";
             echo "<a href=\"./confighabilitation.form.php?menu\">";
@@ -146,7 +154,7 @@ class PluginResourcesMenu extends CommonDBTM {
             echo "</td>";
          }
 
-         if ($canbadges && $plugin->isActivated("badges")) {
+         if ($canbadges && Plugin::isPluginActive("badges")) {
             //Management of a non contract period
             echo "<td colspan=$colspan class=' center'>";
             echo "<a href=\"./resourcebadge.form.php?menu\">";
@@ -341,7 +349,8 @@ class PluginResourcesMenu extends CommonDBTM {
       $menu['title']           = PluginResourcesResource::getTypeName(2);
       $menu['page']            = $plugin_page;
       $menu['links']['search'] = PLUGIN_RESOURCES_NOTFULL_WEBDIR."/front/resource.php";
-
+      $menu['links']['lists']  = "";
+      $menu['lists_itemtype']  = PluginResourcesResource::getType();
       if (Session::haveright("plugin_resources", CREATE)) {
 
          $menu['links']['add']      = PLUGIN_RESOURCES_NOTFULL_WEBDIR.'/front/wizard.form.php';

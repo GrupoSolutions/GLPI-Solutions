@@ -31,7 +31,7 @@
  # ---------------------------------------------------------------------
  #}
 
-<div id="new-itilobject-form" class="ms-auto ps-3">
+<div id="new-itilobject-form" class="ms-auto ps-3" style="width:100%">
    {% for timeline_itemtype in timeline_itemtypes %}
       {% set show_kb_sol = load_kb_sol > 0 and timeline_itemtype.type == 'ITILSolution' %}
       <div class="timeline-item mb-3  {{ timeline_itemtype.type }} collapse {{ show_kb_sol ? 'show' : '' }}"
@@ -42,7 +42,7 @@
             </div>
             <div class="col">
                <div class="row timeline-content t-right card mt-4">
-                  <div class="card-body">
+                  <div class="card-body" style="width:100%">
                      <div class="clearfix">
                         <button class="btn btn-sm btn-ghost-secondary float-end mb-1 close-itil-answer"
                               data-bs-toggle="collapse" data-bs-target="#new-{{ timeline_itemtype.class }}-block">

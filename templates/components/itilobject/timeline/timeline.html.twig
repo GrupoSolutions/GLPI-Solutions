@@ -33,13 +33,13 @@
 
 {% set timeline_order = "flex-column" %}
 {% if user_pref('timeline_order') == constant('CommonITILObject::TIMELINE_ORDER_REVERSE') %}
-    {% set timeline_order = "flex-column-reverse" %}
+    {% set timeline_order = "flex-column" %}
 {% endif %}
 
 <div class="itil-timeline d-flex {{ timeline_order }} align-items-start mb-auto">
-   {{ include('components/itilobject/timeline/main_description.html.twig') }}
-
+{{ include('components/itilobject/answer.html.twig') }}
    {% set status_closed = (item.fields['status'] in item.getClosedStatusArray()) %}
+
    {% for entry in timeline %}
       {% set entry_i = entry['item'] %}
       {% set users_id = entry_i['users_id'] %}
@@ -170,6 +170,7 @@
          </div>
       </div>
    {% endfor %}
+   {{ include('components/itilobject/timeline/main_description.html.twig') }}
 
    <div class="timeline-item tasks-title d-none">
       <h3>{{ _n('Task', 'Tasks', get_plural_number()) }}</h3>
@@ -182,7 +183,7 @@
    </div>
 
    {{ include('components/itilobject/timeline/approbation_form.html.twig') }}
-   {{ include('components/itilobject/answer.html.twig') }}
+   
 
 </div>
 

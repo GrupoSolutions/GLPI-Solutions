@@ -29,6 +29,7 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Application\View\TemplateRenderer;
 use Glpi\Toolbox\Sanitizer;
 use GlpiPlugin\Formcreator\Field\DropdownField;
 
@@ -207,7 +208,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          'table'              => 'glpi_plugin_formcreator_forms',
          'field'              => 'name',
          'name'               => PluginFormcreatorForm::getTypeName(1),
-         'searchtype'         => 'contains',
          'datatype'           => 'string',
          'massiveaction'      => false
       ];
@@ -423,32 +423,85 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    }
 
    static function showForForm(PluginFormcreatorForm $form, $params = []) {
-      // set a session var to tweak search results
-      $_SESSION['formcreator']['form_search_answers'] = $form->getID();
+      global $DB;
 
-      // prepare params for search
-      $item            = PluginFormcreatorCommon::getFormAnswer();
-      $searchOptions   = $item->rawSearchOptions();
-      $filteredOptions = [];
-      foreach ($searchOptions as $value) {
-         if (is_numeric($value['id']) && $value['id'] <= 7) {
-            $filteredOptions[$value['id']] = $value;
+      $table = self::getTable();
+      $form_table = PluginFormcreatorForm::getTable();
+      $form_fk = PluginFormcreatorForm::getForeignKeyField();
+      $user_table = User::getTable();
+      if (version_compare(GLPI_VERSION, '10.0.5') >= 0) {
+         $userQueryExpression = User::getFriendlyNameFields('requester_name');
+      } else {
+         // Drop this alternative when the plugin requires GLPI 10.0.5+
+         $alias = 'requester_name';
+         $config = Config::getConfigurationValues('core');
+         if ($config['names_format'] == User::FIRSTNAME_BEFORE) {
+            $first = "firstname";
+            $second = "realname";
+         } else {
+            $first = "realname";
+            $second = "firstname";
          }
+
+         $first  = DBmysql::quoteName("$user_table.$first");
+         $second = DBmysql::quoteName("$user_table.$second");
+         $alias  = DBmysql::quoteName($alias);
+         $name   = DBmysql::quoteName($user_table . '.' . self::getNameField());
+
+         $userQueryExpression = new QueryExpression("IF(
+            $first <> '' && $second <> '',
+            CONCAT($first, ' ', $second),
+            $name
+         ) AS $alias");
       }
-      $searchOptions = $filteredOptions;
-      $sopt_keys     = array_keys($searchOptions);
 
-      $forcedisplay  = array_combine($sopt_keys, $sopt_keys);
+      $result = $DB->request([
+         'SELECT' => [
+            $table => [
+               'id',
+               'name',
+               'requester_id',
+               'users_id_validator',
+               'request_date'
+            ],
+            $form_table => [
+               'name as form_name'
+            ],
+            $userQueryExpression
+         ],
+         'FROM' => self::getTable(),
+         'INNER JOIN' => [
+            $form_table => [
+               'FKEY' => [
+                  $form_table => 'id',
+                  $table => $form_fk,
+               ],
+            ],
+         ],
+         'LEFT JOIN' => [
+            $user_table => [
+               'FKEY' => [
+                  $user_table => 'id',
+                  $table => 'requester_id',
+               ],
+            ],
+         ],
+         'WHERE' => [
+            $table . '.' . $form_fk => $form->getID(),
+         ],
+         'LIMIT' => 20,
+         'ORDER' => [
+            'request_date DESC',
+         ],
+      ]);
 
-      // do search
-      $params = Search::manageParams(__CLASS__, $params, false);
-      $data   = Search::prepareDatasForSearch(__CLASS__, $params, $forcedisplay);
-      Search::constructSQL($data);
-      Search::constructData($data);
-      Search::displayData($data);
+      $total_count = count($result);
 
-      // remove previous session var (restore default view)
-      unset($_SESSION['formcreator']['form_search_answers']);
+      TemplateRenderer::getInstance()->display('@formcreator/pages/form.formanswer.html.twig', [
+         'form' => $form,
+         'form_answers' => $result,
+         'total_count' => $total_count,
+      ]);
    }
 
     /**
@@ -726,6 +779,14 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          // Validation of answers failed
          return false;
       }
+      if (!$this->validateCaptcha($input)) {
+         // Captcha verification failed
+         return false;
+      }
+      if (!$this->validateValidator($input)) {
+         // Validator requirement failed
+         return false;
+      }
 
       $input['name'] = $DB->escape($this->parseTags($form->fields['formanswer_name']));
 
@@ -783,7 +844,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          }
 
          if ($input['status'] != self::STATUS_REFUSED) {
-            // The requester mai edit his answers
+            // The requester may edit his answers
             // or the validator accepts the answers and may edit the requester's answers
 
             // check if the input contains answers to validate
@@ -799,9 +860,15 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          }
       }
 
-      if (!$skipValidation && !$this->validateFormAnswer($input, false)) {
-         // Validation of answers failed
-         return false;
+      if (!$skipValidation) {
+         if (!$this->validateFormAnswer($input)) {
+            // Validation of answers failed
+            return false;
+         }
+         if (!$this->validateCaptcha($input)) {
+            // Captcha verification failed
+            return false;
+         }
       }
 
       return $input;
@@ -1257,13 +1324,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * Validates answers of a form
     *
     * @param array $input fields from the HTML form
-    * @param bolean $checkValidator True if validator input must be checked
     * @return boolean true if answers are valid, false otherwise
     */
-   protected function validateFormAnswer($input, $checkValidator = true) {
-      // Find the form the requester is answering to
-      $form = PluginFormcreatorCommon::getForm();
-      $form->getFromDB($input['plugin_formcreator_forms_id']);
+   protected function validateFormAnswer($input): bool {
       $this->getQuestionFields($input['plugin_formcreator_forms_id']);
 
       // Parse form answers
@@ -1274,18 +1337,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       }
       // any invalid field will invalidate the answers
       $this->isAnswersValid = !in_array(false, $fieldValidities, true);
-
-      // check captcha if any
-      if ($this->isAnswersValid && $form->fields['access_rights'] == PluginFormcreatorForm::ACCESS_PUBLIC && $form->fields['is_captcha_enabled'] != '0') {
-         if (!isset($_SESSION['plugin_formcreator']['captcha'])) {
-            Session::addMessageAfterRedirect(__('No turing test set', 'formcreator'));
-            $this->isAnswersValid = false;
-         }
-         $this->isAnswersValid = PluginFormcreatorCommon::checkCaptcha($input['plugin_formcreator_captcha_id'], $input['plugin_formcreator_captcha']);
-         if (!$this->isAnswersValid) {
-            Session::addMessageAfterRedirect(__('You failed the Turing test', 'formcreator'));
-         }
-      }
 
       if ($this->isAnswersValid) {
          foreach ($this->questionFields as $id => $field) {
@@ -1298,12 +1349,32 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          }
       }
 
-      if ($form->validationRequired() && $checkValidator) {
-         $this->validateValidator($input);
-      }
-
       if (!$this->isAnswersValid) {
          return false;
+      }
+
+      return true;
+   }
+
+   /**
+    * Check the captcha is resolved by the user
+    *
+    * @param array $input
+    * @return boolean
+    */
+   public function validateCaptcha(array $input): bool {
+      $form = $this->getForm($input['plugin_formcreator_forms_id']);
+      if ($this->isAnswersValid && $form->fields['access_rights'] == PluginFormcreatorForm::ACCESS_PUBLIC && $form->fields['is_captcha_enabled'] != '0') {
+         if (!isset($_SESSION['plugin_formcreator']['captcha'])) {
+            Session::addMessageAfterRedirect(__('No turing test set', 'formcreator'));
+            $this->isAnswersValid = false;
+            return false;
+         }
+         $this->isAnswersValid = PluginFormcreatorCommon::checkCaptcha($input['plugin_formcreator_captcha_id'], $input['plugin_formcreator_captcha']);
+         if (!$this->isAnswersValid) {
+            Session::addMessageAfterRedirect(__('You failed the Turing test', 'formcreator'));
+            return false;
+         }
       }
 
       return true;
@@ -1317,11 +1388,13 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     */
    protected function validateValidator(array $input): bool {
       // Find the form the requester is answering to
-      $form = PluginFormcreatorCommon::getForm();
-      $form->getFromDB($input['plugin_formcreator_forms_id']);
+      $form = $this->getForm($input['plugin_formcreator_forms_id']);
+      if (!$form->validationRequired()) {
+         return true;
+      }
 
       // Check required_validator
-      if ($form->validationRequired() && empty($input['formcreator_validator'])) {
+      if (empty($input['formcreator_validator'])) {
          // Check if only one validator of level 1 is available
          Session::addMessageAfterRedirect(__('You must select validator!', 'formcreator'), false, ERROR);
          $this->isAnswersValid = false;
@@ -1398,8 +1471,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             'entities_id'        => $this->fields['entities_id'],
             'is_recursive'       => $this->fields['is_recursive'],
             'requester_id'       => $this->fields['requester_id'],
-            'users_id_validator' => $this->fields['users_id_validator'],
-            'groups_id_validator'=> $this->fields['groups_id_validator'],
             'comment'            => '',
          ]);
 
@@ -1502,8 +1573,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             'entities_id'        => $this->fields['entities_id'],
             'is_recursive'       => $this->fields['is_recursive'],
             'requester_id'       => $this->fields['requester_id'],
-            'users_id_validator' => $this->fields['users_id_validator'],
-            'groups_id_validator'=> $this->fields['groups_id_validator'],
             'comment'            => '',
          ]);
 
@@ -1592,7 +1661,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       $this->loadAnswers();
       $answers_values = $this->getAnswers();
-      foreach (array_keys($this->questionFields) as $id) {
+      foreach (array_keys($this->questionFields ?? []) as $id) {
          if (!$this->questionFields[$id]->hasInput($answers_values)) {
             continue;
          }

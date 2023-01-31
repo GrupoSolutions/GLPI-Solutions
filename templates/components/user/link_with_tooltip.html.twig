@@ -35,7 +35,8 @@
 
 <span id="user_{{ rand }}">
     <i class="ti ti-user ms-1"></i>
-    {{ get_item_link('User', users_id, {'enable_anonymization': enable_anonymization}) }}
+    {{ get_item_link('User', user_fields['id'], {'enable_anonymization': enable_anonymization}) }}
+	{{user_fields['firstname']}}
 </span>
 
 {% if not enable_anonymization %}
@@ -44,6 +45,8 @@
         {% set user_fields = user.fields %}
         {% set user_fields = user_fields|merge({user_name: user.getFriendlyName()|verbatim_value}) %}
         {% set user_fields = user_fields|merge({email: user.getDefaultEmail()}) %}
+        {% set firstnome = user_fields['firstname'] %}
+        {{firstnome}}
         {% do call(
             'Html::showToolTip',
             [

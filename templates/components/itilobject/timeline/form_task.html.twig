@@ -159,8 +159,8 @@
             <input type="hidden" name="{{ item.getForeignKeyField() }}" value="{{ item.fields['id'] }}" />
             {{ call_plugin_hook('pre_item_form', {"item": subitem, 'options': params}) }}
 
-            <div class="row mx-n3 mx-xxl-auto">
-               <div class="col-12 col-xl-7 col-xxl-8">
+            <div class="row">
+               <div class="col-12">
                   {{ fields.textareaField(
                      'content',
                      subitem.fields['content'],
