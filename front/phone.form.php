@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -50,7 +50,13 @@ $phone = new Phone();
 
 if (isset($_POST["add"])) {
     $phone->check(-1, CREATE, $_POST);
+    $nameUpper = $_POST['name'];
+    $commentUpper = $_POST['comment'];
+    $serialUpper = $_POST['serial'];
 
+    $_POST['name'] = mb_strtoupper($nameUpper);
+    $_POST['comment'] = mb_strtoupper($commentUpper);
+    $_POST['serial'] = mb_strtoupper($serialUpper);
     if ($newID = $phone->add($_POST)) {
         Event::log(
             $newID,
@@ -105,7 +111,13 @@ if (isset($_POST["add"])) {
     $phone->redirectToList();
 } else if (isset($_POST["update"])) {
     $phone->check($_POST["id"], UPDATE);
+    $nameUpper = $_POST['name'];
+    $commentUpper = $_POST['comment'];
+    $serialUpper = $_POST['serial'];
 
+    $_POST['name'] = mb_strtoupper($nameUpper);
+    $_POST['comment'] = mb_strtoupper($commentUpper);
+    $_POST['serial'] = mb_strtoupper($serialUpper);
     $phone->update($_POST);
     Event::log(
         $_POST["id"],

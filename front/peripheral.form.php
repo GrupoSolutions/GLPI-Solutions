@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -50,7 +50,14 @@ $peripheral = new Peripheral();
 
 if (isset($_POST["add"])) {
     $peripheral->check(-1, CREATE, $_POST);
+    $nameUpper = $_POST['name'];
+    $commentUpper = $_POST['comment'];
+    $serialUpper = $_POST['serial'];
 
+    $_POST['name'] = mb_strtoupper($nameUpper);
+    $_POST['comment'] = mb_strtoupper($commentUpper);
+    $_POST['serial'] = mb_strtoupper($serialUpper);
+    
     if ($newID = $peripheral->add($_POST)) {
         Event::log(
             $newID,
@@ -105,7 +112,13 @@ if (isset($_POST["add"])) {
     $peripheral->redirectToList();
 } else if (isset($_POST["update"])) {
     $peripheral->check($_POST["id"], UPDATE);
+    $nameUpper = $_POST['name'];
+    $commentUpper = $_POST['comment'];
+    $serialUpper = $_POST['serial'];
 
+    $_POST['name'] = mb_strtoupper($nameUpper);
+    $_POST['comment'] = mb_strtoupper($commentUpper);
+    $_POST['serial'] = mb_strtoupper($serialUpper);
     $peripheral->update($_POST);
     Event::log(
         $_POST["id"],

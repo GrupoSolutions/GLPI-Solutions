@@ -1,34 +1,21 @@
-2022-07-06 20:25:51 [2@GS001376]
-CSRF check failed for User ID: 2 at /glpi/front/infocom.form.php2022-07-21 16:29:52 [2@GS001376]
-User ID: 2 tried to access or perform an action on /glpi/front/group_user.form.php with insufficient rights. Additional information: User failed a can* method check for right 4 (unknown right name) on item Type: Group_User ID: -1
+2022-11-14 16:36:04 [11@GS003021]
+CSRF check failed for User ID: 11 at /glpi/front/tracking.injector.php2022-11-14 16:36:05 [11@GS003021]
+CSRF check failed for User ID: 11 at /glpi/front/tracking.injector.php2022-11-16 12:53:31 [14@GS003021]
+User ID: 14 tried to access or perform an action on /glpi/ajax/viewsubitem.php with insufficient rights. Additional information: User failed a can* method check for right 1 (READ) on item Type: RuleAction ID: 70
 	Stack Trace:
-		C:\xampp\htdocs\glpi\src\CommonDBTM.php:2946 displayRightError()
-		C:\xampp\htdocs\glpi\front\group_user.form.php:49 check()
-2022-07-21 17:42:00 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:01 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:03 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:05 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:06 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:07 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:08 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:08 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:09 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:10 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 17:42:11 [@GS001376]
-CSRF check failed for User ID:  at /glpi/ajax/central.php2022-07-21 18:06:47 [9@GS001376]
-CSRF check failed for User ID: 9 at /glpi/front/tracking.injector.php2022-07-21 18:14:45 [2@GS001376]
-CSRF check failed for User ID: 2 at /glpi/front/profile.form.php2022-07-21 18:14:45 [2@GS001376]
-CSRF check failed for User ID: 2 at /glpi/front/profile.form.php2022-07-22 20:41:23 [2@GS001376]
-CSRF check failed for User ID: 2 at /glpi/front/massiveaction.php2022-07-22 20:51:59 [11@GS001376]
-CSRF check failed for User ID: 11 at /glpi/front/login.php2022-07-22 21:00:37 [11@GS001376]
-User ID: 11 tried to access or perform an action on /glpi/front/ticket.form.php?id=7 with insufficient rights. Additional information: No additional information given
+		C:\wamp64\www\glpi\src\CommonDBTM.php:3001 displayRightError()
+		C:\wamp64\www\glpi\src\RuleAction.php:726 check()
+		C:\wamp64\www\glpi\ajax\viewsubitem.php:58 showForm()
+2022-11-16 12:53:54 [14@GS003021]
+User ID: 14 tried to access or perform an action on /glpi/front/ruleticket.form.php?id=70 with insufficient rights. Additional information: User failed a global can* method check for right 1 (READ) on item Type: RuleTicketCollection
 	Stack Trace:
-		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6240 displayRightError()
-		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6328 displayAccessDeniedPage()
-		C:\xampp\htdocs\glpi\front\ticket.form.php:259 displayFullPageForItem()
-2022-07-22 21:04:19 [11@GS001376]
-User ID: 11 tried to access or perform an action on /glpi/front/user.form.php?id=11 with insufficient rights. Additional information: No additional information given
+		C:\wamp64\www\glpi\src\CommonDBTM.php:3049 displayRightError()
+		C:\wamp64\www\glpi\front\rule.common.form.php:48 checkGlobal()
+		C:\wamp64\www\glpi\front\ruleticket.form.php:40 include()
+2022-11-16 13:10:47 [8@GS003021]
+User ID: 8 tried to access or perform an action on /glpi/front/profile.php with insufficient rights. Additional information: User is missing the 1 (READ) right for profile
 	Stack Trace:
+<<<<<<< HEAD
 		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6240 displayRightError()
 		C:\xampp\htdocs\glpi\src\CommonDBTM.php:6328 displayAccessDeniedPage()
 		C:\xampp\htdocs\glpi\front\user.form.php:241 displayFullPageForItem()
@@ -591,3 +578,13 @@ User ID: 15 tried to access or perform an action on /marketplace/formcreator/fro
 2023-01-27 17:35:58 [@localhost]
 CSRF check failed for User ID:  at /2023-01-27 22:21:51 [@localhost]
 CSRF check failed for User ID:  at /
+=======
+		C:\wamp64\www\glpi\src\Session.php:1028 displayRightError()
+		C:\wamp64\www\glpi\front\profile.php:38 checkRight()
+2022-11-16 17:44:57 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/marketplace/financialreports/front/financialreport.php2022-11-17 14:45:56 [@GS003021]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-11-17 15:00:11 [@GS003021]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-11-21 13:22:33 [@GS003021]
+CSRF check failed for User ID:  at /glpi/front/login.php2022-11-21 13:22:37 [@GS003021]
+CSRF check failed for User ID:  at /glpi/front/login.php
+>>>>>>> 4da57d3b525f7854ad330f81531da1f6e7167122

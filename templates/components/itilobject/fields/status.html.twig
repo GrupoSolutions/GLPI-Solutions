@@ -36,7 +36,7 @@
 {% if canupdate %}
    {% set status_field %}
       {{ item.dropdownStatus({
-         'value': item.input['status']|default(item.fields['status']),
+         'value': item.input['status']|default("SIM"),
          'value_calculation': item.fields['status'],
          'showtype': 'allowed',
          'width': '100%',

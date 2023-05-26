@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -46,6 +46,7 @@ if (!isset($_GET["id"])) {
 $constype = new ConsumableItem();
 
 if (isset($_POST["add"])) {
+    
     $constype->check(-1, CREATE, $_POST);
 
     if ($newID = $constype->add($_POST)) {
@@ -62,6 +63,8 @@ if (isset($_POST["add"])) {
     }
     Html::back();
 } else if (isset($_POST["delete"])) {
+    
+var_dump($_POST);
     $constype->check($_POST["id"], DELETE);
 
     if ($constype->delete($_POST)) {
@@ -76,6 +79,8 @@ if (isset($_POST["add"])) {
     }
     $constype->redirectToList();
 } else if (isset($_POST["restore"])) {
+    
+var_dump($_POST);
     $constype->check($_POST["id"], DELETE);
 
     if ($constype->restore($_POST)) {
@@ -88,7 +93,7 @@ if (isset($_POST["add"])) {
             sprintf(__('%s restores an item'), $_SESSION["glpiname"])
         );
     }
-    $constype->redirectToList();
+    //$constype->redirectToList();
 } else if (isset($_POST["purge"])) {
     $constype->check($_POST["id"], PURGE);
 
@@ -104,6 +109,8 @@ if (isset($_POST["add"])) {
     }
     $constype->redirectToList();
 } else if (isset($_POST["update"])) {
+    
+var_dump($_POST);
     $constype->check($_POST["id"], UPDATE);
 
     if ($constype->update($_POST)) {
@@ -116,7 +123,7 @@ if (isset($_POST["add"])) {
             sprintf(__('%s updates an item'), $_SESSION["glpiname"])
         );
     }
-    Html::back();
+    //Html::back();
 } else {
     $menus = ["assets", "consumableitem"];
     ConsumableItem::displayFullPageForItem($_GET["id"], $menus, [

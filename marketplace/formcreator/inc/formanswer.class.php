@@ -683,13 +683,16 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       } else if (($this->fields['status'] == self::STATUS_WAITING) && $this->canValidate()) {
          // Display validation form
          echo '<div class="form-group required line1">';
-         echo '<label for="comment">' . __('Comment', 'formcreator') . ' <span class="red">*</span></label>';
+                  echo '<label for="comment">' . __('Comment', 'formcreator') . ' <span class="red">*</span></label>';
          Html::textarea([
             'name' => 'comment',
-            'value' => $this->fields['comment']
+            'value' => $this->fields['comment'],
+            'rows' => 5
          ]);
          echo '<div class="help-block">' . __('Required if refused', 'formcreator') . '</div>';
          echo '</div>';
+       
+         
 
          echo '<div class="form-group line1">';
          echo '<div class="center" style="float: left; width: 30%;">';
@@ -714,12 +717,13 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                ]);
          }
          echo '</div>';         echo '<div class="center">';
-         echo Html::submit(
-            __('Accept', 'formcreator'), [
-               'name'      => 'accept_formanswer',
-            ]);
-         echo '</div>';
-         echo '</div>';
+         $validatorID = Session::getLoginUserID();
+         echo "<input type='hidden' id='formID' name='formID' value='{$ID}'>";
+
+         echo "<input type='hidden' id='validatorID' name='validatorID' value='{$validatorID}'>";
+         //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]))
+         echo "<input type='button' id='myBtn' value='Enviar'";
+         require_once("modal.php");
       }
 
       if (Plugin::isPluginActive(PLUGIN_FORMCREATOR_ADVANCED_VALIDATION)) {
@@ -741,6 +745,15 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      alert("' . __('Refused comment is required!', 'formcreator') . '");
                      return false;
                   }
+               }
+               var modal = document.getElementById("myModal");
+               var btn = document.getElementById("myBtn");
+               var span = document.getElementsByClassName("close")[0];
+               btn.onclick = function() {
+               modal.style.display = "block";
+               }
+               span.onclick = function() {
+               modal.style.display = "none";
                }
             </script>';
 
@@ -929,9 +942,12 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       // Generate targets
       $generatedTargets = new PluginFormcreatorComposite(new PluginFormcreatorItem_TargetTicket(), new Ticket_Ticket(), $this);
+      //var_dump($generatedTargets);
+      
       foreach ($all_targets as $targets) {
          foreach ($targets as $targetObject) {
             // Check the condition of the target
+            
             if (!PluginFormcreatorFields::isVisible($targetObject, $this->questionFields)) {
                // The target shall not be generated
                continue;
@@ -954,13 +970,130 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $generatedTargets->buildCompositeRelations();
 
       Session::addMessageAfterRedirect(__('The form has been successfully saved!', 'formcreator'), true, INFO);
+      $formID = $_POST['formID'];
+      $validatorID = $_POST['validatorID'];
 
-      /** @var CommonDBTM $target */
       foreach ($this->targetList as $target) {
          // TRANS: %1$s is the name of the target, %2$s is the type of the target, %3$s is the ID of the target in a HTML hyperlink
          $targetUrl = '<a href="' . $target->getFormURLWithID($target->getID()) . '">' . $target->getID() . '</a>';
+         $idChamado = $target->getID();
          Session::addMessageAfterRedirect(sprintf(__('Item sucessfully added: %1$s (%2$s: %3$s)', 'formcreator'), $target->getName(), $target->getTypeName(1), $targetUrl), false, INFO);
       }
+      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306');      
+      $GLOBALS['sqlcon'] = $sqlcon;
+      
+      //Busca as perguntas e respostas do formulario
+      $sql = "SELECT RESPOSTA.id as id, IF(name = 'Tamanho', 'BOTA DE SEGURANÇA', PERGUNTAS.name) AS CONSUMIVEL, RESPOSTA.answer as RESPOSTA FROM glpi_plugin_formcreator_answers RESPOSTA LEFT JOIN  glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' AND PERGUNTAS.name != 'Tipo de Vestimenta' AND PERGUNTAS.name != 'Informe qual projeto você participa'";
+      $solicitacaoRetorno = mysqli_query($sqlcon, $sql);
+   
+      $arrPedidos = [];
+      $ids = [];
+      //Busca o id do requerente
+      $buscaIDRequerente = "SELECT requester_id as REQUERENTE FROM glpi_plugin_formcreator_formanswers WHERE id = '{$formID}'";
+      $retornaIDRequerente = mysqli_query($sqlcon, $buscaIDRequerente);
+
+      $_SESSION['validaPedido'] = [$formID, $validatorID];
+      $endereco = $_POST['endereco'];
+      $cep = $_POST['cep'];
+      $estado = $_POST['estado'];
+      $tipoentrega = $_POST['entrega'];
+      $cidade = $_POST['cidade'];
+
+      $_SESSION['dataPedido'] = [$endereco, $cep, $estado, $tipoentrega, $cidade];
+      if($retornaIDRequerente){
+         while($req = mysqli_fetch_row($retornaIDRequerente)){
+            $idRequerente = $req['0'];
+         }
+      }
+      //Percorre o array do retorno sql das perguntas e respostas
+      if($solicitacaoRetorno){
+         while($row = mysqli_fetch_array($solicitacaoRetorno)){
+            $quantidade = $row['RESPOSTA'];
+   
+            
+            if($quantidade != 'TRIAGEM'){
+   
+               $consumivel = $row['CONSUMIVEL'];
+   
+               if($consumivel == "BOTA DE SEGURANÇA"){
+                  $buscaIDInsumo = "SELECT id, consumableitemtypes_id FROM glpi_consumableitems WHERE glpi_consumableitems.name != 'Informe qual projeto você participa' and glpi_consumableitems.name = '{$consumivel} {$quantidade}'";
+                  $retornaIDInsumo = mysqli_query($sqlcon, $buscaIDInsumo);
+                  $numR = mysqli_num_rows($retornaIDInsumo);
+
+                  if($numR > 0 && !empty($consumivel)){
+                     if($retornaIDInsumo){
+                        while($r = mysqli_fetch_array($retornaIDInsumo)){
+                           $idInsumo = $r['id'];
+                           $idTipo = $r['consumableitemtypes_id'];
+                        }
+                     }
+                     $data = date("Y-m-d H:i:s");
+                     $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado')";
+                     if($insert = mysqli_query($sqlcon, $sqlINSERT)){
+                        echo '<script>"Inserido no banco" . $row["CONSUMIVEL"])</script>';
+                     } else{
+                        echo'<script>alert("ERRO: " . $sqlINSERT . "<br>" . mysqli_error($sqlcon))</script>';
+                     }
+                     $endereco = $_POST['endereco'];
+                     $cep = $_POST['cep'];
+                     $estado = $_POST['estado'];
+                     $tipoentrega = $_POST['entrega'];
+                     $cidade = $_POST['cidade'];
+                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+                    
+                  }
+                  else{
+                     //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . ", favor contatar o suporte!'); history.go(-1);</script>";
+                     require_once('erroNomenclatura.php');
+
+                     exit;
+                  }
+               } else{
+
+                  $buscaIDInsumo = "SELECT id, consumableitemtypes_id FROM glpi_consumableitems WHERE glpi_consumableitems.name != 'Informe qual projeto você participa' and glpi_consumableitems.name = '{$consumivel}'";
+                  $retornaIDInsumo = mysqli_query($sqlcon, $buscaIDInsumo);
+                  $numR= mysqli_num_rows($retornaIDInsumo);
+   
+                  if($numR > 0 && !empty($consumivel)){
+                     if($retornaIDInsumo){
+                        while($r = mysqli_fetch_array($retornaIDInsumo)){
+                           $idInsumo = $r['id'];
+                           $idTipo = $r['consumableitemtypes_id'];
+                        }
+                     }
+                     $data = date("Y-m-d H:i:s");
+                     if($quantidade > 0){
+                        $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '{$quantidade}', '{$data}', '$idChamado')";
+                     } else{
+                        echo "ERRO AO INSERIR ITEM";
+                     }
+                     if($insert = mysqli_query($sqlcon, $sqlINSERT)){
+                        echo '<script>"Inserido no banco" . $row["CONSUMIVEL"])</script>';
+                     } else{
+                        echo'<script>alert("ERRO: " . $sqlINSERT . "<br>" . mysqli_error($sqlcon))</script>';
+                     }
+                    
+                     print_r($target->getID());
+
+                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+                     
+                  }
+                  else {
+                     //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . " , favor contatar o suporte!'); history.go(-1);;</script>";
+                     require_once("../inc/erroNomenclatura.php");
+                     exit;
+                  }
+                   /** @var CommonDBTM $target */
+                 
+               }
+              
+            }
+            
+         }
+         
+      
+      }
+     
 
       unset($CFG_GLPI['plugin_formcreator_disable_hook_create_ticket']);
       return $success;
@@ -1142,7 +1275,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    public function post_addItem() {
       // Save questions answers
       $formAnswerId = $this->getID();
-      $formId = $this->input[PluginFormcreatorForm::getForeignKeyField()];
+    
+                    
       /** @var PluginFormcreatorAbstractField $field */
       foreach ($this->getQuestionFields($formId) as $questionId => $field) {
          $field->moveUploads();
@@ -1420,7 +1554,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             // Notify the requester
             $form = $this->getForm();
             if ($form->validationRequired()) {
+              
                NotificationEvent::raiseEvent('plugin_formcreator_accepted', $this);
+                
             } else {
                NotificationEvent::raiseEvent('plugin_formcreator_form_created', $this);
             }
@@ -1487,6 +1623,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          throw new RuntimeException('Formcreator: Missing ticket ' . $itemTicket->fields['tickets_id'] . ' for formanswer ' . $this->getID());
       }
       $ticketId = $ticket->getID();
+      echo "<script>alert('ticket = {$ticket}')</script>";
       $ticketUser = new Ticket_User();
       $ticketUserRow = $ticketUser->find([
          'tickets_id' => $ticketId,

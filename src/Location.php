@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -52,12 +52,7 @@ class Location extends CommonTreeDropdown
     {
 
         return [
-            [
-                'name'  => $this->getForeignKeyField(),
-                'label' => __('As child of'),
-                'type'  => 'parent',
-                'list'  => false
-            ], [
+             [
                 'name'   => 'address',
                 'label'  => __('Address'),
                 'type'   => 'text',
@@ -74,7 +69,7 @@ class Location extends CommonTreeDropdown
                 'list'   => true
             ], [
                 'name'   => 'state',
-                'label'  => _x('location', 'State'),
+                'label'  => _x('location', 'Estado'),
                 'type'   => 'text',
                 'list'   => true
             ], [
@@ -84,7 +79,7 @@ class Location extends CommonTreeDropdown
                 'list'   => true
             ], [
                 'name'  => 'building',
-                'label' => __('Building number'),
+                'label' => 'Número',
                 'type'  => 'text',
                 'list'  => true
             ], [
@@ -92,11 +87,6 @@ class Location extends CommonTreeDropdown
                 'label' => __('Room number'),
                 'type'  => 'text',
                 'list'  => true
-            ], [
-                'name'   => 'setlocation',
-                'type'   => 'setlocation',
-                'label'  => __('Location on map'),
-                'list'   => false
             ], [
                 'name'  => 'latitude',
                 'label' => __('Latitude'),
@@ -112,6 +102,11 @@ class Location extends CommonTreeDropdown
                 'label' => __('Altitude'),
                 'type'  => 'text',
                 'list'  => true
+            ], [
+                'name'   => 'setlocation',
+                'type'   => 'setlocation',
+                'label'  => __('Location on map'),
+                'list'   => false
             ]
         ];
     }
@@ -125,6 +120,7 @@ class Location extends CommonTreeDropdown
 
     public static function rawSearchOptionsToAdd()
     {
+
         $tab = [];
 
         $tab[] = [
@@ -134,6 +130,7 @@ class Location extends CommonTreeDropdown
             'name'               => Location::getTypeName(1),
             'datatype'           => 'dropdown'
         ];
+       
 
         $tab[] = [
             'id'                 => '101',
@@ -166,7 +163,7 @@ class Location extends CommonTreeDropdown
             'id'                 => '104',
             'table'              => 'glpi_locations',
             'field'              => 'state',
-            'name'               => _x('location', 'State'),
+            'name'               => 'Estado',
             'massiveaction'      => false,
             'datatype'           => 'string'
         ];
@@ -198,14 +195,7 @@ class Location extends CommonTreeDropdown
             'datatype'           => 'string'
         ];
 
-        $tab[] = [
-            'id'                 => '93',
-            'table'              => 'glpi_locations',
-            'field'              => 'comment',
-            'name'               => __('Location comments'),
-            'massiveaction'      => false,
-            'datatype'           => 'text'
-        ];
+       
 
         $tab[] = [
             'id'                 => '998',
@@ -224,12 +214,21 @@ class Location extends CommonTreeDropdown
             'massiveaction'      => false,
             'datatype'           => 'text'
         ];
-
+        $tab[] = [
+            'id'                 => '93',
+            'table'              => 'glpi_locations',
+            'field'              => 'comment',
+            'name'               => __('Location comments'),
+            'massiveaction'      => false,
+            'datatype'           => 'text'
+        ];
         return $tab;
     }
 
     public function rawSearchOptions()
     {
+        echo "<input>SOADKAPSOKDPOASDPOKASDOPk</input>";
+
         $tab = parent::rawSearchOptions();
 
         $tab[] = [
@@ -239,7 +238,6 @@ class Location extends CommonTreeDropdown
             'name'               => __('Building number'),
             'datatype'           => 'text',
         ];
-
         $tab[] = [
             'id'                 => '12',
             'table'              => 'glpi_locations',

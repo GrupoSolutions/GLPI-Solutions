@@ -58,19 +58,7 @@
             } %}
          {% endif %}
 
-         {{ fields.field(
-            '_add_validation',
-            validation.dropdownValidator({
-               'name': 'users_id_validate',
-               'entity': item.fields['entities_id'],
-               'right': validation_right,
-               'users_id_validate': params['users_id_validate'],
-               'display': false,
-               'disabled': (not canupdate),
-            }|merge(required)),
-            __('Approval request'),
-            field_options
-         ) }}
+   
 
          <input type="hidden" name="_add_validation" value="{{ params['_add_validation'] }}" />
       {% endif %}

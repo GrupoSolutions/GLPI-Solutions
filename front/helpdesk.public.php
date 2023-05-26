@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -98,7 +98,10 @@ if (isset($_GET['create_ticket'])) {
     $ticket->showFormHelpdesk(Session::getLoginUserID());
 } else {
     Html::helpHeader(__('Home'));
-
+    include_once("../src/ToastNotificacao.php");
+        $user_id = Session::getLoginUserID();
+        $novoChamado = buscarNovosChamados($user_id);
+        $unresolvedChamado = buscarRespostaChamados($user_id);
     $password_alert = "";
     $user = new User();
     $user->getFromDB(Session::getLoginUserID());
@@ -145,6 +148,8 @@ if (isset($_GET['create_ticket'])) {
         'kb_popular'     => $kb_popular,
         'kb_recent'      => $kb_recent,
         'kb_lastupdate'  => $kb_lastupdate,
+        'novo_chamado'=> $novoChamado,
+        'sem_resposta'=> $unresolvedChamado,
     ]);
 }
 

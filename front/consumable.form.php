@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -43,11 +43,22 @@ $con      = new Consumable();
 $constype = new ConsumableItem();
 
 if (isset($_POST["add_several"])) {
+    $usuario_insercao = $_SESSION['glpifriendlyname'];
+
     $constype->check($_POST["consumableitems_id"], UPDATE);
 
     for ($i = 0; $i < $_POST["to_add"]; $i++) {
         unset($con->fields["id"]);
-        $con->add($_POST);
+        $id = $con->add($_POST);
+        $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
+
+        $data_nf = $_POST['data_nf'];
+        $valor_insumo = $_POST['valor_insumo'];
+        $numero_nf = $_POST['numero_nf'];
+        $comentario = $_POST['comentario'];
+
+        $sqlInsereValor = "UPDATE glpi_consumables SET data_nf = '$data_nf', valor_insumo = '$valor_insumo', numero_nf = '$numero_nf', usuario_insercao = '$usuario_insercao', comentario = '$comentario' WHERE id = $id" ;
+        mysqli_query($sqlcon, $sqlInsereValor);
     }
     Event::log(
         $_POST["consumableitems_id"],
@@ -58,7 +69,7 @@ if (isset($_POST["add_several"])) {
         sprintf(__('%s adds consumables'), $_SESSION["glpiname"])
     );
 
-    Html::back();
+   Html::back();
 } else {
     Html::back();
 }

@@ -1,6 +1,6 @@
-1667510055
+1669063033
 3041312e1e72427a334e763f952d0ad6596e780b
-a:1:{s:57:"count_Computer_State_290c5920-9eab-4db8-8753-46108e60f1d8";s:8727:"      <style>
+a:1:{s:57:"count_Computer_State_290c5920-9eab-4db8-8753-46108e60f1d8";s:8724:"      <style>
          #chart-dashboard_card_assets_3816cc4a20821d1c66d94fd80e6d45de8df139d3 {
             background-color: #fbf7f7;
             color: #b76f6f
@@ -90,7 +90,7 @@ a:1:{s:57:"count_Computer_State_290c5920-9eab-4db8-8753-46108e60f1d8";s:8727:"  
       $(function () {
          var chart = new Chartist.Pie('#chart-dashboard_card_assets_3816cc4a20821d1c66d94fd80e6d45de8df139d3 .chart', {
             labels: ["COM DEFEITO"],
-            series: [{"meta":"COM DEFEITO","value":1,"url":"\/glpi104\/front\/computer.php?reset&criteria%5B0%5D%5Bfield%5D=31&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=3&reset=reset"}],
+            series: [{"meta":"COM DEFEITO","value":1,"url":"\/glpi\/front\/computer.php?reset&criteria%5B0%5D%5Bfield%5D=31&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=3&reset=reset"}],
          }, {
             width: 'calc(100% - 5px)',
             chartPadding: 4,

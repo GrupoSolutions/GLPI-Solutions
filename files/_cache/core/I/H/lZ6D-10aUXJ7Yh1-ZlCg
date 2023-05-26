@@ -1,6 +1,6 @@
-1667510055
+1669063033
 f99be137436424f1e2a02451d3623f487cce3a8d
-a:1:{s:64:"count_Computer_ComputerType_c58f9c7e-22d5-478b-8226-d2a752bcbb09";s:8728:"      <style>
+a:1:{s:64:"count_Computer_ComputerType_c58f9c7e-22d5-478b-8226-d2a752bcbb09";s:8725:"      <style>
          #chart-dashboard_card_assets_0a6c5d1834f4f404341ad75d3271a160864cda4e {
             background-color: #f5f9fa;
             color: #6da7b6
@@ -90,7 +90,7 @@ a:1:{s:64:"count_Computer_ComputerType_c58f9c7e-22d5-478b-8226-d2a752bcbb09";s:8
       $(function () {
          var chart = new Chartist.Pie('#chart-dashboard_card_assets_0a6c5d1834f4f404341ad75d3271a160864cda4e .chart', {
             labels: ["All In One"],
-            series: [{"meta":"All In One","value":1,"url":"\/glpi104\/front\/computer.php?reset&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=3&reset=reset"}],
+            series: [{"meta":"All In One","value":1,"url":"\/glpi\/front\/computer.php?reset&criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=3&reset=reset"}],
          }, {
             width: 'calc(100% - 5px)',
             chartPadding: 4,

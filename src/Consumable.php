@@ -528,24 +528,106 @@ class Consumable extends CommonDBChild
     {
 
         $ID = $consitem->getField('id');
+        $name = $consitem->getField('name');
+        $locID = $consitem->getField('locations_id');
 
         if (!$consitem->can($ID, UPDATE)) {
             return;
         }
 
         if ($ID > 0) {
-            echo "<div class='firstbloc'>";
-            echo "<form method='post' action=\"" . static::getFormURL() . "\">";
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr><td class='tab_bg_2 center'>";
+            ?>
+                <div class="boxMovimentacao " align="center">
+                    <div class="boxP"> 
+                        <p>Alteração de Localidade:</p>
+                    </div>
+
+                   
+                    <div class="container">
+                        <input type="checkbox" onchange="showDiv()" class="checkbox" id="checkbox">
+                        <label class="switch" for="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+<?php
+            require_once 'db_config.php';
+            $query = "SELECT glpi_consumableitems.id,
+            glpi_consumableitems.name AS INSUMO,
+            glpi_locations.name as LOCAL
+             FROM base_104.glpi_consumableitems
+            LEFT JOIN
+                glpi_locations on glpi_locations.id = glpi_consumableitems.locations_id
+            Where glpi_consumableitems.id != '$ID' and glpi_consumableitems.name = '$name'";
+            $buscaInsumo = mysqli_query($sqlcon, $query);
+            $arrInsumos = array();
+            if($buscaInsumo){
+                while ($requ = mysqli_fetch_row($buscaInsumo)) {
+                    array_push($arrInsumos, $requ);
+                }
+            }
+            echo "<div class='firstbloc' id='frmAdd' align='center'>";
+            echo "<form method='post'  action=\"" . static::getFormURL() . "\">";
+            echo "<table class='tab_cadre_fixe' style='margin-left:5%;'>";
+            echo "<tr class='center'><td class='tab_bg_2 '>";
             echo "<input type='hidden' name='consumableitems_id' value='$ID'>\n";
-           
-            echo " <input type='text' pattern='[0-9]*' name='to_add'/>";
-            echo " <input type='submit' name='add_several' value=\"" . _sx('button', 'Add consumables') . "\"
-                class='btn btn-primary'>";
             echo "</td></tr>";
+            echo "<p style='font-size:12px; color:gray'>Os campos com<span class='required'>*</span> são obrigatórios.</p>";
+
+            echo "<tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>";
+            echo "<td><input type='text' pattern='[0-9]*' name='to_add' required/></td>";
+
+            echo "<td><label>Valor(R$): </label><span class='required'>*</span></td>";
+            echo "<td><input placeholder='ex: 1500,00' type='number' min='0.1' step='any' name='valor_insumo' required/></td></tr>";
+
+            echo "<tr><td><label>Data da NF: </label><span class='required'>*</span></td>";
+            echo "<td><input style='width:225px' type='date' name='data_nf' required/></td>";
+
+            echo "<td><label>Número da NF:</label><span class='required'>*</span></td>";
+            echo "<td><input type='text' pattern='[0-9]*' name='numero_nf' required/></td></tr>";
+
+            echo "<td><label>Observação:</label></td>";
+            echo "<td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea></td>";
+            echo "<div>";
             echo "</table>";
+            echo "<p align='center'><input type='submit' name='add_several' value=\"" . _sx('button', 'Add consumables') . "\"
+            class='btn btn-primary'></p>";
+            Html::closeForm();?>
+            </div>
+            <form method="post" id="frmMovimentacao" action='../assets/php/MovimentaLacre.php'>
+            <table class='tab_cadre_fixe' style='margin-left:5%'>
+                <tr><p style='font-size:12px; color:gray' align="center">Os campos com<span class='required'>*</span> são obrigatórios.</p></tr>
+                <input type="hidden" name="idOrigem" value="<?php echo $ID ?>">
+                <tr class="center"><td class="tab_bg_2"></td></tr>
+                <tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>
+                <td><input type='text' pattern='[0-9]*' name='qtdInsumos' required/></td>
+
+                <td width='18%'><label>Destino:</label><span class='required'>*</span></td>
+                <td><select name="idDestino" required><option class='disabled' value=''>Selecione o destino</option><?php
+                    foreach($arrInsumos as $insumo){
+                        echo "<option name='id' value='$insumo[0]'>$insumo[1] - $insumo[2]</option>";
+                    }
+                ?></select></td>
+
+                <tr><td><label>Observação:</label> </td>
+                <td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea> </td></tr>
+            </table>
+            <p align='center'><input type='submit' name='add_several' value="Movimentar Insumos" class='btn btn-primary'></p>
+
+            <script>
+            function showDiv(){
+                const divHide = document.getElementById('frmAdd');
+                divHide.style.display === "none" ? divHide.style.display = "block" : divHide.style.display = "none";
+                const consumableHide = document.getElementById('frmMovimentacao');
+                consumableHide.style.display === "block" ? consumableHide.style.display = "none" : consumableHide.style.display = "block";
+                
+            }
+            </script>
+            <?php 
             Html::closeForm();
+            echo "</div>";
+
             echo "</div>";
         }
     }

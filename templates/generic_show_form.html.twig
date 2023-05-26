@@ -64,20 +64,14 @@
                            (item_type == 'Contact' ? __('Patrimônio') : __('Patrimônio')),
                            withtemplate,
                            field_options|merge({
-                              required:true
+                              required:true,
+                              upper:true,
                            })
                         ) }}
+                     
                      {% endif %}
 
-                     {% if item.isField('firstname') %}
-                        {{ fields.autoNameField(
-                           'firstname',
-                           item,
-                           __('First name'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
+                     
 
                      {% if item.isField('is_active') %}
                         {% if withtemplate is not empty or withtemplate == 1 %}
@@ -97,7 +91,8 @@
                            __('Status'),
                            field_options|merge({
                               'entity': item.fields['entities_id'],
-                              'condition': condition
+                              'condition': condition,
+                              'required':true,
                            })
                         ) }}
                      {% endif %}
@@ -152,6 +147,7 @@
                            'Location'|itemtype_name,
                            field_options|merge({
                               'entity': item.fields['entities_id'],
+                              'required':true
                            })
                         ) }}
                      {% endif %}
@@ -164,7 +160,9 @@
                             [
                                 'Computer', 'NetworkEquipment', 'Printer', 'Peripheral', 'Phone'
                             ],
-                            field_options
+                            field_options|merge({
+                              required:true
+                           })
                         ) }}
                      {% endif %}
 
@@ -180,7 +178,9 @@
                            type_fk,
                            item.fields[type_fk],
                            _n('Type', 'Types', 1),
-                           field_options
+                           field_options|merge({
+                              required:true
+                           })
                         ) }}
                      {% endif %}
 
@@ -290,13 +290,14 @@
                            withtemplate,
                            field_options
                         ) }}
+                        
                      {% endif %}
 
                      {% if item.isField('town') %}
                         {{ fields.autoNameField(
                            'town',
                            item,
-                           __('City'),
+                           'Cidadezinha',
                            withtemplate,
                            field_options
                         ) }}
@@ -367,7 +368,7 @@
                               'right': 'own_ticket',
                            })
                         ) }}
-                     {% endif %} #}
+                     {% endif %} #}     
 
                      {% if item.isField('manufacturers_id') %}
                         {{ fields.dropdownField(
@@ -375,7 +376,10 @@
                            'manufacturers_id',
                            item.fields['manufacturers_id'],
                            (item_type starts with 'Software' ? __('Publisher') : 'Manufacturer'|itemtype_name),
-                           field_options
+                           field_options|merge({
+                              required:true,
+                              
+                           })
                         ) }}
                      {% endif %}
 

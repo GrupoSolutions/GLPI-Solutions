@@ -65,7 +65,7 @@ class PluginConsumablesValidation extends CommonDBTM {
       ];
 
       $tab[] = [
-         'id'                 => '1',
+         'id'                 => '5',
          'table'              => 'glpi_users',
          'field'              => 'name',
          'linkfield'          => 'requesters_id',
@@ -74,7 +74,7 @@ class PluginConsumablesValidation extends CommonDBTM {
       ];
 
       $tab[] = [
-         'id'            => '2',
+         'id'            => '4',
          'table'         => 'glpi_consumableitemtypes',
          'field'         => 'name',
          'linkfield'     => 'consumableitemtypes_id',
@@ -83,7 +83,7 @@ class PluginConsumablesValidation extends CommonDBTM {
       ];
 
       $tab[] = [
-         'id'            => '3',
+         'id'            => '2',
          'table'         => 'glpi_consumableitems',
          'field'         => 'name',
          'linkfield'     => 'consumables_id',
@@ -92,19 +92,18 @@ class PluginConsumablesValidation extends CommonDBTM {
       ];
 
       $tab[] = [
-         'id'            => '4',
+         'id'            => '3',
          'table'         => $this->getTable(),
          'field'         => 'number',
-         'name'          => __('Number', 'consumables'),
+         'name'          => 'Quantidade',
          'datatype'      => 'integer'
       ];
 
       $tab[] = [
-         'id'            => '5',
+         'id'            => '7',
          'table'         => $this->getTable(),
          'field'         => 'give_items_id',
          'name'          => __("Give to"),
-         'datatype'      => 'specific',
          'datatype'      => 'specific',
          'searchtype'    => 'equals',
          'additionalfields' => ['give_itemtype']
@@ -120,7 +119,15 @@ class PluginConsumablesValidation extends CommonDBTM {
       ];
 
       $tab[] = [
-         'id'            => '7',
+         'id'            => '1',
+         'table'         => $this->getTable(),
+         'field'         => 'ticket_id',
+         'name'          => 'N° Chamado',
+         'linkfield'     => 'ticket_id',
+         'datatype'      => 'integer'
+      ];
+      $tab[] = [
+         'id'            => '8',
          'table'         => $this->getTable(),
          'field'         => 'date_mod',
          'name'          => __('Request date'),
@@ -179,7 +186,7 @@ class PluginConsumablesValidation extends CommonDBTM {
                                 'NOT' => ['status' => [CommonITILValidation::REFUSED, CommonITILValidation::ACCEPTED]]]
                                , ["requesters_id","consumableitemtypes_id"]);
       }
-      echo "<div class='center'>";
+      echo "<div class=''>";
 
       if (!empty($fields)) {
          if ($this->canValidate()) {

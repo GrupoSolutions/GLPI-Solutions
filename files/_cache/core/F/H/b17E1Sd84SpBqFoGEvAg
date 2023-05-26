@@ -1,29 +1,29 @@
-1667843566
+1668454201
 429c36e71f99b7dbec0e945aecbaab850c26697d
 a:1:{s:54:"bn_count_Computer_4a315743-151c-40cb-a20b-762250668dac";s:1162:"      <style>
-         #bn_715188570 {
+         #bn_840448264 {
             background-color: #e69393;
             color: #8c2121;
          }
 
-         #bn_715188570:hover {
+         #bn_840448264:hover {
             background-color: #d85555;
             border: 1px solid #b62a2a;
          }
 
-         .theme-dark #bn_715188570 {
+         .theme-dark #bn_840448264 {
             background-color: #8c2121;
             color: #e69393;
          }
 
-         .theme-dark #bn_715188570:hover {
+         .theme-dark #bn_840448264:hover {
             background-color: #d85555;
             color: #8c2121;
             border: 1px solid #b62a2a;
          }
       </style>
       <a href='/glpi/front/computer.php?reset=reset'
-         id="bn_715188570"
+         id="bn_840448264"
          class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech filter-state"
          title="">
          <span class="content">            <span title="1"

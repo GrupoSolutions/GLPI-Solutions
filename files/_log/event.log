@@ -26,6 +26,7 @@
 [login] 3: Login falhou para solutions no IP ::1
 2022-11-07 09:57:33 [@GS003021]
 [login] 3: solutions fez login no IP ::1
+<<<<<<< HEAD
 2022-11-28 17:19:39 [@localhost]
 [login] 3: Login falhou para solutions no IP 186.220.101.49
 2022-11-28 17:20:04 [@localhost]
@@ -416,3 +417,133 @@
 [login] 3: Login falhou para  no IP 131.255.236.26
 2023-01-30 11:17:54 [@localhost]
 [login] 3: Paulo Henrique fez login no IP 131.255.236.26
+=======
+2022-11-07 14:55:18 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-07 14:55:31 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-14 16:29:16 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-14 16:30:13 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-14 16:36:17 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-14 16:44:37 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-16 12:47:27 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-16 12:51:41 [@GS003021]
+[login] 3: Fabiana fez login no IP ::1
+2022-11-16 12:53:06 [14@GS003021]
+[Impersonate] 3: solutions começa a personificar o usuário Suporte
+2022-11-16 12:53:56 [2@GS003021]
+[Impersonate] 3: solutions pára de personificar o usuário Suporte
+2022-11-16 12:55:53 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-16 13:06:41 [@GS003021]
+[login] 3: Triador fez login no IP ::1
+2022-11-16 13:08:20 [8@GS003021]
+[Impersonate] 3: solutions começa a personificar o usuário Fabiana
+2022-11-16 13:10:50 [2@GS003021]
+[Impersonate] 3: solutions pára de personificar o usuário Fabiana
+2022-11-16 13:11:42 [8@GS003021]
+[Impersonate] 3: solutions começa a personificar o usuário Fabiana
+2022-11-16 13:18:18 [2@GS003021]
+[Impersonate] 3: solutions pára de personificar o usuário Fabiana
+2022-11-16 13:47:07 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-16 14:09:44 [@GS003021]
+[login] 3: Triador fez login no IP ::1
+2022-11-16 16:56:03 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-16 16:58:05 [@GS003021]
+[login] 3: Login falhou para glpi no IP ::1
+2022-11-17 11:59:04 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-17 14:35:34 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-17 14:39:28 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-17 14:45:55 [@GS003021]
+[login] 3: Login falhou para teste no IP ::1
+2022-11-17 14:46:43 [@GS003021]
+[login] 3: teste fez login no IP ::1
+2022-11-17 14:47:00 [@GS003021]
+[login] 3: Fabiana fez login no IP ::1
+2022-11-17 14:47:11 [@GS003021]
+[login] 3: Login falhou para Usuario Teste no IP ::1
+2022-11-17 14:48:23 [@GS003021]
+[login] 3: Fabiana fez login no IP ::1
+2022-11-18 13:06:04 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-18 15:55:38 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-18 15:57:15 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-18 19:50:56 [@GS003021]
+[login] 3: Login falhou para  no IP ::1
+2022-11-18 19:51:00 [@GS003021]
+[login] 3: fabiana fez login no IP ::1
+2022-11-18 19:51:20 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-21 12:30:04 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-21 12:53:46 [@GS003021]
+[login] 3: Triador fez login no IP ::1
+2022-11-21 12:54:53 [@GS003021]
+[login] 3: BSILVA fez login no IP ::1
+2022-11-21 12:56:43 [@GS003021]
+[login] 3: Login falhou para  no IP ::1
+2022-11-21 12:56:50 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-21 12:57:50 [@GS003021]
+[login] 3: BSILVA fez login no IP ::1
+2022-11-21 12:58:40 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-21 12:59:21 [@GS003021]
+[login] 3: BSILVA fez login no IP ::1
+2022-11-21 13:00:08 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 13:00:43 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 13:01:16 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-21 13:17:46 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 13:21:28 [@GS003021]
+[login] 3: BSILVA fez login no IP ::1
+2022-11-21 13:22:33 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 13:24:26 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 13:24:33 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-21 13:28:29 [@GS003021]
+[login] 3: Login falhou para  no IP ::1
+2022-11-21 13:28:35 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-21 13:34:18 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-21 14:10:24 [@GS003021]
+[login] 3: FABIANA fez login no IP ::1
+2022-11-21 15:02:52 [@GS003021]
+[login] 3: triador fez login no IP ::1
+2022-11-21 18:35:23 [@GS003021]
+[login] 3: TRIADOR fez login no IP ::1
+2022-11-21 20:25:31 [@GS003021]
+[login] 3: Login falhou para Braian no IP ::1
+2022-11-21 20:27:59 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-21 20:28:20 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-21 20:36:30 [@GS003021]
+[login] 3: Fabiana fez login no IP ::1
+2022-11-21 20:36:47 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+2022-11-22 11:24:45 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-22 12:08:14 [@GS003021]
+[login] 3: Login falhou para solutions no IP ::1
+2022-11-22 12:08:41 [@GS003021]
+[login] 3: solutions fez login no IP ::1
+>>>>>>> 4da57d3b525f7854ad330f81531da1f6e7167122
