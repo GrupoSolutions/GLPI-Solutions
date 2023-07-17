@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @copyright 2010-2022 by the FusionInventory Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
@@ -41,9 +41,11 @@ use Glpi\Application\View\TemplateRenderer;
  */
 class Unmanaged extends CommonDBTM
 {
+    use Glpi\Features\Inventoriable;
+
    // From CommonDBTM
     public $dohistory                   = true;
-    public static $rightname                   = 'config';
+    public static $rightname                   = 'unmanaged';
 
     public static function getTypeName($nb = 0)
     {
@@ -55,13 +57,17 @@ class Unmanaged extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong)
+         ->addStandardTab('NetworkPort', $ong, $options)
+         ->addStandardTab('Domain_Item', $ong, $options)
+         ->addStandardTab('Lock', $ong, $options)
+         ->addStandardTab('RuleMatchedLog', $ong, $options)
          ->addStandardTab('Log', $ong, $options);
         return $ong;
     }
 
 
     /**
-     * Print the unmanagemed form
+     * Print the unmanaged form
      *
      * @param $ID integer ID of the item
      * @param $options array
@@ -140,15 +146,6 @@ class Unmanaged extends CommonDBTM
         ];
 
         $tab[] = [
-            'id'        => '9',
-            'table'     => 'glpi_domains',
-            'field'     => 'name',
-            'linkfield' => 'domains_id',
-            'name'      => Domain::getTypeName(1),
-            'datatype'  => 'dropdown',
-        ];
-
-        $tab[] = [
             'id'        => '10',
             'table'     => $this->getTable(),
             'field'     => 'comment',
@@ -173,6 +170,14 @@ class Unmanaged extends CommonDBTM
         ];
 
         $tab[] = [
+            'id'        => '15',
+            'table'     => $this->getTable(),
+            'field'     => 'sysdescr',
+            'name'      => __('Sysdescr'),
+            'datatype'  => 'text',
+        ];
+
+        $tab[] = [
             'id'           => '18',
             'table'        => $this->getTable(),
             'field'        => 'ip',
@@ -180,16 +185,6 @@ class Unmanaged extends CommonDBTM
         ];
 
         return $tab;
-    }
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                NetworkPort::class
-            ]
-        );
     }
 
     public static function getIcon()
@@ -261,10 +256,30 @@ class Unmanaged extends CommonDBTM
 
         $this->getFromDB($items_id);
         $netport = new NetworkPort();
+        $rulematch = new RuleMatchedLog();
+        $lockfield = new Lockedfield();
 
-        $iterator = $DB->request([
+        $iterator_np = $DB->request([
             'SELECT' => ['id'],
             'FROM' => NetworkPort::getTable(),
+            'WHERE' => [
+                'itemtype' => self::getType(),
+                'items_id' => $items_id
+            ]
+        ]);
+
+        $iterator_rml = $DB->request([
+            'SELECT' => ['id'],
+            'FROM' => RuleMatchedLog::getTable(),
+            'WHERE' => [
+                'itemtype' => self::getType(),
+                'items_id' => $items_id
+            ]
+        ]);
+
+        $iterator_lf = $DB->request([
+            'SELECT' => ['id'],
+            'FROM' => Lockedfield::getTable(),
             'WHERE' => [
                 'itemtype' => self::getType(),
                 'items_id' => $items_id
@@ -283,25 +298,39 @@ class Unmanaged extends CommonDBTM
             'uuid'          => $this->fields['uuid'] ?? null,
             'is_dynamic'    => 1
         ] + $this->fields;
+        //do not keep Unmanaged ID
+        unset($asset_data['id']);
+
         $assets_id = $asset->add(Toolbox::addslashes_deep($asset_data));
 
-        foreach ($iterator as $row) {
+        foreach ($iterator_np as $row) {
             $row += [
                 'items_id' => $assets_id,
                 'itemtype' => $itemtype
             ];
             $netport->update(Toolbox::addslashes_deep($row));
         }
+
+        foreach ($iterator_rml as $row) {
+            $row += [
+                'items_id' => $assets_id,
+                'itemtype' => $itemtype
+            ];
+            $rulematch->update(Toolbox::addslashes_deep($row));
+        }
+
+        foreach ($iterator_lf as $row) {
+            $row += [
+                'items_id' => $assets_id,
+                'itemtype' => $itemtype
+            ];
+            $lockfield->update(Toolbox::addslashes_deep($row));
+        }
         $this->deleteFromDB(1);
     }
 
-    public static function canDelete()
+    public function useDeletedToLockIfDynamic()
     {
-        return static::canUpdate();
-    }
-
-    public static function canPurge()
-    {
-        return static::canUpdate();
+        return false;
     }
 }

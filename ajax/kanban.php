@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -56,7 +56,7 @@ if (!isset($_REQUEST['action'])) {
 $action = $_REQUEST['action'];
 
 $nonkanban_actions = ['update', 'bulk_add_item', 'add_item', 'move_item', 'show_card_edit_form', 'delete_item', 'load_item_panel',
-    'add_teammember', 'delete_teammember'
+    'add_teammember', 'delete_teammember', 'restore_item'
 ];
 if (isset($_REQUEST['itemtype'])) {
     if (!in_array($_REQUEST['action'], $nonkanban_actions) && !Toolbox::hasTrait($_REQUEST['itemtype'], Kanban::class)) {
@@ -106,6 +106,14 @@ if (isset($itemtype)) {
         $maybe_deleted = $item->maybeDeleted();
         if (($maybe_deleted && !$item::canDelete()) && (!$maybe_deleted && $item::canPurge())) {
            // Missing rights
+            http_response_code(403);
+            return;
+        }
+    }
+    if ($action === 'restore_item') {
+        $maybe_deleted = $item->maybeDeleted();
+        if (($maybe_deleted && !$item::canDelete())) {
+            // Missing rights
             http_response_code(403);
             return;
         }
@@ -234,6 +242,7 @@ if (($_POST['action'] ?? null) === 'update') {
     header("Content-Type: application/json; charset=UTF-8", true);
     echo json_encode($itemtype::getAllKanbanColumns($_REQUEST['column_field']));
 } else if ($_REQUEST['action'] === 'get_column') {
+    Session::writeClose();
     $checkParams(['column_id', 'column_field', 'items_id']);
     header("Content-Type: application/json; charset=UTF-8", true);
     $column = $itemtype::getKanbanColumns($_REQUEST['items_id'], $_REQUEST['column_field'], [$_REQUEST['column_id']]);
@@ -254,6 +263,17 @@ if (($_POST['action'] ?? null) === 'update') {
     $maybe_deleted = $item->maybeDeleted() && !($_REQUEST['force'] ?? false);
     if (($maybe_deleted && $item->canDeleteItem()) || (!$maybe_deleted && $item->canPurgeItem())) {
         $item->delete(['id' => $_POST['items_id']], !$maybe_deleted);
+    } else {
+        http_response_code(403);
+        return;
+    }
+} else if (($_POST['action'] ?? null) === 'restore_item') {
+    $checkParams(['items_id']);
+    $item->getFromDB($_POST['items_id']);
+    // Check if the item can be restored
+    $maybe_deleted = $item->maybeDeleted();
+    if (($maybe_deleted && $item->canDeleteItem())) {
+        $item->restore(['id' => $_POST['items_id']]);
     } else {
         http_response_code(403);
         return;

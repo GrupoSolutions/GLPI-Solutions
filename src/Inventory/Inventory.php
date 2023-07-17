@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -141,7 +141,7 @@ class Inventory
             $data = json_decode($converter->convert($contentdata));
         } else {
             $this->inventory_tmpfile = tempnam(GLPI_INVENTORY_DIR, 'json_');
-            $contentdata = json_encode($data);
+            $contentdata = json_encode($data, JSON_PRETTY_PRINT);
         }
 
         try {
@@ -251,9 +251,12 @@ class Inventory
             $_SESSION['glpiinventoryuserrunning'] = 'inventory';
         }
 
+        if (!isset($_SESSION['glpiname'])) {
+            $_SESSION['glpiname'] = $_SESSION['glpiinventoryuserrunning'];
+        }
+
+        $main_start = microtime(true); //bench
         try {
-            //bench
-            $main_start = microtime(true);
             if (!$DB->inTransaction()) {
                 $DB->beginTransaction();
             }
@@ -346,7 +349,7 @@ class Inventory
                     $DB->commit();
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $DB->rollback();
             throw $e;
         } finally {
@@ -379,6 +382,10 @@ class Inventory
      */
     public function getItems(): array
     {
+        if ($this->mainasset === null) {
+            return [];
+        }
+
         $items = $this->mainasset->getInventoried();
 
         foreach ($this->mainasset->getRefused() as $refused) {
@@ -878,7 +885,8 @@ class Inventory
         foreach ($existing_types as $existing_type) {
             /** @var class-string<CommonDBTM> $itemtype */
             $itemtype = str_replace(GLPI_INVENTORY_DIR . '/', '', $existing_type);
-           //$invnetoryfiles = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('path/to/folder'));
+            // use `getItemForItemtype` to fix classname case (i.e. `refusedequipement` -> `RefusedEquipement`)
+            $itemtype = getItemForItemtype($itemtype)::getType();
             $inventory_files = new \RegexIterator(
                 new \RecursiveIteratorIterator(
                     new \RecursiveDirectoryIterator($existing_type)
@@ -907,16 +915,29 @@ class Inventory
                  return;
             }
 
-           //find missing assets
+            //find missing assets
             $orphans = array_diff(
                 array_keys($ids),
                 array_keys(iterator_to_array($iterator))
             );
 
             foreach ($orphans as $orphan) {
-                 $dropfile = $ids[$orphan]->getFileName();
-                 @unlink($dropfile);
-                 $message = sprintf(__('File %1$s has been removed'), $dropfile);
+                $dropfile = $ids[$orphan];
+                $res = @unlink($dropfile->getRealPath());
+                if (!$res) {
+                    trigger_error(sprintf(__('Unable to remove file %1$s'), $dropfile->getRealPath()), E_USER_WARNING);
+                    $message = sprintf(
+                        __('File %1$s %2$s has not been removed'),
+                        $itemtype,
+                        $dropfile->getFileName()
+                    );
+                } else {
+                    $message = sprintf(
+                        __('File %1$s %2$s has been removed'),
+                        $itemtype,
+                        $dropfile->getFileName()
+                    );
+                }
                 if ($task) {
                     $task->log($message);
                     $task->addVolume(1);

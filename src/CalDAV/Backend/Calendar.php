@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -169,12 +169,16 @@ class Calendar extends AbstractBackend
 
         $principal_type = \Planning::getActorTypeFromPlanningKey($calendarId);
         $principal_id   = \Planning::getActorIdFromPlanningKey($calendarId);
+
+        $item = null;
         if (null !== $principal_type && is_a($principal_type, \CommonDBTM::class, true) && null !== $principal_id) {
             $item = new $principal_type();
-            $exists = $item->getFromDB($principal_id);
+            if ($item->getFromDB($principal_id) === false) {
+                $item = null;
+            }
         }
 
-        if (!$exists) {
+        if ($item === null) {
             throw new \Sabre\DAV\Exception\NotFound(sprintf('Calendar "%s" not found', $calendarId));
         }
 

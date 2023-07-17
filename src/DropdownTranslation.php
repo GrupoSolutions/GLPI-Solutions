@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -481,11 +481,16 @@ class DropdownTranslation extends CommonDBChild
      */
     public function showForm($ID = -1, array $options = [])
     {
+        if (!isset($options['parent']) || !($options['parent'] instanceof CommonDBTM)) {
+            // parent is mandatory
+            trigger_error('Parent item must be defined in `$options["parent"]`.', E_USER_WARNING);
+            return false;
+        }
+
         global $CFG_GLPI;
 
-        if (isset($options['parent']) && !empty($options['parent'])) {
-            $item = $options['parent'];
-        }
+        $item = $options['parent'];
+
         if ($ID > 0) {
             $this->check($ID, READ);
         } else {
@@ -712,7 +717,7 @@ class DropdownTranslation extends CommonDBChild
 
 
     /**
-     * Is dropdown item translation functionnality active
+     * Is dropdown item translation functionality active
      *
      * @return true if active, false if not
      **/

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -136,8 +136,35 @@ class Lock extends CommonGLPI
                         continue;
                     }
                     $query['WHERE'][] = $connexity_criteria['WHERE'];
+                    if ($lockable_object->isField('is_deleted')) {
+                        $query['WHERE'][] = [
+                            $lockable_object::getTableField('is_deleted') => 0
+                        ];
+                    }
+                } elseif (in_array($lockable_itemtype, $CFG_GLPI['directconnect_types'])) {
+                    //we need to restrict scope with Computer_Item to prevent loading of all lockedfield
+                    $query['LEFT JOIN'][Computer_Item::getTable()] =
+                    [
+                        'FKEY'   => [
+                            Computer_Item::getTable()  => 'items_id',
+                            $lockable_itemtype::getTable()   => 'id'
+                        ]
+                    ];
+                    $query['WHERE'][] = [
+                        Computer_Item::getTable() . '.computers_id'  => $ID,
+                        Computer_Item::getTable() . '.is_deleted' => 0
+                    ];
+                } elseif ($lockable_object->isField('itemtype') && $lockable_object->isField('items_id')) {
+                    $query['WHERE'][] = [
+                        $lockable_itemtype::getTable() . '.itemtype'  => $itemtype,
+                        $lockable_itemtype::getTable() . '.items_id'  => $ID
+                    ];
+                    if ($lockable_object->isField('is_deleted')) {
+                        $query['WHERE'][] = [
+                            $lockable_object::getTableField('is_deleted') => 0
+                        ];
+                    }
                 }
-
                 $subquery[] = new \QuerySubQuery($query);
             }
 
@@ -212,6 +239,7 @@ class Lock extends CommonGLPI
                     $default_itemtype_label = $row['itemtype']::getTypeName();
                     $default_object_link    = $object->getLink();
                     $default_itemtype       = $row['itemtype'];
+                    $default_items_id       = null;
 
                     //get real type name from Item_Devices
                     // ex: get 'Hard drives' instead of 'Hard drive items'
@@ -222,15 +250,34 @@ class Lock extends CommonGLPI
                     //get real type name from CommonDBRelation
                     // ex: get 'Operating System' instead of 'Item operating systems'
                     } elseif (get_parent_class($row['itemtype']) == CommonDBRelation::class) {
-                        $default_itemtype =  $row['itemtype']::$itemtype_1;
-                        $default_items_id =  $row['itemtype']::$items_id_1;
-                        $default_itemtype_label = $row['itemtype']::$itemtype_1::getTypeName();
+                        //For CommonDBRelation
+                        // $itemtype_1 / $items_id_1 and $itemtype_2 / $items_id_2 can be inverted
+
+                        //ex: Item_Software have
+                        // $itemtype_1 = 'itemtype';
+                        // $items_id_1 = 'items_id';
+                        // $itemtype_2 = 'SoftwareVersion';
+                        // $items_id_2 = 'softwareversions_id';
+                        if (preg_match('/^itemtype/', $row['itemtype']::$itemtype_1)) {
+                            $default_itemtype =  $row['itemtype']::$itemtype_2;
+                            $default_items_id =  $row['itemtype']::$items_id_2;
+                            $default_itemtype_label = $row['itemtype']::$itemtype_2::getTypeName();
+                        } else {
+                            //ex: Item_OperatingSystem have
+                            // $itemtype_1 = 'OperatingSystem';
+                            // $items_id_1 = 'operatingsystems_id';
+                            // $itemtype_2 = 'itemtype';
+                            // $items_id_2 = 'items_id';
+                            $default_itemtype =  $row['itemtype']::$itemtype_1;
+                            $default_items_id =  $row['itemtype']::$items_id_1;
+                            $default_itemtype_label = $row['itemtype']::$itemtype_1::getTypeName();
+                        }
                     }
 
                     // specific link for CommonDBRelation itemtype (like Item_OperatingSystem)
                     // get 'real' object name inside URL name
                     // ex: get 'Ubuntu 22.04.1 LTS' instead of 'Computer asus-desktop'
-                    if (is_a($row['itemtype'], CommonDBRelation::class, true)) {
+                    if ($default_items_id !== null && is_a($row['itemtype'], CommonDBRelation::class, true)) {
                         $related_object = new $default_itemtype();
                         $related_object->getFromDB($object->fields[$default_items_id]);
                         $default_object_link = "<a href='" . $object->getLinkURL() . "'" . $related_object->getName() . ">" . $related_object->getName() . "</a>";
@@ -756,15 +803,119 @@ class Lock extends CommonGLPI
             }
         }
 
+        // Show deleted DatabaseInstance
+        $data = $DB->request([
+            'SELECT' => 'id',
+            'FROM' => DatabaseInstance::getTable(),
+            'WHERE' => [
+                DatabaseInstance::getTableField('is_dynamic') => 1,
+                DatabaseInstance::getTableField('is_deleted') => 1,
+                DatabaseInstance::getTableField('items_id')   =>  $ID,
+                DatabaseInstance::getTableField('itemtype')   => $itemtype,
+            ]
+        ]);
+        if (count($data)) {
+            // Print header
+            echo "<tr>";
+            echo "<th width='10'></th>";
+            echo "<th>" . DatabaseInstance::getTypeName(Session::getPluralNumber()) . "</th>";
+            echo "<th>" . __('Name') . "</th>";
+            echo "<th>" . _n('Version', 'Versions', 1) . "</th>";
+            echo "<th>" . __('Automatic inventory') . "</th>";
+            echo "</tr>";
+        }
+
+        foreach ($data as $row) {
+            $database_instance = DatabaseInstance::getById($row['id']);
+            echo "<tr class='tab_bg_1'>";
+            echo "<td class='center' width='10'>";
+            if ($database_instance->can($row['id'], UPDATE) || $database_instance->can($row['id'], PURGE)) {
+                $header = true;
+                echo "<input type='checkbox' name='DatabaseInstance[" . $row['id'] . "]'>";
+            }
+            echo "</td>";
+            echo "<td class='left'>" . $database_instance->getLink() . "</td>";
+            echo "<td class='left'>" . $database_instance->getName() . "</td>";
+            echo "<td class='left'>" . $database_instance->fields['version'] . "</td>";
+            echo "<td class='left'>" . Dropdown::getYesNo($database_instance->fields['is_dynamic']) . "</td>";
+            echo "</tr>\n";
+        }
+
+        // Show deleted Domain_Item
+        $data = $DB->request([
+            'SELECT' => '*',
+            'FROM' => Domain_Item::getTable(),
+            'WHERE' => [
+                Domain_Item::getTableField('is_dynamic') => 1,
+                Domain_Item::getTableField('is_deleted') => 1,
+                Domain_Item::getTableField('items_id')   =>  $ID,
+                Domain_Item::getTableField('itemtype')   => $itemtype,
+            ]
+        ]);
+        if (count($data)) {
+            // Print header
+            echo "<tr>";
+            echo "<th width='10'></th>";
+            echo "<th>" . Domain::getTypeName(Session::getPluralNumber()) . "</th>";
+            echo "<th>" . DomainRelation::getTypeName(1) . "</th>";
+            echo "<th></th><th></th>";
+            echo "</tr>";
+        }
+
+        foreach ($data as $row) {
+            $domain_item = new Domain_Item();
+            $domain = new Domain();
+            $domain_relation = new DomainRelation();
+
+            $link = '';
+            if ($domain->getFromDB($row['domains_id'])) {
+                $link = $domain->getLink();
+            }
+
+            $relation_name = "";
+            if ($domain_relation->getFromDB($row['domainrelations_id'])) {
+                $relation_name = $domain_relation->getName();
+            }
+
+            echo "<tr class='tab_bg_1'>";
+            echo "<td class='center' width='10'>";
+            if ($domain_item->can($row['id'], UPDATE) || $domain_item->can($row['id'], PURGE)) {
+                $header = true;
+                echo "<input type='checkbox' name='Domain_Item[" . $row['id'] . "]'>";
+            }
+            echo "</td>";
+            echo "<td class='left'>" . $link . "</td>";
+            echo "<td class='left'>" . $relation_name . "</td>";
+            echo "<td></td>";
+            echo "<td></td>";
+            echo "</tr>\n";
+        }
+
         if ($header) {
             echo "<tr><th>";
-            //echo Html::getCheckAllAsCheckbox('lock_form');
             echo "</th><th colspan='4'>&nbsp</th></tr>\n";
             echo "</table>";
-            Html::openArrowMassives('lock_form', true);
-            Html::closeArrowMassives(['unlock' => _sx('button', 'Unlock'),
-                'purge'  => _sx('button', 'Delete permanently')
-            ]);
+
+            $formname = 'lock_form';
+            echo "<table width='950px'>";
+            $arrow = "fas fa-level-up-alt";
+
+            echo "<tr>";
+            echo "<td><i class='$arrow fa-flip-horizontal fa-lg mx-2'></i></td>";
+            echo "<td class='center' style='white-space:nowrap;'>";
+            echo "<a onclick= \"if ( markCheckboxes('$formname') ) return false;\" href='#'>" . __('Check all') . "</a></td>";
+            echo "<td>/</td>";
+            echo "<td class='center' style='white-space:nowrap;'>";
+            echo "<a onclick= \"if ( unMarkCheckboxes('$formname') ) return false;\" href='#'>" . __('Uncheck all') . "</a></td>";
+            echo "<td class='left' width='80%'>";
+
+            echo "<input type='submit' name='unlock' ";
+            echo "value=\"" . addslashes(_sx('button', 'Unlock')) . "\" class='btn btn-primary'>&nbsp;";
+
+            echo "<input type='submit' name='purge' ";
+            echo "value=\"" . addslashes(_sx('button', 'Delete permanently')) . "\" class='btn btn-primary'>&nbsp;";
+            echo "</td></tr>";
+            echo "</table>";
         } else {
             echo "<tr class='tab_bg_2'>";
             echo "<td class='center' colspan='5'>" . __('No locked item') . "</td></tr>";
@@ -1043,11 +1194,11 @@ class Lock extends CommonGLPI
                             "field" => $lock_fields_name,
                             "is_global" => 0
                         ]);
-                    }
-                    if ($res) {
-                        $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_OK);
-                    } else {
-                        $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_KO);
+                        if ($res) {
+                            $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_OK);
+                        } else {
+                            $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_KO);
+                        }
                     }
                 }
                 return;

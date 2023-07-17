@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -41,6 +41,7 @@ use Glpi\Console\Application;
 use Glpi\Plugin\Hooks;
 use Glpi\Toolbox\FrontEnd;
 use Glpi\Toolbox\Sanitizer;
+use Glpi\Toolbox\URL;
 use ScssPhp\ScssPhp\Compiler;
 
 /**
@@ -193,7 +194,7 @@ class Html
 
         try {
             $date = new \DateTime($time);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             ErrorHandler::getInstance()->handleException($e);
             Session::addMessageAfterRedirect(
                 sprintf(
@@ -572,7 +573,7 @@ class Html
         }
 
         if (!empty($params)) {
-            if (str_contains('?', $dest)) {
+            if (str_contains($dest, '?')) {
                 $dest .= '&' . $params;
             } else {
                 $dest .= '?' . $params;
@@ -625,6 +626,7 @@ class Html
      **/
     public static function displayRightError(string $additional_info = '')
     {
+        Toolbox::handleProfileChangeRedirect();
         $requested_url = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'Unknown');
         $user_id = Session::getLoginUserID() ?? 'Anonymous';
         if (empty($additional_info)) {
@@ -738,136 +740,11 @@ class Html
      * @param boolean $ajax         If we're called from ajax (false by default)
      *
      * @return void
+     * @deprecated 10.0.0
      **/
     public static function displayDebugInfos($with_session = true, $ajax = false, $rand = null)
     {
-        global $CFG_GLPI, $DEBUG_SQL, $SQL_TOTAL_REQUEST, $TIMER_DEBUG, $PLUGIN_HOOKS;
-
-       // Only for debug mode so not need to be translated
-        if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) { // mode debug
-            if ($rand === null) {
-                $rand = mt_rand();
-            }
-
-            $plugin_tabs = [];
-            if (isset($PLUGIN_HOOKS[Hooks::DEBUG_TABS])) {
-                foreach ($PLUGIN_HOOKS[Hooks::DEBUG_TABS] as $plugin => $tabs) {
-                    $plugin_tabs = array_merge($plugin_tabs, $tabs);
-                }
-            }
-
-            echo "<div id='debugpanel$rand' class='container-fluid card debug-panel " . ($ajax ? "debug_ajax" : "") . "'>";
-
-            echo "<ul class='nav nav-tabs' data-bs-toggle='tabs'>";
-            echo "<li class='nav-item'><a class='nav-link active' data-bs-toggle='tab' href='#debugsummary$rand'>SUMMARY</a></li>";
-            if ($CFG_GLPI["debug_sql"]) {
-                echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debugsql$rand'>SQL REQUEST</a></li>";
-            }
-            if ($CFG_GLPI["debug_vars"]) {
-                echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debugpost$rand'>POST VARIABLE</a></li>";
-                echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debugget$rand'>GET VARIABLE</a></li>";
-                if ($with_session) {
-                    echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debugsession$rand'>SESSION VARIABLE</a></li>";
-                }
-                echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debugserver$rand'>SERVER VARIABLE</a></li>";
-            }
-            foreach ($plugin_tabs as $tab_id => $tab_info) {
-                echo "<li class='nav-item'><a class='nav-link' data-bs-toggle='tab' href='#debug$tab_id$rand'>{$tab_info['title']}</a></li>";
-            }
-            echo "<li class='nav-item ms-auto'><a class='nav-link' href='#' id='close_debug$rand'><i class='fa fa-2x fa-times'></i><span class='sr-only'>" . __('Close') . "</span></a></li>";
-            echo "</ul>";
-
-            echo "<div class='card-body'>";
-            echo "<div class='tab-content'>";
-
-            echo "<div id='debugsummary$rand' class='tab-pane active'>";
-            echo "<dl class='row'>";
-            echo "<dt class='col-sm-3'>Execution time</dt>";
-            echo "<dd class='col-sm-9'>" . sprintf(_n('%s second', '%s seconds', $TIMER_DEBUG->getTime()), $TIMER_DEBUG->getTime()) . "</dd>";
-            echo "<dt class='col-sm-3'>Memory usage</dt>";
-            echo "<dd class='col-sm-9'>" . Toolbox::getSize(memory_get_usage()) . "</dd>";
-            if ($CFG_GLPI["debug_sql"]) {
-                $queries_duration = array_sum($DEBUG_SQL['times']);
-                echo "<dt class='col-sm-3'>SQL queries count</dt>";
-                echo "<dd class='col-sm-9'>{$SQL_TOTAL_REQUEST}</dd>";
-                echo "<dt class='col-sm-3'>SQL queries duration</dt>";
-                echo "<dd class='col-sm-9'>" . sprintf(_n('%s second', '%s seconds', $queries_duration), $queries_duration) . "</dd>";
-            }
-            echo "</dl>";
-            echo "</div>";
-
-            if ($CFG_GLPI["debug_sql"]) {
-                echo "<div id='debugsql$rand' class='tab-pane'>";
-                echo "<h1>" . $SQL_TOTAL_REQUEST . " Queries ";
-                echo "took  " . array_sum($DEBUG_SQL['times']) . "s</h1>";
-
-                echo "<table class='sql-debug table table-striped'><tr><th>N&#176; </th><th>Queries</th><th>Time</th>";
-                echo "<th>Rows</th><th>Errors</th><th>SQL warnings</th></tr>";
-
-                foreach ($DEBUG_SQL['queries'] as $num => $query) {
-                    echo "<tr><td>$num</td><td>";
-                    echo self::cleanSQLDisplay($query);
-                    echo "</td><td>";
-                    echo $DEBUG_SQL['times'][$num];
-                    echo "</td><td>";
-                    echo $DEBUG_SQL['rows'][$num] ?? 0;
-                    echo "</td><td>";
-                    if (isset($DEBUG_SQL['errors'][$num])) {
-                        echo $DEBUG_SQL['errors'][$num];
-                    } else {
-                        echo "&nbsp;";
-                    }
-                    echo "</td><td>";
-                    if (isset($DEBUG_SQL['warnings'][$num])) {
-                        foreach ($DEBUG_SQL['warnings'][$num] as $warning) {
-                            echo sprintf('%s: %s', $warning['Code'], $warning['Message']) . '<br />';
-                        }
-                    } else {
-                        echo "&nbsp;";
-                    }
-                    echo "</td></tr>";
-                }
-                echo "</table>";
-                echo "</div>";
-            }
-            if ($CFG_GLPI["debug_vars"]) {
-                echo "<div id='debugpost$rand' class='tab-pane'>";
-                self::printCleanArray($_POST, 0, true);
-                echo "</div>";
-                echo "<div id='debugget$rand' class='tab-pane'>";
-                self::printCleanArray($_GET, 0, true);
-                echo "</div>";
-                if ($with_session) {
-                    echo "<div id='debugsession$rand' class='tab-pane'>";
-                    self::printCleanArray($_SESSION, 0, true);
-                    echo "</div>";
-                }
-                echo "<div id='debugserver$rand' class='tab-pane'>";
-                self::printCleanArray($_SERVER, 0, true);
-                echo "</div>";
-            }
-            foreach ($plugin_tabs as $tab_id => $tab_info) {
-                if (isset($tab_info['display_callable']) && !is_callable($tab_info['display_callable'])) {
-                    trigger_error(sprintf('Debug tab "%s"(%s) display callable is invalid.', $tab_info['title'] ?? '', $tab_id), E_USER_WARNING);
-                    continue;
-                }
-                echo "<div id='debug$tab_id$rand' class='tab-pane'>";
-                $tab_info['display_callable']([
-                    'with_session' => $with_session,
-                    'ajax'         => $ajax,
-                    'rand'         => $rand,
-                ]);
-                echo "</div>";
-            }
-            echo "</div>";
-
-            echo Html::scriptBlock("
-            $('#close_debug$rand').click(function() {
-                $('#debugpanel$rand').css('display', 'none');
-            });");
-
-            echo "</div></div>";
-        }
+        Toolbox::deprecated('Html::displayDebugInfo is not used anymore. It was replaced by a unified debug bar.');
     }
 
 
@@ -1206,21 +1083,25 @@ HTML;
         $sector = 'none',
         $item = 'none',
         $option = '',
-        bool $add_id = true
+        bool $add_id = true,
+        bool $allow_insecured_iframe = false
     ) {
         global $CFG_GLPI, $PLUGIN_HOOKS;
 
-       // complete title with id if exist
+        // complete title with id if exist
         if ($add_id && isset($_GET['id']) && $_GET['id']) {
             $title = sprintf(__('%1$s - %2$s'), $title, $_GET['id']);
         }
 
-       // Send UTF8 Headers
+        // Send UTF8 Headers
         header("Content-Type: text/html; charset=UTF-8");
-       // Allow only frame from same server to prevent click-jacking
-        header('x-frame-options:SAMEORIGIN');
 
-       // Send extra expires header
+        if (!$allow_insecured_iframe) {
+            // Allow only frame from same server to prevent click-jacking
+            header('x-frame-options:SAMEORIGIN');
+        }
+
+        // Send extra expires header
         self::header_nocache();
 
         $theme = $_SESSION['glpipalette'] ?? 'auror';
@@ -1264,6 +1145,14 @@ HTML;
                     $jslibs = $CFG_GLPI['javascript'][$sector];
                 }
             }
+
+            // include more js libs for dashboard case
+            $jslibs = array_merge($jslibs, [
+                'gridstack',
+                'charts',
+                'clipboard',
+                'sortable'
+            ]);
 
             if (in_array('planning', $jslibs)) {
                 Html::requireJs('planning');
@@ -1331,7 +1220,7 @@ HTML;
                 Html::requireJs('charts');
             }
 
-            if (in_array('codemirror', $jslibs)) {
+            if (in_array('codemirror', $jslibs) || $_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
                 $tpl_vars['css_files'][] = ['path' => 'public/lib/codemirror.css'];
                 Html::requireJs('codemirror');
             }
@@ -1389,10 +1278,20 @@ HTML;
         $tpl_vars['css_files'][] = ['path' => 'css/palettes/' . $theme . '.scss'];
 
         $tpl_vars['js_files'][] = ['path' => 'public/lib/base.js'];
+        $tpl_vars['js_files'][] = ['path' => 'js/webkit_fix.js'];
+        $tpl_vars['js_files'][] = ['path' => 'js/common.js'];
+
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
+            $tpl_vars['js_modules'][] = ['path' => 'js/modules/Debug/Debug.js'];
+        }
 
        // Search
         $tpl_vars['js_modules'][] = ['path' => 'js/modules/Search/ResultsView.js'];
         $tpl_vars['js_modules'][] = ['path' => 'js/modules/Search/Table.js'];
+
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
+            $tpl_vars['glpi_request_id'] = \Glpi\Debug\Profile::getCurrent()->getID();
+        }
 
         TemplateRenderer::getInstance()->display('layout/parts/head.html.twig', $tpl_vars);
 
@@ -1552,7 +1451,8 @@ HTML;
             foreach ($menu as $category => $entries) {
                 if (isset($entries['types']) && count($entries['types'])) {
                     foreach ($entries['types'] as $type) {
-                        if ($data = $type::getMenuContent()) {
+                        $data = $type::getMenuContent();
+                        if ($data) {
                           // Multi menu entries management
                             if (isset($data['is_multi_entries']) && $data['is_multi_entries']) {
                                 if (!isset($menu[$category]['content'])) {
@@ -1639,9 +1539,8 @@ HTML;
         }
 
         if (
-            Session::haveRight("ticket", CREATE)
+            Session::haveRight("ticket", READ)
             || Session::haveRight("ticket", Ticket::READMY)
-            || Session::haveRight("followup", ITILFollowup::SEEPUBLIC)
         ) {
             $menu['tickets'] = [
                 'default' => '/front/ticket.php',
@@ -1662,7 +1561,7 @@ HTML;
             }
         }
 
-        if (Session::haveRight("reservation", ReservationItem::RESERVEANITEM)) {
+        if (Session::haveRightsOr("reservation", [READ, ReservationItem::RESERVEANITEM])) {
             $menu['reservation'] = [
                 'default' => '/front/reservationitem.php',
                 'title'   => _n('Reservation', 'Reservations', Session::getPluralNumber()),
@@ -1773,7 +1672,9 @@ HTML;
         $sector = strtolower($sector);
         $item   = strtolower($item);
 
+        \Glpi\Debug\Profiler::getInstance()->start('Html::includeHeader');
         self::includeHeader($title, $sector, $item, $option, $add_id);
+        \Glpi\Debug\Profiler::getInstance()->stop('Html::includeHeader');
 
         $tmp_active_item = explode("/", $item);
         $active_item     = array_pop($tmp_active_item);
@@ -1790,11 +1691,6 @@ HTML;
             'menu_active' => $menu_active,
         ];
         $tpl_vars += self::getPageHeaderTplVars();
-
-        $help_url_key = Session::getCurrentInterface() === 'central' ? 'central_doc_url' : 'helpdesk_doc_url';
-        $help_url = !empty($CFG_GLPI[$help_url_key]) ? $CFG_GLPI[$help_url_key] : 'https://glpi-project.org/documentation/';
-
-        $tpl_vars['help_url'] = $help_url;
 
         TemplateRenderer::getInstance()->display('layout/parts/page_header.html.twig', $tpl_vars);
 
@@ -1875,7 +1771,6 @@ HTML;
             }
         }
 
-        $tpl_vars['js_files'][] = ['path' => 'js/common.js'];
         $tpl_vars['js_files'][] = ['path' => 'js/misc.js'];
 
         if (isset($PLUGIN_HOOKS['add_javascript']) && count($PLUGIN_HOOKS['add_javascript'])) {
@@ -1933,7 +1828,10 @@ HTML;
 
         TemplateRenderer::getInstance()->display('layout/parts/page_footer.html.twig', $tpl_vars);
 
-        self::displayDebugInfos();
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE && !str_starts_with($_SERVER['PHP_SELF'], $CFG_GLPI['root_doc'] . '/install/')) {
+            \Glpi\Debug\Profiler::getInstance()->stopAll();
+            (new Glpi\Debug\Toolbar())->show();
+        }
 
         if (!$keepDB && function_exists('closeDBConnections')) {
             closeDBConnections();
@@ -1946,27 +1844,8 @@ HTML;
      **/
     public static function ajaxFooter()
     {
-
-        if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) { // mode debug
-            $rand = mt_rand();
-            echo "<div class='center d-none d-md-block btn-group' id='debugajax'>";
-            echo "<a class='btn btn-sm btn-danger debug-float' href=\"javascript:showHideDiv('debugpanel$rand','','','');\">
-            <i class='fas fa-bug'></i>
-            <span>AJAX DEBUG</span>
-         </a>";
-            if (
-                !isset($_GET['full_page_tab'])
-                && strstr($_SERVER['REQUEST_URI'], '/ajax/common.tabs.php')
-            ) {
-                echo "<a href='" . $_SERVER['REQUEST_URI'] . "&full_page_tab=1' class='btn btn-sm btn-danger'>
-               <i class='fas fa-external-link-alt'></i>
-               <span>Display only tab for debug</span>
-            </a>";
-            }
-            echo "</div>";
-            self::displayDebugInfos(false, true, $rand);
-            echo "</div>";
-        }
+        // Not currently used. Old debug stuff is now in the new debug bar.
+        // FIXME: Deprecate this in GLPI 10.1.
     }
 
 
@@ -2054,11 +1933,6 @@ HTML;
         ];
         $tpl_vars += self::getPageHeaderTplVars();
 
-        $help_url_key = Session::getCurrentInterface() === 'central' ? 'central_doc_url' : 'helpdesk_doc_url';
-        $help_url = !empty($CFG_GLPI[$help_url_key]) ? $CFG_GLPI[$help_url_key] : 'http://glpi-project.org/help-central';
-
-        $tpl_vars['help_url'] = $help_url;
-
         TemplateRenderer::getInstance()->display('layout/parts/page_header.html.twig', $tpl_vars);
 
         // call static function callcron() every 5min
@@ -2091,12 +1965,20 @@ HTML;
             $platform = $ua->platform();
         }
 
+        $help_url_key = Session::getCurrentInterface() === 'central'
+            ? 'central_doc_url'
+            : 'helpdesk_doc_url';
+        $help_url = !empty($CFG_GLPI[$help_url_key])
+            ? $CFG_GLPI[$help_url_key]
+            : 'http://glpi-project.org/documentation';
+
         return [
             'is_debug_active'       => $_SESSION['glpi_use_mode'] == Session::DEBUG_MODE,
             'is_impersonate_active' => Session::isImpersonateActive(),
             'founded_new_version'   => $founded_new_version,
             'user'                  => $user instanceof User ? $user : null,
             'platform'              => $platform,
+            'help_url'              => URL::sanitizeURL($help_url),
         ];
     }
 
@@ -2171,7 +2053,7 @@ HTML;
     public static function popHeader(
         $title,
         $url = '',
-        $iframed = false,
+        $in_modal = false,
         $sector = "none",
         $item = "none",
         $option = ""
@@ -2185,9 +2067,41 @@ HTML;
         $HEADER_LOADED = true;
 
         self::includeHeader($title, $sector, $item, $option); // Body
-        echo "<body class='" . ($iframed ? "iframed" : "") . "'>";
+        echo "<body class='" . ($in_modal ? "in_modal" : "") . "'>";
         self::displayMessageAfterRedirect();
         echo "<div id='page'>"; // Force legacy styles for now
+    }
+
+
+    /**
+     * Print a nice HTML head for iframed windows
+     * This header remove any security for iframe (NO SAMEORIGIN, etc)
+     * And should be used ONLY for iframing windows in other applications.
+     * It should NOT be used for GLPI internal iframing.
+     *
+     * @since 10.0.7
+     *
+     * @param string  $sector    sector in which the page displayed is (default 'none')
+     * @param string  $item      item corresponding to the page displayed (default 'none')
+     * @param string  $option    option corresponding to the page displayed (default '')
+     * @return void
+     */
+    public static function zeroSecurityIframedHeader(
+        string $sector = "none",
+        string $item = "none",
+        string $option = ""
+    ): void {
+        global $HEADER_LOADED;
+
+        if ($HEADER_LOADED) {
+            return;
+        }
+        $HEADER_LOADED = true;
+
+        self::includeHeader('', $sector, $item, $option, true, true);
+        echo "<body class='iframed'>";
+        self::displayMessageAfterRedirect();
+        echo "<div id='page'>";
     }
 
 
@@ -2254,7 +2168,7 @@ HTML;
     {
         global $CFG_GLPI;
 
-        //Toolbox::deprecated('openArrowMassives() method is deprecated');
+        Toolbox::deprecated('openArrowMassives() method is deprecated');
 
         if ($fixed) {
             echo "<table width='950px'>";
@@ -2300,7 +2214,7 @@ HTML;
     public static function closeArrowMassives($actions, $confirm = [])
     {
 
-        //Toolbox::deprecated('closeArrowMassives() method is deprecated');
+        Toolbox::deprecated('closeArrowMassives() method is deprecated');
 
         if (count($actions)) {
             foreach ($actions as $name => $label) {
@@ -2335,10 +2249,10 @@ HTML;
             $rand = mt_rand();
         }
 
-        $out  = "<input title='" . __s('Check all as') . "' type='checkbox' class='form-check-input'
+        $out  = "<input title='" . __s('Check all as') . "' type='checkbox' class='form-check-input massive_action_checkbox'
                       title='" . __s('Check all as') . "'
                       name='_checkall_$rand' id='checkall_$rand'
-                      onclick= \"if ( checkAsCheckboxes(this, '$container_id')) {return true;}\">";
+                      onclick= \"if ( checkAsCheckboxes(this, '$container_id', '.massive_action_checkbox')) {return true;}\">";
 
        // permit to shift select checkboxes
         $out .= Html::scriptBlock("\$(function() {\$('#$container_id input[type=\"checkbox\"]').shiftSelectable();});");
@@ -2437,6 +2351,7 @@ HTML;
         $params['zero_on_empty']   = true;
         $params['specific_tags']   = [];
         $params['criterion']       = [];
+        $params['class']           = '';
 
         if (is_array($options) && count($options)) {
             foreach ($options as $key => $val) {
@@ -2450,7 +2365,7 @@ HTML;
             $out .= '<input type="hidden" name="' . $params['name'] . '" value="0" />';
         }
 
-        $out .= "<input type='checkbox' class='form-check-input' title=\"" . $params['title'] . "\" ";
+        $out .= "<input type='checkbox' class='form-check-input " . $params['class'] . "' title=\"" . $params['title'] . "\" ";
         if (isset($params['onclick'])) {
             $params['onclick'] = htmlspecialchars($params['onclick'], ENT_QUOTES);
             $out .= " onclick='{$params['onclick']}'";
@@ -2540,6 +2455,7 @@ HTML;
             $options['name'] = "item[$itemtype][" . $id . "]";
         }
 
+        $options['class']         = 'massive_action_checkbox';
         $options['zero_on_empty'] = false;
 
         return self::getCheckbox($options);
@@ -2897,6 +2813,7 @@ HTML;
             dateFormat: 'Y-m-d',
             wrap: true, // permits to have controls in addition to input (like clear or open date buttons
             weekNumbers: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             {$min_attr}
             {$max_attr}
@@ -3079,6 +2996,7 @@ HTML;
             enableTime: true,
             enableSeconds: true,
             weekNumbers: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             minuteIncrement: "{$p['timestep']}",
             {$min_attr}
@@ -3202,6 +3120,7 @@ HTML;
             enableTime: true,
             noCalendar: true, // only time picker
             enableSeconds: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             minuteIncrement: "{$p['timestep']}",
             onChange: function(selectedDates, dateStr, instance) {
@@ -3423,8 +3342,16 @@ JS;
                 $dates[$i . 'WEEK'] = sprintf(_n('+ %d week', '+ %d weeks', $i), $i);
             }
 
+            if ($params['with_days']) {
+                $dates['ENDMONTH']  = __('End of the month');
+            }
+
             for ($i = 1; $i <= 12; $i++) {
                 $dates[$i . 'MONTH'] = sprintf(_n('+ %d month', '+ %d months', $i), $i);
+            }
+
+            if ($params['with_days']) {
+                $dates['ENDYEAR']  = __('End of the year');
             }
 
             for ($i = 1; $i <= 10; $i++) {
@@ -3468,8 +3395,8 @@ JS;
                 return date("Y-m-d", $specifictime);
         }
 
-       // Search on begin of month / year
-        if (strstr($val, 'BEGIN')) {
+       // Search on begin /end of month / year
+        if (strstr($val, 'BEGIN') || strstr($val, 'END')) {
             $hour   = 0;
             $minute = 0;
             $second = 0;
@@ -3483,6 +3410,15 @@ JS;
                     break;
 
                 case "BEGINMONTH":
+                    break;
+
+                case "ENDYEAR":
+                    $month = 12;
+                    $day = 31;
+                    break;
+
+                case "ENDMONTH":
+                    $day = date("t", $specifictime);
                     break;
             }
 
@@ -3644,7 +3580,7 @@ JS;
             'contentid'     => '',
             'link'          => '',
             'linkid'        => '',
-            'linktarget'    => '',
+            'linktarget'    => '_top',
             'awesome-class' => 'fa-info',
             'popup'         => '',
             'ajax'          => '',
@@ -3875,7 +3811,10 @@ JS;
                 'language_url' => $language_url
             ]);
         }
-       // init tinymce
+
+        $mandatory_field_msg = json_encode(__('The %s field is mandatory'));
+
+        // init tinymce
         $js = <<<JS
          $(function() {
             var is_dark = $('html').css('--is-dark').trim() === 'true';
@@ -3897,7 +3836,7 @@ JS;
                body_class: 'rich_text_container',
                content_css: '{$content_css}',
 
-               min_height: '150px',
+               min_height: 150,
                resize: true,
 
                // disable path indicator in bottom bar
@@ -3936,7 +3875,8 @@ JS;
 
                      editor.on('submit', function (e) {
                         if ($('#$id').val() == '') {
-                           alert(__('The description field is mandatory'));
+                           const field = $('#$id').closest('.form-field').find('label').text().replace('*', '').trim();
+                           alert({$mandatory_field_msg}.replace('%s', field));
                            e.preventDefault();
 
                            // Prevent other events to run
@@ -4124,9 +4064,9 @@ JAVASCRIPT
 
        // Back and fast backward button
         if (!$start == 0) {
-            $out .= "<th class='left'><a href='javascript:reloadTab(\"start=0$additional_params\");'>
+            $out .= "<th class='left'><a class='btn btn-sm btn-icon btn-ghost-secondary' href='javascript:reloadTab(\"start=0$additional_params\");'>
                      <i class='fa fa-step-backward' title=\"" . __s('Start') . "\"></i></a></th>";
-            $out .= "<th class='left'><a href='javascript:reloadTab(\"start=$back$additional_params\");'>
+            $out .= "<th class='left'><a class='btn btn-sm btn-icon btn-ghost-secondary' href='javascript:reloadTab(\"start=$back$additional_params\");'>
                      <i class='fa fa-chevron-left' title=\"" . __s('Previous') . "\"></i></a></th>";
         }
 
@@ -4146,9 +4086,9 @@ JAVASCRIPT
 
        // Forward and fast forward button
         if ($forward < $numrows) {
-            $out .= "<th class='right'><a href='javascript:reloadTab(\"start=$forward$additional_params\");'>
+            $out .= "<th class='right'><a class='btn btn-sm btn-icon btn-ghost-secondary' href='javascript:reloadTab(\"start=$forward$additional_params\");'>
                      <i class='fa fa-chevron-right' title=\"" . __s('Next') . "\"></i></a></th>";
-            $out .= "<th class='right'><a href='javascript:reloadTab(\"start=$end$additional_params\");'>
+            $out .= "<th class='right'><a class='btn btn-sm btn-icon btn-ghost-secondary' href='javascript:reloadTab(\"start=$end$additional_params\");'>
                      <i class='fa fa-step-forward' title=\"" . __s('End') . "\"></i></a></th>";
         }
 
@@ -4186,9 +4126,9 @@ JAVASCRIPT
                 $key = Sanitizer::encodeHtmlSpecialChars($key);
                 echo "<tr><td>";
                 echo $key;
+                echo "</td><td>";
                 $is_array = is_array($val);
                 $rand     = mt_rand();
-                echo "</td><td>";
                 if ($jsexpand && $is_array) {
                     echo "<a href=\"javascript:showHideDiv('content$key$rand','','','')\">";
                     echo "=></a>";
@@ -4699,7 +4639,7 @@ JAVASCRIPT
             $placeholder
             width: '$width',
             dropdownAutoWidth: true,
-            dropdownParent: $('#$id').closest('div.modal, body'),
+            dropdownParent: $('#$id').closest('div.modal, div.dropdown-menu, body'),
             quietMillis: 100,
             minimumResultsForSearch: " . $CFG_GLPI['ajax_limit_count'] . ",
             matcher: function(params, data) {
@@ -4899,12 +4839,12 @@ JAVASCRIPT
          const select2_el = $('#$field_id').select2({
             width: '$width',
             multiple: '$multiple',
-            placeholder: '$placeholder',
+            placeholder: " . json_encode($placeholder) . ",
             allowClear: $allowclear,
             minimumInputLength: 0,
             quietMillis: 100,
             dropdownAutoWidth: true,
-            dropdownParent: $('#$field_id').closest('div.modal, body'),
+            dropdownParent: $('#$field_id').closest('div.modal, div.dropdown-menu, body'),
             minimumResultsForSearch: " . $CFG_GLPI['ajax_limit_count'] . ",
             ajax: {
                url: '$url',
@@ -5611,21 +5551,18 @@ HTML;
                       . ($p['multiple'] ? " multiple='multiple'" : "")
                       . ($p['onlyimages'] ? " accept='.gif,.png,.jpg,.jpeg'" : "") . ">";
 
-        $progressall_js = '';
-        if (!$p['only_uploaded_files']) {
-            $display .= "<div id='progress{$p['rand']}' style='display:none'>" .
-                 "<div class='uploadbar' style='width: 0%;'></div></div>";
-            $progressall_js = "
-            progressall: function(event, data) {
-               var progress = parseInt(data.loaded / data.total * 100, 10);
-               $('#progress{$p['rand']}').show();
-               $('#progress{$p['rand']} .uploadbar')
-                  .text(progress + '%')
-                  .css('width', progress + '%')
-                  .show();
-            },
-         ";
-        }
+        $display .= "<div id='progress{$p['rand']}' style='display:none'>" .
+                "<div class='uploadbar' style='width: 0%;'></div></div>";
+        $progressall_js = "
+        progressall: function(event, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress{$p['rand']}').show();
+            $('#progress{$p['rand']} .uploadbar')
+                .text(progress + '%')
+                .css('width', progress + '%')
+                .show();
+        },
+        ";
 
         $display .= Html::scriptBlock("
       $(function() {
@@ -5644,6 +5581,8 @@ HTML;
             maxFileSize: {$max_file_size},
             maxChunkSize: {$max_chunk_size},
             add: function (e, data) {
+               // disable submit button during upload
+               $(this).closest('form').find(':submit').prop('disabled', true);
                // randomize filename
                for (var i = 0; i < data.files.length; i++) {
                   data.files[i].uploadName = uniqid('', true) + data.files[i].name;
@@ -5659,14 +5598,22 @@ HTML;
                   $('#{$p['filecontainer']}'),
                   '{$p['editor_id']}'
                );
+               // enable submit button after upload
+               $(this).closest('form').find(':submit').prop('disabled', false);
+               // remove required
+                $('#fileupload{$p['rand']}').removeAttr('required');
             },
             fail: function (e, data) {
+                // enable submit button after upload
+                $(this).closest('form').find(':submit').prop('disabled', false);
                const err = 'responseText' in data.jqXHR && data.jqXHR.responseText.length > 0
                   ? data.jqXHR.responseText
                   : data.jqXHR.statusText;
                alert(err);
             },
             processfail: function (e, data) {
+                // enable submit button after upload
+                $(this).closest('form').find(':submit').prop('disabled', false);
                $.each(
                   data.files,
                   function(index, file) {
@@ -5674,7 +5621,8 @@ HTML;
                         $('#progress{$p['rand']}').show();
                         $('#progress{$p['rand']} .uploadbar')
                            .text(file.error)
-                           .css('width', '100%');
+                           .css('width', '100%')
+                           .show();
                         return;
                      }
                   }
@@ -6401,7 +6349,6 @@ HTML;
         }
 
        // Some Javascript-Functions which we may need later
-        echo Html::script('js/common.js');
         self::redefineAlert();
         self::redefineConfirm();
 
@@ -6674,7 +6621,7 @@ HTML;
                     }
 
                     if (isset($firstlvl['default'])) {
-                        if (strlen($menu['title']) > 0) {
+                        if (strlen($firstlvl['title']) > 0) {
                             $fuzzy_entries[] = [
                                 'url'   => $firstlvl['default'],
                                 'title' => $firstlvl['title']
@@ -6977,12 +6924,16 @@ CSS;
         if (!ctype_digit($ts)) {
             $ts = strtotime($ts);
         }
+        $ts_date = new DateTime();
+        $ts_date->setTimestamp($ts);
 
         $diff = time() - $ts;
         if ($diff == 0) {
             return __('Now');
         } else if ($diff > 0) {
-            $day_diff = floor($diff / 86400);
+            $date = new DateTime(date('Y-m-d', $ts));
+            $today = new DateTime('today');
+            $day_diff = $date->diff($today)->days;
             if ($day_diff == 0) {
                 if ($diff < 60) {
                     return __('Just now');
@@ -6997,20 +6948,22 @@ CSS;
             if ($day_diff == 1) {
                 return __('Yesterday');
             }
-            if ($day_diff < 7) {
+            if ($day_diff < 14) {
                 return sprintf(__('%s days ago'), $day_diff);
             }
             if ($day_diff < 31) {
-                return sprintf(__('%s weeks ago'), ceil($day_diff / 7));
+                return sprintf(__('%s weeks ago'), floor($day_diff / 7));
             }
             if ($day_diff < 60) {
                 return __('Last month');
             }
 
-            return date('F Y', $ts);
+            return IntlDateFormatter::formatObject($ts_date, 'MMMM Y', $_SESSION['glpilanguage'] ?? 'en_GB');
         } else {
             $diff     = abs($diff);
-            $day_diff = floor($diff / 86400);
+            $today = new DateTime('today');
+            $date = new DateTime(date('Y-m-d', $ts));
+            $day_diff = $today->diff($date)->days;
             if ($day_diff == 0) {
                 if ($diff < 120) {
                     return __('In a minute');
@@ -7028,19 +6981,17 @@ CSS;
             if ($day_diff == 1) {
                 return __('Tomorrow');
             }
-            if ($day_diff < 4) {
-                return date('l', $ts);
+            if ($day_diff < 14) {
+                return sprintf(__('In %s days'), $day_diff);
             }
-            if ($day_diff < 7 + (7 - date('w'))) {
-                return __('next week');
+            if ($day_diff < 31) {
+                return sprintf(__('In %s weeks'), floor($day_diff / 7));
             }
-            if (ceil($day_diff / 7) < 4) {
-                return sprintf(__('In %s weeks'), ceil($day_diff / 7));
+            if ($day_diff < 60) {
+                return __('Next month');
             }
-            if (date('n', $ts) == date('n') + 1) {
-                return __('next month');
-            }
-            return date('F Y', $ts);
+
+            return IntlDateFormatter::formatObject($ts_date, 'MMMM Y', $_SESSION['glpilanguage'] ?? 'en_GB');
         }
 
         return "";

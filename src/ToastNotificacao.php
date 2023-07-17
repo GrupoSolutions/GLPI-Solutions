@@ -1,5 +1,5 @@
 <?php
-$sqlcon = mysqli_connect('localhost', 'glpi', '62h$W%6vSo5V', 'glpi', '3306'); // ALTERAR AO SUBIR PARA PROD
+$sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
 
 $GLOBALS['sqlcon'] = $sqlcon;
 $ticket = [];
@@ -14,7 +14,6 @@ $ticket = [];
         $recip = $row[0];
         }
     }
-
 function atribuirChamado($user_id, $ticket_id){
     $sqlcon = $GLOBALS['sqlcon'];
     $sqlVerificacao = "SELECT * FROM glpi_tickets_users WHERE tickets_id = {$ticket_id} and users_id = {$user_id}";
@@ -93,16 +92,17 @@ function buscarRespostaChamados($user_id){
     }
 
     foreach($notificacoes as $notificacao){
-        if ($notificacao['status'] == 2 and $notificacao['tipoChamado'] == 65 and $notificacao['is_deleted'] != 0) {
+        if ($notificacao['status'] == 2 and $notificacao['tipoChamado'] == 66 and $notificacao['is_deleted'] != 0) {
             $update = "UPDATE glpi_queuednotifications SET is_deleted = 0 WHERE id = {$notificacao['id']}";
             mysqli_query($sqlcon, $update);
         }
-        if($notificacao['status'] == 2 and $notificacao['tipoChamado'] == 65 and $notificacao['is_deleted'] == 0 and $notificacao['lastUpdater'] != $user_id){
+        if($notificacao['status'] == 2 and $notificacao['tipoChamado'] == 66 and $notificacao['is_deleted'] == 0 and $notificacao['lastUpdater'] != $user_id){
             array_push($unresolvedTickets, $notificacao['ticketID']);
         }
     }
     return $unresolvedTickets;
 }
+
 
 
 ?>

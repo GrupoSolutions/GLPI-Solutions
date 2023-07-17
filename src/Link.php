@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -33,6 +33,7 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Toolbox\Sanitizer;
 use Glpi\Toolbox\URL;
 
 /** Link Class
@@ -268,9 +269,13 @@ class Link extends CommonDBTM
      * @param bool          $safe_url   indicates whether URL should be sanitized or not
      *
      * @return array of link contents (may have several when item have several IP / MAC cases)
+     *
+     * @FIXME Uncomment $safe_url parameter declaration in GLPI 10.1.
      */
-    public static function generateLinkContents($link, CommonDBTM $item, bool $safe_url = true)
+    public static function generateLinkContents($link, CommonDBTM $item/*, bool $safe_url = true*/)
     {
+        $safe_url = func_num_args() === 3 ? func_get_arg(2) : true;
+
         global $DB, $CFG_GLPI;
 
        // Replace [FIELD:<field name>]
@@ -655,13 +660,14 @@ class Link extends CommonDBTM
         $file  = trim($params['data']);
 
         if (empty($file)) {
-           // Generate links
-            $links = $item->generateLinkContents($params['link'], $item, true);
+            // Generate links
+            $link_pattern = Sanitizer::unsanitize($params['link']); // generate links from raw pattern
+            $links = $item->generateLinkContents($link_pattern, $item, true);
             $i     = 1;
             foreach ($links as $key => $val) {
+                $val     = htmlspecialchars($val); // encode special chars as value was generated from a raw pattern
                 $name    = (isset($names[$key]) ? $names[$key] : reset($names));
-                $url     = $val;
-                $newlink = "<a href='$url'";
+                $newlink = '<a href="' . $val . '"';
                 if ($params['open_window']) {
                     $newlink .= " target='_blank'";
                 }
@@ -687,9 +693,9 @@ class Link extends CommonDBTM
                     $file = reset($files);
                 }
                 $url             = $CFG_GLPI["root_doc"] . "/front/link.send.php?lID=" . $params['id'] .
-                                 "&amp;itemtype=" . $item->getType() .
-                                 "&amp;id=" . $item->getID() . "&amp;rank=$key";
-                $newlink         = "<a href='$url' target='_blank'>";
+                                 "&itemtype=" . $item->getType() .
+                                 "&id=" . $item->getID() . "&rank=$key";
+                $newlink         = '<a href="' . htmlspecialchars($url) . '" target="_blank">';
                 $newlink        .= "<i class='fa-lg fa-fw fas fa-link'></i>&nbsp;";
                 $linkname        = sprintf(__('%1$s #%2$s'), $name, $i);
                 $newlink        .= sprintf(__('%1$s: %2$s'), $linkname, $val);

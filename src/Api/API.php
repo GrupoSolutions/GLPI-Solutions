@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -1697,19 +1697,18 @@ abstract class API
             $cleaned_cols[] = $col['id'];
             if (isset($params['uid_cols'])) {
                // prepare cols with uid
-                $uid_cols[] = $soptions[$col['id']]['uid'];
+                if (isset($col['meta']) && $col['meta']) {
+                    $meta_opts = $this->listSearchOptions($col['itemtype'], [], false);
+                    $uid_cols[] = $meta_opts[$col['id']]['uid'];
+                } else {
+                    $uid_cols[] = $soptions[$col['id']]['uid'];
+                }
             }
         }
 
         foreach ($rawdata['data']['rows'] as $row) {
             $raw = $row['raw'];
             $id = $raw['id'];
-
-           // keep row itemtype for all asset
-            if ($itemtype == AllAssets::getType()) {
-                $current_id       = $raw['id'];
-                $current_itemtype = $raw['TYPE'];
-            }
 
            // retrive value (and manage multiple values)
             $clean_values = [];
@@ -1737,8 +1736,8 @@ abstract class API
 
            // if all asset, provide type in returned data
             if ($itemtype == AllAssets::getType()) {
-                $current_line['id']       = $current_id;
-                $current_line['itemtype'] = $current_itemtype;
+                $current_line['id']       = $raw['id'];
+                $current_line['itemtype'] = $raw['TYPE'];
             }
 
            // append to final array
@@ -1800,7 +1799,6 @@ abstract class API
         $itemtype = $this->handleDepreciation($itemtype);
 
         $input    = isset($params['input']) ? $params["input"] : null;
-        $item     = new $itemtype();
 
         if (is_object($input)) {
             $input = [$input];
@@ -1820,6 +1818,8 @@ abstract class API
             $failed       = 0;
             $index        = 0;
             foreach ($input as $object) {
+                // Use a new instance each time to avoid side effects with data from a previous item (See #14490)
+                $item     = new $itemtype();
                 $object      = $this->inputObjectToArray($object);
                 $current_res = [];
 
@@ -1928,9 +1928,7 @@ abstract class API
     protected function updateItems($itemtype, $params = [])
     {
         $itemtype = $this->handleDepreciation($itemtype);
-
         $input    = isset($params['input']) ? $params["input"] : null;
-        $item     = new $itemtype();
 
         if (is_object($input)) {
             $input = [$input];
@@ -1950,6 +1948,8 @@ abstract class API
             $failed       = 0;
             $index        = 0;
             foreach ($input as $object) {
+                // Use a new instance each time to avoid side effects with data from a previous item (See #14490)
+                $item     = new $itemtype();
                 $current_res = [];
                 if (isset($object->id)) {
                     if (!$item->getFromDB($object->id)) {
@@ -3332,12 +3332,14 @@ abstract class API
 
         if ($results['ok'] == 0 && $results['noaction'] == 0 && $results['ko'] == 0 && $results['noright'] == 0) {
            // No items were processed, invalid action key -> 400
-            $this->returnError(
+            return $this->returnError(
                 "Invalid action key parameter, run 'getMassiveActions' endpoint to see available keys",
                 400,
                 "ERROR_MASSIVEACTION_KEY"
             );
-        } else if ($results['ok'] > 0 && $results['ko'] == 0) {
+        }
+
+        if ($results['ok'] > 0 && $results['ko'] == 0) {
            // Success -> 200
             $code = 200;
         } else if ($results['ko'] > 0 && $results['ok'] > 0) {

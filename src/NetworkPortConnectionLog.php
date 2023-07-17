@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -35,6 +35,9 @@
 
 /**
  * Store ports connections log
+ *
+ * FIXME This class should inherit from CommonDBRelation, as it is linked
+ * to both 'networkports_id_source' and 'networkports_id_destination'
  */
 class NetworkPortConnectionLog extends CommonDBChild
 {

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -100,7 +100,7 @@ class HookManager
     }
 
     /**
-     * Add a functionnal hook
+     * Add a functional hook
      *
      * @param string $hook
      * @param string $file
@@ -111,7 +111,7 @@ class HookManager
     ): void {
         global $PLUGIN_HOOKS;
 
-        // Check if the given hook is a valid functionnal hook
+        // Check if the given hook is a valid functional hook
         $allowed_file_hooks = Hooks::getFunctionalHooks();
         if (!in_array($hook, $allowed_file_hooks)) {
             trigger_error("Invalid functional hook: '$hook'", E_USER_ERROR);

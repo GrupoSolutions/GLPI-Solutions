@@ -38,6 +38,8 @@ if (!(new Plugin())->isActivated('formcreator')) {
    Html::displayNotFoundError();
 }
 
+
+
 $formanswer = PluginFormcreatorCommon::getFormAnswer();
 
 if (isset($_POST['update'])) {
@@ -50,8 +52,9 @@ if (isset($_POST['update'])) {
    $formanswer->redirectToList();
 
 } else if (isset($_POST['accept_formanswer'])) {
-   $formanswer->update($_POST);
-   $formanswer->redirectToList();
+   	 require_once("loading.php");
+         $formanswer->update($_POST);
+         $formanswer->redirectToList(); 
 
 } else if (isset($_POST['save_formanswer'])) {
    if (!$formanswer->update($_POST)) {
@@ -65,8 +68,8 @@ if (isset($_POST['update'])) {
    }
 
 }
-// Show target ticket form
-$formanswer->getFromDB((int) $_GET['id']);
+//Show target ticket form
+$formanswer->getFromDB((int)$_GET['id']);
 if (!$formanswer->checkEntity()) {
    Html::displayRightError();
 }

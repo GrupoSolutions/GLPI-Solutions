@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -182,14 +182,21 @@ class Document extends CommonDBTM
             ) {
                 if (unlink(GLPI_DOC_DIR . "/" . $this->fields["filepath"])) {
                     Session::addMessageAfterRedirect(sprintf(
-                        __('Succesful deletion of the file %s'),
-                        GLPI_DOC_DIR . "/" . $this->fields["filepath"]
+                        __('Successful deletion of the file %s'),
+                        $this->fields["filepath"]
                     ));
                 } else {
+                    trigger_error(
+                        sprintf(
+                            'Failed to delete the file %s',
+                            GLPI_DOC_DIR . "/" . $this->fields["filepath"]
+                        ),
+                        E_USER_WARNING
+                    );
                     Session::addMessageAfterRedirect(
                         sprintf(
                             __('Failed to delete the file %s'),
-                            GLPI_DOC_DIR . "/" . $this->fields["filepath"]
+                            $this->fields["filepath"]
                         ),
                         false,
                         ERROR
@@ -563,7 +570,7 @@ class Document extends CommonDBTM
             $link_params = sprintf('&itemtype=%s&items_id=%s', $linked_item->getType(), $linked_item->getID());
         }
 
-        $splitter = explode("/", $this->fields['filename']);
+        $splitter = $this->fields['filename'] !== null ? explode("/", $this->fields['filename']) : [];
 
         if (count($splitter) == 2) {
            // Old documents in EXT/filename
@@ -575,7 +582,7 @@ class Document extends CommonDBTM
 
         $initfileout = $fileout;
 
-        if (Toolbox::strlen($fileout) > $len) {
+        if ($fileout !== null && Toolbox::strlen($fileout) > $len) {
             $fileout = Toolbox::substr($fileout, 0, $len) . "&hellip;";
         }
 
@@ -593,7 +600,7 @@ class Document extends CommonDBTM
                     title=\"" . $initfileout . "\"target='_blank'>";
             $close = "</a>";
         }
-        $splitter = explode("/", $this->fields['filepath']);
+        $splitter = $this->fields['filename'] !== null ? explode("/", $this->fields['filepath']) : [];
 
         if (count($splitter)) {
             $iterator = $DB->request([
@@ -715,6 +722,7 @@ class Document extends CommonDBTM
 
         if (
             $itemtype !== null
+            && is_a($itemtype, CommonDBTM::class, true)
             && $items_id !== null
             && $this->canViewFileFromItem($itemtype, $items_id)
         ) {
@@ -1157,8 +1165,12 @@ class Document extends CommonDBTM
         }
 
         if (!is_file($fullpath)) {
+            trigger_error(
+                sprintf('File %s not found.', $fullpath),
+                E_USER_WARNING
+            );
             Session::addMessageAfterRedirect(
-                sprintf(__('File %s not found.'), $fullpath),
+                sprintf(__('File %s not found.'), $filename),
                 false,
                 ERROR
             );
@@ -1186,16 +1198,23 @@ class Document extends CommonDBTM
         ) {
             if (unlink(GLPI_DOC_DIR . "/" . $input['current_filepath'])) {
                 Session::addMessageAfterRedirect(sprintf(
-                    __('Succesful deletion of the file %s'),
+                    __('Successful deletion of the file %s'),
                     $input['current_filename']
                 ));
             } else {
                // TRANS: %1$s is the curent filename, %2$s is its directory
-                Session::addMessageAfterRedirect(
+                trigger_error(
                     sprintf(
-                        __('Failed to delete the file %1$s (%2$s)'),
+                        'Failed to delete the file %1$s (%2$s)',
                         $input['current_filename'],
                         GLPI_DOC_DIR . "/" . $input['current_filepath']
+                    ),
+                    E_USER_WARNING
+                );
+                Session::addMessageAfterRedirect(
+                    sprintf(
+                        __('Failed to delete the file %1$s'),
+                        $input['current_filename']
                     ),
                     false,
                     ERROR
@@ -1257,8 +1276,12 @@ class Document extends CommonDBTM
         }
 
         if (!is_file($fullpath)) {
+            trigger_error(
+                sprintf('File %s not found.', $fullpath),
+                E_USER_WARNING
+            );
             Session::addMessageAfterRedirect(
-                sprintf(__('File %s not found.'), $fullpath),
+                sprintf(__('File %s not found.'), $filename),
                 false,
                 ERROR
             );
@@ -1287,16 +1310,23 @@ class Document extends CommonDBTM
         ) {
             if (unlink(GLPI_DOC_DIR . "/" . $input['current_filepath'])) {
                 Session::addMessageAfterRedirect(sprintf(
-                    __('Succesful deletion of the file %s'),
+                    __('Successful deletion of the file %s'),
                     $input['current_filename']
                 ));
             } else {
                // TRANS: %1$s is the curent filename, %2$s is its directory
-                Session::addMessageAfterRedirect(
+                trigger_error(
                     sprintf(
-                        __('Failed to delete the file %1$s (%2$s)'),
+                        'Failed to delete the file %1$s (%2$s)',
                         $input['current_filename'],
                         GLPI_DOC_DIR . "/" . $input['current_filepath']
+                    ),
+                    E_USER_WARNING
+                );
+                Session::addMessageAfterRedirect(
+                    sprintf(
+                        __('Failed to delete the file %1$s'),
+                        $input['current_filename']
                     ),
                     false,
                     ERROR
@@ -1388,16 +1418,23 @@ class Document extends CommonDBTM
         ) {
             if (unlink(GLPI_DOC_DIR . "/" . $input['current_filepath'])) {
                 Session::addMessageAfterRedirect(sprintf(
-                    __('Succesful deletion of the file %s'),
+                    __('Successful deletion of the file %s'),
                     $input['current_filename']
                 ));
             } else {
                // TRANS: %1$s is the curent filename, %2$s is its directory
-                Session::addMessageAfterRedirect(
+                trigger_error(
                     sprintf(
-                        __('Failed to delete the file %1$s (%2$s)'),
+                        'Failed to delete the file %1$s (%2$s)',
                         $input['current_filename'],
                         GLPI_DOC_DIR . "/" . $input['current_filepath']
+                    ),
+                    E_USER_WARNING
+                );
+                Session::addMessageAfterRedirect(
+                    sprintf(
+                        __('Failed to delete the file %1$s'),
+                        $input['current_filename']
                     ),
                     false,
                     ERROR
@@ -1453,10 +1490,16 @@ class Document extends CommonDBTM
         }
 
         if (!is_dir(GLPI_DOC_DIR)) {
+            trigger_error(
+                sprintf(
+                    "The directory %s doesn't exist.",
+                    GLPI_DOC_DIR
+                ),
+                E_USER_WARNING
+            );
             Session::addMessageAfterRedirect(
                 sprintf(
-                    __("The directory %s doesn't exist."),
-                    GLPI_DOC_DIR
+                    __("Documents directory doesn't exist.")
                 ),
                 false,
                 ERROR
@@ -1471,15 +1514,22 @@ class Document extends CommonDBTM
         ) {
             Session::addMessageAfterRedirect(sprintf(
                 __('Create the directory %s'),
-                GLPI_DOC_DIR . "/" . $subdir
+                $subdir
             ));
         }
 
         if (!is_dir(GLPI_DOC_DIR . "/" . $subdir)) {
+            trigger_error(
+                sprintf(
+                    'Failed to create the directory %s.',
+                    GLPI_DOC_DIR . "/" . $subdir
+                ),
+                E_USER_WARNING
+            );
             Session::addMessageAfterRedirect(
                 sprintf(
                     __('Failed to create the directory %s. Verify that you have the correct permission'),
-                    GLPI_DOC_DIR . "/" . $subdir
+                    $subdir
                 ),
                 false,
                 ERROR
@@ -1720,7 +1770,7 @@ class Document extends CommonDBTM
                 return false;
             }
             $etype = exif_imagetype($file);
-            return in_array($etype, [IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_BMP]);
+            return in_array($etype, [IMAGETYPE_JPEG, IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_BMP, IMAGETYPE_WEBP]);
         } else {
             trigger_error(
                 'For security reasons, you should consider using exif PHP extension to properly check images.',
@@ -1729,7 +1779,7 @@ class Document extends CommonDBTM
             $fileinfo = finfo_open(FILEINFO_MIME_TYPE);
             return in_array(
                 finfo_file($fileinfo, $file),
-                ['image/jpeg', 'image/png','image/gif', 'image/bmp']
+                ['image/jpeg', 'image/png','image/gif', 'image/bmp', 'image/webp']
             );
         }
     }

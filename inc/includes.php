@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -44,6 +44,7 @@ include_once GLPI_ROOT . '/inc/based_config.php';
 // Init Timer to compute time of display
 $TIMER_DEBUG = new Timer();
 $TIMER_DEBUG->start();
+\Glpi\Debug\Profiler::getInstance()->start('php_request');
 
 
 /// TODO try to remove them if possible
@@ -62,6 +63,8 @@ if (
     isset($_SESSION['glpi_use_mode'])
     && ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE)
 ) {
+    // Start the debug profile
+    $profile = \Glpi\Debug\Profile::getCurrent();
     $SQL_TOTAL_REQUEST    = 0;
     $DEBUG_SQL = [
         'queries' => [],
@@ -132,20 +135,11 @@ if (isset($_REQUEST['forcetab'])) {
 }
 // Manage tabs
 if (isset($_REQUEST['glpi_tab']) && isset($_REQUEST['itemtype'])) {
-    Session::setActiveTab($_REQUEST['itemtype'], $_REQUEST['glpi_tab']);
+    Session::setActiveTab($_REQUEST['itemtype'], Sanitizer::unsanitize($_REQUEST['glpi_tab']));
 }
 // Override list-limit if choosen
 if (isset($_REQUEST['glpilist_limit'])) {
     $_SESSION['glpilist_limit'] = $_REQUEST['glpilist_limit'];
-}
-
-// Security : Check HTTP_REFERRER : need to be in GLPI.
-if (
-    !defined('DO_NOT_CHECK_HTTP_REFERER')
-    && !isCommandLine()
-    && isset($_POST) && is_array($_POST) && count($_POST)
-) {
-    Toolbox::checkValidReferer();
 }
 
 // Security : check CSRF token

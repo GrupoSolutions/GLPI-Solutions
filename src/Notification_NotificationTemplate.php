@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -389,7 +389,7 @@ class Notification_NotificationTemplate extends CommonDBRelation
      *
      * @param string $mode  Mode
      * @param string $label Mode's label
-     * @param strign $from  Plugin which registers the mode
+     * @param string $from  Plugin which registers the mode
      *
      * @return void
      */

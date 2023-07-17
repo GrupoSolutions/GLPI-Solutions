@@ -5,7 +5,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -130,8 +130,8 @@ var handleUploadedFile = function (files, files_data, input_name, container, edi
  * @param      {String}  input_name    Name of generated input hidden (default filename)
  * @param      {Object}  container     The fileinfo container
  */
-var fileindex = 0;
 var displayUploadedFile = function(file, tag, editor, input_name, filecontainer) {
+    var fileindex = $('input[name^="_'+input_name+'["]').length;
     var ext = file.name.split('.').pop();
 
     var p = $('<p></p>')
@@ -169,8 +169,6 @@ var displayUploadedFile = function(file, tag, editor, input_name, filecontainer)
     $('<span class="ti ti-circle-x pointer"></span>').click(function() {
         deleteImagePasted(elementsIdToRemove, tag.tag, editor);
     }).appendTo(p);
-
-    fileindex++;
 };
 
 /**
@@ -426,22 +424,6 @@ if (typeof tinyMCE != 'undefined') {
 
             // Update HTML to paste to include "data-upload_id" attributes on images.
             event.content = fragment.html();
-        });
-
-        $(editor.formElement).on('submit', function() {
-            // Remove base64 src from images that were handled by upload process.
-            // This will prevent sending too many data on server and will also prevent issues with
-            // regex that are not correctly handling huge strings (see #8044).
-            var fragment = $('<div></div>');
-            fragment.append($(editor.targetElm).val());
-            fragment.find('img').each(function () {
-                const image = $(this);
-                const upload_id = image.attr('data-upload_id');
-                if (upload_id !== undefined) {
-                    image.removeAttr('src');
-                }
-            });
-            $(editor.targetElm).val(fragment.html());
         });
     });
 }

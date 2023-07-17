@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -254,7 +254,8 @@ class Fieldblacklist extends CommonDropdown
             }
             echo "<input type='hidden' name='itemtype' value='" . $this->fields['itemtype'] . "'>";
         } else {
-           //Add criteria : display dropdown
+            //Add criteria : display dropdown
+            $options = [];
             foreach ($CFG_GLPI['unicity_types'] as $itemtype) {
                 if ($item = getItemForItemtype($itemtype)) {
                     if ($item->can(-1, READ)) {

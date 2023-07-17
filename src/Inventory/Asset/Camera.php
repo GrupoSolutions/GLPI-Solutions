@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -108,7 +108,7 @@ class Camera extends Device
 
             $cam_resolutions = new \Item_DeviceCamera_ImageResolution();
             $data = [
-                'item_devicecameras_id' => $itemdevice->fields['devicecameras_id'],
+                'items_devicecameras_id' => $itemdevice->fields['devicecameras_id'],
                 'imageresolutions_id' => $resolution->fields['id'],
                 'is_dynamic' => 1
             ];
@@ -142,7 +142,7 @@ class Camera extends Device
 
             $cam_formats = new \Item_DeviceCamera_ImageFormat();
             $data = [
-                'item_devicecameras_id' => $itemdevice->fields['devicecameras_id'],
+                'items_devicecameras_id' => $itemdevice->fields['devicecameras_id'],
                 'imageformats_id' => $format->fields['id'],
                 'is_dynamic' => 1
             ];

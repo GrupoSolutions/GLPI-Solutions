@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -212,7 +212,9 @@ class Transfer extends CommonDBTM
             'keep_consumable'     => 0,
 
             'keep_certificate'    => 0,
-            'clean_certificate'   => 0
+            'clean_certificate'   => 0,
+
+            'lock_updated_fields' => 0
         ];
 
         if ($to >= 0) {
@@ -285,7 +287,7 @@ class Transfer extends CommonDBTM
                 if (!$intransaction && $DB->inTransaction()) {
                     $DB->commit();
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 if (!$intransaction && $DB->inTransaction()) {
                     $DB->rollBack();
                 }
@@ -1298,9 +1300,10 @@ class Transfer extends CommonDBTM
 
                // Transfer Item
                 $input = [
-                    'id'          => $newID,
-                    'entities_id' => $this->to,
-                    '_transfer'   => 1
+                    'id'                   => $newID,
+                    'entities_id'          => $this->to,
+                    '_transfer'            => 1,
+                    '_lock_updated_fields' => $this->options['lock_updated_fields']
                 ];
 
                // Manage Location dropdown
@@ -1708,7 +1711,10 @@ class Transfer extends CommonDBTM
                     unset($vers->fields['id']);
                     $input                 = $vers->fields;
                     $vers->fields = [];
-                   // entities_id and is_recursive from new software are set in prepareInputForAdd
+                    // entities_id and is_recursive from new software are set in prepareInputForAdd
+                    // they must be emptied to be computed
+                    unset($input['entities_id']);
+                    unset($input['is_recursive']);
                     $input['softwares_id'] = $newsoftID;
                     $newversID             = $vers->add(Toolbox::addslashes_deep($input));
                 }
@@ -2914,25 +2920,21 @@ class Transfer extends CommonDBTM
     {
         global $DB;
 
-        switch ($itemtype) {
-            case 'Ticket':
-                $table = 'glpi_suppliers_tickets';
-                $field = 'tickets_id';
-                $link  = new Supplier_Ticket();
-                break;
-
-            case 'Problem':
-                $table = 'glpi_problems_suppliers';
-                $field = 'problems_id';
-                $link  = new Problem_Supplier();
-                break;
-
-            case 'Change':
-                $table = 'glpi_changes_suppliers';
-                $field = 'changes_id';
-                $link  = new Change_Supplier();
-                break;
+        if (!is_a($itemtype, CommonITILObject::class, true)) {
+            return;
         }
+
+        /* @var CommonITILObject $item */
+        $item = new $itemtype();
+        $linkclass = $item->supplierlinkclass;
+        if (!is_a($linkclass, CommonITILActor::class, true)) {
+            return;
+        }
+
+        /* @var CommonITILActor $link */
+        $link  = new $linkclass();
+        $field = getForeignKeyFieldForItemType($itemtype);
+        $table = $link->getTable();
 
         $iterator = $DB->request([
             'FROM'   => $table,
@@ -2995,25 +2997,19 @@ class Transfer extends CommonDBTM
     {
         global $DB;
 
-        switch ($itemtype) {
-            case 'Ticket':
-                $table = 'glpi_tickettasks';
-                $field = 'tickets_id';
-                $task  = new TicketTask();
-                break;
-
-            case 'Problem':
-                $table = 'glpi_problemtasks';
-                $field = 'problems_id';
-                $task  = new ProblemTask();
-                break;
-
-            case 'Change':
-                $table = 'glpi_changetasks';
-                $field = 'changes_id';
-                $task  = new ProblemTask();
-                break;
+        if (!is_a($itemtype, CommonITILObject::class, true)) {
+            return;
         }
+
+        $taskclass = $itemtype::getTaskClass();
+        if (!is_a($taskclass, CommonITILTask::class, true)) {
+            return;
+        }
+
+        /* @var CommonITILTask $task */
+        $task  = new $taskclass();
+        $field = getForeignKeyFieldForItemType($itemtype);
+        $table = $task->getTable();
 
         $iterator = $DB->request([
             'FROM'   => $table,
@@ -3831,20 +3827,21 @@ class Transfer extends CommonDBTM
                         }
                     } else {
                         foreach ($iterator as $data) {
-                          // Not a copy -> only update socket
+                            // Not a copy -> only update socket
                             if (isset($data['sockets_id']) && $data['sockets_id']) {
-                                 $socket = new Socket();
+                                $socket = new Socket();
                                 if ($socket->getFromDBByCrit(["networkports_id" => $data['id']])) {
                                     if ($socket->getID()) {
                                         $socketID = $this->transferDropdownSocket($socket->getID());
+                                        $input['id']         = $data['id'];
+                                        $input['sockets_id'] = $socketID;
+                                        $np->update($input);
                                     }
                                 }
-                                 $input['id']           = $data['id'];
-                                 $input['sockets_id'] = $socketID;
-                                 $np->update($input);
                             }
                         }
                     }
+                    break;
             }
         }
     }
@@ -3986,6 +3983,12 @@ class Transfer extends CommonDBTM
         Dropdown::showFromArray('keep_disk', $keep, $params);
         echo "</td></tr>";
 
+        echo "<tr class='tab_bg_1'>";
+        echo "<td>" . __('Lock fields updated during transfer') . "</td><td>";
+        Dropdown::showYesNo('lock_updated_fields', $this->fields['lock_updated_fields']);
+        echo "</td>";
+        echo "<td></td></tr>";
+
         echo "<tr class='tab_bg_2'>";
         echo "<td colspan='4' class='center b'>" . __('Direct connections') . "</td></tr>";
 
@@ -4118,12 +4121,14 @@ class Transfer extends CommonDBTM
             echo '</th></tr>';
 
             echo "<tr><td class='tab_bg_1 top'>";
+
+            /** @var class-string<CommonDBTM> $itemtype */
             foreach ($_SESSION['glpitransfer_list'] as $itemtype => $tab) {
                 if (count($tab)) {
                     if (!($item = getItemForItemtype($itemtype))) {
                         continue;
                     }
-                    $table = getTableForItemType($itemtype);
+                    $table = $itemtype::getTable();
 
                     $iterator = $DB->request([
                         'SELECT'    => [

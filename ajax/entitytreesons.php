@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -53,6 +53,7 @@ $ancestors = getAncestorsOf('glpi_entities', $_SESSION['glpiactive_entity']);
 
 $ckey    = 'entity_selector';
 $subckey = sha1(json_encode($_SESSION['glpiactiveprofile']['entities']));
+$subckey .= sha1($base_path); // cached value contains links based on `$base_path`, so cache key should change when `$base_path` changes
 $all_entitiestree = $GLPI_CACHE->get($ckey, []);
 
 /* calculates the tree to save it in the cache if it is not already there */

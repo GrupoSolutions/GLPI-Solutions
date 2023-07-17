@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -1042,7 +1042,7 @@ class Item_Devices extends CommonDBRelation
                                 $content = Html::progressBar("percent" . mt_rand(), [
                                     'create'  => true,
                                     'percent' => $percent,
-                                    'message' => sprintf(__('%1$s (%2$d%%) '), html_entity_decode(Html::formatNumber($this->fields[$field], false, 0)), $percent),
+                                    'message' => sprintf(__('%1$s (%2$d%%) '), Html::formatNumber($this->fields[$field], false, 0), $percent),
                                     'display' => false
                                 ]);
                                 break;
@@ -1251,9 +1251,7 @@ class Item_Devices extends CommonDBRelation
         $item->check($input['items_id'], UPDATE, $_POST);
 
         $is_device = ($item instanceof CommonDevice);
-        if ($is_device) {
-            $link_type = $itemtype::getItem_DeviceType();
-        }
+        $link_type = $is_device ? $itemtype::getItem_DeviceType() : '';
 
         $links   = [];
        // Update quantity or values

@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 430:
+/***/ 73:
 /***/ (() => {
 
 ﻿/*! RateIt | v1.1.5 / 03/10/2021
@@ -421,7 +421,7 @@
 
 /***/ }),
 
-/***/ 431:
+/***/ 74:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -480,7 +480,7 @@ var __webpack_exports__ = {};
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -507,8 +507,8 @@ var __webpack_exports__ = {};
  */
 
 // RateIt jQuery plugin
-__webpack_require__(430);
-__webpack_require__(431);
+__webpack_require__(73);
+__webpack_require__(74);
 
 })();
 

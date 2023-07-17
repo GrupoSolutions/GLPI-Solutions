@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 370:
+/***/ 133:
 /***/ (function(module) {
 
 /* flatpickr v4.6.11, @license MIT */
@@ -2721,7 +2721,7 @@
 
 /***/ }),
 
-/***/ 371:
+/***/ 134:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2780,7 +2780,7 @@ var __webpack_exports__ = {};
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -2806,8 +2806,8 @@ var __webpack_exports__ = {};
  * ---------------------------------------------------------------------
  */
 
-const flatpickr = __webpack_require__(370);
-__webpack_require__(371);
+const flatpickr = __webpack_require__(133);
+__webpack_require__(134);
 
 })();
 

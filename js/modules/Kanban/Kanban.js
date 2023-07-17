@@ -5,7 +5,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -343,6 +343,13 @@ class GLPIKanbanRights {
         this.display_initials = true;
 
         /**
+         * Keep track of users pictures that need to be loaded later on
+         *
+         * @type {Set}
+         */
+        this.user_pictures_to_load = new Set([]);
+
+        /**
        * Parse arguments and assign them to the object's properties
        * @since 9.5.0
        * @param {Object} args Object arguments
@@ -480,6 +487,12 @@ class GLPIKanbanRights {
                <a href="#"><i class="fa-fw fas fa-share"></i>${__('Go to')}</a>
             </li>`;
             if (self.rights.canDeleteItem()) {
+                card_overflow_dropdown += `
+                <li class='kanban-item-restore dropdown-item d-none'>
+                   <span>
+                      <i class="fa-fw ti ti-trash-off"></i>${__('Restore')}
+                   </span>
+                </li>`;
                 card_overflow_dropdown += `
                 <li class='kanban-item-remove dropdown-item'>
                    <span>
@@ -772,9 +785,12 @@ class GLPIKanbanRights {
                 $(card_overflow_dropdown.find('.kanban-item-goto a')).attr('href', form_link);
 
                 let delete_action = $(card_overflow_dropdown.find('.kanban-item-remove'));
-                if (card.hasClass('deleted')) {
+                const restore_action = $(card_overflow_dropdown.find('.kanban-item-restore'));
+                if (card.data('is_deleted')) {
+                    restore_action.removeClass('d-none');
                     delete_action.html('<span><i class="ti ti-trash"></i>'+__('Purge')+'</span>');
                 } else {
+                    restore_action.addClass('d-none');
                     delete_action.html('<span><i class="ti ti-trash"></i>'+__('Delete')+'</span>');
                 }
             });
@@ -820,6 +836,12 @@ class GLPIKanbanRights {
                 const card = $(e.target.closest('.kanban-dropdown')).data('trigger-button').closest('.kanban-item').prop('id');
                 // Try to delete that card item
                 deleteCard(card, undefined, undefined);
+            });
+            $(self.element + ' .kanban-container').on('click', '.kanban-item-restore', function(e) {
+                // Get root dropdown, then the button that triggered it, and finally the card that the button is in
+                const card = $(e.target.closest('.kanban-dropdown')).data('trigger-button').closest('.kanban-item').prop('id');
+                // Try to delete that card item
+                restoreCard(card, undefined, undefined);
             });
             $(self.element + ' .kanban-container').on('click', '.kanban-collapse-column', function(e) {
                 self.toggleCollapseColumn(e.target.closest('.kanban-column'));
@@ -1075,7 +1097,7 @@ class GLPIKanbanRights {
 
             sortable(self.element + ' .kanban-body', {
                 acceptFrom: '.kanban-body',
-                items: '.kanban-item:not(.readonly):not(.temporarily-readonly)',
+                items: '.kanban-item:not(.readonly):not(.temporarily-readonly):not(.filtered-out)',
             });
 
             $(self.element + ' .kanban-body').off('sortstart');
@@ -1294,6 +1316,39 @@ class GLPIKanbanRights {
         };
 
         /**
+         * Restore a trashed card
+         * @param {string} card The ID of the card being restored.
+         * @param {function} error Callback function called when the server reports an error.
+         * @param {function} success Callback function called when the server processes the request successfully.
+         */
+        const restoreCard = function(card, error, success) {
+            const [itemtype, items_id] = card.split('-', 2);
+            const card_obj = $('#'+card);
+            $.ajax({
+                type: "POST",
+                url: (self.ajax_root + "kanban.php"),
+                data: {
+                    action: "restore_item",
+                    itemtype: itemtype,
+                    items_id: items_id,
+                },
+                error: function() {
+                    if (error) {
+                        error();
+                    }
+                },
+                success: function() {
+                    card_obj.data('is_deleted', false);
+                    card_obj.removeClass('deleted');
+                    if (success) {
+                        success();
+                        $('#'+card).trigger('kanban:card_restore');
+                    }
+                }
+            });
+        };
+
+        /**
        * Show the column and notify the server of the change.
        * @since 9.5.0
        * @param {number} column The ID of the column.
@@ -1378,105 +1433,72 @@ class GLPIKanbanRights {
             const itemtype = teammember["itemtype"];
             const items_id = teammember["id"];
 
-            if (self.team_badge_cache[itemtype] === undefined ||
-                 self.team_badge_cache[itemtype][items_id] === undefined) {
-                if (itemtype === 'User') {
-                    let user_img = null;
-                    $.ajax({
-                        url: (self.ajax_root + "getUserPicture.php"),
-                        async: false,
-                        data: {
-                            users_id: [items_id],
-                            size: self.team_image_size,
-                        }
-                    }).done(function(data) {
-                        if (data[items_id] !== undefined) {
-                            user_img = data[items_id];
-                        } else {
-                            user_img = null;
-                        }
-                    });
+            // If the picture is already cached, return cache value
+            if (
+                self.team_badge_cache[itemtype] !== undefined &&
+                self.team_badge_cache[itemtype][items_id] !== undefined
+            ) {
+                return self.team_badge_cache[itemtype][items_id];
+            }
 
-                    if (user_img) {
-                        self.team_badge_cache[itemtype][items_id] = "<span>" + user_img + "</span>";
-                    } else {
-                        self.team_badge_cache[itemtype][items_id] = generateUserBadge(teammember);
-                    }
-                } else {
-                    switch (itemtype) {
-                        case 'Group':
-                            self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-users');
-                            break;
-                        case 'Supplier':
-                            self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-briefcase');
-                            break;
-                        case 'Contact':
-                            self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-user');
-                            break;
-                        default:
-                            self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-user');
-                    }
-                }
+            // Pictures from users
+            if (itemtype === 'User') {
+                // Display a placeholder and keep track of the image to load it later
+                self.user_pictures_to_load.add(items_id);
+                self.team_badge_cache[itemtype][items_id] = generateUserBadge(teammember);
+
+                return self.team_badge_cache[itemtype][items_id];
+            }
+
+            // Pictures from groups, supplier, contact
+            switch (itemtype) {
+                case 'Group':
+                    self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-users');
+                    break;
+                case 'Supplier':
+                    self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-briefcase');
+                    break;
+                case 'Contact':
+                    self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-user');
+                    break;
+                default:
+                    self.team_badge_cache[itemtype][items_id] = generateOtherBadge(teammember, 'fa-user');
             }
             return self.team_badge_cache[itemtype][items_id];
         };
 
-        /**
-       * Attempt to get and cache user badges in a single AJAX request to reduce time wasted when using multiple requests.
-       * Most time spent on the request is latency, so it takes about the same amount of time for 1 or 50 users.
-       * If no image is returned from the server, a badge is generated based on the user's initials.
-       * @since 9.5.0
-       * @param {Object} options Object of options for this function. Supports:
-       *    trim_cache - boolean indicating if unused user images should be removed from the cache.
-       *       This is useful for refresh scenarios.
-       * @see generateUserBadge()
-      **/
-        const preloadBadgeCache = function(options) {
-            let users = [];
-            $.each(self.columns, function(column_id, column) {
-                if (column['items'] !== undefined) {
-                    $.each(column['items'], function(card_id, card) {
-                        if (card["_team"] !== undefined) {
-                            Object.values(card["_team"]).slice(0, self.max_team_images).forEach(function(teammember) {
-                                if (teammember['itemtype'] === 'User') {
-                                    if (self.team_badge_cache['User'][teammember['id']] === undefined) {
-                                        users[teammember['id']] = teammember;
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-            if (users.length === 0) {
+        const fetchUserPicturesToLoad = function() {
+            // Get user ids for which we must load their pictures
+            const users_ids = Array.from(self.user_pictures_to_load.values());
+
+            if (users_ids.length === 0) {
+                // Nothing to be loaded
                 return;
             }
+
+            // Clear "to load" list
+            self.user_pictures_to_load.clear();
+
             $.ajax({
+                type: 'POST', // Too much data may break GET limit
                 url: (self.ajax_root + "getUserPicture.php"),
-                async: false,
                 data: {
-                    users_id: Object.keys(users),
-                    size: self.team_image_size
+                    users_id: users_ids,
+                    size: self.team_image_size,
                 }
             }).done(function(data) {
-                Object.keys(users).forEach(function(user_id) {
-                    const teammember = users[user_id];
+                // For each users, apply the image found
+                Object.keys(users_ids).forEach(function(user_id) {
                     if (data[user_id] !== undefined) {
+                        // Store new image in cache
                         self.team_badge_cache['User'][user_id] = "<span>" + data[user_id] + "</span>";
-                    } else {
-                        self.team_badge_cache['User'][user_id] = generateUserBadge(teammember);
+
+                        // Replace placeholders
+                        $("[data-placeholder-users-id=" + user_id + "]").each(function() {
+                            $(this).parent().html(self.team_badge_cache['User'][user_id]);
+                        });
                     }
                 });
-                if (options !== undefined && options['trim_cache'] !== undefined) {
-                    let cached_colors = JSON.parse(window.sessionStorage.getItem('badge_colors'));
-                    Object.keys(self.team_badge_cache['User']).forEach(function(user_id) {
-                        if (users[user_id] === undefined) {
-                            delete self.team_badge_cache['User'][user_id];
-                            delete cached_colors['User'][user_id];
-                        }
-                    });
-                    window.sessionStorage.setItem('badge_colors', JSON.stringify(cached_colors));
-                }
             });
         };
 
@@ -1591,7 +1613,7 @@ class GLPIKanbanRights {
             context.fillText(initials, self.team_image_size / 2, self.team_image_size / 2);
             const src = canvas.toDataURL("image/png");
             const name = teammember['name'].replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-            return "<span><img src='" + src + "' title='" + name + "'/></span>";
+            return "<span><img src='" + src + "' title='" + name + "' data-bs-toggle='tooltip' data-placeholder-users-id='" + teammember["id"] + "'/></span>";
         };
 
         /**
@@ -1608,7 +1630,7 @@ class GLPIKanbanRights {
             return `
             <span class='fa-stack fa-lg' style='font-size: ${(self.team_image_size / 2)}px'>
                 <i class='fas fa-circle fa-stack-2x' style="color: ${bg_color}" title="${teammember['name']}"></i>
-                <i class='fas ${icon} fa-stack-1x' title="${name}"></i>
+                <i class='fas ${icon} fa-stack-1x' title="${name}" data-bs-toggle='tooltip'></i>
             </span>
          `;
         };
@@ -1638,7 +1660,7 @@ class GLPIKanbanRights {
             context.textBaseline = 'middle';
             context.fillText("+" + overflow_count, self.team_image_size / 2, self.team_image_size / 2);
             const src = canvas.toDataURL("image/png");
-            return "<span><img src='" + src + "' title='" + __('%d other team members').replace('%d', overflow_count) + "'/></span>";
+            return "<span><img src='" + src + "' title='" + __('%d other team members').replace('%d', overflow_count) + "' data-bs-toggle='tooltip'/></span>";
         };
 
         /**
@@ -1826,7 +1848,6 @@ class GLPIKanbanRights {
 
                 $.ajax({
                     method: 'POST',
-                    //async: false,
                     url: (self.ajax_root + "kanban.php"),
                     data: data
                 }).done(function() {
@@ -1922,7 +1943,6 @@ class GLPIKanbanRights {
             const _refresh = function() {
                 $.ajax({
                     method: 'GET',
-                    //async: false,
                     url: (self.ajax_root + "kanban.php"),
                     data: {
                         action: "refresh",
@@ -1931,9 +1951,6 @@ class GLPIKanbanRights {
                         column_field: self.column_field.id
                     }
                 }).done(function(columns, textStatus, jqXHR) {
-                    preloadBadgeCache({
-                        trim_cache: true
-                    });
                     clearColumns();
                     self.columns = columns;
                     fillColumns();
@@ -1943,6 +1960,7 @@ class GLPIKanbanRights {
                         success(columns, textStatus, jqXHR);
                         $(self.element).trigger('kanban:refresh');
                     }
+                    fetchUserPicturesToLoad();
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     if (fail) {
                         fail(jqXHR, textStatus, errorThrown);
@@ -2063,6 +2081,7 @@ class GLPIKanbanRights {
             }
 
             refreshSortables();
+            self.filter();
         };
 
         /**
@@ -2086,7 +2105,7 @@ class GLPIKanbanRights {
             const col_body = $(column_el).find('.kanban-body').first();
             const readonly = card['_readonly'] !== undefined && (card['_readonly'] === true || card['_readonly'] === 1);
             let card_el = `
-            <li id="${card['id']}" class="kanban-item card ${readonly ? 'readonly' : ''} ${card['is_deleted'] ? 'deleted' : ''}">
+            <li id="${card['id']}" class="kanban-item card ${readonly ? 'readonly' : ''}">
                 <div class="kanban-item-header">
                     <span class="kanban-item-title" title="${card['title_tooltip']}">
                     <i class="${self.supported_itemtypes[itemtype]['icon']}"></i>
@@ -2113,6 +2132,9 @@ class GLPIKanbanRights {
                 $.each(card['_metadata'], (k, v) => {
                     card_obj.data(k, v);
                 });
+                if (card_obj.data('is_deleted')) {
+                    card_obj.addClass('deleted');
+                }
             }
             card_obj.data('_team', card['_team']);
             self.updateColumnCount(column_el);
@@ -2124,6 +2146,7 @@ class GLPIKanbanRights {
             // Refresh core tags autocomplete
             self.filter_input.tokenizer.setAutocomplete('type', Object.keys(self.supported_itemtypes).map(k => `<i class="${self.supported_itemtypes[k].icon} me-1"></i>` + k));
             self.filter_input.tokenizer.setAutocomplete('milestone', ["true", "false"]);
+            self.filter_input.tokenizer.setAutocomplete('deleted', ["true", "false"]);
 
             $(self.element).trigger('kanban:refresh_tokenizer', self.filter_input.tokenizer);
         };
@@ -2206,6 +2229,15 @@ class GLPIKanbanRights {
                     }
                 };
 
+                const filter_boolean = (filter_data, target) => {
+                    const negative_values = ['false', 'no', '0', 0, false, undefined];
+                    const negative_filter = negative_values.includes(typeof filter_data.term === 'string' ? filter_data.term.toLowerCase() : filter_data.term);
+                    const negative_target = negative_values.includes(typeof target === 'string' ? target.toLowerCase() : target);
+                    if ((negative_target !== negative_filter) !== filter_data.exclusion) {
+                        shown = false;
+                    }
+                };
+
                 if (self.filters._text) {
                     try {
                         if (!title.match(new RegExp(self.filters._text, 'i'))) {
@@ -2219,6 +2251,10 @@ class GLPIKanbanRights {
                     }
                 }
 
+                if (self.filters.deleted !== undefined) {
+                    filter_boolean(self.filters.deleted, card.data('is_deleted'));
+                }
+
                 if (self.filters.title !== undefined) {
                     filter_text(self.filters.title, title);
                 }
@@ -2228,8 +2264,11 @@ class GLPIKanbanRights {
                 }
 
                 if (self.filters.milestone !== undefined) {
-                    self.filters.milestone.term = (self.filters.milestone.term == '0' || self.filters.milestone.term == 'false') ? 0 : 1;
-                    filter_equal(self.filters.milestone, card.data('is_milestone'));
+                    filter_boolean(self.filters.milestone, card.data('is_milestone'));
+                }
+
+                if (self.filters.category !== undefined) {
+                    filter_text(self.filters.category, card.data('category'));
                 }
 
                 if (self.filters.content !== undefined) {
@@ -2318,7 +2357,7 @@ class GLPIKanbanRights {
        *    This is useful if an item is changed in another tab or by another user to be in the new column after the original column was added.
        * @param {function} callback Function to call after the column is loaded (or fails to load).
        */
-        const loadColumn = function(column_id, nosave, revalidate, callback = undefined) {
+        const loadColumn = async function(column_id, nosave, revalidate, callback = undefined) {
             nosave = nosave !== undefined ? nosave : false;
 
             let skip_load = false;
@@ -2337,27 +2376,28 @@ class GLPIKanbanRights {
                 return;
             }
 
-            $.ajax({
-                method: 'GET',
-                url: (self.ajax_root + "kanban.php"),
-                async: false,
-                data: {
-                    action: "get_column",
-                    itemtype: self.item.itemtype,
-                    items_id: self.item.items_id,
-                    column_field: self.column_field.id,
-                    column_id: column_id
-                }
-            }).done(function(column) {
+            try {
+                const column = await $.ajax({
+                    method: 'GET',
+                    url: (self.ajax_root + "kanban.php"),
+                    data: {
+                        action: "get_column",
+                        itemtype: self.item.itemtype,
+                        items_id: self.item.items_id,
+                        column_field: self.column_field.id,
+                        column_id: column_id
+                    }
+                });
+
                 if (column !== undefined && Object.keys(column).length > 0) {
                     self.columns[column_id] = column[column_id];
                     appendColumn(column_id, self.columns[column_id], null, revalidate);
                 }
-            }).always(function() {
+            } finally {
                 if (callback) {
                     callback();
                 }
-            });
+            }
         };
 
         /**
@@ -2588,7 +2628,7 @@ class GLPIKanbanRights {
                     items_id: self.item.items_id,
                     last_load: self.last_refresh
                 }
-            }).done(function(state) {
+            }).done(async function(state) {
                 if (state['state'] === undefined || state['state'] === null || Object.keys(state['state']).length === 0) {
                     if (callback) {
                         callback(false);
@@ -2601,18 +2641,20 @@ class GLPIKanbanRights {
                 };
 
                 const indices = Object.keys(state['state']);
+                const promises = [];
                 for (let i = 0; i < indices.length; i++) {
                     const index = indices[i];
                     const entry = state['state'][index];
                     const element = $('#column-' + self.column_field.id + "-" + entry.column);
                     if (element.length === 0) {
-                        loadColumn(entry.column, true, false);
+                        promises.push(loadColumn(entry.column, true, false));
                     }
                     $(self.element + ' .kanban-columns .kanban-column:nth-child(' + index + ')').after(element);
                     if (entry.folded === 'true') {
                         element.addClass('collapsed');
                     }
                 }
+                await Promise.all(promises);
                 self.last_refresh = state['timestamp'];
 
                 if (callback) {

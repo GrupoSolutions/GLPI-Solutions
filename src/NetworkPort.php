@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -483,6 +483,7 @@ class NetworkPort extends CommonDBChild
                 'ifoutbytes'      => $this->fields['ifoutbytes'] ?? 0,
                 'ifinerrors'      => $this->fields['ifinerrors'] ?? 0,
                 'ifouterrors'     => $this->fields['ifouterrors'] ?? 0,
+                'is_dynamic'     =>  $this->fields['is_dynamic'] ?? 0,
             ],
             $unicity_input
         );
@@ -520,6 +521,7 @@ class NetworkPort extends CommonDBChild
 
     public function post_addItem()
     {
+        parent::post_addItem(); //for history
         $this->updateDependencies(!$this->input['_no_history']);
         $this->updateMetrics();
     }
@@ -538,6 +540,14 @@ class NetworkPort extends CommonDBChild
                 NetworkName::class,
                 NetworkPort_NetworkPort::class,
                 NetworkPort_Vlan::class,
+                NetworkPortAggregate::class,
+                NetworkPortAlias::class,
+                NetworkPortDialup::class,
+                NetworkPortEthernet::class,
+                NetworkPortFiberchannel::class,
+                NetworkPortLocal::class,
+                NetworkPortMetrics::class,
+                NetworkPortWifi::class,
             ]
         );
     }
@@ -654,6 +664,19 @@ class NetworkPort extends CommonDBChild
         $itemtype = $item->getType();
         $items_id = $item->getField('id');
 
+        //no matter if the main item is dynamic,
+        //deleted and dynamic networkport are displayed from lock tab
+        //deleted and non dynamic networkport are always displayed (with is_deleted column)
+        $deleted_criteria = [
+            'OR'  => [
+                'AND' => [
+                    "is_deleted" => 0,
+                    "is_dynamic" => 1
+                ],
+                "is_dynamic" => 0
+            ]
+        ];
+
         if (
             !NetworkEquipment::canView()
             || !$item->can($items_id, READ)
@@ -704,7 +727,7 @@ class NetworkPort extends CommonDBChild
                         ['name' => null]
                     ]
                 ]
-            ]
+            ] + $deleted_criteria
         ];
 
         $ports_iterator = $DB->request($criteria);
@@ -880,7 +903,7 @@ class NetworkPort extends CommonDBChild
                 'items_id'  => $item->getID(),
                 'itemtype'  => $item->getType(),
                 'name'      => 'Management'
-            ]
+            ] + $deleted_criteria
         ];
 
         $mports_iterator = $DB->request($criteria);
@@ -975,6 +998,9 @@ class NetworkPort extends CommonDBChild
             foreach ($so as $option) {
                 if ($option['id'] == $dpref) {
                     switch ($dpref) {
+                        case 6:
+                            $output .= Dropdown::getYesNo($port['is_deleted']);
+                            break;
                         case 1:
                             if ($agg === true) {
                                 $td_class = 'aggregated';
@@ -1035,13 +1061,13 @@ class NetworkPort extends CommonDBChild
                             }
 
                             if (!empty($in)) {
-                                $in = Toolbox::getSize($in, 1000);
+                                $in = Toolbox::getSize($in);
                             } else {
                                 $in = ' - ';
                             }
 
                             if (!empty($out)) {
-                                $out = Toolbox::getSize($out, 1000);
+                                $out = Toolbox::getSize($out);
                             } else {
                                 $out = ' - ';
                             }
@@ -1430,7 +1456,7 @@ class NetworkPort extends CommonDBChild
                 'joinparams' => $joinparams
             ]
         ];
-        NetworkName::rawSearchOptionsToAdd($tab, $networkNameJoin, $itemtype);
+        NetworkName::rawSearchOptionsToAdd($tab, $networkNameJoin);
 
         $instantjoin = ['jointype'   => 'child',
             'beforejoin' => ['table'      => 'glpi_networkports',
@@ -1466,15 +1492,54 @@ class NetworkPort extends CommonDBChild
 
     public function getSpecificMassiveActions($checkitem = null)
     {
-
         $isadmin = $checkitem !== null && $checkitem->canUpdate();
         $actions = parent::getSpecificMassiveActions($checkitem);
+
+        //add purge action if main item is not dynamic
+        //NetworkPort delete / purge are handled a different way on dynamic asset (lock)
+        if (!$checkitem->isDynamic()) {
+            $actions['NetworkPort' . MassiveAction::CLASS_ACTION_SEPARATOR . 'purge']    = __('Delete permanently');
+        }
+
         if ($isadmin) {
             $vlan_prefix                    = 'NetworkPort_Vlan' . MassiveAction::CLASS_ACTION_SEPARATOR;
             $actions[$vlan_prefix . 'add']    = __('Associate a VLAN');
             $actions[$vlan_prefix . 'remove'] = __('Dissociate a VLAN');
         }
         return $actions;
+    }
+
+
+    public static function processMassiveActionsForOneItemtype(
+        MassiveAction $ma,
+        CommonDBTM $item,
+        array $ids
+    ) {
+        switch ($ma->getAction()) {
+            case 'purge':
+                foreach ($ids as $id) {
+                    if ($item->can($id, PURGE)) {
+                        // Only mark deletion for
+                        if (!$item->isDeleted()) {
+                            $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_KO);
+                            $ma->addMessage(sprintf(__('%1$s: %2$s'), $item->getLink(), __('Item need to be deleted first')));
+                        } else {
+                            $delete_array = ['id' => $id];
+
+                            if ($item->delete($delete_array, true)) {
+                                $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_OK);
+                            } else {
+                                $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_KO);
+                                $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
+                            }
+                        }
+                    } else {
+                        $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_NORIGHT);
+                        $ma->addMessage($item->getErrorMessage(ERROR_RIGHT));
+                    }
+                }
+                return;
+        }
     }
 
 
@@ -1529,6 +1594,15 @@ class NetworkPort extends CommonDBChild
             'name'               => NetworkPortType::getTypeName(1),
             'datatype'           => 'itemtypename',
             'itemtype_list'      => 'networkport_instantiations',
+            'massiveaction'      => false
+        ];
+
+        $tab[] = [
+            'id'                 => '6',
+            'table'              => $this->getTable(),
+            'field'              => 'is_deleted',
+            'name'               => __('Deleted'),
+            'datatype'           => 'bool',
             'massiveaction'      => false
         ];
 
@@ -1638,17 +1712,14 @@ class NetworkPort extends CommonDBChild
             'joinparams' => ['beforejoin' => $netportjoin]
         ];
 
-        if (!defined('TU_USER')) {
-            $tab[] = [
-                'id'    => '39',
-                'table' => $this->getTable(),
-                'field' => 'noone',
-                'name' => __('Connected to'),
-                'nosearch' => true,
-                'nodisplay' => true,
-                'massiveaction' => false
-            ];
-        }
+        $tab[] = [
+            'id'    => '39',
+            'table' => $this->getTable(),
+            'field' => '_virtual_connected_to',
+            'name' => __('Connected to'),
+            'nosearch' => true,
+            'massiveaction' => false
+        ];
 
         $tab[] = [
             'id'    => '40',

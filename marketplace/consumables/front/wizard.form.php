@@ -54,21 +54,7 @@ if (!empty($_GET['action'])) {
          echo "&nbsp;";
          echo __("Consumable validation", "consumables");
          echo "</div>";
-         $p = ['criteria' => [
-            [
-               'field' => 6,        // field index in search options
-               'searchtype' => 'equals',  // type of search
-               'value' => 2,         // value to search
-            ]
-         ],
-            'as_map' => 0];
-         $p = Search::manageParams(PluginConsumablesValidation::getType(), $_GET);
-         $p["criteria"][0] =  [
-            'field'      => 6,        // field index in search options
-            'searchtype' => 'equals',  // type of search
-            'value'      => 2,         // value to search
-         ];
-         Search::showList("PluginConsumablesValidation", $p);
+         require('../../../assets/php/MovimentacaoPedido.php');
          break;
    }
 }

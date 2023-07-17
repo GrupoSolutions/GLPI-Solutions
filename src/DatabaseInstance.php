@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -578,6 +578,10 @@ class DatabaseInstance extends CommonDBTM
             echo "<table class='tab_cadre_fixehov'>";
             $header = "<tr>";
             $header .= "<th>" . __('Name') . "</th>";
+            $header .= "<th>" . Database::getTypeName(1) . "</th>";
+            $header .= "<th>" . _n('Version', 'Versions', 1) . "</th>";
+            $header .= "<th>" . DatabaseInstanceType::getTypeName(0) . "</th>";
+            $header .= "<th>" . Manufacturer::getTypeName(0) . "</th>";
             $header .= "<th></th>";
             $header .= "</tr>";
             echo $header;
@@ -585,10 +589,23 @@ class DatabaseInstance extends CommonDBTM
             foreach ($instances as $row) {
                 $item = new self();
                 $item->getFromDB($row['id']);
-                echo "<tr lass='tab_bg_1'>";
+                echo "<tr class='tab_bg_1" . ($item->fields['is_deleted'] ? '_2' : '') . "'>";
                 echo "<td>" . $item->getLink() . "</td>";
                 $databases = $item->getDatabases();
                 echo "<td>" . sprintf(_n('%1$d database', '%1$d databases', count($databases)), count($databases)) . "</td>";
+                echo "<td>" . $item->fields['version'] . "</td>";
+                $databasetype = new DatabaseInstanceType();
+                $databasetype_name = '';
+                if ($item->fields['databaseinstancetypes_id'] > 0 && $databasetype->getFromDB($item->fields['databaseinstancetypes_id'])) {
+                    $databasetype_name = $databasetype->fields['name'];
+                }
+                echo "<td>" . $databasetype_name . "</td>";
+                $manufacturer = new Manufacturer();
+                $manufacturer_name = '';
+                if ($item->fields['manufacturers_id'] > 0 && $manufacturer->getFromDB($item->fields['manufacturers_id'])) {
+                    $manufacturer_name = $manufacturer->fields['name'];
+                }
+                echo "<td>" . $manufacturer_name . "</td>";
                 echo "</tr>";
             }
             echo $header;

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -1200,10 +1200,6 @@ class Item_Ticket extends CommonItilObject_Item
             $item = getItemForItemtype($this->fields['itemtype']);
             $item->getFromDB($this->fields['items_id']);
 
-            $link = $item->getFormURL();
-            if (!isset($link)) {
-                return;
-            }
             if (($name = $item->getName()) == NOT_AVAILABLE) {
                //TRANS: %1$s is the itemtype, %2$d is the id of the item
                 $item->fields['name'] = sprintf(
@@ -1252,10 +1248,6 @@ class Item_Ticket extends CommonItilObject_Item
             $item = getItemForItemtype($this->fields['itemtype']);
             $item->getFromDB($this->fields['items_id']);
 
-            $link = $item->getFormURL();
-            if (!isset($link)) {
-                return;
-            }
             if (isset($this->input['_no_message_link'])) {
                 $display = $item->getNameID();
             } else {

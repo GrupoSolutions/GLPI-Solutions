@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -104,7 +104,7 @@ class APIRest extends API
         $is_inline_doc = (strlen($resource) == 0) || ($resource == "api");
 
         // Add headers for CORS
-        $this->cors($this->verb);
+        $this->cors();
 
         // retrieve paramaters (in body, query_string, headers)
         $this->parseIncomingParams($is_inline_doc);
@@ -159,22 +159,22 @@ class APIRest extends API
             $this->returnResponse($this->getMyEntities($this->parameters));
         } elseif ($resource === "getActiveEntities") {
             // get curent active entity
-            $this->returnResponse($this->getActiveEntities($this->parameters));
+            $this->returnResponse($this->getActiveEntities());
         } elseif ($resource === "changeActiveProfile") {
             // change active profile
             $this->returnResponse($this->changeActiveProfile($this->parameters));
         } elseif ($resource === "getMyProfiles") {
             // get all profiles of current logged user
-            $this->returnResponse($this->getMyProfiles($this->parameters));
+            $this->returnResponse($this->getMyProfiles());
         } elseif ($resource === "getActiveProfile") {
             // get current active profile
-            $this->returnResponse($this->getActiveProfile($this->parameters));
+            $this->returnResponse($this->getActiveProfile());
         } elseif ($resource === "getFullSession") {
             // get complete php session
-            $this->returnResponse($this->getFullSession($this->parameters));
+            $this->returnResponse($this->getFullSession());
         } elseif ($resource === "getGlpiConfig") {
             // get complete php var $CFG_GLPI
-            $this->returnResponse($this->getGlpiConfig($this->parameters));
+            $this->returnResponse($this->getGlpiConfig());
         } elseif ($resource === "listSearchOptions") {
             // list searchOptions of an itemtype
             $itemtype = $this->getItemtype(1);
@@ -379,13 +379,17 @@ class APIRest extends API
                 }
 
                // Load namespace for deprecated
-                if (Toolbox::isAPIDeprecated($itemtype)) {
-                     $itemtype = "Glpi\Api\Deprecated\\$itemtype";
+                $deprecated = Toolbox::isAPIDeprecated($itemtype);
+                if ($deprecated) {
+                    $itemtype = "Glpi\Api\Deprecated\\$itemtype";
                 }
 
                // Get case sensitive itemtype name
-                $rc = new \ReflectionClass($itemtype);
-                $itemtype = $rc->getShortName();
+                $itemtype = (new \ReflectionClass($itemtype))->getName();
+                if ($deprecated) {
+                    // Remove deprecated namespace
+                    $itemtype = str_replace("Glpi\Api\Deprecated\\", "", $itemtype);
+                }
                 return $itemtype;
             }
             $this->returnError(
@@ -514,6 +518,10 @@ class APIRest extends API
             /** @var array $postvars */
             parse_str($body, $postvars);
             foreach ($postvars as $field => $value) {
+                // $parameters['input'] needs to be an object when process API Request
+                if ($field === 'input') {
+                    $value = (object) $value;
+                }
                 $parameters[$field] = $value;
             }
             $this->format = "html";

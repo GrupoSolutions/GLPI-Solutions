@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @copyright 2010-2022 by the FusionInventory Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
@@ -151,7 +151,7 @@ class RuleImportEntity extends Rule
         global $PLUGIN_HOOKS, $CFG_GLPI;
 
         if ($criteria['field'] == '_source') {
-            $tab = ['GLPI' => __('GLPI')];
+            $tab = ['GLPI' => __('GLPI'), 'NATIVE_INVENTORY' => AutoUpdateSystem::getLabelFor(AutoUpdateSystem::NATIVE_INVENTORY)];
             foreach ($PLUGIN_HOOKS['import_item'] as $plug => $types) {
                 if (!Plugin::isPluginActive($plug)) {
                     continue;
@@ -192,13 +192,15 @@ class RuleImportEntity extends Rule
 
         $crit = $this->getCriteria($ID);
         if (count($crit) && $crit['field'] == '_source') {
-            if ($pattern != 'GLPI') {
+            if ($pattern == 'GLPI') {
+                $name = $pattern;
+            } elseif ($pattern == 'NATIVE_INVENTORY') {
+                $name = AutoUpdateSystem::getLabelFor(AutoUpdateSystem::NATIVE_INVENTORY);
+            } else {
                 $name = Plugin::getInfo($pattern, 'name');
                 if (empty($name)) {
                     return false;
                 }
-            } else {
-                $name = $pattern;
             }
             return $name;
         }

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -36,6 +36,7 @@
 namespace Glpi\System\Diagnostic;
 
 use DBmysql;
+use Glpi\Toolbox\DatabaseSchema;
 use Glpi\Toolbox\VersionParser;
 use Plugin;
 use SebastianBergmann\Diff\Differ;
@@ -128,6 +129,13 @@ class DatabaseSchemaIntegrityChecker
     private $differ;
 
     /**
+     * GLPI database version.
+     *
+     * @var string
+     */
+    private $db_version;
+
+    /**
      * @param DBmysql $db                                 DB instance.
      * @param bool $strict                                Ignore differences that has no effect on application (columns and keys order for instance).
      * @param bool $ignore_innodb_migration               Do not check tokens related to migration from "MyISAM" to "InnoDB".
@@ -196,7 +204,7 @@ class DatabaseSchemaIntegrityChecker
             return '';
         }
 
-        return $this->differ->diff(
+        return $this->diff(
             $proper_create_table_sql,
             $effective_create_table_sql
         );
@@ -223,7 +231,7 @@ class DatabaseSchemaIntegrityChecker
         }
 
         $matches = [];
-        preg_match_all('/(?<sql_query>CREATE TABLE[^`]*`(?<table_name>.+)`[^;]+);/', $schema_sql, $matches);
+        preg_match_all('/(?<sql_query>CREATE TABLE[^`]*`(?<table_name>\w+)`.+?);$/ms', $schema_sql, $matches);
         $tables_names             = $matches['table_name'];
         $create_table_sql_queries = $matches['sql_query'];
 
@@ -263,7 +271,7 @@ class DatabaseSchemaIntegrityChecker
             if (!$this->db->tableExists($table_name)) {
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_MISSING_TABLE,
-                    'diff' => $this->differ->diff($create_table_sql, '')
+                    'diff' => $this->diff($create_table_sql, '')
                 ];
                 continue;
             }
@@ -272,7 +280,7 @@ class DatabaseSchemaIntegrityChecker
             if ($create_table_sql !== $effective_create_table_sql) {
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_ALTERED_TABLE,
-                    'diff' => $this->differ->diff($create_table_sql, $effective_create_table_sql)
+                    'diff' => $this->diff($create_table_sql, $effective_create_table_sql)
                 ];
             }
         }
@@ -306,7 +314,7 @@ class DatabaseSchemaIntegrityChecker
                 $effective_create_table_sql = $this->getNomalizedSql($this->getEffectiveCreateTableSql($table_name));
                 $result[$table_name] = [
                     'type' => self::RESULT_TYPE_UNKNOWN_TABLE,
-                    'diff' => $this->differ->diff('', $effective_create_table_sql)
+                    'diff' => $this->diff('', $effective_create_table_sql)
                 ];
             }
         }
@@ -373,6 +381,8 @@ class DatabaseSchemaIntegrityChecker
         if (array_key_exists($cache_key, $this->normalized)) {
             return $this->normalized[$cache_key];
         }
+
+        $dbversion = $this->getDbVersion();
 
         // Clean whitespaces
         $create_table_sql = $this->normalizeWhitespaces($create_table_sql);
@@ -483,8 +493,21 @@ class DatabaseSchemaIntegrityChecker
         }
 
         if (
+            $table_name === 'glpi_notimportedemails'
+            && $dbversion !== null
+            && version_compare(VersionParser::getNormalizedVersion($dbversion), '10.0', '<')
+        ) {
+            // Before GLPI 10.0.0, COLLATE property was not explicitely defined for glpi_notimportedemails,
+            // and charset was not the same as other tables.
+            // If installed schema is < 10.0.0, we exclude CHARACTER SET and COLLATE properties from
+            // diff as we cannot easilly predict effective values (COLLATE will depend on server configuration)
+            // and, anyway, it will be fixed during GLPI 10.0.0 migration.
+            $column_replacements['/( CHARACTER SET \w+)? COLLATE \w+/i'] = '';
+        }
+        if (
             $table_name === 'glpi_impactcontexts'
-            && $this->db->tableExists('glpi_configs') && $this->db->fieldExists('glpi_configs', 'context')
+            && $dbversion !== null
+            && version_compare(VersionParser::getNormalizedVersion($dbversion), '10.0.1', '<')
         ) {
             // Remove default value on glpi_impactcontexts.positions column.
             // The default cannot be added on MySQL server, so it is impossible to fix this diff prior to migration.
@@ -493,21 +516,7 @@ class DatabaseSchemaIntegrityChecker
             // this default value on GLPI firstly installed in version <= 9.5.3.
             // see https://github.com/glpi-project/glpi/pull/8415
             // see https://github.com/glpi-project/glpi/pull/11662
-            $dbversion_res = $this->db->request(
-                [
-                    'FROM'   => 'glpi_configs',
-                    'WHERE'  => [
-                        'context' => 'core',
-                        'name'    => 'dbversion',
-                    ]
-                ]
-            )->current();
-            if (
-                $dbversion_res !== null
-                && version_compare(VersionParser::getNormalizedVersion($dbversion_res['value']), '10.0.1', '<')
-            ) {
-                $column_replacements['/(`positions`.*)\s*DEFAULT\s*\'\'\s*(.*)/'] = '$1 $2';
-            }
+            $column_replacements['/(`positions`.*)\s*DEFAULT\s*\'\'\s*(.*)/'] = '$1 $2';
         }
 
         $columns = preg_replace(array_keys($column_replacements), array_values($column_replacements), $columns);
@@ -580,6 +589,19 @@ class DatabaseSchemaIntegrityChecker
             if (in_array($properties['COLLATE'] ?? '', ['utf8_unicode_ci', 'utf8mb4_unicode_ci'])) {
                 unset($properties['COLLATE']);
             }
+        }
+        if (
+            $table_name === 'glpi_notimportedemails'
+            && $dbversion !== null
+            && version_compare(VersionParser::getNormalizedVersion($dbversion), '10.0', '<')
+        ) {
+            // Before GLPI 10.0.0, COLLATE property was not explicitely defined for glpi_notimportedemails,
+            // and charset was not the same as other tables.
+            // If installed schema is < 10.0.0, we exclude DEFAULT CHARSET and COLLATE properties from
+            // diff as we cannot easilly predict effective values (COLLATE will depend on server configuration)
+            // and, anyway, it will be fixed during GLPI 10.0.0 migration.
+            unset($properties['DEFAULT CHARSET']);
+            unset($properties['COLLATE']);
         }
         ksort($properties);
 
@@ -700,6 +722,24 @@ class DatabaseSchemaIntegrityChecker
     }
 
     /**
+     * Generate diff between proper and effective `CREATE TABLE` SQL string.
+     */
+    private function diff(string $proper_create_table_sql, string $effective_create_table_sql): string
+    {
+        $diff = $this->differ->diff(
+            $proper_create_table_sql,
+            $effective_create_table_sql
+        );
+
+        if (!$this->db->allow_signed_keys) {
+            // Add `unsigned` to primary/foreign keys on lines preceded by a `-` (i.e. expected but not found in DB).
+            $diff = preg_replace('/^-\s+(`id`|`.+_id(_.+)?`)\s+int(?!\s+unsigned)/im', '$0 unsigned', $diff);
+        }
+
+        return $diff;
+    }
+
+    /**
      * Get schema file path for given version.
      *
      * @param string|null $schema_version   Installed schema version
@@ -713,8 +753,7 @@ class DatabaseSchemaIntegrityChecker
 
         if ($context === 'core') {
             $schema_version_nohash = preg_replace('/@.+$/', '', $schema_version); // strip hash
-            $schema_version_clean  = VersionParser::getNormalizedVersion($schema_version_nohash, false); // strip stability flag
-            $schema_path = sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, $schema_version_clean);
+            $schema_path = DatabaseSchema::getEmptySchemaPath($schema_version_nohash);
         } elseif (preg_match('/^plugin:(?<plugin_key>\w+)$/', $context) === 1) {
             $plugin_key = str_replace('plugin:', '', $context);
             Plugin::load($plugin_key); // Load setup file, to be able to check schema even on inactive plugins
@@ -751,5 +790,53 @@ class DatabaseSchemaIntegrityChecker
             }
         }
         return $this->getSchemaPath($schema_version, $context) !== null;
+    }
+
+    /**
+     * Returns GLPI database version.
+     *
+     * @return string|null
+     */
+    private function getDbVersion(): ?string
+    {
+        if ($this->db_version === null) {
+            if ($this->db->tableExists('glpi_configs') && $this->db->fieldExists('glpi_configs', 'context')) {
+                $dbversion_result = $this->db->request(
+                    [
+                        'FROM'   => 'glpi_configs',
+                        'WHERE'  => [
+                            'context' => 'core',
+                            'name'    => 'dbversion',
+                        ]
+                    ]
+                );
+                if ($dbversion_result->count() > 0) {
+                    // GLPI >= 9.2
+                    $this->db_version = $dbversion_result->current()['value'];
+                } else {
+                    // GLPI >= 0.85
+                    $dbversion_result = $this->db->request(
+                        [
+                            'FROM'   => 'glpi_configs',
+                            'WHERE'  => [
+                                'context' => 'core',
+                                'name'    => 'version',
+                            ]
+                        ]
+                    );
+                    $this->db_version = $dbversion_result->current()['value'] ?? null;
+                }
+            } elseif ($this->db->tableExists('glpi_configs') && $this->db->fieldExists('glpi_configs', 'version')) {
+                // GLPI < 0.85
+                $this->db_version = $this->db->request(
+                    [
+                        'SELECT' => ['version'],
+                        'FROM'   => 'glpi_configs',
+                    ]
+                )->current()['version'] ?? null;
+            }
+        }
+
+        return $this->db_version;
     }
 }

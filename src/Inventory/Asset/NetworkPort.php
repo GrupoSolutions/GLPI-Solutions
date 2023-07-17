@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @copyright 2010-2022 by the FusionInventory Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
@@ -40,6 +40,7 @@ use Glpi\Inventory\Conf;
 use Glpi\Inventory\FilesToJSON;
 use Glpi\Toolbox\Sanitizer;
 use NetworkPort as GlobalNetworkPort;
+use NetworkPortAggregate;
 use NetworkPortType;
 use QueryParam;
 use RuleImportAssetCollection;
@@ -131,6 +132,10 @@ class NetworkPort extends InventoryAsset
                 }
             }
 
+            if ((!property_exists($val, 'name') || empty($val->name)) && property_exists($val, 'ifdescr')) {
+                $val->name = $val->ifdescr;
+            }
+
             if ((!property_exists($val, 'ifdescr') || empty($val->ifdescr)) && property_exists($val, 'name')) {
                 $val->ifdescr = $val->name;
             }
@@ -154,6 +159,8 @@ class NetworkPort extends InventoryAsset
      */
     private function prepareConnections(\stdClass $port)
     {
+        global $DB;
+
         $results = [];
         $connections = $port->connections;
         $ifnumber = $port->ifnumber;
@@ -168,6 +175,45 @@ class NetworkPort extends InventoryAsset
         foreach ($connections as $connection) {
             $connection = (object)$connection;
             if ($this->isLLDP($port)) {
+                // LLDP provides ChassisId (sysmac) and PortID as one of: local number, mac, interface name
+                // We'll try to find the real mac and logical_number of the connection
+                if (property_exists($connection, 'sysmac')) {
+                    $field = null;
+                    $val = null;
+                    if (property_exists($connection, 'ifnumber')) {
+                        $field = 'logical_number';
+                        $val = $connection->ifnumber;
+                    } else if (property_exists($connection, 'mac')) {
+                        $field = 'mac';
+                        $val = $connection->mac;
+                    } else if (property_exists($connection, 'ifdescr')) {
+                        $field = 'name';
+                        $val = $connection->ifdescr;
+                    }
+
+                    if ($field && $val) {
+                        $criteria = [
+                            'SELECT'    => ['n1.logical_number', 'n1.mac'],
+                            'FROM'      => \NetworkPort::getTable() . ' AS n1',
+                            'WHERE'     => [
+                                'n1.' . $field => $val,
+                                'n2.mac'       => $connection->sysmac,
+                            ]
+                        ];
+                        $criteria['LEFT JOIN'][\NetworkPort::getTable() . ' AS n2'][] =
+                            new \QueryExpression("`n1`.`items_id`=`n2`.`items_id` AND `n1`.`itemtype`=`n2`.`itemtype`");
+
+                        $iterator = $DB->request($criteria);
+                        if (count($iterator)) {
+                            $result = $iterator->current();
+                            $connection->logical_number = (int)$result['logical_number'];
+                            $connection->mac = $result['mac'];
+                            // make sure mac does't get overwritten below
+                            unset($lldp_mapping['sysmac']);
+                        }
+                    }
+                }
+
                 foreach ($lldp_mapping as $origin => $dest) {
                     if (property_exists($connection, $origin)) {
                         $connection->$dest = $connection->$origin;
@@ -250,8 +296,25 @@ class NetworkPort extends InventoryAsset
             $rule->getCollectionPart();
             $rule->processAllRules($input, [], ['class' => $this]);
 
-            if (count($this->connection_ports)) {
-                $connections_id = current(current($this->connection_ports));
+            if (count($this->connection_ports) != 1) {
+                continue;
+            }
+
+            $connection_ports = current($this->connection_ports);
+            if (count($connection_ports) == 1) { // single NetworkPort
+                $connections_id = current($connection_ports);
+            } else { // multiple NetworkPorts
+                $networkPort = new \NetworkPort();
+                foreach (array_keys($connection_ports) as $k) {
+                    $networkPort->getFromDB($k);
+                    if ($networkPort->fields['logical_number'] > 0) {
+                        $connections_id = $k;
+                        break;
+                    }
+                }
+            }
+
+            if ($connections_id) {
                 $this->addPortsWiring($netports_id, $connections_id);
             }
         }
@@ -299,7 +362,36 @@ class NetworkPort extends InventoryAsset
             if (isset($this->connections['NetworkEquipment'])) {
                 return;
             }
-            $this->handleHub($found_macs, $netports_id);
+
+            // see if we got a mix of different device types (other than computers)
+            if (!(isset($this->connection_ports['Computer']) && count($this->connection_ports) == 1)) {
+                $this->handleHub($found_macs, $netports_id);
+                return;
+            }
+
+            $item_ids = [];
+            $real_port_ids = [];
+            foreach (array_keys($found_macs) as $k) {
+                $networkPort = new \NetworkPort();
+                $networkPort->getFromDB($k);
+
+                $items_ids[$networkPort->fields['items_id']] = null;
+                if ($networkPort->fields['logical_number'] > 0) {
+                    $real_port_ids[$networkPort->fields['id']] = null;
+                }
+            }
+
+            // multiple computers mean a hub
+            if (count($items_ids) > 1) {
+                $this->handleHub($found_macs, $netports_id);
+            } else if (count($real_port_ids) == 1) {
+                // the only remaining option is multiple macs on the same computer,
+                $this->addPortsWiring($netports_id, array_key_first($real_port_ids));
+            } else if (count($real_port_ids) > 1) {
+                trigger_error('Multiple non-virtual NetworkPorts on the computer ('
+                    . join(',', array_keys($real_port_ids)) . ')', E_USER_WARNING);
+                return;
+            }
         } else { // One mac on port
             if (count($this->connection_ports)) {
                 $connections_id = current(current($this->connection_ports));
@@ -452,6 +544,7 @@ class NetworkPort extends InventoryAsset
             $input_db['ifoutbytes']  = $input['ifoutbytes'];
             $input_db['ifinerrors']  = $input['ifinerrors'];
             $input_db['ifouterrors'] = $input['ifouterrors'];
+            $input_db['is_dynamic'] = true;
             $netport->update($input_db);
         }
     }
@@ -547,10 +640,13 @@ class NetworkPort extends InventoryAsset
      * @param integer $items_id id of the item (0 if new)
      * @param string  $itemtype Item type
      * @param integer $rules_id Matched rule id, if any
-     * @param integer $ports_id Matched port id, if any
+     * @param array   $ports_id Matched port ids, if any
      */
-    public function rulepassed($items_id, $itemtype, $rules_id, $ports_id = 0)
+    public function rulepassed($items_id, $itemtype, $rules_id, $ports_id = [])
     {
+        if (!is_array($ports_id)) {
+            $ports_id = [$ports_id]; // Handle compatibility with previous signature.
+        }
         $netport = new \NetworkPort();
         if (empty($itemtype)) {
             $itemtype = 'Unmanaged';
@@ -585,7 +681,7 @@ class NetworkPort extends InventoryAsset
             $rulesmatched->cleanOlddata($items_id, $itemtype);
         }
 
-        if (!$ports_id) {
+        if (!count($ports_id)) {
            //create network port
             $input = [
                 'items_id'           => $items_id,
@@ -616,13 +712,20 @@ class NetworkPort extends InventoryAsset
             if (property_exists($port, 'mac') && !empty($port->mac)) {
                 $input['mac'] = $port->mac;
             }
-            $ports_id = $netport->add(Sanitizer::sanitize($input));
+
+            if (property_exists($port, 'logical_number') && !empty($port->logical_number)) {
+                $input['logical_number'] = $port->logical_number;
+            }
+
+            $ports_id[] = $netport->add(Sanitizer::sanitize($input));
         }
 
         if (!isset($this->connection_ports[$itemtype])) {
             $this->connection_ports[$itemtype] = [];
         }
-        $this->connection_ports[$itemtype][$ports_id] = $ports_id;
+        foreach ($ports_id as $pid) {
+            $this->connection_ports[$itemtype][$pid] = $pid;
+        }
     }
 
     /**
@@ -672,13 +775,42 @@ class NetworkPort extends InventoryAsset
     {
         $mainasset = $this->extra_data['\Glpi\Inventory\Asset\\' . $this->item->getType()];
 
+        //remove management port for Printer on netinventory
+        //to prevent twice IP (NetworkPortAggregate / NetworkPortEthernet)
+        if ($mainasset instanceof Printer && !$this->item->isNewItem()) {
+            if (empty($this->extra_data['\Glpi\Inventory\Asset\\' . $this->item->getType()]->getManagementPorts())) {
+                //remove all port management ports
+                $networkport = new GlobalNetworkPort();
+                $networkport->deleteByCriteria([
+                    "itemtype"           => $this->item->getType(),
+                    "items_id"           => $this->item->getID(),
+                    "instantiation_type" => NetworkPortAggregate::getType(),
+                    "name"               => "Management"
+                ], 1);
+            }
+        }
+
         //handle ports for stacked switches
         if ($mainasset->isStackedSwitch()) {
             $bkp_ports = $this->ports;
+            $stack_id = $mainasset->getStackId();
+            $need_increment_index = false;
             foreach ($this->ports as $k => $val) {
                 $matches = [];
-                if (preg_match('@[\w-]+(\d+)/\d+/\d+@', $val->name, $matches)) {
-                    if ($matches[1] != $mainasset->getStackId()) {
+                if (
+                    preg_match('@[\w\s+]+(\d+)/[\w]@', $val->name, $matches)
+                ) {
+                    //in case when port is related to chassis index 0 (stack_id)
+                    //ex : GigabitEthernet 0/1    Gi0/0/1
+                    //GLPI compute stack_id by starting with 1 (see: NetworkEquipment->getStackedSwitches)
+                    //so we need to increment index to match related stack_id
+                    if ((int) $matches[1] == 0 || $need_increment_index) {
+                        $matches[1]++;
+                        //current NetworkEquipement must have the index incremented
+                        $need_increment_index = true;
+                    }
+
+                    if ($matches[1] != $stack_id) {
                         //port attached to another stack entry, remove from here
                         unset($this->ports[$k]);
                         continue;
@@ -686,6 +818,7 @@ class NetworkPort extends InventoryAsset
                 }
             }
         }
+
 
         $this->handlePortsTrait($itemtype, $items_id);
         if (isset($bkp_ports)) {

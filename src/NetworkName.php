@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -781,6 +781,7 @@ class NetworkName extends FQDNLabel
         }
 
         $table_options = ['createRow' => true];
+        $start = 0;
 
         if (
             ($item->getType() == 'FQDN')
@@ -788,8 +789,6 @@ class NetworkName extends FQDNLabel
         ) {
             if (isset($_GET["start"])) {
                 $start = $_GET["start"];
-            } else {
-                $start = 0;
             }
 
             if (!empty($_GET["order"])) {

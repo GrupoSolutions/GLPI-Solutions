@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -467,6 +467,8 @@ class RuleCollection extends CommonDBTM
         $p['condition'] = 0;
         $p['_glpi_tab'] = $options['_glpi_tab'];
         $rand           = mt_rand();
+        $p['display_criterias'] = false;
+        $p['display_actions']   = false;
 
         foreach (['inherited','childrens', 'condition'] as $param) {
             if (
@@ -477,9 +479,19 @@ class RuleCollection extends CommonDBTM
             }
         }
 
-        $rule             = $this->getRuleClass();
-        $display_entities = ($this->isRuleRecursive()
-                           && ($p['inherited'] || $p['childrens']));
+        foreach (['display_criterias', 'display_actions'] as $param) {
+            if (
+                isset($options[$param])
+            ) {
+                $p[$param] = $options[$param];
+            }
+        }
+
+        $rule              = $this->getRuleClass();
+        $display_entities  = ($this->isRuleRecursive()
+                            && ($p['inherited'] || $p['childrens']));
+        $display_criterias = $p['display_criterias'];
+        $display_actions   = $p['display_actions'];
 
        // Do not know what it is ?
         $canedit    = (self::canUpdate()
@@ -540,10 +552,16 @@ class RuleCollection extends CommonDBTM
         if ($use_conditions) {
             $colspan++;
         }
+        if ($display_criterias) {
+            $colspan++;
+        }
+        if ($display_actions) {
+            $colspan++;
+        }
 
+        $ruletype = $this->getRuleClassName();
         $can_sort = $canedit && $nb;
         if (count($this->RuleList->list)) {
-            $ruletype = $this->RuleList->list[0]->getType();
             $can_sort = $this->RuleList->list[0]->can_sort && $canedit && $nb;
             Session::initNavigateListItems($ruletype);
         }
@@ -564,8 +582,13 @@ class RuleCollection extends CommonDBTM
         if ($use_conditions) {
             $header_row .= "<th>" . __('Use rule for') . "</th>";
         }
+        if ($display_criterias) {
+            $header_row .= "<th>" . RuleCriteria::getTypeName(2) . "</th>";
+        }
+        if ($display_actions) {
+            $header_row .= "<th>" . RuleAction::getTypeName(2) . "</th>";
+        }
         $header_row .= "<th>" . __('Active') . "</th>";
-
         if ($display_entities) {
             $header_row .= "<th>" . Entity::getTypeName(1) . "</th>";
         }
@@ -577,7 +600,15 @@ class RuleCollection extends CommonDBTM
 
         echo "<tbody class='sortable-rules'>";
         for ($i = $p['start'],$j = 0; isset($this->RuleList->list[$j]); $i++,$j++) {
-            $this->RuleList->list[$j]->showMinimalForm($target, $i == 0, $i == $nb - 1, $display_entities, $p['condition']);
+            $this->RuleList->list[$j]->showMinimalForm(
+                $target,
+                $i == 0,
+                $i == $nb - 1,
+                $display_entities,
+                $p['condition'],
+                $display_criterias,
+                $display_actions
+            );
             Session::addToNavigateListItems($ruletype, $this->RuleList->list[$j]->fields['id']);
         }
         echo "</tbody>";
@@ -638,12 +669,13 @@ JAVASCRIPT;
             $url = $CFG_GLPI["root_doc"];
         }
 
-       //if rules provides an initRules method, then we're able to reset them
-        if (method_exists($this->getRuleClass(), 'initRules')) {
-            echo "<a class='btn btn-primary' id='reset_rules' href='" . $rule->getSearchURL() . "?reinit=true' " .
-            //does not work.
-            //"onClick='if(confirm(\"" . __s('All rules will be erased and recreated from scratch. Are you sure?')."\")) { return true } else { return false; };' " .
-            "title='" . __s("Remove all equipment import rules and recreate from defaults") . "'" .
+        // if rules provides has default rules, then we're able to reset them
+        $ruleclass = $this->getRuleClass();
+        if ($ruleclass instanceof Rule && $ruleclass->hasDefaultRules()) {
+            echo "<a class='btn btn-primary' id='reset_rules' href='" . $rule->getSearchURL() . "?reinit=true&subtype=" . $ruleclass->getType() . "' " .
+            "onClick='if(confirm(\"" . __s('Rules will be erased and recreated from default. Are you sure?') . "\"))
+            { return true } else { return false; };' " .
+            "title='" . __s("Delete all rules and recreate them by default") . "'" .
             ">" . __('Reset rules') . "</a>&nbsp;";
         }
         echo "<a class='btn btn-primary' href='#' data-bs-toggle='modal' data-bs-target='#allruletest$rand'>" .
@@ -651,7 +683,7 @@ JAVASCRIPT;
         Ajax::createIframeModalWindow(
             'allruletest' . $rand,
             $url . "/front/rulesengine.test.php?" .
-                                          "sub_type=" . $this->getRuleClassName() .
+                                          "sub_type=" . $ruleclass->getType() .
                                           "&condition=" . $p['condition'],
             ['title' => __('Test rules engine')]
         );
@@ -1167,6 +1199,7 @@ JAVASCRIPT;
             $tmprule = new $rule['sub_type']();
            //check entities
             if ($tmprule->isEntityAssign()) {
+                $rule['entities_id'] = $DB->escape(Html::entity_decode_deep($rule['entities_id']));
                 $entities_found = $entity->find(['completename' => $rule['entities_id']]);
                 if (empty($entities_found)) {
                     $rules_refused[$k_rule]['entity'] = true;
@@ -1191,6 +1224,11 @@ JAVASCRIPT;
                 }
 
                 foreach ($rule['rulecriteria'] as $k_crit => $criteria) {
+                    // Fix patterns decoded as empty arrays to prevent empty IN clauses in SQL generation.
+                    if (is_array($criteria['pattern']) && empty($criteria['pattern'])) {
+                        $criteria['pattern'] = '';
+                    }
+
                     $available_criteria = $tmprule->getCriterias();
                     $crit               = $criteria['criteria'];
                    //check FK (just in case of "is", "is_not" and "under" criteria)
@@ -1228,6 +1266,10 @@ JAVASCRIPT;
                 }
 
                 foreach ($rule['ruleaction'] as $k_action => $action) {
+                    // Fix values decoded as empty arrays to prevent empty IN clauses in SQL generation.
+                    if (is_array($action['value']) && empty($action['value'])) {
+                        $action['value'] = '';
+                    }
                     $available_actions = $tmprule->getActions();
                     $act               = $action['field'];
 
@@ -1238,9 +1280,9 @@ JAVASCRIPT;
                     ) {
                        //pass root entity and empty array (N/A value)
                         if (
-                            ($action['field'] == "entities_id")
+                            (in_array($action['value'], ['entities_id', 'new_entities_id'], true))
                             && (($action['value'] == 0)
-                            || ($action['value'] == []))
+                            || ($action['value'] == ''))
                         ) {
                             continue;
                         }
@@ -1419,6 +1461,7 @@ JAVASCRIPT;
      **/
     public static function processImportRules()
     {
+        global $DB;
         $ruleCriteria = new RuleCriteria();
         $ruleAction   = new RuleAction();
         $entity       = new Entity();
@@ -1462,7 +1505,7 @@ JAVASCRIPT;
             if (!$item->isEntityAssign()) {
                 $params['entities_id'] = 0;
             } else {
-                $entities_found = $entity->find(['completename' => $rule['entities_id']]);
+                $entities_found = $entity->find(['completename' => $DB->escape($current_rule['entities_id'])]);
                 if (!empty($entities_found)) {
                     $entity_found          = array_shift($entities_found);
                     $params['entities_id'] = $entity_found['id'];
@@ -1553,14 +1596,14 @@ JAVASCRIPT;
     /**
      * Process all the rules collection
      *
-     * @param input            array the input data used to check criterias (need to be clean slashes)
-     * @param output           array the initial ouput array used to be manipulate by actions (need to be clean slashes)
-     * @param params           array parameters for all internal functions (need to be clean slashes)
-     * @param options          array options :
-     *                            - condition : specific condition to limit rule list
-     *                            - only_criteria : only react on specific criteria
+     * @param array $input    Input data used to check criterias (need to be clean slashes)
+     * @param array $output   Initial ouput array used to be manipulate by actions (need to be clean slashes)
+     * @param array $params   Parameters for all internal functions (need to be clean slashes)
+     * @param array $options  Options :
+     *                         - condition : specific condition to limit rule list
+     *                         - only_criteria : only react on specific criteria
      *
-     * @return the output array updated by actions (addslashes datas)
+     * @return array the output array updated by actions (addslashes datas)
      **/
     public function processAllRules($input = [], $output = [], $params = [], $options = [])
     {
@@ -1574,23 +1617,32 @@ JAVASCRIPT;
             }
         }
 
-       // Get Collection datas
+        // Get Collection datas
         $this->getCollectionDatas(1, 1, $p['condition']);
         $input                      = $this->prepareInputDataForProcessWithPlugins($input, $params);
         $output["_no_rule_matches"] = true;
-       //Store rule type being processed (for plugins)
+
+        //Store rule type being processed (for plugins)
         $params['rule_itemtype']    = $this->getRuleClassName();
 
         if (count($this->RuleList->list)) {
             /** @var Rule $rule */
             foreach ($this->RuleList->list as $rule) {
+                if ($p['condition'] && !($rule->fields['condition'] & $p['condition'])) {
+                    // Rule is loaded in the cache but is not relevant for the current condition
+                    continue;
+                }
+
                //If the rule is active, process it
 
                 if ($rule->fields["is_active"]) {
                     $output["_rule_process"] = false;
                     $rule->process($input, $output, $params, $p);
 
-                    if ((isset($output['_stop_rules_processing']) && (int) $output['_stop_rules_processing'] === 1) || ($output["_rule_process"] && $this->stop_on_first_match)) {
+                    if (
+                        (isset($output['_stop_rules_processing']) && (int) $output['_stop_rules_processing'] === 1)
+                        || ($output["_rule_process"] && $this->stop_on_first_match)
+                    ) {
                         unset($output["_stop_rules_processing"], $output["_rule_process"]);
                         $output["_ruleid"] = $rule->fields["id"];
                         return Toolbox::addslashes_deep($output);
@@ -1701,11 +1753,8 @@ JAVASCRIPT;
                     $output["result"][$rule->fields["id"]]["id"] = $rule->fields["id"];
                     $rule->process($input, $output, $params);
 
-                    if (
-                        $output["_rule_process"]
-                        && $this->stop_on_first_match
-                    ) {
-                        unset($output["_rule_process"]);
+                    if ((isset($output['_stop_rules_processing']) && (int) $output['_stop_rules_processing'] === 1) || ($output["_rule_process"] && $this->stop_on_first_match)) {
+                        unset($output["_stop_rules_processing"], $output["_rule_process"]);
                         $output["result"][$rule->fields["id"]]["result"] = 1;
                         $output["_ruleid"]                               = $rule->fields["id"];
                         return $output;
@@ -2353,6 +2402,10 @@ JAVASCRIPT;
                         'label'  => OperatingSystemArchitecture::getTypeName(Session::getPluralNumber()),
                         'link'   => 'ruledictionnaryoperatingsystemarchitecture.php',
                         'icon'   => OperatingSystemArchitecture::getIcon(),
+                    ], [
+                        'label'  => OperatingSystemEdition::getTypeName(Session::getPluralNumber()),
+                        'link'   => 'ruledictionnaryoperatingsystemedition.php',
+                        'icon'   => OperatingSystemEdition::getIcon(),
                     ]
                 ]
             ];

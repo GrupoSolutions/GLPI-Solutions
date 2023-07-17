@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -240,6 +240,12 @@ class SlaLevel_Ticket extends CommonDBTM
 
             foreach ($ticket->getSuppliers(CommonITILActor::ASSIGN) as $supplier) {
                 $ticket->fields['_suppliers_id_assign'][] = $supplier['suppliers_id'];
+            }
+
+            $itil_project = new Itil_Project();
+            $itil_projects = $itil_project->find(["itemtype" => Ticket::class, "items_id" => $data['tickets_id']]);
+            foreach ($itil_projects as $rel_values) {
+                $ticket->fields['assign_project'][] = $rel_values['projects_id'];
             }
 
             $slalevel = new SlaLevel();

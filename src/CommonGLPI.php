@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -507,6 +507,7 @@ class CommonGLPI implements CommonGLPIInterface
             $newmenu['is_multi_entries'] = true;
             $menu = $newmenu;
         }
+
         if (count($menu)) {
             return $menu;
         }
@@ -686,7 +687,9 @@ class CommonGLPI implements CommonGLPIInterface
                     $options['tabnum'] = $tabnum;
                     $options['itemtype'] = $itemtype;
                     Plugin::doHook(Hooks::PRE_SHOW_TAB, [ 'item' => $item, 'options' => &$options]);
+                    \Glpi\Debug\Profiler::getInstance()->start(get_class($obj) . '::displayTabContentForItem');
                     $ret = $obj->displayTabContentForItem($item, $tabnum, $withtemplate);
+                    \Glpi\Debug\Profiler::getInstance()->stop(get_class($obj) . '::displayTabContentForItem');
 
                     Plugin::doHook(Hooks::POST_SHOW_TAB, ['item' => $item, 'options' => $options]);
                     return $ret;
@@ -854,20 +857,24 @@ class CommonGLPI implements CommonGLPIInterface
             }
         }
 
+        $cleaned_options = $options;
+        unset($cleaned_options['id'], $cleaned_options['stock_image']);
+
         $target         = $_SERVER['PHP_SELF'];
         $extraparamhtml = "";
         $withtemplate   = "";
-        if (is_array($options) && count($options)) {
+
+        // TODO - There should be a better option than checking whether or not
+        // $options is empty.
+        // See:
+        //  - https://github.com/glpi-project/glpi/pull/12929
+        //  - https://github.com/glpi-project/glpi/pull/13101
+        //  - https://github.com/glpi-project/glpi/commit/1d27bf14d4527f748876dcd556f2b995a0bf7684
+        if (is_array($cleaned_options) && count($cleaned_options)) {
             if (isset($options['withtemplate'])) {
                 $withtemplate = $options['withtemplate'];
             }
-            $cleaned_options = $options;
-            if (isset($cleaned_options['id'])) {
-                unset($cleaned_options['id']);
-            }
-            if (isset($cleaned_options['stock_image'])) {
-                unset($cleaned_options['stock_image']);
-            }
+
             if ($this instanceof CommonITILObject && $this->isNewItem()) {
                 $this->input = $cleaned_options;
                 $this->saveInput();
@@ -951,12 +958,10 @@ class CommonGLPI implements CommonGLPIInterface
         }
         $target         = $_SERVER['PHP_SELF'];
         $extraparamhtml = "";
-        $withtemplate   = "";
 
         if (is_array($options) && count($options)) {
             $cleanoptions = $options;
             if (isset($options['withtemplate'])) {
-                $withtemplate = $options['withtemplate'];
                 unset($cleanoptions['withtemplate']);
             }
             foreach (array_keys($cleanoptions) as $key) {
@@ -969,15 +974,16 @@ class CommonGLPI implements CommonGLPIInterface
         }
 
         if (
-            empty($withtemplate)
-            && !$this->isNewID($ID)
+            !$this->isNewID($ID)
             && $this->getType()
             && $this->displaylist
         ) {
             $glpilistitems = & $_SESSION['glpilistitems'][$this->getType()];
             $glpilisttitle = & $_SESSION['glpilisttitle'][$this->getType()];
             $glpilisturl   = & $_SESSION['glpilisturl'][$this->getType()];
-
+            if ($this instanceof CommonDBChild && $parent = $this->getItem(true, false)) {
+                $glpilisturl = $parent::getFormURLWithID($parent->fields['id'], true);
+            }
             if (empty($glpilisturl)) {
                 $glpilisturl = $this->getSearchURL();
             }
@@ -1072,6 +1078,16 @@ class CommonGLPI implements CommonGLPIInterface
                 echo $this->getNameID([
                     'forceid' => $this instanceof CommonITILObject
                 ]);
+                if ($this->isField('is_deleted') && $this->fields['is_deleted']) {
+                    $title = $this->isField('date_mod')
+                                ? sprintf(__s('Item has been deleted on %s'), Html::convDateTime($this->fields['date_mod']))
+                                : __s('Deleted');
+                    echo "<span class='mx-2 bg-danger status rounded-1' title=\"" . $title . "\"
+                        data-bs-toggle='tooltip'>
+                        <i class='ti ti-trash'></i>";
+                        echo __s('Deleted');
+                    echo "</span>";
+                }
                 echo "</h3>";
             } else {
                 echo TemplateRenderer::getInstance()->render('components/form/header_content.html.twig', [
@@ -1351,7 +1367,7 @@ class CommonGLPI implements CommonGLPIInterface
     {
         global $CFG_GLPI;
 
-        $options      = static::getAvailableDisplayOptions($sub_itemtype);
+        $options      = static::getAvailableDisplayOptions();
 
         if (count($options)) {
             if (empty($sub_itemtype)) {

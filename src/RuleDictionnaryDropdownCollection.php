@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -78,7 +78,7 @@ class RuleDictionnaryDropdownCollection extends RuleCollection
             foreach ($iterator as $data) {
                 if (!($i % $step)) {
                     if (isCommandLine()) {
-                      //TRANS: %1$s is a row, %2$s is total rows
+                        //TRANS: %1$s is a row, %2$s is total rows
                         printf(__('Replay rules on existing database: %1$s/%2$s') . "\r", $i, $nb);
                     } else {
                         Html::changeProgressBarPosition($i, $nb, "$i / $nb");

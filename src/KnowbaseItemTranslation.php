@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -277,15 +277,17 @@ class KnowbaseItemTranslation extends CommonDBChild
      */
     public function showForm($ID = -1, array $options = [])
     {
-        if (isset($options['parent']) && !empty($options['parent'])) {
-            $item = $options['parent'];
+        if (!($ID > 0) && !isset($options['parent']) || !($options['parent'] instanceof CommonDBTM)) {
+            // parent is mandatory in new item form
+            trigger_error('Parent item must be defined in `$options["parent"]`.', E_USER_WARNING);
+            return false;
         }
         if ($ID > 0) {
             $this->check($ID, READ);
         } else {
            // Create item
-            $options['itemtype']         = get_class($item);
-            $options['knowbaseitems_id'] = $item->getID();
+            $options['itemtype']         = get_class($options['parent']);
+            $options['knowbaseitems_id'] = $options['parent']->getID();
             $this->check(-1, CREATE, $options);
         }
         $this->showFormHeader($options);
@@ -301,7 +303,7 @@ class KnowbaseItemTranslation extends CommonDBChild
                 "language",
                 ['display_none' => false,
                     'value'        => $_SESSION['glpilanguage'],
-                    'used'         => self::getAlreadyTranslatedForItem($item)
+                    'used'         => self::getAlreadyTranslatedForItem($options['parent'])
                 ]
             );
         }
@@ -362,7 +364,7 @@ class KnowbaseItemTranslation extends CommonDBChild
 
 
     /**
-     * Is kb item translation functionnality active
+     * Is kb item translation functionality active
      *
      * @return true if active, false if not
      **/

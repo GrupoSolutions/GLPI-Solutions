@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -69,6 +69,10 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         return 'id';
     }
 
+    public static function getIcon()
+    {
+        return 'ti ti-checkbox';
+    }
 
     public function canViewPrivates()
     {
@@ -676,7 +680,6 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         $this->deleteChildrenAndRelationsFromDb(
             [
                 PlanningRecall::class,
-                VObject::class,
             ]
         );
     }
@@ -713,7 +716,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
             'table'              => $this->getTable(),
             'field'              => 'content',
             'name'               => __('Description'),
-            'datatype'           => 'text'
+            'datatype'           => 'text',
+            'htmltext'           => true,
         ];
 
         $tab[] = [
@@ -1414,8 +1418,10 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
     public function showForm($ID, array $options = [])
     {
         TemplateRenderer::getInstance()->display('components/itilobject/timeline/form_task.html.twig', [
-            'item'      => $options['parent'],
-            'subitem'   => $this
+            'item'               => $options['parent'],
+            'subitem'            => $this,
+            'has_pending_reason' => PendingReason_Item::getForItem($options['parent']) !== false,
+            'params'             => $options,
         ]);
 
         return true;
@@ -1550,19 +1556,14 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
      */
     public static function showCentralList($start, $status = 'todo', $showgrouptickets = true)
     {
-        global $CFG_GLPI;
+        global $DB;
 
         $iterator = self::getTaskList($status, $showgrouptickets);
 
         $total_row_count = count($iterator);
-        $displayed_row_count = (int)$_SESSION['glpidisplay_count_on_home'] > 0
-         ? min((int)$_SESSION['glpidisplay_count_on_home'], $total_row_count)
-         : $total_row_count;
+        $displayed_row_count = min((int)$_SESSION['glpidisplay_count_on_home'], $total_row_count);
 
-        if ($displayed_row_count > 0) {
-            echo "<table class='tab_cadrehov'>";
-            echo "<tr class='noHover'><th colspan='4'>";
-
+        if ($total_row_count > 0) {
             $itemtype = get_called_class();
             switch ($status) {
                 case "todo":
@@ -1602,42 +1603,99 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                     $title = '';
                     if ($itemtype == "TicketTask") {
                         $title = __("Ticket tasks to do");
+                        $type = Ticket::getTypeName();
+                        $parent_itemtype = Ticket::class;
                     } else if ($itemtype == "ProblemTask") {
                         $title = __("Problem tasks to do");
+                        $type = Problem::getTypeName();
+                        $parent_itemtype = Problem::class;
                     } else if ($itemtype == "ChangeTask") {
                         $title = __("Change tasks to do");
+                        $type = Change::getTypeName();
+                        $parent_itemtype = Change::class;
+                    } else {
+                        // Invalid itemtype
+                        return;
                     }
                     $linked_itemtype = str_replace("Task", "", $itemtype);
-                    echo "<a href=\"" . $linked_itemtype::getSearchURL() . "?" .
+                    $main_header = "<a href=\"" . $linked_itemtype::getSearchURL() . "?" .
                       Toolbox::append_params($options, '&amp;') . "\">" .
                       Html::makeTitle($title, $displayed_row_count, $total_row_count) . "</a>";
                     break;
+
+                default:
+                    // Invalid status
+                    return;
             }
 
-            echo "</th></tr>";
-            echo "<tr>";
-            echo "<th style='width: 75px;'>" . __('ID') . " </th>";
-            $type = "";
-            if ($itemtype == "TicketTask") {
-                $type = Ticket::getTypeName();
-            } else if ($itemtype == "ProblemTask") {
-                $type = Problem::getTypeName();
-            } else if ($itemtype == "ChangeTask") {
-                $type = Change::getTypeName();
-            }
-            echo "<th style='width: 20%;'>" . __('Title') . " (" . strtolower($type) . ")</th>";
-            echo "<th>" . __('Description') . "</th>";
-            echo "</tr>";
+            $twig_params = [
+                'class'        => 'table table-borderless table-striped table-hover card-table',
+                'header_rows'  => [
+                    [
+                        [
+                            'colspan'   => 3,
+                            'content'   => $main_header
+                        ]
+                    ],
+                ],
+                'rows'         => []
+            ];
+
             $i = 0;
-            foreach ($iterator as $data) {
-                self::showVeryShort($data['id'], $itemtype);
+            if ($displayed_row_count > 0) {
+                $twig_params['header_rows'][] = [
+                    [
+                        'content'   => __('ID'),
+                        'style'     => 'width: 75px'
+                    ],
+                    [
+                        'content'   => __('Title') . " (" . strtolower($type) . ")",
+                        'style'     => 'width: 20%'
+                    ],
+                    __('Description')
+                ];
+                foreach ($iterator as $data) {
+                    $row = [
+                        'values' => []
+                    ];
 
-                $i++;
-                if ($i == $displayed_row_count) {
-                    break;
+                    $task = $itemtype::getById($data['id']);
+                    $parent_item = $parent_itemtype::getById($task->fields[getForeignKeyFieldForItemType($parent_itemtype)]);
+
+
+                    if (!$task || !$parent_item) {
+                        // Invalid data; skip
+                        continue;
+                    }
+
+                    // Parent item id with priority hint
+                    $bgcolor = $_SESSION["glpipriority_" . $parent_item->fields["priority"]];
+                    $name = sprintf(__('%1$s: %2$s'), __('ID'), $parent_item->fields["id"]);
+                    $row['values'][] = [
+                        'content' => "<div class='priority_block' style='border-color: $bgcolor'><span style='background: $bgcolor'></span>&nbsp;$name</div>"
+                    ];
+
+                    // Parent item name
+                    $row['values'][] = [
+                        'content' => $parent_item->fields['name']
+                    ];
+
+                    // Task description
+                    $href = $parent_item::getFormURLWithID($parent_item->fields['id']);
+                    $link_title = Html::resume_text(RichText::getTextFromHtml($task->fields['content'], false, true, true), 50);
+                    $row['values'][] = [
+                        'content' => "<a href='$href'>$link_title</a>"
+                    ];
+
+                    $twig_params['rows'][] = $row;
+
+                    $i++;
+                    if ($i == $displayed_row_count) {
+                        break;
+                    }
                 }
             }
-            echo "</table>";
+            echo TemplateRenderer::getInstance()->render('components/table.html.twig', $twig_params);
         }
     }
 
@@ -1672,6 +1730,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                 $item_link = new Change();
                 $item_link->getFromDB($job->fields['changes_id']);
                 $tab_name = "ChangeTask";
+            } else {
+                throw new \RuntimeException(sprintf('Unexpected `%s` itemtype.', $itemtype));
             }
 
             $bgcolor = $_SESSION["glpipriority_" . $item_link->fields["priority"]];

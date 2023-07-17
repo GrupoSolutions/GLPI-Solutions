@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @copyright 2010-2022 by the FusionInventory Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
@@ -188,7 +188,14 @@ abstract class InventoryAsset
         //load locked field for current itemtype
         $itemtype = $this->getItemtype();
         $lockedfield = new Lockedfield();
-        $locks = $lockedfield->getLockedNames($itemtype, $this->item->fields['id'] ?? 0);
+
+        $items_id = 0;
+        //compare current itemtype et mainasset itemtype to be sure
+        //to get related lock
+        if (get_class($this->item) == $itemtype) {
+            $items_id = $this->item->fields['id'] ?? 0;
+        }
+        $locks = $lockedfield->getLockedNames($itemtype, $items_id);
 
         $data = $this->data;
         foreach ($data as &$value) {
@@ -229,7 +236,7 @@ abstract class InventoryAsset
                     }
                 }
 
-                if (!isset($this->known_links[$known_key])) {
+                if (!isset($this->known_links[$known_key]) && $value->$key !== 0) {
                     $entities_id = $this->entities_id;
                     if ($key == "locations_id") {
                         $this->known_links[$known_key] = Dropdown::importExternal('Location', $value->$key, $entities_id);
@@ -383,23 +390,24 @@ abstract class InventoryAsset
      */
     protected function addOrMoveItem(array $input): void
     {
-        $citem = new \Computer_Item();
-        $citem->getFromDBByCrit([
-            'itemtype' => $input['itemtype'],
-            'items_id' => $input['items_id'],
-            'is_deleted' => 0 //do not take care of deleted computers_items (e.g. the monitor / Printer / Peripheral is connected to another computer)
-        ]);
-
         $itemtype = $input['itemtype'];
         $item = new $itemtype();
-        $item->getFromDb($input['items_id']);
+        $item->getFromDB($input['items_id']);
 
-        //check for global management type configuration
         if (!$item->isGlobal()) {
-            if (isset($citem->fields['id'])) {
-                $citem->delete(['id' => $citem->fields['id']], true);
-            }
+            // Item is not global, delete links with other assets.
+            $citem = new \Computer_Item();
+            $citem->deleteByCriteria(
+                [
+                    'itemtype' => $input['itemtype'],
+                    'items_id' => $input['items_id'],
+                ],
+                true,
+                false
+            );
         }
+
+        $citem = new \Computer_Item();
         $citem->add($input, [], false);
     }
 
@@ -442,4 +450,19 @@ abstract class InventoryAsset
     }
 
     abstract public function getItemtype(): string;
+
+    final protected function cleanName(string $string): string
+    {
+        return trim(
+            preg_replace(
+                '/[\x{200B}-\x{200D}\x{FEFF}]/u', //remove invisible characters
+                '',
+                preg_replace(
+                    '/\s+/u', //replace with single standard whitespace
+                    ' ',
+                    $string
+                )
+            )
+        );
+    }
 }

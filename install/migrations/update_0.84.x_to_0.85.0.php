@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -2922,10 +2922,30 @@ function update084xto0850()
                  FROM `glpi_softwarelicenses`";
 
         foreach ($DB->request($queryl) as $datal) {
-            if (
-                ($datal['number'] >= 0)
-                && ($datal['number'] < Item_SoftwareLicense::countForLicense($datal['id'], -1, 'Computer'))
-            ) {
+            if (!($datal['number'] >= 0)) {
+                continue;
+            }
+
+            $count_for_license = $DB->request([
+                'FROM'         => 'glpi_computers_softwarelicenses',
+                'COUNT'        => 'cpt',
+                'INNER JOIN'   => [
+                    'glpi_computers'  => [
+                        'FKEY'   => [
+                            'glpi_computers'                    => 'id',
+                            'glpi_computers_softwarelicenses'   => 'computers_id'
+                        ]
+                    ]
+                ],
+                'WHERE'        => [
+                    'glpi_computers_softwarelicenses.softwarelicenses_id' => $datal['id'],
+                    'glpi_computers.is_deleted'                           => 0,
+                    'glpi_computers.is_template'                          => 0,
+                    'glpi_computers_softwarelicenses.is_deleted'          => 0
+                ]
+            ])->current()['cpt'];
+
+            if ($datal['number'] < $count_for_license) {
                 $queryl2 = "UPDATE `glpi_softwarelicenses`
                         SET `is_valid` = 0
                         WHERE `id` = '" . $datal['id'] . "'";

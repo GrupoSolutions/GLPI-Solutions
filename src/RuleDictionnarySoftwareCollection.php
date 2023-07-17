@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -86,7 +86,7 @@ class RuleDictionnarySoftwareCollection extends RuleCollection
         echo "<tr><td class='tab_bg_2 center'>";
         echo "<img src=\"" . $CFG_GLPI["root_doc"] . "/pics/warning.png\"></td>";
         echo "<td class='tab_bg_2 center'>" .
-            __('Warning! This operation can put merged software in the trashbin.<br>Sure to notify your users.') .
+            __('Warning! This operation can put merged software in the trashbin. Ensure to notify your users.') .
            "</td></tr>\n";
         echo "<tr><th colspan='2' class='b'>" . __('Manufacturer choice') . "</th></tr>\n";
         echo "<tr><td class='tab_bg_2 center'>" .

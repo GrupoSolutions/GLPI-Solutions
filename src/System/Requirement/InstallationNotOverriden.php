@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -56,7 +56,7 @@ final class InstallationNotOverriden extends AbstractRequirement
      */
     private $version_dir;
 
-    public function __construct(?DBmysql $db, string $version_dir = GLPI_ROOT . '/.version')
+    public function __construct(?DBmysql $db, string $version_dir = GLPI_ROOT . '/version')
     {
         $this->db = $db;
         $this->version_dir = $version_dir;
@@ -75,14 +75,14 @@ final class InstallationNotOverriden extends AbstractRequirement
 
         if ($version_files_count == 0) {
             // Cannot do the check.
-            // Indicating that `.version` directory is missing would be useless, as it would probably incitate administrator
+            // Indicating that `version` directory is missing would be useless, as it would probably incitate administrator
             // to restore it, and it would result in a "false positive" type validation.
             $this->out_of_context = true;
             return;
         }
 
         $current_version_file = $this->version_dir . '/' . VersionParser::getNormalizedVersion(GLPI_VERSION, false);
-        if (!file_exists($current_version_file) || iterator_count($file_iterator) > 1) {
+        if (!file_exists($current_version_file) || $version_files_count > 1) {
             $this->validated = false;
             $this->validation_messages[] = __("We detected files of previous versions of GLPI.");
             $this->validation_messages[] = __("Please update GLPI by following the procedure described in the installation documentation.");
@@ -113,14 +113,14 @@ final class InstallationNotOverriden extends AbstractRequirement
                 $previous_version = VersionParser::getNormalizedVersion($previous_version, false);
             }
         }
-        if ($previous_version === null || version_compare($previous_version, '10.0.4', '<')) {
+        if ($previous_version === null || version_compare($previous_version, '10.0.6', '<')) {
             // If previous version is unknown, validation will be mostly a "false positive" type validation.
             // Cases corresponding to an unknown previous version:
             // - new installation;
             // - update from an empty directory (where DB config has not even been restored);
             // - update from version < 0.85.
             //
-            // If previous version is < 10.0.4, version file form previous version should not be available.
+            // If previous version is < 10.0.6, version file form previous version should not be available.
             // In this case, we cannot detect presence of previous versions files.
             $this->out_of_context = true;
             return;

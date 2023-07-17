@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -91,7 +91,7 @@ class InstallCommand extends AbstractConfigureCommand
 
         parent::configure();
 
-        $this->setName('glpi:database:install');
+        $this->setName('database:install');
         $this->setAliases(['db:install']);
         $this->setDescription('Install database schema');
 
@@ -172,7 +172,7 @@ class InstallCommand extends AbstractConfigureCommand
         }
 
         if (!$this->isDbAlreadyConfigured() || $input->getOption('reconfigure')) {
-            $this->configureDatabase($input, $output, false, true, false, false, false);
+            $this->configureDatabase($input, $output, false);
 
             // Ensure global $DB is updated (used by GLPIKey)
             global $DB;
@@ -224,6 +224,7 @@ class InstallCommand extends AbstractConfigureCommand
             return self::ERROR_CANNOT_CREATE_ENCRYPTION_KEY_FILE;
         }
 
+        mysqli_report(MYSQLI_REPORT_OFF);
         $mysqli = new \mysqli();
         if (intval($db_port) > 0) {
            // Network port

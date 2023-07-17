@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -271,6 +271,67 @@ class Socket extends CommonDBChild
         return $values;
     }
 
+    /**
+     * Get all Socket already linked to Cable for given asset
+     * @return array Array of linked sockets
+     **/
+    public static function getSocketAlreadyLinked(string $itemtype, int $items_id): array
+    {
+        global $DB;
+        $already_use = [];
+        $sub_query = [];
+
+        $sub_query[] = new \QuerySubQuery([
+            'SELECT' => ['sockets.id AS socket_id'],
+            'FROM'   => Socket::getTable() . ' AS sockets',
+            'LEFT JOIN'   => [
+                Cable::getTable() . ' AS cables' => [
+                    'ON'  => [
+                        'cables'  => 'sockets_id_endpoint_a',
+                        'sockets'  => 'id'
+                    ]
+                ],
+            ],
+            'WHERE'  => [
+                'NOT' => [
+                    'cables.sockets_id_endpoint_a' => 'NULL'
+                ],
+                'sockets.itemtype' => $itemtype,
+                'sockets.items_id' => $items_id
+            ],
+        ]);
+
+        $sub_query[] = new \QuerySubQuery([
+            'SELECT' => ['sockets.id AS socket_id'],
+            'FROM'   => Socket::getTable() . ' AS sockets',
+            'LEFT JOIN'   => [
+                Cable::getTable() . ' AS cables' => [
+                    'ON'  => [
+                        'cables'  => 'sockets_id_endpoint_b',
+                        'sockets'  => 'id'
+                    ]
+                ],
+            ],
+            'WHERE'  => [
+                'NOT' => [
+                    'cables.sockets_id_endpoint_b' => 'NULL'
+                ],
+                'sockets.itemtype' => $itemtype,
+                'sockets.items_id' => $items_id
+            ],
+        ]);
+
+        $sockets_iterator = $DB->request([
+            'FROM' => new \QueryUnion($sub_query)
+        ]);
+
+        foreach ($sockets_iterator as $row) {
+            $already_use[$row['socket_id']] = $row['socket_id'];
+        }
+
+        return $already_use;
+    }
+
 
     /**
      * Dropdown of Wiring Side
@@ -419,13 +480,13 @@ class Socket extends CommonDBChild
         $tab[] = [
             'id'                 => '1310',
             'table'              => Socket::getTable(),
-            'field'              => 'id',
+            'field'              => 'name',
             'name'               => Socket::getTypeName(0),
             'searchtype'         => 'equals',
             'joinparams'         => [
                 'jointype'           => 'itemtype_item',
             ],
-            'datatype'           => 'dropdown'
+            'datatype'           => 'itemlink'
         ];
 
         $tab[] = [
@@ -734,6 +795,8 @@ class Socket extends CommonDBChild
         $header_end .= "<th>" . __('Wiring side') . "</th>";
         $header_end .= "<th>" .  _n('Network port', 'Network ports', Session::getPluralNumber()) . "</th>";
         $header_end .= "<th>" .  Cable::getTypeName(0) . "</th>";
+        $header_end .= "<th>" .  __('Itemtype') . "</th>";
+        $header_end .= "<th>" .  __('Item Name') . "</th>";
         $header_end .= "</tr>\n";
         echo $header_begin . $header_top . $header_end;
 
@@ -783,8 +846,28 @@ class Socket extends CommonDBChild
                 ])
             ) {
                 echo "<td><a href='" . $cable->getLinkURL() . "'>" . $cable->getName() . "</a></td>";
+                if (
+                    $cable->fields['itemtype_endpoint_a'] === $item->getType()
+                    && $cable->fields['items_id_endpoint_a'] === $item->getID()
+                ) {
+                    $itemtype = $cable->fields['itemtype_endpoint_b'];
+                    $item_id = $cable->fields['items_id_endpoint_b'];
+                } else {
+                    $itemtype = $cable->fields['itemtype_endpoint_a'];
+                    $item_id = $cable->fields['items_id_endpoint_a'];
+                }
+
+                $endpoint = getItemForItemtype($itemtype);
+                if ($endpoint !== false && $item_id !== 0 && $endpoint->getFromDB($item_id)) {
+                    echo "<td>" . $endpoint->getType() . "</td>";
+                    echo "<td><a href='" . $endpoint->getLinkURL() . "'>" . $endpoint->getName() . "</a></td>";
+                } else {
+                    echo "<td></td>";
+                    echo "<td></td>";
+                }
             } else {
-                echo "<td></td>";
+                // No cable, so empty columns for Cable, Itemtype and Item Name
+                echo "<td></td><td></td><td></td>";
             }
 
             echo "</tr>\n";
@@ -840,7 +923,7 @@ class Socket extends CommonDBChild
             );
             echo "</td>";
             echo "<td>" . SocketModel::getTypeName(1) . "</td><td>";
-            SocketModel::dropdown("socketmodels_id", []);
+            SocketModel::dropdown();
             echo "</td>";
             echo "<td>" . __('Wiring side') . "</td><td>";
             Socket::dropdownWiringSide("wiring_side", []);
@@ -879,7 +962,7 @@ class Socket extends CommonDBChild
             echo "&nbsp;<input type='text' maxlength='100' size='10' name='_after'><br>";
             echo "</td>";
             echo "<td>" . SocketModel::getTypeName(1) . "</td><td>";
-            SocketModel::dropdown("socketmodels_id", []);
+            SocketModel::dropdown();
             echo "</td>";
             echo "<td>" . __('Wiring side') . "</td><td>";
             Socket::dropdownWiringSide("wiring_side", []);

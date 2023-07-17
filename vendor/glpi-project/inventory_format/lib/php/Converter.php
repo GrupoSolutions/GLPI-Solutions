@@ -1147,7 +1147,12 @@ class Converter
             case 'boolean':
                 return (bool)$value;
             case 'integer':
-                return (int)$value;
+                $casted = (int)$value;
+                if ($value == $casted && is_numeric($value)) {
+                    return $casted;
+                } else {
+                    return null;
+                }
             default:
                 throw new \UnexpectedValueException('Type ' . $type . ' not known.');
         }
@@ -1340,6 +1345,9 @@ class Converter
                     if (isset($device_info['id'])) {
                         $device_info['id'] = (int)$device_info['id'];
                     }
+                    if (isset($device_info['comments'])) {
+                        $device_info['description'] = $device_info['comments'];
+                    }
 
                     //Fix network inventory type
                     if (isset($device_info['type'])) {
@@ -1384,6 +1392,7 @@ class Converter
                                 case 'Computer':
                                 case 'Phone':
                                 case 'Printer':
+                                case 'Unmanaged':
                                     $itemtype = $device_info['type'];
                                     break;
                                 case 'Networking':
@@ -1436,11 +1445,19 @@ class Converter
                             $netport['connections'] = array_is_list($netport['connections']['connection']) ?
                                 $netport['connections']['connection'] :
                                 [$netport['connections']['connection']];
+
+                            //replace bad typed values...
+                            foreach ($netport['connections'] as &$connection) {
+                                if (isset($connection['ifnumber'])) {
+                                    $connection['ifnumber'] = $this->getCastedValue($connection['ifnumber'], 'integer');
+                                }
+                            }
                         }
                         if (isset($netport['aggregate'])) {
-                            $netport['aggregate'] = array_is_list($netport['aggregate']['port']) ?
-                                $netport['aggregate']['port'] :
-                                [$netport['aggregate']['port']];
+                            $netport['aggregate'] = is_array($netport['aggregate']['port'])
+                                && array_is_list($netport['aggregate']['port'])
+                                ? $netport['aggregate']['port']
+                                : [$netport['aggregate']['port']];
                             $netport['aggregate'] = array_map('intval', $netport['aggregate']);
                         }
 
@@ -1537,7 +1554,7 @@ class Converter
 
         $device = &$data['content']['device'];
         if (!isset($device['info'])) {
-            $device['info'] = ['type' => 'Computer'];
+            $device['info'] = ['type' => 'Unmanaged'];
         }
         $device_info = &$data['content']['device']['info'];
 
@@ -1593,6 +1610,7 @@ class Converter
                 case 'type':
                 case 'description':
                 case 'serial':
+                case 'assettag':
                     $device_info[$key] = $device[$key];
                     unset($device[$key]);
                     break;

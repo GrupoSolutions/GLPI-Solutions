@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -146,6 +146,8 @@ class NotificationMailing implements NotificationInterface
 
         $data['sender']                               = $options['from'];
         $data['sendername']                           = $options['fromname'];
+
+        $data['event'] = $options['event'] ?? null; // `event` has been added in GLPI 10.0.7
 
         if (isset($options['replyto']) && $options['replyto']) {
             $data['replyto']       = $options['replyto'];

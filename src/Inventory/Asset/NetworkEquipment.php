@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @copyright 2010-2022 by the FusionInventory Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
@@ -36,6 +36,7 @@
 
 namespace Glpi\Inventory\Asset;
 
+use Blacklist;
 use Glpi\Toolbox\Sanitizer;
 use NetworkEquipmentModel;
 use NetworkEquipmentType;
@@ -68,6 +69,7 @@ class NetworkEquipment extends MainAsset
         $val = $this->data[0];
         $model_field = $this->getModelsFieldName();
         $types_field = $this->getTypesFieldName();
+        $blacklist = new Blacklist();
 
         if (isset($this->extra_data['network_device'])) {
             $device = (object)$this->extra_data['network_device'];
@@ -78,7 +80,8 @@ class NetworkEquipment extends MainAsset
                 'model'        => $model_field,
                 'type'         => $types_field,
                 'manufacturer' => 'manufacturers_id',
-                'credentials'  => 'snmpcredentials_id'
+                'credentials'  => 'snmpcredentials_id',
+                'assettag'     => 'otherserial',
             ];
 
             foreach ($dev_mapping as $origin => $dest) {
@@ -111,7 +114,10 @@ class NetworkEquipment extends MainAsset
 
                //add internal port(s)
                 foreach ($device->ips as $ip) {
-                    if ($ip != '127.0.0.1' && $ip != '::1' && !in_array($ip, $port->ipaddress)) {
+                    if (
+                        !in_array($ip, $port->ipaddress)
+                        && '' != $blacklist->process(Blacklist::IP, $ip)
+                    ) {
                         $port->ipaddress[] = $ip;
                     }
                 }
@@ -130,8 +136,8 @@ class NetworkEquipment extends MainAsset
                 $stack->serial = $switch->serial;
                 $stack->model = $switch->model;
                 $stack->$model_field = $switch->model;
-                $stack->description = $stack->name . ' - ' . $switch->name;
-                $stack->name = $stack->name . ' - ' . $switch->name;
+                $stack->description = $stack->name . ' - ' . ($switch->name ?? $switch->description);
+                $stack->name = $stack->name . ' - ' . ($switch->name ?? $switch->description);
                 $stack->stack_number = $switch->stack_number ?? null;
                 $this->data[] = $stack;
             }

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -69,6 +69,8 @@ abstract class CommonITILObjectParameters extends AbstractParameters
             new AttributeParameter("closedate", __('Closing date'), 'date("d/m/y H:i")'),
             new AttributeParameter("status", __('Status')),
             new AttributeParameter("urgency", __('Urgency')),
+            new AttributeParameter("impact", __('Impact')),
+            new AttributeParameter("priority", __('Priority')),
             new ObjectParameter(new EntityParameters()),
             new ObjectParameter(new ITILCategoryParameters()),
             new ArrayParameter("requesters.users", new UserParameters(), _n('Requester', 'Requesters', Session::getPluralNumber())),
@@ -100,6 +102,8 @@ abstract class CommonITILObjectParameters extends AbstractParameters
             'closedate' => $fields['closedate'],
             'status'    => $commonitil::getStatus($fields['status']),
             'urgency'   => $commonitil::getUrgencyName($fields['urgency']),
+            'impact'    => $commonitil::getImpactName($fields['impact']),
+            'priority'  => $commonitil::getPriorityName($fields['priority']),
         ];
 
        // Add ticket's entity

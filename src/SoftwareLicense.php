@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -56,7 +56,13 @@ class SoftwareLicense extends CommonTreeDropdown
 
     public function getCloneRelations(): array
     {
-        return [];
+        return [
+            Infocom::class,
+            Contract_Item::class,
+            Document_Item::class,
+            KnowbaseItem_Item::class,
+            Notepad::class
+        ];
     }
 
     public static function getTypeName($nb = 0)
@@ -186,7 +192,6 @@ class SoftwareLicense extends CommonTreeDropdown
 
         $this->deleteChildrenAndRelationsFromDb(
             [
-                Certificate_Item::class,
                 Item_SoftwareLicense::class,
             ]
         );
@@ -543,6 +548,27 @@ class SoftwareLicense extends CommonTreeDropdown
             'name'               => __('Inventory number'),
             'massiveaction'      => false,
             'datatype'           => 'string',
+        ];
+
+        $tab[] = [
+            'id'                 => '163',
+            'table'              => 'glpi_items_softwarelicenses',
+            'field'              => 'id',
+            'name'               => _x('quantity', 'Number of installations'),
+            'forcegroupby'       => true,
+            'usehaving'          => true,
+            'datatype'           => 'count',
+            'massiveaction'      => false,
+            'joinparams'         => [
+                'jointype'   => 'child',
+                'beforejoin' => [
+                    'table'      => 'glpi_softwarelicenses',
+                    'joinparams' => ['jointype' => 'child'],
+                ],
+                'condition'  => [
+                    'NEWTABLE.is_deleted'          => 0
+                ]
+            ]
         ];
 
        // add objectlock search options

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -135,7 +135,7 @@ class ProjectTaskTemplate extends CommonDropdown
             'id'       => '6',
             'name'     => __('As child of'),
             'field'    => 'name',
-            'table'    => 'glpi_projects',
+            'table'    => 'glpi_projecttasks',
             'datatype' => 'itemlink',
         ];
 

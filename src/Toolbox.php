@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -36,6 +36,7 @@
 use Glpi\Console\Application;
 use Glpi\Event;
 use Glpi\Mail\Protocol\ProtocolInterface;
+use Glpi\Rules\RulesManager;
 use Glpi\Toolbox\Sanitizer;
 use Glpi\Toolbox\VersionParser;
 use Laminas\Mail\Storage\AbstractStorage;
@@ -412,7 +413,7 @@ class Toolbox
 
         try {
             $logger->addRecord($level, $msg, $extra);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
            //something went wrong, make sure logging does not cause fatal
             error_log($e);
         }
@@ -633,6 +634,7 @@ class Toolbox
         if (isset($mode)) {
             $_SESSION['glpi_use_mode'] = $mode;
         }
+        //FIXME Deprecate the debug_sql and debug_vars parameters in GLPI 10.1.0
         if (isset($debug_sql)) {
             $CFG_GLPI['debug_sql'] = $debug_sql;
         }
@@ -1030,28 +1032,24 @@ class Toolbox
         if (empty($img_height)) {
             $img_height = $img_infos[1];
         }
-        if (empty($new_width)) {
-            $new_width  = $img_infos[0];
-        }
-        if (empty($new_height)) {
-            $new_height = $img_infos[1];
+
+        if (
+            empty($max_size)
+            && (
+                !empty($new_width)
+                || !empty($new_height)
+            )
+        ) {
+            $max_size = ($new_width > $new_height ? $new_width : $new_height);
         }
 
-       // Image max size is 500 pixels : is set to 0 no resize
-        if ($max_size > 0) {
-            if (
-                ($img_width > $max_size)
-                || ($img_height > $max_size)
-            ) {
-                $source_aspect_ratio = $img_width / $img_height;
-                if ($source_aspect_ratio < 1) {
-                    $new_width  = ceil($max_size * $source_aspect_ratio);
-                    $new_height = $max_size;
-                } else {
-                    $new_width  = $max_size;
-                    $new_height = ceil($max_size / $source_aspect_ratio);
-                }
-            }
+        $source_aspect_ratio = $img_width / $img_height;
+        if ($source_aspect_ratio < 1) {
+            $new_width  = ceil($max_size * $source_aspect_ratio);
+            $new_height = $max_size;
+        } else {
+            $new_width  = $max_size;
+            $new_height = ceil($max_size / $source_aspect_ratio);
         }
 
         $img_type = $img_infos[2];
@@ -1073,6 +1071,10 @@ class Toolbox
                 $source_res = imagecreatefrompng($source_path);
                 break;
 
+            case IMAGETYPE_WEBP:
+                $source_res = imagecreatefromwebp($source_path);
+                break;
+
             default:
                 return false;
         }
@@ -1080,8 +1082,8 @@ class Toolbox
        //create new img resource for store thumbnail
         $source_dest = imagecreatetruecolor($new_width, $new_height);
 
-       // set transparent background for PNG/GIF
-        if ($img_type === IMAGETYPE_GIF || $img_type === IMAGETYPE_PNG) {
+       // set transparent background for PNG/GIF/WebP
+        if ($img_type === IMAGETYPE_GIF || $img_type === IMAGETYPE_PNG || $img_type === IMAGETYPE_WEBP) {
             imagecolortransparent($source_dest, imagecolorallocatealpha($source_dest, 0, 0, 0, 127));
             imagealphablending($source_dest, false);
             imagesavealpha($source_dest, true);
@@ -1107,6 +1109,10 @@ class Toolbox
             case IMAGETYPE_GIF:
             case IMAGETYPE_PNG:
                 $result = imagepng($source_dest, $dest_path);
+                break;
+
+            case IMAGETYPE_WEBP:
+                $result = imagewebp($source_dest, $dest_path);
                 break;
 
             case IMAGETYPE_JPEG:
@@ -1418,7 +1424,8 @@ class Toolbox
      * @param string $url         URL to retrieve
      * @param array  $eopts       Extra curl opts
      * @param string $msgerr      will contains a human readable error string if an error occurs of url returns empty contents
-     * @param string $curl_error  will contains original curl error string if an error occurs
+     * @param bool   $check_url_safeness    indicated whether the URL have to be filetered by safety checks
+     * @param array  $curl_info   will contains contents provided by `curl_getinfo`
      *
      * @return string
      */
@@ -1427,7 +1434,8 @@ class Toolbox
         array $eopts = [],
         &$msgerr = null,
         &$curl_error = null,
-        bool $check_url_safeness = false
+        bool $check_url_safeness = false,
+        ?array &$curl_info = null
     ) {
         global $CFG_GLPI;
 
@@ -1490,7 +1498,8 @@ class Toolbox
         curl_setopt_array($ch, $opts);
         $content = curl_exec($ch);
         $curl_error = curl_error($ch) ?: null;
-        $curl_redirect = curl_getinfo($ch, CURLINFO_REDIRECT_URL) ?: null;
+        $curl_info = curl_getinfo($ch);
+        $curl_redirect = $curl_info['redirect_url'] ?? null;
         curl_close($ch);
 
         if ($curl_error !== null) {
@@ -1508,8 +1517,8 @@ class Toolbox
                 );
             }
             $content = '';
-        } else if ($curl_redirect !== null) {
-            return self::callCurl($curl_redirect, $eopts, $msgerr, $curl_error, $check_url_safeness);
+        } else if (!empty($curl_redirect)) {
+            return self::callCurl($curl_redirect, $eopts, $msgerr, $curl_error, $check_url_safeness, $curl_info);
         } else if (empty($content)) {
             $msgerr = __('No data available on the web site');
         }
@@ -2345,8 +2354,7 @@ class Toolbox
        // Set global $DB as it is used in "Config::setConfigurationValues()" just after schema creation
         $DB = $database;
 
-        $normalized_nersion = VersionParser::getNormalizedVersion(GLPI_VERSION, false);
-        if (!$DB->runFile(sprintf('%s/install/mysql/glpi-%s-empty.sql', GLPI_ROOT, $normalized_nersion))) {
+        if (!$DB->runFile(sprintf('%s/install/mysql/glpi-empty.sql', GLPI_ROOT))) {
             echo "Errors occurred inserting default database";
         } else {
            //dataset
@@ -2394,8 +2402,8 @@ class Toolbox
                 }
             }
 
-           //rules
-            RuleImportAsset::initRules();
+            // Initalize rules
+            RulesManager::initializeRules();
 
            // update default language
             Config::setConfigurationValues(
@@ -2496,9 +2504,13 @@ class Toolbox
      * @since 0.84.2
      *
      * @return void  display error if not permit
+     *
+     * @deprecated 10.0.7
      **/
     public static function checkValidReferer()
     {
+        Toolbox::deprecated('Checking `HTTP_REFERER` does not provide any security.');
+
         global $CFG_GLPI;
 
         $isvalidReferer = true;
@@ -2628,7 +2640,7 @@ class Toolbox
     public static function slugify($string, $prefix = 'slug_')
     {
         $string = transliterator_transliterate("Any-Latin; Latin-ASCII; [^a-zA-Z0-9\.\ -_] Remove;", $string);
-        $string = str_replace(' ', '-', self::strtolower($string, 'UTF-8'));
+        $string = str_replace(' ', '-', self::strtolower($string));
         $string = preg_replace('~[^0-9a-z_\.]+~i', '-', $string);
         $string = trim($string, '-');
         if ($string == '') {
@@ -2677,7 +2689,7 @@ class Toolbox
      *
      * @return string                the $content_text param after parsing
      **/
-    public static function convertTagToImage($content_text, CommonDBTM $item, $doc_data = [])
+    public static function convertTagToImage($content_text, CommonDBTM $item, $doc_data = [], bool $add_link = true)
     {
         global $CFG_GLPI;
 
@@ -2758,7 +2770,7 @@ class Toolbox
                                 $id,
                                 $width,
                                 $height,
-                                true,
+                                $add_link,
                                 $object_url_param
                             );
                             if (empty($new_image)) {
@@ -3463,7 +3475,7 @@ HTML;
        // (or would require usage of a dedicated lib).
         return (preg_match(
             "/^(?:http[s]?:\/\/(?:[^\s`!(){};'\",<>«»“”‘’+]+|[^\s`!()\[\]{};:'\".,<>?«»“”‘’+]))$/iu",
-            $url
+            Sanitizer::unsanitize($url)
         ) === 1);
     }
 
@@ -3560,7 +3572,12 @@ HTML;
             $item->getFromDB($id);
         }
 
-        $tabs = $item->defineAllTabs();
+        $options = [];
+        if (isset($_GET['withtemplate'])) {
+            $options['withtemplate'] = $_GET['withtemplate'];
+        }
+
+        $tabs = $item->defineAllTabs($options);
         if (isset($tabs['no_all_tab'])) {
             unset($tabs['no_all_tab']);
         }
@@ -3665,11 +3682,11 @@ HTML;
             'to'  => 2,
             'tio' => 2,
         ];
-        $exp = $supported_sizes[strtolower($matches[2]) ?? null];
-        if ($exp === null) {
-            // Unkown format, keep the string as it is
-            return $size;
+        if (count($matches) >= 3 && isset($supported_sizes[strtolower($matches[2])])) {
+            // Known format
+            $size = $matches[1];
+            $size *= pow(1024, $supported_sizes[strtolower($matches[2])]);
         }
-        return $matches[1] * pow(1024, $exp);
+        return $size;
     }
 }

@@ -5,7 +5,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -149,6 +149,8 @@
 
                     padding: 1px 3px;
                     margin: 3px 3px 0 0;
+                    max-width: 100%;
+                    white-space: normal;
 
                     @include dark-mode {
                         & {

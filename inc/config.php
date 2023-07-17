@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -139,7 +139,13 @@ if (!isset($skip_db_check) && !file_exists(GLPI_CONFIG_DIR . "/config_db.php")) 
     Toolbox::setDebugMode();
 
     if (isset($_SESSION["glpiroot"]) && $CFG_GLPI["root_doc"] != $_SESSION["glpiroot"]) {
-        Html::redirect($_SESSION["glpiroot"]);
+        // When `$_SESSION["glpiroot"]` differs from `$CFG_GLPI["root_doc"]`, it means that
+        // either web server configuration changed,
+        // either session was initialized on another GLPI instance.
+        // Destroy session and redirect to login to ensure that session from another GLPI instance is not reused.
+        Session::destroy();
+        Auth::setRememberMeCookie('');
+        Html::redirectToLogin();
     }
 
     if (!isset($_SESSION["glpilanguage"])) {
@@ -179,6 +185,9 @@ if (!isset($skip_db_check) && !file_exists(GLPI_CONFIG_DIR . "/config_db.php")) 
     }
     // Check version
     if (!isset($_GET["donotcheckversion"]) && !Update::isDbUpToDate()) {
+        // Prevent debug bar to be displayed when an admin user was connected with debug mode when codebase was updated.
+        Toolbox::setDebugMode(Session::NORMAL_MODE);
+
         Session::loadLanguage('', false);
 
         if (isCommandLine()) {

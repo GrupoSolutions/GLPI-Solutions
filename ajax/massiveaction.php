@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -50,7 +50,7 @@ Session::checkLoginUser();
 
 try {
     $ma = new MassiveAction($_POST, $_GET, 'initial');
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     echo "<div class='center'><img src='" . $CFG_GLPI["root_doc"] . "/pics/warning.png' alt='" .
                               __s('Warning') . "'><br><br>";
     echo "<span class='b'>" . $e->getMessage() . "</span><br>";

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -150,6 +150,8 @@ class State extends CommonTreeDropdown
         }
 
         if (count($states)) {
+            $total = [];
+
            // Produce headline
             echo "<div class='center'><table class='tab_cadrehov'><tr>";
 
@@ -274,7 +276,7 @@ class State extends CommonTreeDropdown
         }
         if (!$this->isUnique($input)) {
             Session::addMessageAfterRedirect(
-                sprintf(__('%1$s must be unique!'), $this->getType(1)),
+                sprintf(__('%1$s must be unique!'), $this->getTypeName(1)),
                 false,
                 ERROR
             );
@@ -515,7 +517,7 @@ class State extends CommonTreeDropdown
     {
         if (!$this->isUnique($input)) {
             Session::addMessageAfterRedirect(
-                sprintf(__('%1$s must be unique per level!'), $this->getType(1)),
+                sprintf(__('%1$s must be unique per level!'), $this->getTypeName(1)),
                 false,
                 ERROR
             );

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -77,11 +77,11 @@ class CheckSchemaIntegrityCommand extends AbstractCommand
     {
         parent::configure();
 
-        $this->setName('glpi:database:check_schema_integrity');
+        $this->setName('database:check_schema_integrity');
         $this->setAliases(
             [
                 'db:check_schema_integrity',
-                'glpi:database:check', // old name
+                'database:check', // old name
                 'db:check', // old alias
             ]
         );
@@ -165,7 +165,11 @@ class CheckSchemaIntegrityCommand extends AbstractCommand
             $installed_version = null; // Cannot know installed schema of plugins
         } else {
             $context = 'core';
-            $installed_version = $CFG_GLPI['dbversion'];
+            $installed_version = $CFG_GLPI['dbversion'] ?? $CFG_GLPI['version']; // `dbversion` has been added in GLPI 9.2
+
+            // Some versions were stored with unexpected whitespaces.
+            // e.g. ` 0.80`, ` 0.80.1`, ...
+            $installed_version = trim($installed_version);
         }
 
         if (!$checker->canCheckIntegrity($installed_version, $context)) {

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -81,6 +81,7 @@ if (isset($_POST["add"])) {
     if (!$track::canUpdate()) {
         Html::displayRightError();
     }
+    print_r($_POST);
     $track->update($_POST);
 
     if (isset($_POST['kb_linked_id'])) {
@@ -115,14 +116,14 @@ if (isset($_POST["add"])) {
         if (isset($_POST['_sol_to_kb']) && $_POST['_sol_to_kb']) {
             $toadd = "&_sol_to_kb=1";
         }
-        Html::redirect(Ticket::getFormURLWithID($_POST["id"]) . $toadd);
+        //Html::redirect(Ticket::getFormURLWithID($_POST["id"]) . $toadd);
     }
     Session::addMessageAfterRedirect(
         __('You have been redirected because you no longer have access to this ticket'),
         true,
         ERROR
     );
-    Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.php");
+    //Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.php");
 } else if (isset($_POST['delete'])) {
     $track->check($_POST['id'], DELETE);
     if ($track->delete($_POST)) {
@@ -177,6 +178,7 @@ if (isset($_POST["add"])) {
 
     Html::redirect(Ticket::getFormURLWithID($_POST["id"]));
 } else if (isset($_POST['ola_delete'])) {
+    
     $track->check($_POST["id"], UPDATE);
 
     $track->deleteLevelAgreement("OLA", $_POST["id"], $_POST['type'], $_POST['delete_date']);

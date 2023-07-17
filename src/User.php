@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -303,7 +303,13 @@ class User extends CommonDBTM
         $this->addStandardTab('Config', $ong, $options);
         $this->addStandardTab(__CLASS__, $ong, $options);
         $this->addStandardTab('Ticket', $ong, $options);
+        $this->addStandardTab('Item_Problem', $ong, $options);
+        $this->addStandardTab('Change_Item', $ong, $options);
         $this->addStandardTab('Document_Item', $ong, $options);
+        $this->addStandardTab('Reservation', $ong, $options);
+        $this->addStandardTab('Auth', $ong, $options);
+        $this->addStandardTab('ManualLink', $ong, $options);
+        $this->addStandardTab('Certificate_Item', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
 
         return $ong;
@@ -619,7 +625,28 @@ class User extends CommonDBTM
      *
      * @return boolean
      */
-   
+    public function getFromDBbyToken($token, $field = 'personal_token')
+    {
+        if (!is_string($token)) {
+            trigger_error(
+                sprintf('Unexpected token value received: "string" expected, received "%s".', gettype($token)),
+                E_USER_WARNING
+            );
+            return false;
+        }
+
+        $fields = ['personal_token', 'api_token'];
+        if (!in_array($field, $fields)) {
+            trigger_error(
+                'User::getFromDBbyToken() can only be called with $field parameter with theses values: \'' . implode('\', \'', $fields) . '\'',
+                E_USER_WARNING
+            );
+            return false;
+        }
+
+        return $this->getFromDBByCrit([$this->getTable() . ".$field" => $token]);
+    }
+
 
     public function prepareInputForAdd($input)
     {
@@ -1973,6 +2000,7 @@ class User extends CommonDBTM
        //Only retrive cn and member attributes from groups
         $attrs = ['dn'];
 
+        $group_condition = Sanitizer::unsanitize($group_condition);
         if (!$use_dn) {
             $filter = "(& $group_condition (|($group_member_field=$user_dn)
                                           ($group_member_field=$login_field=$user_dn)))";
@@ -1981,7 +2009,6 @@ class User extends CommonDBTM
         }
 
        //Perform the search
-        $filter = Sanitizer::unsanitize($filter);
         $sr     = ldap_search($ds, $ldap_base_dn, $filter, $attrs);
 
        //Get the result of the search as an array
@@ -2147,8 +2174,12 @@ class User extends CommonDBTM
         if (!$DB->isSlave()) {
            //Instanciate the affectation's rule
             $rule = new RuleRightCollection();
-            $groups = Group_User::getUserGroups($this->fields['id']);
-            $groups_id = array_column($groups, 'id');
+
+            $groups_id = [];
+            if (!$this->isNewItem()) {
+                $groups = Group_User::getUserGroups($this->fields['id']);
+                $groups_id = array_column($groups, 'id');
+            }
 
             $this->fields = $rule->processAllRules($groups_id, Toolbox::stripslashes_deep($this->fields), [
                 'type'   => Auth::EXTERNAL,
@@ -2417,7 +2448,7 @@ HTML;
         }
 
         $surnamerand = mt_rand();
-        
+      
 
         $firstnamerand = mt_rand();
         echo "<tr class='tab_bg_1'><td><label for='textfield_firstname$firstnamerand'>" . __('First name') . "</label></td><td>";
@@ -2445,14 +2476,6 @@ HTML;
             echo "<td><label for='password2'>" . __('Password confirmation') . "</label></td>";
             echo "<td><input type='password' id='password2' name='password2' value='' size='20' autocomplete='new-password' class='form-control'>";
             echo "</td></tr>";
-            echo "<td>" . _n('Email', 'Emails', Session::getPluralNumber());
-            UserEmail::showAddEmailButton($this);
-            echo "</td><td>";
-            
-
-            UserEmail::showForUser($this);
-            echo "</td>";
-            echo "</tr>";
 
             if ($CFG_GLPI["use_password_security"]) {
                 echo "<tr class='tab_bg_1'>";
@@ -2463,14 +2486,14 @@ HTML;
                 Config::displayPasswordSecurityChecks();
                 echo "</td>";
                 echo "</tr>";
-                
             }
         } else {
             echo "<tr class='tab_bg_1'><td></td><td></td></tr>";
             echo "<tr class='tab_bg_1'><td></td><td></td></tr>";
         }
 
-       
+      
+
         echo "<tr class='tab_bg_1'>";
         if (!GLPI_DEMO_MODE) {
             $activerand = mt_rand();
@@ -2478,10 +2501,16 @@ HTML;
             Dropdown::showYesNo('is_active', $this->fields['is_active'], -1, ['rand' => $activerand]);
             echo "</td>";
         } else {
+            echo "<td colspan='2'></td>";
         }
-        
+        echo "<td>" . _n('Email', 'Emails', Session::getPluralNumber());
+        UserEmail::showAddEmailButton($this);
+        echo "</td><td>";
+        UserEmail::showForUser($this);
+        echo "</td>";
+        echo "</tr>";
 
-
+       
         $phonerand = mt_rand();
         echo "<tr class='tab_bg_1'>";
         echo "<td><label for='textfield_phone$phonerand'>" .  Phone::getTypeName(1) . "</label></td><td>";
@@ -2495,49 +2524,7 @@ HTML;
         echo "</td>";
        //Authentications information : auth method used and server used
        //don't display is creation of a new user'
-        if (!empty($ID)) {
-            if (Session::haveRight(self::$rightname, self::READAUTHENT)) {
-                
-                if (!empty($this->fields["date_sync"])) {
-                    //TRANS: %s is the date of last sync
-                    echo '<br>' . sprintf(
-                        __('Last synchronization on %s'),
-                        Html::convDateTime($this->fields["date_sync"])
-                    );
-                }
-                if (!empty($this->fields["user_dn"])) {
-                  //TRANS: %s is the user dn
-                    echo '<br>' . sprintf(__('%1$s: %2$s'), __('User DN'), $this->fields["user_dn"]);
-                }
-                if ($this->fields['is_deleted_ldap']) {
-                    echo '<br>' . __('User missing in LDAP directory');
-                }
-
-                echo "</td>";
-            } else {
-                echo "<td colspan='2'>&nbsp;</td>";
-            }
-        } else {
-            echo "<td colspan='2'><input type='hidden' name='authtype' value='1'></td>";
-        }
-
-        echo "</tr>";
-       
-
-       
-        echo "</td>";
-        echo "<td rowspan='4' class='middle'><label for='comment'>" . __('Comments') . "</label></td>";
-        echo "<td class='center middle' rowspan='4'>";
-        echo "<textarea class='form-control' id='comment' name='comment' >" . $this->fields["comment"] . "</textarea>";
-        echo "</td></tr>";
-
-        echo "<tr class='tab_bg_1'><td></td><td>";
         
-        echo "</td>";
-
-        $titlerand = mt_rand();
-        echo "<tr class='tab_bg_1'><td></td><td>";
-        echo "</td></tr>";
 
         echo "<tr class='tab_bg_1'>";
         if (!empty($ID)) {
@@ -2579,29 +2566,26 @@ HTML;
             ]);
             echo "</td></tr>";
         } else {
-            
-            if ($higherrights) {
-                $entrand = mt_rand();
-                echo "</td><td><label for='dropdown_entities_id$entrand'>" .  __('Default entity') . "</label></td><td>";
-                $entities = $this->getEntities();
-                Entity::dropdown(['value'  => $this->fields["entities_id"],
-                    'rand'   => $entrand,
-                    'entity' => $entities
-                ]);
-                echo "</td></tr>";
-                echo "</td>";
-                $userrand = mt_rand();
-                echo "<td><label for='dropdown_users_id_supervisor_$userrand'>" .  __('Responsible') . "</label></td><td>";
+            if ($higherrights || $ismyself) {
+                $profilerand = mt_rand();
+                echo "<tr class='tab_bg_1'>";
+                echo "<td><label for='dropdown_profiles_id$profilerand'>" .  __('Default profile') . "</label></td><td>";
 
-                User::dropdown(['name'   => 'users_id_supervisor',
-                    'value'  => $this->fields["users_id_supervisor"],
-                    'rand'   => $userrand,
-                    'entity' => $_SESSION["glpiactive_entity"],
-                    'right'  => 'all'
-                ]);
-                echo "</td></tr>";
+                $options   = Dropdown::getDropdownArrayNames(
+                    'glpi_profiles',
+                    Profile_User::getUserProfiles($this->fields['id'])
+                );
+
+                Dropdown::showFromArray(
+                    "profiles_id",
+                    $options,
+                    ['value'               => $this->fields["profiles_id"],
+                        'rand'                => $profilerand,
+                        'display_emptychoice' => true
+                    ]
+                );
             }
-
+          
             if (
                 Entity::getAnonymizeConfig() == Entity::ANONYMIZE_USE_NICKNAME
                 && Session::getCurrentInterface() == "central"
@@ -2620,7 +2604,54 @@ HTML;
                 echo "</tr>";
             }
 
-           
+            if ($this->can($ID, UPDATE)) {
+                echo "<tr class='tab_bg_1'><th colspan='4'>" . __('Remote access keys') . "</th></tr>";
+
+                echo "<tr class='tab_bg_1'><td>";
+                echo __("Personal token");
+                echo "</td><td colspan='2'>";
+
+                if (!empty($this->fields["personal_token"])) {
+                    echo "<div class='copy_to_clipboard_wrapper'>";
+                    echo Html::input('_personal_token', [
+                        'value'    => $this->fields["personal_token"],
+                        'style'    => 'width:90%'
+                    ]);
+                    echo "</div>";
+                    echo "(" . sprintf(
+                        __('generated on %s'),
+                        Html::convDateTime($this->fields["personal_token_date"])
+                    ) . ")";
+                }
+                echo "</td><td>";
+                Html::showCheckbox(['name'  => '_reset_personal_token',
+                    'title' => __('Regenerate')
+                ]);
+                echo "&nbsp;&nbsp;" . __('Regenerate');
+                echo "</td></tr>";
+
+                echo "<tr class='tab_bg_1'><td>";
+                echo __("API token");
+                echo "</td><td colspan='2'>";
+                if (!empty($this->fields["api_token"])) {
+                     echo "<div class='copy_to_clipboard_wrapper'>";
+                     echo Html::input('_api_token', [
+                         'value'    => $this->fields["api_token"],
+                         'style'    => 'width:90%'
+                     ]);
+                     echo "</div>";
+                     echo "(" . sprintf(
+                         __('generated on %s'),
+                         Html::convDateTime($this->fields["api_token_date"])
+                     ) . ")";
+                }
+                echo "</td><td>";
+                Html::showCheckbox(['name'  => '_reset_api_token',
+                    'title' => __('Regenerate')
+                ]);
+                echo "&nbsp;&nbsp;" . __('Regenerate');
+                echo "</td></tr>";
+            }
 
             echo "<tr class='tab_bg_1'>";
             echo "<td colspan='2' class='center'>";
@@ -2816,7 +2847,7 @@ HTML;
                    // Display a warning but only if user is more or less an admin
                     echo __('Timezone usage has not been activated.')
                     . ' '
-                    . sprintf(__('Run the "php bin/console %1$s" command to activate it.'), 'glpi:database:enable_timezones');
+                    . sprintf(__('Run the "%1$s" command to activate it.'), 'php bin/console database:enable_timezones');
                 }
                 echo "</td>";
                 if (
@@ -2872,11 +2903,27 @@ HTML;
             }
             echo "</td>";
 
-            
-            echo "</tr>";
+            if (count($_SESSION['glpiprofiles']) > 1) {
+                $profilerand = mt_rand();
+                echo "<td><label for='dropdown_profiles_id$profilerand'>" . __('Default profile') . "</label></td><td>";
 
-            $phone2rand = mt_rand();
-            echo "<tr class='tab_bg_1'><td><label for='textfield_phone2$phone2rand'>" .  __('Phone 2') . "</label></td><td>";
+                $options = Dropdown::getDropdownArrayNames(
+                    'glpi_profiles',
+                    Profile_User::getUserProfiles($this->fields['id'])
+                );
+                Dropdown::showFromArray(
+                    "profiles_id",
+                    $options,
+                    ['value'               => $this->fields["profiles_id"],
+                        'rand'                => $profilerand,
+                        'display_emptychoice' => true
+                    ]
+                );
+                echo "</td>";
+            } else {
+                echo "<td colspan='2'>&nbsp;</td>";
+            }
+            echo "</tr>";
 
             if (
                 $extauth
@@ -4211,7 +4258,7 @@ HTML;
        // Check default value for dropdown : need to be a numeric (or null)
         if (
             isset($p['value'])
-            && ((strlen($p['value']) == 0) || !is_numeric($p['value']) && $p['value'] != 'myself')
+            && ((strlen($p['value']) == 0) || !is_numeric($p['value']) && $p['value'] !== 'myself')
         ) {
             $p['value'] = 0;
         }
@@ -4849,7 +4896,6 @@ HTML;
             'is_deleted_ldap' => 1,
         ];
         $myuser = new self();
-        $myuser->getFromDB($users_id);
 
         switch ($CFG_GLPI['user_deleted_ldap']) {
            //DO nothing
@@ -5281,7 +5327,7 @@ HTML;
         // Check that the configuration allow this user to change his password
         if ($this->fields["authtype"] !== Auth::DB_GLPI && Auth::useAuthExt()) {
             trigger_error(
-                __("The authentication method configuration doesn't allow the user '$email' to change his password."),
+                __("The authentication method configuration doesn't allow the user '$email' to change their password."),
                 E_USER_WARNING
             );
 
@@ -5984,7 +6030,7 @@ HTML;
         $first  = DBmysql::quoteName("$table.$first");
         $second = DBmysql::quoteName("$table.$second");
         $alias  = DBmysql::quoteName($alias);
-        $name   = DBmysql::quoteName(self::getNameField());
+        $name   = DBmysql::quoteName($table . '.' . self::getNameField());
 
         return new QueryExpression("IF(
             $first <> '' && $second <> '',

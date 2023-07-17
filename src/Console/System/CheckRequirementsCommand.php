@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -49,8 +49,7 @@ class CheckRequirementsCommand extends AbstractCommand
     {
         parent::configure();
 
-        $this->setName('glpi:system:check_requirements');
-        $this->setAliases(['system:check_requirements']);
+        $this->setName('system:check_requirements');
         $this->setDescription(__('Check system requirements'));
     }
 
@@ -74,24 +73,22 @@ class CheckRequirementsCommand extends AbstractCommand
        /* @var \Glpi\System\Requirement\RequirementInterface $requirement */
         foreach ($core_requirements as $requirement) {
             if ($requirement->isOutOfContext()) {
-                continue; // skip requirement if not relevant
-            }
-
-            if ($requirement->isValidated()) {
+                $status = sprintf('<%s>[%s]</> ', 'fg=white;bg=yellow', __('SKIPPED'));
+            } elseif ($requirement->isValidated()) {
                 $status = sprintf('<%s>[%s]</>', 'fg=black;bg=green', __('OK'));
             } else {
                 $status = $requirement->isOptional()
-                ? sprintf('<%s>[%s]</> ', 'fg=white;bg=yellow', __('INFO'))
-                : sprintf('<%s>[%s]</> ', 'fg=white;bg=red', __('ERROR'));
+                    ? sprintf('<%s>[%s]</> ', 'fg=white;bg=yellow', __('INFO'))
+                    : sprintf('<%s>[%s]</> ', 'fg=white;bg=red', __('ERROR'));
             }
 
             $badge = $requirement->isOptional()
-            ? sprintf('<%s>[%s]</> ', 'fg=black;bg=bright-blue', mb_strtoupper(__('Suggested')))
-            : sprintf('<%s>[%s]</> ', 'fg=black;bg=bright-yellow', mb_strtoupper(__('Required')));
+                ? sprintf('<%s>[%s]</> ', 'fg=black;bg=bright-blue', mb_strtoupper(__('Suggested')))
+                : sprintf('<%s>[%s]</> ', 'fg=black;bg=bright-yellow', mb_strtoupper(__('Required')));
             $title = $badge . '<options=bold>' . $requirement->getTitle() . '</>';
             if (!empty($description = $requirement->getDescription())) {
-               // wordwrap to to keep table width acceptable
-                $wrapped = wordwrap($description, 70, '-----');
+                // wordwrap to keep table width acceptable
+                $wrapped = wordwrap($description, 50, '-----');
                 $lines = explode('-----', $wrapped);
                 foreach ($lines as $line) {
                     $title .= "\n\e[2m\e[3m" . $line . "\e[0m";

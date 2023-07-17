@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -74,20 +74,18 @@ class Ticket_Contract extends CommonDBRelation
         $tabnum = 1,
         $withtemplate = 0
     ) {
-        if (!($item instanceof CommonDBTM)) {
-            return false;
-        }
-
         $rand = mt_rand();
 
-        if (get_class($item) == Ticket::class) {
+        if ($item instanceof Ticket) {
             $add_label = __('Add a contract');
             $item_a_fkey = self::$items_id_1;
             $linked_itemtype = self::$itemtype_2;
-        } else if (get_class($item) == Contract::class) {
+        } else if ($item instanceof Contract) {
             $add_label = __('Add a ticket');
             $item_a_fkey = self::$items_id_2;
             $linked_itemtype = self::$itemtype_1;
+        } else {
+            return false;
         }
 
         $ID = $item->getField('id');

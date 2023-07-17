@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -51,18 +51,27 @@ trait ParentStatus
     {
         $needupdateparent = false;
 
-       // Set pending reason data on parent and self
+       // Set pending reason data on parent and self if not already set
         if ($input['pending'] ?? 0) {
-            PendingReason_Item::createForItem($parentitem, [
-                'pendingreasons_id'           => $input['pendingreasons_id'] ?? 0,
-                'followup_frequency'          => $input['followup_frequency'] ?? 0,
-                'followups_before_resolution' => $input['followups_before_resolution'] ?? 0,
-            ]);
-            PendingReason_Item::createForItem($this, [
-                'pendingreasons_id'           => $input['pendingreasons_id'] ?? 0,
-                'followup_frequency'          => $input['followup_frequency'] ?? 0,
-                'followups_before_resolution' => $input['followups_before_resolution'] ?? 0,
-            ]);
+            $parent_pending_reason = PendingReason_Item::getForItem($this->input['_job']);
+            if (
+                !$parent_pending_reason
+                || (
+                    $parent_pending_reason
+                    && !$parent_pending_reason->fields['pendingreasons_id']
+                )
+            ) {
+                PendingReason_Item::createForItem($parentitem, [
+                    'pendingreasons_id'           => $input['pendingreasons_id'] ?? 0,
+                    'followup_frequency'          => $input['followup_frequency'] ?? 0,
+                    'followups_before_resolution' => $input['followups_before_resolution'] ?? 0,
+                ]);
+                PendingReason_Item::createForItem($this, [
+                    'pendingreasons_id'           => $input['pendingreasons_id'] ?? 0,
+                    'followup_frequency'          => $input['followup_frequency'] ?? 0,
+                    'followups_before_resolution' => $input['followups_before_resolution'] ?? 0,
+                ]);
+            }
         }
 
         if (
@@ -81,11 +90,19 @@ trait ParentStatus
             $parentitem->update($update);
         }
 
-       // Set parent status to pending
-        if ($input['pending'] ?? 0) {
-            $input['_status'] = CommonITILObject::WAITING;
-        } elseif ($parentitem->fields["status"] == CommonITILObject::WAITING) {
-            $input["_reopen"] = true;
+        if (isset($input['pending'])) {
+            // Pending toggle was explicitly enabled or disabled
+            if ($input['pending']) {
+                $input['_status'] = CommonITILObject::WAITING;
+            } else {
+                $input["_reopen"] = true;
+            }
+        } else {
+            // Pending toggle isn't set (self-service, API, ...)
+            // Try to compute whether or not we need te reopen the ticket
+            if (!isset($input['_no_reopen']) && $parentitem->needReopen()) {
+                $input["_reopen"] = true;
+            }
         }
 
        //manage reopening of ITILObject

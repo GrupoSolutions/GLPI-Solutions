@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -678,7 +678,7 @@ class IPNetwork extends CommonImplicitTreeDropdown
 
             if ($relation == "equals") {
                 for ($i = $startIndex; $i < 4; ++$i) {
-                    $WHERE = [
+                    $WHERE[] = [
                         new \QueryExpression("(" . $DB->quoteName($addressDB[$i]) . " & " . $DB->quoteValue($netmaskPa[$i]) . ") = (" . $DB->quoteValue($addressPa[$i]) . " & " . $DB->quoteValue($netmaskPa[$i]) . ")"),
                         $netmaskDB[$i]  => $netmaskPa[$i]
                     ];
@@ -691,7 +691,7 @@ class IPNetwork extends CommonImplicitTreeDropdown
                         $globalNetmask = $DB->quoteName($netmaskDB[$i]);
                     }
 
-                    $WHERE = [
+                    $WHERE[] = [
                         new \QueryExpression("(" . $DB->quoteName($addressDB[$i]) . " & $globalNetmask) = (" . $DB->quoteValue($addressPa[$i]) . " & $globalNetmask)"),
                         new \QueryExpression("(" . $DB->quoteValue($netmaskPa[$i]) . " & " . $DB->quoteName($netmaskDB[$i]) . ")=$globalNetmask")
                     ];
@@ -703,6 +703,7 @@ class IPNetwork extends CommonImplicitTreeDropdown
             $entityID = $_SESSION['glpiactive_entity'];
         }
         $entitiesID = [];
+        $ORDER_ORIENTATION = '';
         switch ($relation) {
             case "is contained by":
                 $ORDER_ORIENTATION = 'ASC';
@@ -719,7 +720,6 @@ class IPNetwork extends CommonImplicitTreeDropdown
                 break;
 
             case "equals":
-                $ORDER_ORIENTATION = '';
                 if ($recursive) {
                     $entitiesID = getSonsAndAncestorsOf('glpi_entities', $entityID);
                 }
