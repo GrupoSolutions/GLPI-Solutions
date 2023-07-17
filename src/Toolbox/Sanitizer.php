@@ -90,10 +90,11 @@ class Sanitizer
      * Unsanitize a value. Reverts self::sanitize() transformation.
      *
      * @param mixed $value
+     * @param bool  $db_unescape
      *
      * @return mixed
      */
-    public static function unsanitize($value)
+    public static function unsanitize($value, bool $db_unescape = true)
     {
         if (is_array($value)) {
             return array_map(
@@ -108,7 +109,9 @@ class Sanitizer
         }
 
         $value = self::decodeHtmlSpecialChars($value);
-        $value = self::dbUnescape($value);
+        if ($db_unescape === true) {
+            $value = self::dbUnescape($value);
+        }
 
         return $value;
     }
@@ -216,6 +219,7 @@ class Sanitizer
 
     /**
      * Check wether the value correspond to a valid namespaced class (or a callable identifier related to a valid class).
+     * Note: also support the {namespace}${tab number} format used for tab identifications
      *
      * @param string $value
      *
@@ -224,8 +228,12 @@ class Sanitizer
     public static function isNsClassOrCallableIdentifier(string $value): bool
     {
         $class_match = [];
-        return preg_match('/^(?<class>(([a-zA-Z0-9_]+\\\)+[a-zA-Z0-9_]+))(:?:[a-zA-Z0-9_]+)?$/', $value, $class_match)
-            && class_exists($class_match['class']);
+
+        return preg_match(
+            '/^(?<class>(([a-zA-Z0-9_]+\\\)+[a-zA-Z0-9_]+))(:?:[a-zA-Z0-9_]+)?(\$[0-9]+)?$/',
+            $value,
+            $class_match
+        ) && class_exists($class_match['class']);
     }
 
     /**

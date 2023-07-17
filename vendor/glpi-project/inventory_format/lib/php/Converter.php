@@ -1445,6 +1445,13 @@ class Converter
                             $netport['connections'] = array_is_list($netport['connections']['connection']) ?
                                 $netport['connections']['connection'] :
                                 [$netport['connections']['connection']];
+
+                            //replace bad typed values...
+                            foreach ($netport['connections'] as &$connection) {
+                                if (isset($connection['ifnumber'])) {
+                                    $connection['ifnumber'] = $this->getCastedValue($connection['ifnumber'], 'integer');
+                                }
+                            }
                         }
                         if (isset($netport['aggregate'])) {
                             $netport['aggregate'] = is_array($netport['aggregate']['port'])
@@ -1603,6 +1610,7 @@ class Converter
                 case 'type':
                 case 'description':
                 case 'serial':
+                case 'assettag':
                     $device_info[$key] = $device[$key];
                     unset($device[$key]);
                     break;

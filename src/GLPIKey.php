@@ -61,8 +61,10 @@ class GLPIKey
      * @var array
      */
     protected $fields = [
+        'glpi_authldaps.rootdn_passwd',
         'glpi_mailcollectors.passwd',
-        'glpi_authldaps.rootdn_passwd'
+        'glpi_snmpcredentials.auth_passphrase',
+        'glpi_snmpcredentials.priv_passphrase',
     ];
 
     /**
@@ -76,6 +78,8 @@ class GLPIKey
             'glpinetwork_registration_key',
             'proxy_passwd',
             'smtp_passwd',
+            'smtp_oauth_client_secret',
+            'smtp_oauth_refresh_token',
         ]
     ];
 

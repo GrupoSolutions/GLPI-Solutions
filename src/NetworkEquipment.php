@@ -97,29 +97,6 @@ class NetworkEquipment extends CommonDBTM
 
 
     /**
-     * @since 0.84
-     *
-     * @see CommonDBTM::cleanDBonPurge()
-     **/
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                Certificate_Item::class,
-                Item_Project::class,
-            ]
-        );
-
-        Item_Devices::cleanItemDeviceDBOnItemDelete(
-            $this->getType(),
-            $this->fields['id'],
-            (!empty($this->input['keep_devices']))
-        );
-    }
-
-
-    /**
      * @see CommonDBTM::useDeletedToLockIfDynamic()
      *
      * @since 0.84
@@ -432,6 +409,14 @@ class NetworkEquipment extends CommonDBTM
         ];
 
         $tab[] = [
+            'id'                 => '12',
+            'table'              => $this->getTable(),
+            'field'              => 'uuid',
+            'name'               => __('UUID'),
+            'datatype'           => 'string',
+        ];
+
+        $tab[] = [
             'id'                 => '14',
             'table'              => $this->getTable(),
             'field'              => 'ram',
@@ -515,9 +500,9 @@ class NetworkEquipment extends CommonDBTM
 
         $tab = array_merge($tab, Rack::rawSearchOptionsToAdd(get_class($this)));
 
-        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd(get_class($this)));
+        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd());
 
-        $tab = array_merge($tab, SNMPCredential::rawSearchOptionsToAdd(get_class($this)));
+        $tab = array_merge($tab, SNMPCredential::rawSearchOptionsToAdd());
 
         return $tab;
     }

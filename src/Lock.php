@@ -239,6 +239,7 @@ class Lock extends CommonGLPI
                     $default_itemtype_label = $row['itemtype']::getTypeName();
                     $default_object_link    = $object->getLink();
                     $default_itemtype       = $row['itemtype'];
+                    $default_items_id       = null;
 
                     //get real type name from Item_Devices
                     // ex: get 'Hard drives' instead of 'Hard drive items'
@@ -276,7 +277,7 @@ class Lock extends CommonGLPI
                     // specific link for CommonDBRelation itemtype (like Item_OperatingSystem)
                     // get 'real' object name inside URL name
                     // ex: get 'Ubuntu 22.04.1 LTS' instead of 'Computer asus-desktop'
-                    if (is_a($row['itemtype'], CommonDBRelation::class, true)) {
+                    if ($default_items_id !== null && is_a($row['itemtype'], CommonDBRelation::class, true)) {
                         $related_object = new $default_itemtype();
                         $related_object->getFromDB($object->fields[$default_items_id]);
                         $default_object_link = "<a href='" . $object->getLinkURL() . "'" . $related_object->getName() . ">" . $related_object->getName() . "</a>";
@@ -840,6 +841,56 @@ class Lock extends CommonGLPI
             echo "</tr>\n";
         }
 
+        // Show deleted Domain_Item
+        $data = $DB->request([
+            'SELECT' => '*',
+            'FROM' => Domain_Item::getTable(),
+            'WHERE' => [
+                Domain_Item::getTableField('is_dynamic') => 1,
+                Domain_Item::getTableField('is_deleted') => 1,
+                Domain_Item::getTableField('items_id')   =>  $ID,
+                Domain_Item::getTableField('itemtype')   => $itemtype,
+            ]
+        ]);
+        if (count($data)) {
+            // Print header
+            echo "<tr>";
+            echo "<th width='10'></th>";
+            echo "<th>" . Domain::getTypeName(Session::getPluralNumber()) . "</th>";
+            echo "<th>" . DomainRelation::getTypeName(1) . "</th>";
+            echo "<th></th><th></th>";
+            echo "</tr>";
+        }
+
+        foreach ($data as $row) {
+            $domain_item = new Domain_Item();
+            $domain = new Domain();
+            $domain_relation = new DomainRelation();
+
+            $link = '';
+            if ($domain->getFromDB($row['domains_id'])) {
+                $link = $domain->getLink();
+            }
+
+            $relation_name = "";
+            if ($domain_relation->getFromDB($row['domainrelations_id'])) {
+                $relation_name = $domain_relation->getName();
+            }
+
+            echo "<tr class='tab_bg_1'>";
+            echo "<td class='center' width='10'>";
+            if ($domain_item->can($row['id'], UPDATE) || $domain_item->can($row['id'], PURGE)) {
+                $header = true;
+                echo "<input type='checkbox' name='Domain_Item[" . $row['id'] . "]'>";
+            }
+            echo "</td>";
+            echo "<td class='left'>" . $link . "</td>";
+            echo "<td class='left'>" . $relation_name . "</td>";
+            echo "<td></td>";
+            echo "<td></td>";
+            echo "</tr>\n";
+        }
+
         if ($header) {
             echo "<tr><th>";
             echo "</th><th colspan='4'>&nbsp</th></tr>\n";
@@ -1143,11 +1194,11 @@ class Lock extends CommonGLPI
                             "field" => $lock_fields_name,
                             "is_global" => 0
                         ]);
-                    }
-                    if ($res) {
-                        $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_OK);
-                    } else {
-                        $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_KO);
+                        if ($res) {
+                            $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_OK);
+                        } else {
+                            $ma->itemDone($base_itemtype, $id, MassiveAction::ACTION_KO);
+                        }
                     }
                 }
                 return;

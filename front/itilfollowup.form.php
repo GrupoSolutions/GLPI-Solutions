@@ -47,13 +47,38 @@ $handled = false;
 if (!isset($_POST['itemtype']) || !class_exists($_POST['itemtype'])) {
     Html::displayErrorAndDie('Lost');
 }
+print_r($_POST);
 $track = new $_POST['itemtype']();
 
-
 if (isset($_POST["add"])) {
+    
     $fup->check(-1, CREATE, $_POST);
-    $fup->add($_POST);
+    //Aqui vou ter que chamar o src da conexão com o banco, verificar o id do ticket, e ver se é novo e se quem está respondendo é diferente de quem fez a solicitação
+    //Daí entao atribuo o status do chamado para em atendimento.
+    require_once '../src/db_config.php';
+    
+    $idChamado = $_POST['items_id'];
 
+    $SQL = "SELECT id, users_id_lastupdater, status, users_id_recipient FROM glpi_tickets WHERE id = {$idChamado} ";
+    $buscaChamado = mysqli_query($sqlcon, $SQL);
+    $chamado = array();
+    if($buscaChamado){
+        while ($ticket = mysqli_fetch_row($buscaChamado)) {
+            array_push($chamado, $ticket);
+        }
+    }   
+    $idUsuario = $_SESSION['glpiID'];
+
+    if($chamado[0][2] == 1 && $chamado[0][1] != $idUsuario && $chamado[0][3] != $idUsuario){
+        $statusSQL = "UPDATE glpi_tickets SET status = 2, id_atendente = {$idUsuario} WHERE id = {$idChamado}";
+        $execStatus = mysqli_query($sqlcon, $statusSQL);
+    }
+   
+    // Aqui deve ser verificado o status, se é diferente de 5 (Pendente), deve ser aplicado o status 5 de pendente
+    // e inserido uma pausa na tabela de pausas, glpi_ticket_pause (id, hora e data da pausa, ticket_id)
+
+    $fup->add($_POST);
+    
     Event::log(
         $fup->getField('items_id'),
         strtolower($_POST['itemtype']),
@@ -81,9 +106,9 @@ if (isset($_POST["add"])) {
         );
     }
 } else if (isset($_POST["update"])) {
-    $fup->check($_POST['id'], UPDATE);
-    $fup->update($_POST);
-
+    print_r($_POST);
+    // $fup->check($_POST['id'], UPDATE);
+    // $fup->update($_POST);
     Event::log(
         $fup->getField('items_id'),
         strtolower($_POST['itemtype']),
@@ -92,8 +117,8 @@ if (isset($_POST["add"])) {
         //TRANS: %s is the user login
         sprintf(__('%s updates a followup'), $_SESSION["glpiname"])
     );
-    $redirect = $track->getFormURLWithID($fup->getField('items_id'));
-    $handled = true;
+    //$redirect = $track->getFormURLWithID($fup->getField('items_id'));
+    //$handled = true;
 } else if (isset($_POST["purge"])) {
     $fup->check($_POST['id'], PURGE);
     $fup->delete($_POST, 1);
@@ -144,10 +169,10 @@ if ($handled) {
     }
 }
 
-if (null == $redirect) {
-    Html::back();
-} else {
-    Html::redirect($redirect);
-}
+// if (null == $redirect) {
+//     Html::back();
+// } else {
+//     Html::redirect($redirect);
+// }
 
-Html::displayErrorAndDie('Lost');
+// Html::displayErrorAndDie('Lost');

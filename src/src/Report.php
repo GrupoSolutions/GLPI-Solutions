@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -86,6 +86,8 @@ class Report extends CommonGLPI
             $report_list["Infocoms"]["file"]  = "report.infocom.php";
             $report_list["Infocoms2"]["name"] = __('Other financial and administrative information (licenses, cartridges, consumables)');
             $report_list["Infocoms2"]["file"] = "report.infocom.conso.php";
+            $report_list["Infocoms2"]["name"] = "Relatório Financeiro de Ativos e Insumos";
+            $report_list["Infocoms2"]["file"] = "report.financeiro.php";
         }
         if (Session::haveRight("networking", READ)) {
             $report_list["Rapport prises reseau"]["name"] = __('Network report');

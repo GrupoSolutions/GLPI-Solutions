@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -101,32 +101,15 @@ class Computer extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong)
-         ->addImpactTab($ong, $options)
          ->addStandardTab('Item_OperatingSystem', $ong, $options)
          ->addStandardTab('Item_Devices', $ong, $options)
-         ->addStandardTab('Item_Disk', $ong, $options)
-         ->addStandardTab('Item_SoftwareVersion', $ong, $options)
          ->addStandardTab('Computer_Item', $ong, $options)
-         ->addStandardTab('NetworkPort', $ong, $options)
-         ->addStandardTab(Socket::class, $ong, $options)
          ->addStandardTab('Item_RemoteManagement', $ong, $options)
          ->addStandardTab('Infocom', $ong, $options)
          ->addStandardTab('Contract_Item', $ong, $options)
          ->addStandardTab('Document_Item', $ong, $options)
-         ->addStandardTab('ComputerVirtualMachine', $ong, $options)
-         ->addStandardTab('ComputerAntivirus', $ong, $options)
-         ->addStandardTab('KnowbaseItem_Item', $ong, $options)
-         ->addStandardTab('Ticket', $ong, $options)
-         ->addStandardTab('Item_Problem', $ong, $options)
-         ->addStandardTab('Change_Item', $ong, $options)
-         ->addStandardTab('ManualLink', $ong, $options)
-         ->addStandardTab('Certificate_Item', $ong, $options)
          ->addStandardTab('Lock', $ong, $options)
          ->addStandardTab('Notepad', $ong, $options)
-         ->addStandardTab('Reservation', $ong, $options)
-         ->addStandardTab('Domain_Item', $ong, $options)
-         ->addStandardTab('Appliance_Item', $ong, $options)
-         ->addStandardTab('DatabaseInstance', $ong, $options)
          ->addStandardTab('RuleMatchedLog', $ong, $options)
          ->addStandardTab('Log', $ong, $options);
 
@@ -195,14 +178,9 @@ class Computer extends CommonDBTM
         }
 
         if (count($changes)) {
-            //propage is_dynamic value if needed to prevent locked fields
-            if (isset($this->input['is_dynamic'])) {
-                $changes['is_dynamic'] = $this->input['is_dynamic'];
-            }
-
             $update_done = false;
 
-            // Propagates the changes to linked items
+           // Propagates the changes to linked items
             foreach ($CFG_GLPI['directconnect_types'] as $type) {
                 $items_result = $DB->request(
                     [
@@ -456,14 +434,6 @@ class Computer extends CommonDBTM
         ];
 
         $tab[] = [
-            'id'                 => '10',
-            'table'              => $this->getTable(),
-            'field'              => 'last_boot',
-            'name'               => __('Last boot date'),
-            'datatype'           => 'datetime',
-        ];
-
-        $tab[] = [
             'id'                 => '16',
             'table'              => $this->getTable(),
             'field'              => 'comment',
@@ -539,7 +509,15 @@ class Computer extends CommonDBTM
             'datatype'           => 'dropdown'
         ];
 
-        
+        $tab[] = [
+            'id'                 => '24',
+            'table'              => 'glpi_users',
+            'field'              => 'name',
+            'linkfield'          => 'users_id_tech',
+            'name'               => __('Technician in charge of the hardware'),
+            'datatype'           => 'dropdown',
+            'right'              => 'own_ticket'
+        ];
 
         $tab[] = [
             'id'                 => '49',

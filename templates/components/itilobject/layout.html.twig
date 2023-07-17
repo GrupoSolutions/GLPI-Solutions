@@ -52,23 +52,15 @@
     {% set left_side_cls = left_expanded_cls %}
     {% set right_side_cls = right_expanded_cls %}
 {% endif %}
+   {% if not item.isNewItem() %}
+   {% endif %}
+         {{ include('components/itilobject/sla.php')}}
 
-
-<div id="itil-object-container" class=" right-collapsed">
+<div id="itil-object-container" class=" right">
    {% if item.isNewItem and not params['template_preview'] %}
       {{ include('components/itilobject/mainform_open.html.twig') }}
    {% endif %}
-
-   <div class="row d-flex flex-column alin-items-stretch itil-object">
-      {% set fl_direction = (item.isNewItem ? 'flex-column' : 'flex-column-reverse') %}
-      <div class="itil-left-side col-12 {{ left_side_cls }} order-last order-md-first pt-2 pe-2 pe-md-4 d-flex {{ fl_direction }} border-top border-4">
-         {% if item.isNewItem() %}
-            {{ include('components/itilobject/timeline/new_form.html.twig') }}
-         {% else %}
-            {{ include('components/itilobject/timeline/timeline.html.twig') }}
-         {% endif %}
-      </div>
-      <div class="itil-right-side col-12 {{ right_side_cls }} mt-0 mt-md-n1 card-footer p-0 rounded-0">
+  <div class="itil-right-side col-12 {{ right_side_cls }} mt-0 mt-md-n1 card-footer p-0 rounded-0" style="width:100%">
          {% if not item.isNewItem() %}
             {{ include('components/itilobject/mainform_open.html.twig') }}
          {% endif %}
@@ -77,6 +69,16 @@
             {{ include('components/itilobject/mainform_close.html.twig') }}
          {% endif %}
       </div>
+   <div class="row d-flex flex-column alin-items-stretch itil-object">
+      {% set fl_direction = (item.isNewItem ? 'flex-column' : 'flex-column-reverse') %}
+      <div class="itil-left-side col-12 {{ left_side_cls }} order-last order-md-first pt-2 pe-2 pe-md-4 d-flex {{ fl_direction }} border-top border-4" style="width:100%" >
+         {% if item.isNewItem() %}
+            {{ include('components/itilobject/timeline/new_form.html.twig') }}
+         {% else %}
+            {{ include('components/itilobject/timeline/timeline.html.twig') }}
+         {% endif %}
+      </div>
+    
    </div>
 
    {% if not params['template_preview'] %}

@@ -114,7 +114,7 @@ class NotificationMailing implements NotificationInterface
         }
 
         $mmail->AddAddress($recipient, $CFG_GLPI["admin_email_name"]);
-        $mmail->Subject = "[Ativo] " . __('Mail test');
+        $mmail->Subject = "[GLPI] " . __('Mail test');
         $mmail->Body    = $text;
 
         if (!$mmail->Send()) {
@@ -146,6 +146,8 @@ class NotificationMailing implements NotificationInterface
 
         $data['sender']                               = $options['from'];
         $data['sendername']                           = $options['fromname'];
+
+        $data['event'] = $options['event'] ?? null; // `event` has been added in GLPI 10.0.7
 
         if (isset($options['replyto']) && $options['replyto']) {
             $data['replyto']       = $options['replyto'];

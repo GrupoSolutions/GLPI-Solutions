@@ -92,10 +92,10 @@ trait Inventoriable
         $items_id = $this->agent->fields['items_id'] ?? $this->fields['id'];
 
         $conf = new Conf();
-       //most files will be XML for now
-        $filename = $conf->buildInventoryFileName($itemtype, $items_id, 'xml');
+        //Check for JSON file, and the XML if JSON does not exists
+        $filename = $conf->buildInventoryFileName($itemtype, $items_id, 'json');
         if (!file_exists($inventory_dir_path . $filename)) {
-            $filename = $conf->buildInventoryFileName($itemtype, $items_id, 'json');
+            $filename = $conf->buildInventoryFileName($itemtype, $items_id, 'xml');
             if (!file_exists($inventory_dir_path . $filename)) {
                 return null;
             }
@@ -160,7 +160,7 @@ trait Inventoriable
 
         if ($agent === null) {
             echo '<tr class="tab_bg_1">';
-            echo '<td colspan="4">' . __('No agent has been linked.') . '</td>';
+            echo '<td colspan="4">' . __('Agent information is not available.') . '</td>';
             echo "</tr>";
         } else {
             $this->displayAgentInformation();
@@ -270,15 +270,27 @@ JAVASCRIPT;
                 [
                     'SELECT' => ['itemtype', 'items_id'],
                     'FROM'   => Computer_Item::getTable(),
+                    'WHERE'  => [
+                        'computers_id' => $this->getID()
+                    ]
                 ]
             );
             if (count($relations_iterator) > 0) {
                 $conditions = ['OR' => []];
+                $itemtype_ids = [];
                 foreach ($relations_iterator as $relation_data) {
-                    $conditions['OR'][] = [
-                        'itemtype' => $relation_data['itemtype'],
-                        'items_id' => $relation_data['items_id'],
-                    ];
+                    if (!isset($itemtype_ids[$relation_data['itemtype']])) {
+                        $itemtype_ids[$relation_data['itemtype']] = [];
+                    }
+                    $itemtype_ids[$relation_data['itemtype']][] = $relation_data['items_id'];
+                }
+                foreach ($itemtype_ids as $itemtype => $ids) {
+                    if (count($ids) > 0) {
+                        $conditions['OR'][] = [
+                            'itemtype' => $itemtype,
+                            'items_id' => $ids
+                        ];
+                    }
                 }
                 $agent = $this->getMostRecentAgent($conditions);
             }

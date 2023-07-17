@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -497,29 +497,6 @@ class Certificate extends CommonDBTM
     public function showForm($ID, array $options = [])
     {
         $this->initForm($ID, $options);
-
-        $class = "";
-
-        if (!$this->isNewItem()) {
-            //use send_certificates_alert_before_delay to compute color
-            if ($before = Entity::getUsedConfig('send_certificates_alert_before_delay', $_SESSION['glpiactive_entity'])) {
-                if ($this->fields['date_expiration'] < date('Y-m-d')) {
-                    $class = 'expired';
-                } elseif ($this->fields['date_expiration'] < date('Y-m-d', strtotime("+ $before days"))) {
-                    $class = 'soon_expired';
-                } else {
-                    $class = "not_expired";
-                }
-            } else { // standard color compute
-                if ($this->fields['date_expiration'] < date('Y-m-d')) {
-                    $class = 'warn';
-                }
-            }
-        }
-
-
-
-        $options['expiration_class'] = $class;
         TemplateRenderer::getInstance()->display('pages/management/certificate.html.twig', [
             'item'   => $this,
             'params' => $options,

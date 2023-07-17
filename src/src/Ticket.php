@@ -3762,7 +3762,8 @@ JAVASCRIPT;
             self::PLANNED  => _x('status', 'Processing (planned)'),
             self::WAITING  => __('Pending'),
             self::SOLVED   => _x('status', 'Solved'),
-            self::CLOSED   => _x('status', 'Closed')
+            self::CLOSED   => _x('status', 'Closed'),
+            self::WAITINGSOL    => "Aguardando Solicitante"
         ];
 
         if ($withmetaforsearch) {

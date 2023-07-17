@@ -320,6 +320,13 @@ class Agent extends CommonDBTM
             'datatype'   => 'text',
         ] + $baseopts;
 
+        $tab[] = [
+            'id'         => 906,
+            'field'      => 'useragent',
+            'name'       => __('Useragent'),
+            'datatype'   => 'text',
+        ] + $baseopts;
+
         return $tab;
     }
 
@@ -386,12 +393,16 @@ class Agent extends CommonDBTM
         $deviceid = $metadata['deviceid'];
 
         $aid = false;
-        if ($this->getFromDBByCrit(['deviceid' => $deviceid])) {
+        if ($this->getFromDBByCrit(Sanitizer::dbEscapeRecursive(['deviceid' => $deviceid]))) {
             $aid = $this->fields['id'];
         }
 
         $atype = new AgentType();
-        $atype->getFromDBByCrit(['name' => 'Core']);
+        if (!$atype->getFromDBByCrit(['name' => 'Core'])) {
+            $atype->add([
+                'name' => 'Core',
+            ]);
+        }
 
         $input = [
             'deviceid'     => $deviceid,
@@ -453,7 +464,7 @@ class Agent extends CommonDBTM
             return 0;
         }
 
-        $input = Toolbox::addslashes_deep($input);
+        $input = Sanitizer::sanitize($input);
         if ($aid) {
             $input['id'] = $aid;
             // We should not update itemtype in db if not an expected one
@@ -680,6 +691,7 @@ class Agent extends CommonDBTM
             $addresses = $this->getAgentURLs();
         }
 
+        $exception = null;
         $response = null;
         foreach ($addresses as $address) {
             $options = [
@@ -702,17 +714,17 @@ class Agent extends CommonDBTM
                 $response = $httpClient->request('GET', $endpoint, []);
                 self::$found_address = $address;
                 break;
-            } catch (\GuzzleHttp\Exception\RequestException $e) {
+            } catch (\GuzzleHttp\Exception\RequestException $exception) {
                 // got an error response, we don't need to try other addresses
                 break;
-            } catch (Exception $e) {
+            } catch (\Throwable $exception) {
                 // many addresses will be incorrect
             }
         }
 
-        if (!$response) {
+        if ($response === null && $exception !== null) {
             // throw last exception on no response
-            throw $e;
+            throw $exception;
         }
 
         return $response;
@@ -733,7 +745,7 @@ class Agent extends CommonDBTM
             ErrorHandler::getInstance()->handleException($e);
             // not authorized
             return ['answer' => __('Not allowed')];
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // no response
             return ['answer' => __('Unknown')];
         }
@@ -754,7 +766,7 @@ class Agent extends CommonDBTM
             ErrorHandler::getInstance()->handleException($e);
             // not authorized
             return ['answer' => __('Not allowed')];
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             // no response
             return ['answer' => __('Unknown')];
         }
@@ -864,7 +876,8 @@ class Agent extends CommonDBTM
                             //change status of agents linked assets
                             $input = [
                                 'id'        => $item->fields['id'],
-                                'states_id' => $config['stale_agents_status']
+                                'states_id' => $config['stale_agents_status'],
+                                'is_dynamic' => 1
                             ];
                             if ($item->update($input)) {
                                 $task->addVolume(1);

@@ -2448,15 +2448,7 @@ HTML;
         }
 
         $surnamerand = mt_rand();
-        echo "<tr class='tab_bg_1'><td><label for='textfield_realname$surnamerand'>" . __('Surname') . "</label></td><td>";
-        echo Html::input(
-            'realname',
-            [
-                'value' => $this->fields['realname'],
-                'id'    => "textfield_realname$surnamerand",
-            ]
-        );
-        echo "</td></tr>";
+      
 
         $firstnamerand = mt_rand();
         echo "<tr class='tab_bg_1'><td><label for='textfield_firstname$firstnamerand'>" . __('First name') . "</label></td><td>";
@@ -2500,28 +2492,7 @@ HTML;
             echo "<tr class='tab_bg_1'><td></td><td></td></tr>";
         }
 
-        if ($DB->use_timezones || Session::haveRight("config", READ)) {
-            echo "<tr class='tab_bg_1'>";
-            echo "<td><label for='timezone'>" . __('Time zone') . "</label></td><td>";
-            if ($DB->use_timezones) {
-                $timezones = $DB->getTimezones();
-                Dropdown::showFromArray(
-                    'timezone',
-                    $timezones,
-                    [
-                        'value'                 => $this->fields["timezone"],
-                        'display_emptychoice'   => true,
-                        'emptylabel'            => __('Use server configuration')
-                    ]
-                );
-            } else if (Session::haveRight("config", READ)) {
-               // Display a warning but only if user is more or less an admin
-                echo __('Timezone usage has not been activated.')
-                . ' '
-                . sprintf(__('Run the "%1$s" command to activate it.'), 'php bin/console database:enable_timezones');
-            }
-            echo "</td></tr>";
-        }
+      
 
         echo "<tr class='tab_bg_1'>";
         if (!GLPI_DEMO_MODE) {
@@ -2539,25 +2510,7 @@ HTML;
         echo "</td>";
         echo "</tr>";
 
-        if (!GLPI_DEMO_MODE) {
-            $sincerand = mt_rand();
-            echo "<tr class='tab_bg_1'>";
-            echo "<td><label for='showdate$sincerand'>" . __('Valid since') . "</label></td><td>";
-            Html::showDateTimeField("begin_date", ['value'       => $this->fields["begin_date"],
-                'rand'        => $sincerand,
-                'maybeempty'  => true
-            ]);
-            echo "</td>";
-
-            $untilrand = mt_rand();
-            echo "<td><label for='showdate$untilrand'>" . __('Valid until') . "</label></td><td>";
-            Html::showDateTimeField("end_date", ['value'       => $this->fields["end_date"],
-                'rand'        => $untilrand,
-                'maybeempty'  => true
-            ]);
-            echo "</td></tr>";
-        }
-
+       
         $phonerand = mt_rand();
         echo "<tr class='tab_bg_1'>";
         echo "<td><label for='textfield_phone$phonerand'>" .  Phone::getTypeName(1) . "</label></td><td>";
@@ -2571,82 +2524,7 @@ HTML;
         echo "</td>";
        //Authentications information : auth method used and server used
        //don't display is creation of a new user'
-        if (!empty($ID)) {
-            if (Session::haveRight(self::$rightname, self::READAUTHENT)) {
-                echo "<td>" . __('Authentication') . "</td><td>";
-                echo Auth::getMethodName($this->fields["authtype"], $this->fields["auths_id"]);
-                if (!empty($this->fields["date_sync"])) {
-                    //TRANS: %s is the date of last sync
-                    echo '<br>' . sprintf(
-                        __('Last synchronization on %s'),
-                        Html::convDateTime($this->fields["date_sync"])
-                    );
-                }
-                if (!empty($this->fields["user_dn"])) {
-                  //TRANS: %s is the user dn
-                    echo '<br>' . sprintf(__('%1$s: %2$s'), __('User DN'), $this->fields["user_dn"]);
-                }
-                if ($this->fields['is_deleted_ldap']) {
-                    echo '<br>' . __('User missing in LDAP directory');
-                }
-
-                echo "</td>";
-            } else {
-                echo "<td colspan='2'>&nbsp;</td>";
-            }
-        } else {
-            echo "<td colspan='2'><input type='hidden' name='authtype' value='1'></td>";
-        }
-
-        echo "</tr>";
-
-        $mobilerand = mt_rand();
-        echo "<tr class='tab_bg_1'>";
-        echo "<td><label for='textfield_mobile$mobilerand'>" . __('Mobile phone') . "</label></td><td>";
-        echo Html::input(
-            'mobile',
-            [
-                'value' => $this->fields['mobile'],
-                'id'    => "textfield_mobile$mobilerand",
-            ]
-        );
-        echo "</td>";
-        $catrand = mt_rand();
-        echo "<td><label for='dropdown_usercategories_id$catrand'>" . _n('Category', 'Categories', 1) . "</label></td><td>";
-        UserCategory::dropdown(['value' => $this->fields["usercategories_id"], 'rand' => $catrand]);
-        echo "</td></tr>";
-
-        $phone2rand = mt_rand();
-        echo "<tr class='tab_bg_1'>";
-        echo "<td><label for='textfield_phone2$phone2rand'>" .  __('Phone 2') . "</label></td><td>";
-        echo Html::input(
-            'phone2',
-            [
-                'value' => $this->fields['phone2'],
-                'id'    => "textfield_phone2$phone2rand",
-            ]
-        );
-        echo "</td>";
-        echo "<td rowspan='4' class='middle'><label for='comment'>" . __('Comments') . "</label></td>";
-        echo "<td class='center middle' rowspan='4'>";
-        echo "<textarea class='form-control' id='comment' name='comment' >" . $this->fields["comment"] . "</textarea>";
-        echo "</td></tr>";
-
-        $admnumrand = mt_rand();
-        echo "<tr class='tab_bg_1'><td><label for='textfield_registration_number$admnumrand'>" . _x('user', 'Administrative number') . "</label></td><td>";
-        echo Html::input(
-            'registration_number',
-            [
-                'value' => $this->fields['registration_number'],
-                'id'    => "textfield_registration_number$admnumrand",
-            ]
-        );
-        echo "</td></tr>";
-
-        $titlerand = mt_rand();
-        echo "<tr class='tab_bg_1'><td><label for='dropdown_usertitles_id$titlerand'>" . _x('person', 'Title') . "</label></td><td>";
-        UserTitle::dropdown(['value' => $this->fields["usertitles_id"], 'rand' => $titlerand]);
-        echo "</td></tr>";
+        
 
         echo "<tr class='tab_bg_1'>";
         if (!empty($ID)) {
@@ -2707,47 +2585,7 @@ HTML;
                     ]
                 );
             }
-            if ($higherrights) {
-                $entrand = mt_rand();
-                echo "</td><td><label for='dropdown_entities_id$entrand'>" .  __('Default entity') . "</label></td><td>";
-                $entities = $this->getEntities();
-                Entity::dropdown(['value'  => $this->fields["entities_id"],
-                    'rand'   => $entrand,
-                    'entity' => $entities
-                ]);
-                echo "</td></tr>";
-
-                $grouprand = mt_rand();
-                echo "<tr class='tab_bg_1'>";
-                echo "<td><label for='dropdown_profiles_id$grouprand'>" .  __('Default group') . "</label></td><td>";
-
-                $options = [];
-                foreach (Group_User::getUserGroups($this->fields['id']) as $group) {
-                     $options[$group['id']] = $group['completename'];
-                }
-
-                Dropdown::showFromArray(
-                    "groups_id",
-                    $options,
-                    ['value'               => $this->fields["groups_id"],
-                        'rand'                => $grouprand,
-                        'display_emptychoice' => true
-                    ]
-                );
-
-                echo "</td>";
-                $userrand = mt_rand();
-                echo "<td><label for='dropdown_users_id_supervisor_$userrand'>" .  __('Responsible') . "</label></td><td>";
-
-                User::dropdown(['name'   => 'users_id_supervisor',
-                    'value'  => $this->fields["users_id_supervisor"],
-                    'rand'   => $userrand,
-                    'entity' => $_SESSION["glpiactive_entity"],
-                    'right'  => 'all'
-                ]);
-                echo "</td></tr>";
-            }
-
+          
             if (
                 Entity::getAnonymizeConfig() == Entity::ANONYMIZE_USE_NICKNAME
                 && Session::getCurrentInterface() == "central"
@@ -3086,9 +2924,6 @@ HTML;
                 echo "<td colspan='2'>&nbsp;</td>";
             }
             echo "</tr>";
-
-            $phone2rand = mt_rand();
-            echo "<tr class='tab_bg_1'><td><label for='textfield_phone2$phone2rand'>" .  __('Phone 2') . "</label></td><td>";
 
             if (
                 $extauth

@@ -1512,8 +1512,8 @@ class Document extends CommonDBTM
             && @mkdir(GLPI_DOC_DIR . "/" . $subdir, 0777, true)
         ) {
             Session::addMessageAfterRedirect(sprintf(
-                __('Create the directory %s'),
-                $subdir
+                __('Create the directory'),
+                
             ));
         }
 

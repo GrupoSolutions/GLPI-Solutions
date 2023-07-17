@@ -66,6 +66,7 @@ switch ($action) {
                     'itemtype'           => $_GET['itemtype'],
                     'items_id'           => $_GET['items_id']
                 ],
+                'used'         => (int)$_GET['items_id'] > 0 ? Socket::getSocketAlreadyLinked($_GET['itemtype'], (int)$_GET['items_id']) : [],
                 'displaywith'  => ['itemtype', 'items_id', 'networkports_id'],
             ]);
         }
@@ -76,7 +77,8 @@ switch ($action) {
              'display_emptychoice' => true,
              'condition'           => ['items_id' => $_GET['items_id'],
                  'itemtype' => $_GET['itemtype']
-             ]
+             ],
+             'comments' => false
          ]);
         break;
 

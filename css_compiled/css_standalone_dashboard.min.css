@@ -6,7 +6,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -69,12 +69,11 @@
 }
 .dashboard.fullscreen .glpi_logo, .dashboard.embed .glpi_logo {
   background: url("../pics/logos/logo-GLPI-100-black.png") no-repeat;
-  width: 300px;
-  height: 195px;
+  width: 100px;
+  height: 55px;
   position: absolute;
   top: 30px;
-  left: 42%;
-  margin-right:58%;
+  left: 100px;
 }
 .dashboard.fullscreen .toolbar, .dashboard.embed .toolbar {
   top: 50px;
@@ -133,7 +132,7 @@
   display: none !important;
 }
 .dashboard.edit-mode .filters_toolbar .filters fieldset.filter .delete-filter {
-  display: inline-block;
+  display: inline-block !important;
 }
 .dashboard.edit-mode .filters_toolbar .filters fieldset.filter legend {
   display: inline-block;
@@ -174,7 +173,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 0;
+  z-index: 10;
 }
 .dashboard .toolbar.left-toolbar {
   top: 0;
@@ -853,7 +852,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -885,7 +884,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -1119,7 +1118,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -1151,7 +1150,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *

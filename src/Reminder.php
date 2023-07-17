@@ -35,6 +35,7 @@
 
 use Glpi\CalDAV\Contracts\CalDAVCompatibleItemInterface;
 use Glpi\CalDAV\Traits\VobjectConverterTrait;
+use Glpi\Features\Clonable;
 use Glpi\RichText\RichText;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VTodo;
@@ -50,6 +51,7 @@ class Reminder extends CommonDBVisible implements
         post_getEmpty as trait_post_getEmpty;
     }
     use VobjectConverterTrait;
+    use Clonable;
 
    // From CommonDBTM
     public $dohistory                   = true;
@@ -57,7 +59,7 @@ class Reminder extends CommonDBVisible implements
 
     public static $rightname    = 'reminder_public';
 
-
+    const PERSONAL = 128;
 
     public static function getTypeName($nb = 0)
     {
@@ -72,16 +74,14 @@ class Reminder extends CommonDBVisible implements
     public static function canCreate()
     {
 
-        return (Session::haveRight(self::$rightname, CREATE)
-              || Session::getCurrentInterface() != 'helpdesk');
+        return (Session::haveRightsOr(self::$rightname, [CREATE, self::PERSONAL]));
     }
 
 
     public static function canView()
     {
 
-        return (Session::haveRight(self::$rightname, READ)
-              || Session::getCurrentInterface() != 'helpdesk');
+        return (Session::haveRightsOr(self::$rightname, [READ, self::PERSONAL]));
     }
 
 
@@ -131,7 +131,7 @@ class Reminder extends CommonDBVisible implements
      **/
     public static function canUpdate()
     {
-        return (Session::getCurrentInterface() != 'helpdesk');
+        return (Session::haveRightsOr(self::$rightname, [UPDATE, self::PERSONAL]));
     }
 
 
@@ -141,7 +141,7 @@ class Reminder extends CommonDBVisible implements
      **/
     public static function canPurge()
     {
-        return (Session::getCurrentInterface() != 'helpdesk');
+        return (Session::haveRightsOr(self::$rightname, [PURGE, self::PERSONAL]));
     }
 
 
@@ -177,10 +177,27 @@ class Reminder extends CommonDBVisible implements
                 PlanningRecall::class,
                 Profile_Reminder::class,
                 Reminder_User::class,
-                VObject::class,
                 ReminderTranslation::class,
             ]
         );
+    }
+
+    public function prepareInputForClone($input)
+    {
+        // regenerate uuid
+        $input['uuid'] = \Ramsey\Uuid\Uuid::uuid4();
+        return $input;
+    }
+
+    public function getCloneRelations(): array
+    {
+        return [
+            Entity_Reminder::class,
+            Group_Reminder::class,
+            Profile_Reminder::class,
+            Reminder_User::class,
+            ReminderTranslation::class,
+        ];
     }
 
     public function haveVisibilityAccess()
@@ -1035,6 +1052,7 @@ class Reminder extends CommonDBVisible implements
             $values = [READ => __('Read')];
         } else {
             $values = parent::getRights();
+            $values[self::PERSONAL] = __('Manage personal');
         }
         return $values;
     }

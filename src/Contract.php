@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -393,6 +393,21 @@ class Contract extends CommonDBTM
             'datatype'           => 'specific'
         ];
 
+        $tab[] = [
+            'id'                 => '139',
+            'table'              => 'glpi_locations',
+            'field'              => 'completename',
+            'name'               => Location::getTypeName(1),
+            'datatype'           => 'dropdown',
+            'massiveaction'      => false,
+            'joinparams'         => [
+                'beforejoin'         => [
+                    'table'              => 'glpi_contracts',
+                    'joinparams'         => $joinparams
+                ]
+            ]
+        ];
+
         return $tab;
     }
 
@@ -568,6 +583,14 @@ class Contract extends CommonDBTM
             'datatype'           => 'number',
             'max'                => 120,
             'unit'               => 'month'
+        ];
+
+        $tab[] = [
+            'id'                 => '8',
+            'table'              => 'glpi_locations',
+            'field'              => 'completename',
+            'name'               => Location::getTypeName(1),
+            'datatype'           => 'dropdown'
         ];
 
         $tab[] = [
@@ -980,8 +1003,6 @@ class Contract extends CommonDBTM
         $options['criteria'][0]['value'] = '>0';
         $options['criteria'][1]['field'] = 13;
         $options['criteria'][1]['value'] = '<7';
-        $options['criteria'][0]['value'] = '>6';
-        $options['criteria'][1]['value'] = '<30';
         $twig_params['items'][] = [
             'link'   => $CFG_GLPI["root_doc"] . "/front/contract.php?" . Toolbox::append_params($options),
             'text'   => __('Contracts where notice begins in less than 7 days'),
@@ -1784,6 +1805,9 @@ class Contract extends CommonDBTM
         return "ti ti-writing-sign";
     }
 
+    /**
+     * @FIXME Rename method in GLPI 10.1. Method returns criteria to find NOT expired contracts.
+     */
     public static function getExpiredCriteria()
     {
         global $DB;

@@ -165,13 +165,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
           <option value="Matriz">Matriz</option>
           <option value="B2W">B2W</option>
           <option value="Via Varejo">Via Varejo</option>
-	        <option value="ASC">ASC</option>
+	  <option value="ASC">ASC</option>
         </select><br>
       </div>
       
       <br><br>
       <?php 
-      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
+      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306');
       $GLOBALS['sqlcon'] = $sqlcon;
 
       $buscaIDRequerente = "SELECT requester_id as REQUERENTE FROM glpi_plugin_formcreator_formanswers WHERE id = '{$ID}'";
@@ -243,7 +243,6 @@ function validaFRM(){
   var estado = document.getElementById("state");
   var cep = document.getElementById("zipcode");
   var cidade = document.getElementById("city");
-  var btnenvio = document.getElementById("envio");
 
   if(entrega.value == "" || !entrega.value ){
     alert("<div style='width:200px;'><br><br><h3 style='color: red; witdh:200px'>Informe o tipo de entrega!<br><br></h3></div>");

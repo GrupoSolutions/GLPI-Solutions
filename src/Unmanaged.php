@@ -45,7 +45,7 @@ class Unmanaged extends CommonDBTM
 
    // From CommonDBTM
     public $dohistory                   = true;
-    public static $rightname                   = 'config';
+    public static $rightname                   = 'unmanaged';
 
     public static function getTypeName($nb = 0)
     {
@@ -58,6 +58,7 @@ class Unmanaged extends CommonDBTM
         $ong = [];
         $this->addDefaultFormTab($ong)
          ->addStandardTab('NetworkPort', $ong, $options)
+         ->addStandardTab('Domain_Item', $ong, $options)
          ->addStandardTab('Lock', $ong, $options)
          ->addStandardTab('RuleMatchedLog', $ong, $options)
          ->addStandardTab('Log', $ong, $options);
@@ -66,7 +67,7 @@ class Unmanaged extends CommonDBTM
 
 
     /**
-     * Print the unmanagemed form
+     * Print the unmanaged form
      *
      * @param $ID integer ID of the item
      * @param $options array
@@ -145,15 +146,6 @@ class Unmanaged extends CommonDBTM
         ];
 
         $tab[] = [
-            'id'        => '9',
-            'table'     => 'glpi_domains',
-            'field'     => 'name',
-            'linkfield' => 'domains_id',
-            'name'      => Domain::getTypeName(1),
-            'datatype'  => 'dropdown',
-        ];
-
-        $tab[] = [
             'id'        => '10',
             'table'     => $this->getTable(),
             'field'     => 'comment',
@@ -193,16 +185,6 @@ class Unmanaged extends CommonDBTM
         ];
 
         return $tab;
-    }
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                NetworkPort::class
-            ]
-        );
     }
 
     public static function getIcon()
@@ -347,13 +329,8 @@ class Unmanaged extends CommonDBTM
         $this->deleteFromDB(1);
     }
 
-    public static function canDelete()
+    public function useDeletedToLockIfDynamic()
     {
-        return static::canUpdate();
-    }
-
-    public static function canPurge()
-    {
-        return static::canUpdate();
+        return false;
     }
 }

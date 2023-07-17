@@ -173,6 +173,11 @@ $empty_data_builder = new class
             'smtp_host' => '',
             'smtp_port' => '25',
             'smtp_username' => '',
+            'smtp_oauth_provider' => '',
+            'smtp_oauth_client_id' => '',
+            'smtp_oauth_client_secret' => '',
+            'smtp_oauth_options' => '{}',
+            'smtp_oauth_refresh_token' => '',
             'proxy_name' => '',
             'proxy_port' => '8080',
             'proxy_user' => '',
@@ -200,6 +205,7 @@ $empty_data_builder = new class
             'is_location_autoclean' => '0',
             'state_autoclean_mode' => '0',
             'use_flat_dropdowntree' => '0',
+            'use_flat_dropdowntree_on_search_result' => '1',
             'use_autoname_by_entity' => '1',
             'softwarecategories_id_ondelete' => '1',
             'x509_email_field' => '',
@@ -265,7 +271,7 @@ $empty_data_builder = new class
             'translate_kb' => '0',
             'translate_dropdowns' => '0',
             'translate_reminders' => '0',
-            'pdffont' => 'helvetica',
+            'pdffont' => 'dejavusans',
             'keep_devices_when_purging_item' => '0',
             'maintenance_mode' => '0',
             'maintenance_text' => '',
@@ -5330,11 +5336,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_OBSERVER,
                 'name' => 'reminder_public',
-                'rights' => READ,
+                'rights' => READ | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_OBSERVER,
                 'name' => 'rssfeed_public',
-                'rights' => READ,
+                'rights' => READ | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_OBSERVER,
                 'name' => 'bookmark_public',
@@ -5626,11 +5632,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_ADMIN,
                 'name' => 'reminder_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_ADMIN,
                 'name' => 'rssfeed_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_ADMIN,
                 'name' => 'bookmark_public',
@@ -5923,11 +5929,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_SUPER_ADMIN,
                 'name' => 'reminder_public',
-                'rights' => ALLSTANDARDRIGHT | UNLOCK,
+                'rights' => ALLSTANDARDRIGHT | UNLOCK | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_SUPER_ADMIN,
                 'name' => 'rssfeed_public',
-                'rights' => ALLSTANDARDRIGHT | UNLOCK,
+                'rights' => ALLSTANDARDRIGHT | UNLOCK | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_SUPER_ADMIN,
                 'name' => 'bookmark_public',
@@ -6222,11 +6228,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_HOTLINER,
                 'name' => 'reminder_public',
-                'rights' => self::RIGHT_NONE,
+                'rights' => self::RIGHT_NONE | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_HOTLINER,
                 'name' => 'rssfeed_public',
-                'rights' => self::RIGHT_NONE,
+                'rights' => self::RIGHT_NONE | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_HOTLINER,
                 'name' => 'bookmark_public',
@@ -6507,11 +6513,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_TECHNICIAN,
                 'name' => 'reminder_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_TECHNICIAN,
                 'name' => 'rssfeed_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_TECHNICIAN,
                 'name' => 'bookmark_public',
@@ -6798,11 +6804,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_SUPERVISOR,
                 'name' => 'reminder_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_SUPERVISOR,
                 'name' => 'rssfeed_public',
-                'rights' => READ | UPDATE | CREATE | PURGE,
+                'rights' => READ | UPDATE | CREATE | PURGE | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_SUPERVISOR,
                 'name' => 'bookmark_public',
@@ -7113,11 +7119,11 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
             ], [
                 'profiles_id' => self::PROFILE_READ_ONLY,
                 'name' => 'reservation',
-                'rights' => READ,
+                'rights' => READ | Reminder::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_READ_ONLY,
                 'name' => 'rssfeed_public',
-                'rights' => READ,
+                'rights' => READ | RSSFeed::PERSONAL,
             ], [
                 'profiles_id' => self::PROFILE_READ_ONLY,
                 'name' => 'rule_dictionnary_dropdown',
@@ -7933,7 +7939,48 @@ style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"&gt;
                 'profiles_id' => self::PROFILE_READ_ONLY,
                 'name' => 'agent',
                 'rights' => self::RIGHT_NONE,
-            ]
+            ],
+            [
+                'profiles_id' => self::PROFILE_SELF_SERVICE,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_OBSERVER,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_ADMIN,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPER_ADMIN,
+                'name' => 'unmanaged',
+                'rights' => READ | UPDATE | DELETE | PURGE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_HOTLINER,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_TECHNICIAN,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_SUPERVISOR,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+            ],
+            [
+                'profiles_id' => self::PROFILE_READ_ONLY,
+                'name' => 'unmanaged',
+                'rights' => self::RIGHT_NONE,
+
+            ],
         ];
 
 

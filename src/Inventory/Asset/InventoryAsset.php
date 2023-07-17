@@ -236,7 +236,7 @@ abstract class InventoryAsset
                     }
                 }
 
-                if (!isset($this->known_links[$known_key])) {
+                if (!isset($this->known_links[$known_key]) && $value->$key !== 0) {
                     $entities_id = $this->entities_id;
                     if ($key == "locations_id") {
                         $this->known_links[$known_key] = Dropdown::importExternal('Location', $value->$key, $entities_id);
@@ -450,4 +450,19 @@ abstract class InventoryAsset
     }
 
     abstract public function getItemtype(): string;
+
+    final protected function cleanName(string $string): string
+    {
+        return trim(
+            preg_replace(
+                '/[\x{200B}-\x{200D}\x{FEFF}]/u', //remove invisible characters
+                '',
+                preg_replace(
+                    '/\s+/u', //replace with single standard whitespace
+                    ' ',
+                    $string
+                )
+            )
+        );
+    }
 }

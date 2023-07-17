@@ -136,7 +136,7 @@ class Controller extends CommonGLPI
 
             try {
                 // copy files
-                $archive->extractFiles(GLPI_MARKETPLACE_DIR) !== false;
+                $archive->extract(GLPI_MARKETPLACE_DIR) !== false;
             } catch (\wapmorgan\UnifiedArchive\Exceptions\ArchiveExtractionException $e) {
                 $error = true;
             }
@@ -405,7 +405,7 @@ class Controller extends CommonGLPI
     {
         $api_plugin = self::getAPI()->getPlugin($this->plugin_key);
 
-        if (!isset($api_plugin['required_offers'])) {
+        if (empty($api_plugin['required_offers'])) {
             return false;
         }
 

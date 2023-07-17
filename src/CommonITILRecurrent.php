@@ -40,6 +40,8 @@
  */
 abstract class CommonITILRecurrent extends CommonDropdown
 {
+    use Glpi\Features\Clonable;
+
     /**
      * @var bool From CommonDBTM
      */
@@ -108,6 +110,11 @@ abstract class CommonITILRecurrent extends CommonDropdown
         }
 
         return '';
+    }
+
+    public function getCloneRelations(): array
+    {
+        return [];
     }
 
     public function defineTabs($options = [])
@@ -546,9 +553,11 @@ abstract class CommonITILRecurrent extends CommonDropdown
     /**
      * Create an item based on the specified template
      *
+     * @param CommonITILObject|null $created_item   Will contain the created item instance
+     *
      * @return boolean
      */
-    public function createItem()
+    public function createItem(?CommonITILObject &$created_item = null)
     {
         $result = false;
         $concrete_class = static::getConcreteClass();
@@ -570,6 +579,10 @@ abstract class CommonITILRecurrent extends CommonDropdown
             $predefined = $fields->getPredefinedFields($this->fields[$tmpl_fk], true);
             $input = $this->handlePredefinedFields($predefined, $input);
 
+            if (array_key_exists('status', $predefined)) {
+                $input['_do_not_compute_status'] = true;
+            }
+
            // Set entity
             $input['entities_id'] = $this->fields['entities_id'];
             $input['_auto_import'] = true;
@@ -579,6 +592,7 @@ abstract class CommonITILRecurrent extends CommonDropdown
             $input  = Toolbox::addslashes_deep($input);
 
             if ($items_id = $item->add($input)) {
+                $created_item = $item;
                 $msg = sprintf(
                     __('%s %d successfully created'),
                     $concrete_class::getTypeName(1),

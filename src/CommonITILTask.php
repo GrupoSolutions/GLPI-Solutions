@@ -69,6 +69,10 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         return 'id';
     }
 
+    public static function getIcon()
+    {
+        return 'ti ti-checkbox';
+    }
 
     public function canViewPrivates()
     {
@@ -676,7 +680,6 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         $this->deleteChildrenAndRelationsFromDb(
             [
                 PlanningRecall::class,
-                VObject::class,
             ]
         );
     }
@@ -1418,6 +1421,7 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
             'item'               => $options['parent'],
             'subitem'            => $this,
             'has_pending_reason' => PendingReason_Item::getForItem($options['parent']) !== false,
+            'params'             => $options,
         ]);
 
         return true;
@@ -1557,11 +1561,9 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
         $iterator = self::getTaskList($status, $showgrouptickets);
 
         $total_row_count = count($iterator);
-        $displayed_row_count = (int)$_SESSION['glpidisplay_count_on_home'] > 0
-         ? min((int)$_SESSION['glpidisplay_count_on_home'], $total_row_count)
-         : $total_row_count;
+        $displayed_row_count = min((int)$_SESSION['glpidisplay_count_on_home'], $total_row_count);
 
-        if ($displayed_row_count > 0) {
+        if ($total_row_count > 0) {
             $itemtype = get_called_class();
             switch ($status) {
                 case "todo":
@@ -1635,60 +1637,62 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                             'content'   => $main_header
                         ]
                     ],
-                    [
-                        [
-                            'content'   => __('ID'),
-                            'style'     => 'width: 75px'
-                        ],
-                        [
-                            'content'   => __('Title') . " (" . strtolower($type) . ")",
-                            'style'     => 'width: 20%'
-                        ],
-                        __('Description')
-                    ]
                 ],
                 'rows'         => []
             ];
 
             $i = 0;
-            foreach ($iterator as $data) {
-                $row = [
-                    'values' => []
+            if ($displayed_row_count > 0) {
+                $twig_params['header_rows'][] = [
+                    [
+                        'content'   => __('ID'),
+                        'style'     => 'width: 75px'
+                    ],
+                    [
+                        'content'   => __('Title') . " (" . strtolower($type) . ")",
+                        'style'     => 'width: 20%'
+                    ],
+                    __('Description')
                 ];
+                foreach ($iterator as $data) {
+                    $row = [
+                        'values' => []
+                    ];
 
-                $task  = $itemtype::getById($data['id']);
-                $parent_item  = $parent_itemtype::getById($task->fields[getForeignKeyFieldForItemType($parent_itemtype)]);
+                    $task = $itemtype::getById($data['id']);
+                    $parent_item = $parent_itemtype::getById($task->fields[getForeignKeyFieldForItemType($parent_itemtype)]);
 
 
-                if (!$task || !$parent_item) {
-                    // Invalid data; skip
-                    continue;
-                }
+                    if (!$task || !$parent_item) {
+                        // Invalid data; skip
+                        continue;
+                    }
 
-                // Parent item id with priority hint
-                $bgcolor = $_SESSION["glpipriority_" . $parent_item->fields["priority"]];
-                $name    = sprintf(__('%1$s: %2$s'), __('ID'), $parent_item->fields["id"]);
-                $row['values'][] = [
-                    'content' => "<div class='priority_block' style='border-color: $bgcolor'><span style='background: $bgcolor'></span>&nbsp;$name</div>"
-                ];
+                    // Parent item id with priority hint
+                    $bgcolor = $_SESSION["glpipriority_" . $parent_item->fields["priority"]];
+                    $name = sprintf(__('%1$s: %2$s'), __('ID'), $parent_item->fields["id"]);
+                    $row['values'][] = [
+                        'content' => "<div class='priority_block' style='border-color: $bgcolor'><span style='background: $bgcolor'></span>&nbsp;$name</div>"
+                    ];
 
-                // Parent item name
-                $row['values'][] = [
-                    'content' => $parent_item->fields['name']
-                ];
+                    // Parent item name
+                    $row['values'][] = [
+                        'content' => $parent_item->fields['name']
+                    ];
 
-                // Task description
-                $href = $parent_item::getFormURLWithID($parent_item->fields['id']);
-                $link_title = Html::resume_text(RichText::getTextFromHtml($task->fields['content'], false, true, true), 50);
-                $row['values'][] = [
-                    'content' => "<a href='$href'>$link_title</a>"
-                ];
+                    // Task description
+                    $href = $parent_item::getFormURLWithID($parent_item->fields['id']);
+                    $link_title = Html::resume_text(RichText::getTextFromHtml($task->fields['content'], false, true, true), 50);
+                    $row['values'][] = [
+                        'content' => "<a href='$href'>$link_title</a>"
+                    ];
 
-                $twig_params['rows'][] = $row;
+                    $twig_params['rows'][] = $row;
 
-                $i++;
-                if ($i == $displayed_row_count) {
-                    break;
+                    $i++;
+                    if ($i == $displayed_row_count) {
+                        break;
+                    }
                 }
             }
             echo TemplateRenderer::getInstance()->render('components/table.html.twig', $twig_params);
@@ -1726,6 +1730,8 @@ abstract class CommonITILTask extends CommonDBTM implements CalDAVCompatibleItem
                 $item_link = new Change();
                 $item_link->getFromDB($job->fields['changes_id']);
                 $tab_name = "ChangeTask";
+            } else {
+                throw new \RuntimeException(sprintf('Unexpected `%s` itemtype.', $itemtype));
             }
 
             $bgcolor = $_SESSION["glpipriority_" . $item_link->fields["priority"]];

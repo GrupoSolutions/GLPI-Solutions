@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -95,27 +95,9 @@ class Peripheral extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong);
-        $this->addImpactTab($ong, $options);
-        $this->addStandardTab('Item_OperatingSystem', $ong, $options);
-        $this->addStandardTab('Item_SoftwareVersion', $ong, $options);
-        $this->addStandardTab('Item_Devices', $ong, $options);
-        $this->addStandardTab('Computer_Item', $ong, $options);
-        $this->addStandardTab('NetworkPort', $ong, $options);
-        $this->addStandardTab(Socket::class, $ong, $options);
         $this->addStandardTab('Infocom', $ong, $options);
         $this->addStandardTab('Contract_Item', $ong, $options);
         $this->addStandardTab('Document_Item', $ong, $options);
-        $this->addStandardTab('KnowbaseItem_Item', $ong, $options);
-        $this->addStandardTab('Ticket', $ong, $options);
-        $this->addStandardTab('Item_Problem', $ong, $options);
-        $this->addStandardTab('Change_Item', $ong, $options);
-        $this->addStandardTab('ManualLink', $ong, $options);
-        $this->addStandardTab('Lock', $ong, $options);
-        $this->addStandardTab('Notepad', $ong, $options);
-        $this->addStandardTab('Reservation', $ong, $options);
-        $this->addStandardTab('Certificate_Item', $ong, $options);
-        $this->addStandardTab('Domain_Item', $ong, $options);
-        $this->addStandardTab('Appliance_Item', $ong, $options);
         $this->addStandardTab('RuleMatchedLog', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
 

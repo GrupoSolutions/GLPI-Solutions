@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -399,6 +399,9 @@ class Consumable extends CommonDBChild
         return 0;
     }
 
+    public function getURL(){
+       
+    }
     /**
      * Get the consumable count HTML array for a defined consumable type
      *
@@ -424,10 +427,20 @@ class Consumable extends CommonDBChild
             }
            //TRANS: For consumable. %1$d is total number, %2$d is unused number, %3$d is old number
             $tmptxt = sprintf(__('Total: %1$d, New: %2$d, Used: %3$d'), $total, $unused, $old);
+
+            $str = str_replace("/glpi/ajax/common.tabs.php?_target=/glpi/front/", "", $_SERVER["REQUEST_URI"]);
+            $url = strstr($str,'.php',true);
             if ($nohtml) {
                 $out = $tmptxt;
             } else {
+                $str = str_replace("/glpi/ajax/common.tabs.php?_target=/glpi/front/", "", $_SERVER["REQUEST_URI"]);
+                $url = strstr($str,'.php',true);
+                if($url = "consumableitem.form"){
+                    $tmptxt = sprintf(__('Total: %1$d  Disponiveis:  %2$d Usados:  %3$d'), $total, $unused, $old);
+                    $out = $tmptxt;
+                }else{
                 $out = "<div $highlight>" . $tmptxt . "</div>";
+                }
             }
         } else {
             if ($nohtml) {
@@ -501,7 +514,6 @@ class Consumable extends CommonDBChild
         } else if (self::isOld($cID)) {
             return _nx('consumable', 'Used', 'Used', 1);
         }
-        return '';
     }
 
 
@@ -516,26 +528,105 @@ class Consumable extends CommonDBChild
     {
 
         $ID = $consitem->getField('id');
+        $name = $consitem->getField('name');
+        $locID = $consitem->getField('locations_id');
 
         if (!$consitem->can($ID, UPDATE)) {
             return;
         }
 
         if ($ID > 0) {
-            echo "<div class='firstbloc'>";
-            echo "<form method='post' action=\"" . static::getFormURL() . "\">";
-            echo "<table class='tab_cadre_fixe'>";
-            echo "<tr><td class='tab_bg_2 center'>";
+            ?>
+                <div class="boxMovimentacao " align="center">
+                    <div class="boxP"> 
+                        <p>Alteração de Localidade:</p>
+                    </div>
+
+                   
+                    <div class="container">
+                        <input type="checkbox" onchange="showDiv()" class="checkbox" id="checkbox">
+                        <label class="switch" for="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+<?php
+            require_once 'db_config.php';
+            $query = "SELECT glpi_consumableitems.id,
+            glpi_consumableitems.name AS INSUMO,
+            glpi_locations.name as LOCAL
+             FROM base_104.glpi_consumableitems
+            LEFT JOIN
+                glpi_locations on glpi_locations.id = glpi_consumableitems.locations_id
+            Where glpi_consumableitems.id != '$ID' and glpi_consumableitems.name = '$name'";
+            $buscaInsumo = mysqli_query($sqlcon, $query);
+            $arrInsumos = array();
+            if($buscaInsumo){
+                while ($requ = mysqli_fetch_row($buscaInsumo)) {
+                    array_push($arrInsumos, $requ);
+                }
+            }
+            echo "<div class='firstbloc' id='frmAdd' align='center'>";
+            echo "<form method='post'  action=\"" . static::getFormURL() . "\">";
+            echo "<table class='tab_cadre_fixe' style='margin-left:5%;'>";
+            echo "<tr class='center'><td class='tab_bg_2 '>";
             echo "<input type='hidden' name='consumableitems_id' value='$ID'>\n";
-            Dropdown::showNumber('to_add', ['value' => 1,
-                'min'   => 1,
-                'max'   => 100
-            ]);
-            echo " <input type='submit' name='add_several' value=\"" . _sx('button', 'Add consumables') . "\"
-                class='btn btn-primary'>";
             echo "</td></tr>";
+            echo "<p style='font-size:12px; color:gray'>Os campos com<span class='required'>*</span> são obrigatórios.</p>";
+
+            echo "<tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>";
+            echo "<td><input type='text' pattern='[0-9]*' name='to_add' required/></td>";
+
+            echo "<td><label>Valor(R$): </label><span class='required'>*</span></td>";
+            echo "<td><input placeholder='ex: 1500,00' type='number' min='0.1' step='any' name='valor_insumo' required/></td></tr>";
+
+            echo "<tr><td><label>Data da NF: </label><span class='required'>*</span></td>";
+            echo "<td><input style='width:225px' type='date' name='data_nf' required/></td>";
+
+            echo "<td><label>Número da NF:</label><span class='required'>*</span></td>";
+            echo "<td><input type='text' pattern='[0-9]*' name='numero_nf' required/></td></tr>";
+
+            echo "<td><label>Observação:</label></td>";
+            echo "<td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea></td>";
+            echo "<div>";
             echo "</table>";
+            echo "<p align='center'><input type='submit' name='add_several' value=\"" . _sx('button', 'Add consumables') . "\"
+            class='btn btn-primary'></p>";
+            Html::closeForm();?>
+            </div>
+            <form method="post" id="frmMovimentacao" action='../assets/php/MovimentaLacre.php'>
+            <table class='tab_cadre_fixe' style='margin-left:5%'>
+                <tr><p style='font-size:12px; color:gray' align="center">Os campos com<span class='required'>*</span> são obrigatórios.</p></tr>
+                <input type="hidden" name="idOrigem" value="<?php echo $ID ?>">
+                <tr class="center"><td class="tab_bg_2"></td></tr>
+                <tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>
+                <td><input type='text' pattern='[0-9]*' name='qtdInsumos' required/></td>
+
+                <td width='18%'><label>Destino:</label><span class='required'>*</span></td>
+                <td><select name="idDestino" required><option class='disabled' value=''>Selecione o destino</option><?php
+                    foreach($arrInsumos as $insumo){
+                        echo "<option name='id' value='$insumo[0]'>$insumo[1] - $insumo[2]</option>";
+                    }
+                ?></select></td>
+
+                <tr><td><label>Observação:</label> </td>
+                <td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea> </td></tr>
+            </table>
+            <p align='center'><input type='submit' name='add_several' value="Movimentar Insumos" class='btn btn-primary'></p>
+
+            <script>
+            function showDiv(){
+                const divHide = document.getElementById('frmAdd');
+                divHide.style.display === "none" ? divHide.style.display = "block" : divHide.style.display = "none";
+                const consumableHide = document.getElementById('frmMovimentacao');
+                consumableHide.style.display === "block" ? consumableHide.style.display = "none" : consumableHide.style.display = "block";
+                
+            }
+            </script>
+            <?php 
             Html::closeForm();
+            echo "</div>";
             echo "</div>";
         }
     }
@@ -588,103 +679,16 @@ class Consumable extends CommonDBChild
         echo "<div class='spaced'>";
 
        // Display the pager
-        Html::printAjaxPager(Consumable::getTypeName(Session::getPluralNumber()), $start, $number);
 
-        if ($canedit && $number) {
-            Html::openMassiveActionsForm('mass' . __CLASS__ . $rand);
-            $actions = [];
-            if ($consitem->can($tID, PURGE)) {
-                $actions['delete'] = _x('button', 'Delete permanently');
-            }
-            $actions['Infocom' . MassiveAction::CLASS_ACTION_SEPARATOR . 'activate']
-            = __('Enable the financial and administrative information');
+       
 
-            if ($show_old) {
-                $actions['Consumable' . MassiveAction::CLASS_ACTION_SEPARATOR . 'backtostock']
-                     = __('Back to stock');
-            } else {
-                $actions[__CLASS__ . MassiveAction::CLASS_ACTION_SEPARATOR . 'give'] = _x('button', 'Give');
-            }
-            $entparam = ['entities_id' => $consitem->getEntityID()];
-            if ($consitem->isRecursive()) {
-                $entparam = ['entities_id' => getSonsOf('glpi_entities', $consitem->getEntityID())];
-            }
-            $massiveactionparams = ['num_displayed'    => min($_SESSION['glpilist_limit'], $number),
-                'specific_actions' => $actions,
-                'container'        => 'mass' . __CLASS__ . $rand,
-                'extraparams'      => $entparam
-            ];
-            Html::showMassiveActions($massiveactionparams);
-            echo "<input type='hidden' name='consumableitems_id' value='$tID'>\n";
-        }
-
-        echo "<table class='tab_cadre_fixehov'>";
+        echo "<table class='tab_cadre_fixehov' style='text-align:center;'>";
         if (!$show_old) {
             echo "<tr><th colspan=" . ($canedit ? '5' : '4') . ">";
             echo self::getCount($tID, -1);
             echo "</th></tr>";
-        } else { // Old
-            echo "<tr><th colspan='" . ($canedit ? '7' : '6') . "'>" . __('Used consumables') . "</th></tr>";
-        }
-
-        if ($number) {
-            $header_begin  = "<tr>";
-            $header_top    = '';
-            $header_bottom = '';
-            $header_end    = '';
-            if ($canedit) {
-                $header_begin  .= "<th width='10'>";
-                $header_top    .= Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand);
-                $header_bottom .= Html::getCheckAllAsCheckbox('mass' . __CLASS__ . $rand);
-                $header_end    .= "</th>";
-            }
-            $header_end .= "<th>" . __('ID') . "</th>";
-            $header_end .= "<th>" . _x('item', 'State') . "</th>";
-            $header_end .= "<th>" . __('Add date') . "</th>";
-            if ($show_old) {
-                $header_end .= "<th>" . __('Use date') . "</th>";
-                $header_end .= "<th>" . __('Given to') . "</th>";
-            }
-            $header_end .= "<th width='200px'>" . __('Financial and administrative information') . "</th>";
-            $header_end .= "</tr>";
-            echo $header_begin . $header_top . $header_end;
-
-            foreach ($iterator as $data) {
-                $date_in  = Html::convDate($data["date_in"]);
-                $date_out = Html::convDate($data["date_out"]);
-
-                echo "<tr class='tab_bg_1'>";
-                if ($canedit) {
-                    echo "<td width='10'>";
-                    Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
-                    echo "</td>";
-                }
-                echo "<td class='center'>" . $data["id"] . "</td>";
-                echo "<td class='center'>" . self::getStatus($data["id"]) . "</td>";
-                echo "<td class='center'>" . $date_in . "</td>";
-                if ($show_old) {
-                    echo "<td class='center'>" . $date_out . "</td>";
-                    echo "<td class='center'>";
-                    if ($item = getItemForItemtype($data['itemtype'])) {
-                        if ($item->getFromDB($data['items_id'])) {
-                             echo $item->getLink();
-                        }
-                    }
-                    echo "</td>";
-                }
-                echo "<td class='center'>";
-                Infocom::showDisplayLink('Consumable', $data["id"]);
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo $header_begin . $header_bottom . $header_end;
-        }
+        } 
         echo "</table>";
-        if ($canedit && $number) {
-            $massiveactionparams['ontop'] = false;
-            Html::showMassiveActions($massiveactionparams);
-            Html::closeForm();
-        }
 
         echo "</div>";
     }
@@ -863,9 +867,8 @@ class Consumable extends CommonDBChild
                 self::showAddForm($item);
                 self::showForConsumableItem($item);
                 self::showForConsumableItem($item, 1);
-                break;
+                return true;
         }
-        return true;
     }
 
     public function getRights($interface = 'central')

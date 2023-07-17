@@ -67,9 +67,12 @@ class Entity extends CommonTreeDropdown
     /**
      * Possible values for "anonymize_support_agents" setting
      */
-    const ANONYMIZE_DISABLED     = 0;
-    const ANONYMIZE_USE_GENERIC  = 1;
-    const ANONYMIZE_USE_NICKNAME = 2;
+    const ANONYMIZE_DISABLED            = 0;
+    const ANONYMIZE_USE_GENERIC         = 1;
+    const ANONYMIZE_USE_NICKNAME        = 2;
+    const ANONYMIZE_USE_GENERIC_USER    = 3;
+    const ANONYMIZE_USE_NICKNAME_USER   = 4;
+    const ANONYMIZE_USE_GENERIC_GROUP   = 5;
 
    // Array of "right required to update" => array of fields allowed
    // Missing field here couldn't be update (no right)
@@ -152,19 +155,55 @@ class Entity extends CommonTreeDropdown
         ];
     }
 
-    /**
-     * @since 0.84
-     **/
+    public function pre_updateInDB()
+    {
+        global $DB;
+
+        if (($key = array_search('name', $this->updates)) !== false) {
+            /// Check if entity does not exist
+            $iterator = $DB->request([
+                'FROM' => $this->getTable(),
+                'WHERE' => [
+                    'name' => $this->input['name'],
+                    'entities_id' => $this->input['entities_id'],
+                    'id' => ['<>', $this->input['id']]
+                ]
+            ]);
+
+            if (count($iterator)) {
+                //To display a message
+                $this->fields['name'] = $this->oldvalues['name'];
+                unset($this->updates[$key]);
+                unset($this->oldvalues['name']);
+                Session::addMessageAfterRedirect(
+                    __('An entity with that name already exists at the same level.'),
+                    false,
+                    ERROR
+                );
+            }
+        }
+    }
+
     public function pre_deleteItem()
     {
         global $GLPI_CACHE;
 
-       // Security do not delete root entity
+        // Security do not delete root entity
         if ($this->input['id'] == 0) {
             return false;
         }
 
-       //Cleaning sons calls getAncestorsOf and thus... Re-create cache. Call it before clean.
+        // Security do not delete entity with children
+        if (countElementsInTable($this->getTable(), ['entities_id' => $this->input['id']])) {
+            Session::addMessageAfterRedirect(
+                __('You cannot delete an entity which contains sub-entities.'),
+                false,
+                ERROR
+            );
+            return false;
+        }
+
+        //Cleaning sons calls getAncestorsOf and thus... Re-create cache. Call it before clean.
         $this->cleanParentsSons();
         $ckey = 'ancestors_cache_' . $this->getTable() . '_' . $this->getID();
         $GLPI_CACHE->delete($ckey);
@@ -178,6 +217,11 @@ class Entity extends CommonTreeDropdown
         return _n('Entity', 'Entities', $nb);
     }
 
+    public static function canCreate()
+    {
+        // Do not show the create button if no recusive access on current entity
+        return parent::canCreate() && Session::haveRecursiveAccessToEntity(Session::getActiveEntity());
+    }
 
     public function canCreateItem()
     {
@@ -1237,6 +1281,20 @@ class Entity extends CommonTreeDropdown
         ];
 
         $tab[] = [
+            'id'                 => '75',
+            'table'              => self::getTable(),
+            'field'              => 'contracts_id_default',
+            'name'               => __('Default contract'),
+            'datatype'           => 'specific',
+            'nosearch'           => true,
+            'additionalfields'   => ['contracts_strategy_default'],
+            'toadd'              => [
+                self::CONFIG_PARENT => __('Inheritance of the parent entity'),
+                self::CONFIG_AUTO   => __('Contract in ticket entity'),
+            ]
+        ];
+
+        $tab[] = [
             'id'                 => 'assets',
             'name'               => _n('Asset', 'Assets', Session::getPluralNumber())
         ];
@@ -1876,10 +1934,13 @@ class Entity extends CommonTreeDropdown
         $params = [
             'name'       => 'transfers_id',
             'value'      => $entity->fields['transfers_id'],
-            'emptylabel' => __('No automatic transfer')
+            'display_emptychoice' => false
         ];
         if ($entity->fields['id'] > 0) {
-            $params['toadd'] = [self::CONFIG_PARENT => __('Inheritance of the parent entity')];
+            $params['toadd'] = [
+                self::CONFIG_NEVER => __('No automatic transfer'),
+                self::CONFIG_PARENT => __('Inheritance of the parent entity')
+            ];
         }
         Dropdown::show('Transfer', $params);
         if ($entity->fields['transfers_strategy'] == self::CONFIG_PARENT) {
@@ -2939,7 +3000,7 @@ class Entity extends CommonTreeDropdown
 
         Contract::dropdown([
             'name'      => 'contracts_id_default',
-            'condition' => Contract::getExpiredCriteria(),
+            'condition' => ['is_template' => 0, 'is_deleted' => 0] + Contract::getExpiredCriteria(),
             'entity'    => $entity->getID(),
             'toadd'     => $toadd,
             'value'     => $current_default_contract_value,
@@ -3488,8 +3549,11 @@ class Entity extends CommonTreeDropdown
         return [
             self::CONFIG_PARENT => __('Inheritance of the parent entity'),
             self::ANONYMIZE_DISABLED => __('Disabled'),
-            self::ANONYMIZE_USE_GENERIC => __("Replace the agent's name with a generic name"),
-            self::ANONYMIZE_USE_NICKNAME => __("Replace the agent's name with a customisable nickname"),
+            self::ANONYMIZE_USE_GENERIC => __("Replace the agent and group name with a generic name"),
+            self::ANONYMIZE_USE_NICKNAME => __("Replace the agent and group name with a customisable nickname"),
+            self::ANONYMIZE_USE_GENERIC_USER => __("Replace the agent's name with a generic name"),
+            self::ANONYMIZE_USE_NICKNAME_USER => __("Replace the agent's name with a customisable nickname"),
+            self::ANONYMIZE_USE_GENERIC_GROUP => __("Replace the group's name with a generic name"),
         ];
     }
 
@@ -3705,6 +3769,17 @@ class Entity extends CommonTreeDropdown
                     return __('No automatic transfer');
                 }
                 return Dropdown::getDropdownName('glpi_transfers', $values[$field]);
+
+            case 'contracts_id_default':
+                $strategy = $values['contracts_strategy_default'] ?? $values[$field];
+                if ($strategy === self::CONFIG_PARENT) {
+                    return __('Inheritance of the parent entity');
+                }
+                if ($strategy === self::CONFIG_AUTO) {
+                    return __('Contract in ticket entity');
+                }
+
+                return Dropdown::getDropdownName(Contract::getTable(), $values[$field]);
         }
         return parent::getSpecificValueToDisplay($field, $values, $options);
     }
@@ -3887,6 +3962,8 @@ class Entity extends CommonTreeDropdown
      * @since 10.0.0
      *
      * @return array
+     *
+     * @FIXME Remove this method in GLPI 10.1.
      */
     public static function getDefaultContractValues($entities_id): array
     {
@@ -3951,7 +4028,7 @@ class Entity extends CommonTreeDropdown
      *
      * @return string|null
      */
-    public static function badgeCompletename(string $entity_string = ""): string
+    public static function badgeCompletename(string $entity_string = "", ?string $title = null): string
     {
         // `completename` is expected to be received as it is stored in DB,
         // meaning that `>` separator is not encoded, but `<`, `>` and `&` from self or parent names are encoded.
@@ -3963,7 +4040,9 @@ class Entity extends CommonTreeDropdown
         }
 
         // Construct HTML with special chars encoded.
-        $title = htmlspecialchars(implode(' > ', $names));
+        if ($title === null) {
+            $title = htmlspecialchars(implode(' > ', $names));
+        }
         $breadcrumbs = implode(
             '<i class="fas fa-caret-right mx-1"></i>',
             array_map(

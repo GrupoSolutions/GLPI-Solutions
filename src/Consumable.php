@@ -627,7 +627,6 @@ class Consumable extends CommonDBChild
             <?php 
             Html::closeForm();
             echo "</div>";
-
             echo "</div>";
         }
     }

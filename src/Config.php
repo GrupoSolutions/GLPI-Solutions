@@ -73,6 +73,10 @@ class Config extends CommonDBTM
     public static $undisclosedFields      = [
         'proxy_passwd',
         'smtp_passwd',
+        'smtp_oauth_client_id',
+        'smtp_oauth_client_secret',
+        'smtp_oauth_options',
+        'smtp_oauth_refresh_token',
         'glpinetwork_registration_key',
         'ldap_pass', // this one should not exist anymore, but may be present when admin restored config dump after migration
     ];
@@ -167,7 +171,7 @@ class Config extends CommonDBTM
             return false;
         }
 
-       // Trim automatically endig slash for url_base config as, for all existing occurences,
+       // Trim automatically ending slash for url_base config as, for all existing occurrences,
        // this URL will be prepended to something that starts with a slash.
         if (isset($input["url_base"]) && !empty($input["url_base"])) {
             if (Toolbox::isValidWebUrl($input["url_base"])) {
@@ -185,12 +189,7 @@ class Config extends CommonDBTM
             }
         }
 
-        if (isset($input["smtp_passwd"]) && empty($input["smtp_passwd"])) {
-            unset($input["smtp_passwd"]);
-        }
-        if (isset($input["_blank_smtp_passwd"]) && $input["_blank_smtp_passwd"]) {
-            $input['smtp_passwd'] = '';
-        }
+        $input = $this->handleSmtpInput($input);
 
         if (isset($input["proxy_passwd"]) && empty($input["proxy_passwd"])) {
             unset($input["proxy_passwd"]);
@@ -299,6 +298,71 @@ class Config extends CommonDBTM
         $this->setConfigurationValues('core', $input);
 
         return false;
+    }
+
+    /**
+     * Handle SMTP input values.
+     *
+     * @param array $input
+     *
+     * @return array
+     */
+    private function handleSmtpInput(array $input): array
+    {
+        global $CFG_GLPI;
+
+        if (array_key_exists('smtp_mode', $input) && (int)$input['smtp_mode'] === MAIL_SMTPOAUTH) {
+            $input['smtp_check_certificate'] = 1;
+            $input['smtp_passwd']          = '';
+
+            if (array_key_exists('smtp_oauth_client_secret', $input) && $input['smtp_oauth_client_secret'] === '') {
+                // form does not contains existing password value for security reasons
+                // prevent password to be overriden by an empty value
+                unset($input['smtp_oauth_client_secret']);
+            }
+
+            if (array_key_exists('smtp_oauth_options', $input)) {
+                if (is_array($input['smtp_oauth_options'])) {
+                    $input['smtp_oauth_options'] = json_encode($input['smtp_oauth_options']);
+                } else {
+                    $input['smtp_oauth_options'] = '';
+                }
+            }
+
+            $has_oauth_settings_changed = (array_key_exists('smtp_oauth_provider', $input) && $input['smtp_oauth_provider'] !== $CFG_GLPI['smtp_oauth_provider'])
+                || (array_key_exists('smtp_oauth_client_id', $input) && $input['smtp_oauth_client_id'] !== $CFG_GLPI['smtp_oauth_client_id'])
+                || (array_key_exists('smtp_oauth_options', $input) && $input['smtp_oauth_options'] !== $CFG_GLPI['smtp_oauth_options']);
+
+            if ($has_oauth_settings_changed) {
+                // clean credentials, they will have to be replaced by new ones
+                $input['smtp_oauth_refresh_token'] = '';
+                $input['smtp_username']            = '';
+            }
+
+            // remember whether the SMTP Oauth flow has to be triggered
+            $_SESSION['redirect_to_smtp_oauth'] = (bool)($input['_force_redirect_to_smtp_oauth'] ?? false) === true
+                || $has_oauth_settings_changed
+                || (string)$CFG_GLPI['smtp_oauth_refresh_token'] === '';
+
+            // ensure value is not saved in DB
+            unset($input['_force_redirect_to_smtp_oauth']);
+        } elseif (array_key_exists('smtp_mode', $input) && (int)$input['smtp_mode'] !== MAIL_SMTPOAUTH) {
+            // clean oauth related information
+            $input['smtp_oauth_provider'] = '';
+            $input['smtp_oauth_client_id'] = '';
+            $input['smtp_oauth_client_secret'] = '';
+            $input['smtp_oauth_options'] = '{}';
+            $input['smtp_oauth_refresh_token'] = '';
+        }
+
+        if (isset($input['smtp_passwd']) && empty($input['smtp_passwd'])) {
+            unset($input['smtp_passwd']);
+        }
+        if (isset($input["_blank_smtp_passwd"]) && $input["_blank_smtp_passwd"]) {
+            $input['smtp_passwd'] = '';
+        }
+
+        return $input;
     }
 
     public static function unsetUndisclosedFields(&$fields)
@@ -1015,15 +1079,19 @@ class Config extends CommonDBTM
 
         echo "</tr>";
 
-        echo "<tr class='tab_bg_2'>";
         if ($oncentral) {
-            echo "<td><label for='dropdown_use_flat_dropdowntree$rand'>" . __('Display the complete name in tree dropdowns') . "</label></td><td>";
+            echo "<tr class='tab_bg_2'>";
+            echo "<td><label for='dropdown_use_flat_dropdowntree$rand'>" . __('Display the tree dropdown complete name in dropdown inputs') . "</label></td><td>";
             Dropdown::showYesNo('use_flat_dropdowntree', $data["use_flat_dropdowntree"], -1, ['rand' => $rand]);
             echo "</td>";
-        } else {
-            echo "<td colspan='2'>&nbsp;</td>";
+
+            echo "<td><label for='dropdown_use_flat_dropdowntree_on_search_result$rand'>" . __('Display the complete name of tree dropdown in search results') . "</label></td><td>";
+            Dropdown::showYesNo('use_flat_dropdowntree_on_search_result', $data["use_flat_dropdowntree_on_search_result"], -1, ['rand' => $rand]);
+            echo "</td>";
+            echo "</tr>";
         }
 
+        echo "<tr class='tab_bg_2'>";
         if (
             !$userpref
             || ($CFG_GLPI['show_count_on_tabs'] != -1)
@@ -2220,6 +2288,18 @@ HTML;
                 'name'  => 'symfony/polyfill-php82',
                 'check' => 'Symfony\\Polyfill\\Php82\\SensitiveParameterValue'
             ],
+            [
+                'name'  => 'league/oauth2-client',
+                'check' => 'League\\OAuth2\\Client\\Provider\\AbstractProvider'
+            ],
+            [
+                'name'  => 'league/oauth2-google',
+                'check' => 'League\\OAuth2\\Client\\Provider\\Google'
+            ],
+            [
+                'name'  => 'thenetworg/oauth2-azure',
+                'check' => 'TheNetworg\\OAuth2\\Client\\Provider\\Azure'
+            ],
         ];
         if (Toolbox::canUseCAS()) {
             $deps[] = [
@@ -2377,7 +2457,14 @@ HTML;
 
             $url_base = $CFG_GLPI['url_base'] ?? null;
             // $CFG_GLPI may have not been loaded yet, load value form DB if `$CFG_GLPI['url_base']` is not set.
-            if ($url_base === null && $DB instanceof DBmysql && $DB->connected) {
+            if (
+                $url_base === null
+                && $DB instanceof DBmysql
+                && $DB->connected
+                // table/field may not exists in edge case (e.g. update from GLPI < 0.85)
+                && $DB->tableExists('glpi_configs')
+                && $DB->fieldExists('glpi_configs', 'context')
+            ) {
                 $url_base = Config::getConfigurationValue('core', 'url_base');
             }
 
@@ -2932,6 +3019,9 @@ HTML;
                 $config->add($input);
             }
         }
+
+        //reload config for loggedin user
+    
     }
 
     /**
@@ -3534,22 +3624,21 @@ HTML;
 
     public function post_updateItem($history = 1)
     {
-        global $DB;
-
-       // Check if password expiration mechanism has been activated
+        global $DB, $CFG_GLPI;
+        // Check if password expiration mechanism has been activated
         if (
             $this->fields['name'] == 'password_expiration_delay'
             && array_key_exists('value', $this->oldvalues)
             && (int)$this->oldvalues['value'] === -1
         ) {
-           // As passwords will now expire, consider that "now" is the reference date of expiration delay
+            // As passwords will now expire, consider that "now" is the reference date of expiration delay
             $DB->update(
                 User::getTable(),
                 ['password_last_update' => $_SESSION['glpi_currenttime']],
                 ['authtype' => Auth::DB_GLPI]
             );
 
-           // Activate passwordexpiration automated task
+            // Activate passwordexpiration automated task
             $DB->update(
                 CronTask::getTable(),
                 ['state' => 1,],
@@ -3572,6 +3661,8 @@ HTML;
             if (strlen($oldvalue) > 255 && Toolbox::isJSON($oldvalue)) {
                 $oldvalue = "{...}";
             }
+
+            $CFG_GLPI[$this->fields['name']] = $newvalue; // Ensure post update actions and hook that are using `$CFG_GLPI` will use the new value
 
             $this->logConfigChange(
                 $this->fields['context'],

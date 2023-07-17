@@ -543,7 +543,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $options['canedit'] = false;
 
       // Print css media
-      echo Html::css(FORMCREATOR_ROOTDOC . "/css/print_form.css", ['media' => 'print']);
+      echo Html::css("/marketplace/css/print_form.css", ['media' => 'print']);
 
       $style = "<style>";
       // force colums width
@@ -979,7 +979,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          $idChamado = $target->getID();
          Session::addMessageAfterRedirect(sprintf(__('Item sucessfully added: %1$s (%2$s: %3$s)', 'formcreator'), $target->getName(), $target->getTypeName(1), $targetUrl), false, INFO);
       }
-      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306');      
+      $sqlcon = mysqli_connect('localhost', 'glpi', '16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@', 'glpi', '3306');  
       $GLOBALS['sqlcon'] = $sqlcon;
       
       //Busca as perguntas e respostas do formulario
@@ -1010,8 +1010,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          while($row = mysqli_fetch_array($solicitacaoRetorno)){
             $quantidade = $row['RESPOSTA'];
    
-            
-            if($quantidade != 'TRIAGEM'){
+            if($quantidade != 'TRIAGEM' || $quantidade != 'WHIRLPOOL'){
    
                $consumivel = $row['CONSUMIVEL'];
    
@@ -1019,7 +1018,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                   $buscaIDInsumo = "SELECT id, consumableitemtypes_id FROM glpi_consumableitems WHERE glpi_consumableitems.name != 'Informe qual projeto você participa' and glpi_consumableitems.name = '{$consumivel} {$quantidade}'";
                   $retornaIDInsumo = mysqli_query($sqlcon, $buscaIDInsumo);
                   $numR = mysqli_num_rows($retornaIDInsumo);
-
                   if($numR > 0 && !empty($consumivel)){
                      if($retornaIDInsumo){
                         while($r = mysqli_fetch_array($retornaIDInsumo)){
@@ -1088,7 +1086,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                }
               
             }
-            
          }
          
       

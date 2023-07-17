@@ -1635,7 +1635,7 @@ class Project extends CommonDBTM implements ExtraVisibilityCriteria
             'type'      => 'checkbox',
             'name'      => 'auto_percent_done',
             'title'     => __('Automatically calculate'),
-            'onclick'   => "$(\"select[name='percent_done']\").prop('disabled', !$(\"input[name='auto_percent_done']\").prop('checked'));"
+            'onclick'   => "$(\"select[name='percent_done']\").prop('disabled', $(\"input[type='checkbox'][name='auto_percent_done']\").prop('checked'));"
         ];
         if ($this->fields['auto_percent_done']) {
             $auto_percent_done_params['checked'] = 'checked';
@@ -2045,7 +2045,7 @@ class Project extends CommonDBTM implements ExtraVisibilityCriteria
 
        // Build team member data
         $supported_teamtypes = [
-            'User' => ['id', 'firstname', 'realname'],
+            'User' => ['id', 'name', 'firstname', 'realname'],
             'Group' => ['id', 'name'],
             'Supplier' => ['id', 'name'],
             'Contact' => ['id', 'name', 'firstname']
@@ -2114,8 +2114,9 @@ class Project extends CommonDBTM implements ExtraVisibilityCriteria
                         if (count($contact_matches)) {
                               $match = reset($contact_matches);
                               // contact -> name, user -> realname
-                              $realname = $match['name'] ?? $match['realname'] ?? "";
-                              $match['name'] = formatUserName($match['id'], '', $realname, $match['firstname']);
+                              $realname = $teammember['itemtype'] === 'User' ? $match['realname'] : $match['name'];
+                              $name = $teammember['itemtype'] === 'User' ? $match['name'] : '';
+                              $match['name'] = formatUserName($match['id'], $name, $realname, $match['firstname']);
                               $item['_team'][] = array_merge($teammember, $match);
                         }
                         break;
@@ -2162,7 +2163,7 @@ class Project extends CommonDBTM implements ExtraVisibilityCriteria
                         if (count($contact_matches)) {
                               $match = reset($contact_matches);
                             if ($teammember['itemtype'] === 'User') {
-                                $match['name'] = formatUserName($match['id'], '', $match['realname'], $match['firstname']);
+                                $match['name'] = formatUserName($match['id'], $match['name'], $match['realname'], $match['firstname']);
                             } else {
                                 $match['name'] = formatUserName($match['id'], '', $match['name'], $match['firstname']);
                             }

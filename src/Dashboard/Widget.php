@@ -392,7 +392,6 @@ HTML;
         $class = $p['class'];
         $class .= count($p['filters']) > 0 ? " filter-" . implode(' filter-', $p['filters']) : "";
 
-        $alphabet = range('a', 'z');
         $numbers_html = "";
         $i = 0;
         foreach ($p['data'] as $entry) {
@@ -416,7 +415,7 @@ HTML;
             $formatted_number = Toolbox::shortenNumber($entry['number']);
 
             $numbers_html .= <<<HTML
-            <a {$href} class="line line-{$alphabet[$i]}">
+            <a {$href} class="line line-{$i}">
                <span class="content" {$color}>$formatted_number</span>
                <i class="icon {$entry['icon']}" {$color2}></i>
                <span class="label" {$color2}>{$entry['label']}</span>
@@ -656,7 +655,12 @@ HTML;
 
         $js = <<<JAVASCRIPT
       $(function () {
-         var chart = new Chartist.Pie(Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0], {
+         if (Dashboard.getActiveDashboard()) {
+            var target = Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0];
+         } else {
+            var target = '#{$chart_id} .chart';
+         }
+         var chart = new Chartist.Pie(target, {
             labels: {$labels},
             series: {$series},
          }, {
@@ -1147,7 +1151,12 @@ HTML;
 
         $js = <<<JAVASCRIPT
       $(function () {
-         var chart = new Chartist.Bar(Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0], {
+         if (Dashboard.getActiveDashboard()) {
+            var target = Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0];
+         } else {
+            var target = '#{$chart_id} .chart';
+         }
+         var chart = new Chartist.Bar(target, {
             labels: {$json_labels},
             series: {$json_series},
          }, {
@@ -1579,7 +1588,12 @@ HTML;
 
         $js = <<<JAVASCRIPT
       $(function () {
-         var chart = new Chartist.Line(Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0], {
+         if (Dashboard.getActiveDashboard()) {
+            var target = Dashboard.getActiveDashboard().element.find('#{$chart_id} .chart')[0];
+         } else {
+            var target = '#{$chart_id} .chart';
+         }
+         var chart = new Chartist.Line(target, {
             labels: {$json_labels},
             series: {$json_series},
          }, {
@@ -1996,7 +2010,6 @@ JAVASCRIPT;
             ];
         }
 
-        $alphabet = range('a', 'z');
         $min_l = 20; // min for luminosity
         $max_l = 20; // max ...
         $min_s = 30; // min for saturation
@@ -2011,7 +2024,7 @@ JAVASCRIPT;
         $colors = [];
 
         for ($i = 1; $i <= $nb_series; $i++) {
-            $names[$i - 1] = $alphabet[$i - 1];
+            $names[$i - 1] = $i - 1;
 
            // adjust luminosity
             $i_l_step = $i * $step_l + $min_l / 100;

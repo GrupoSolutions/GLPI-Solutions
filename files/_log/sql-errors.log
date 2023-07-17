@@ -1886,3 +1886,1298 @@
   ...ce\financialreports\front\report.dynamic.php:55 PluginFinancialreportsFinancialreport->displayReport()
   {"user":"2@GS003021"} 
 >>>>>>> 4da57d3b525f7854ad330f81531da1f6e7167122
+[2023-02-07 11:14:41] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-02-07 11:14:41] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.004\", 2.31Mio)"} 
+[2023-02-07 11:14:41] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.027\", 2.33Mio)"} 
+[2023-02-07 11:14:41] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.003\", 2.31Mio)"} 
+[2023-02-16 09:56:24] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_displaypreferences` (`itemtype`, `users_id`, `num`, `rank`) VALUES ('PassiveDCEquipment', '0', '40', '5')
+  Error: Duplicate entry '0-PassiveDCEquipment-40' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  front/displaypreference.form.php:60                CommonDBTM->add()
+  {"user":"10@localhost"} 
+[2023-02-23 08:01:06] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SHOW COLUMNS FROM `glpi_configs`
+  Error: Disk full (/tmp/#sql-temptable-75c-3e-795.MAI); waiting for someone to free some space... (errno: 28 "No space left on device")
+  Backtrace :
+  src/DBmysql.php:889                                
+  src/DBmysql.php:1191                               DBmysql->listFields()
+  src/DBmysql.php:298                                DBmysql->fieldExists()
+  src/DBmysql.php:275                                DBmysql->guessTimezone()
+  src/DBmysql.php:209                                DBmysql->connect()
+  src/DBConnection.php:412                           DBmysql->__construct()
+  src/DBConnection.php:501                           DBConnection::switchToMaster()
+  inc/config.php:116                                 DBConnection::establishDBConnection()
+  inc/includes.php:53                                include_once()
+  ajax/notifications_ajax.php:36                     include()
+  {"user":"124@localhost"} 
+[2023-02-23 08:01:07] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `itemtypes` FROM `glpi_plugin_fields_containers` WHERE 1=1
+  Error: Disk full (/tmp/#sql-temptable-75c-3e-796.MAI); waiting for someone to free some space... (errno: 28 "No space left on device")
+  Backtrace :
+  marketplace/fields/inc/container.class.php:987     
+  marketplace/fields/setup.php:157                   PluginFieldsContainer::getUsedItemtypes()
+  src/Plugin.php:300                                 plugin_init_fields()
+  src/Plugin.php:253                                 Plugin::load()
+  inc/includes.php:86                                Plugin->init()
+  ajax/notifications_ajax.php:36          [2023-02-28 13:57:48] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-02-28 13:58:42] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-03-20 14:38:38] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-03-20 14:38:38] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.002\", 2.23Mio)"} 
+[2023-03-20 14:38:38] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.010\", 2.26Mio)"} 
+[2023-03-20 14:38:38] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.000\", 2.24Mio)"} 
+[2023-03-20 14:39:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-03-20 14:39:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.001\", 2.24Mio)"} 
+[2023-03-20 14:39:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.009\", 2.26Mio)"} 
+[2023-03-20 14:39:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.000\", 2.24Mio)"} 
+[2023-03-22 10:21:29] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_locations` (`entities_id`, `name`, `comment`, `address`, `postcode`, `town`, `state`, `country`, `building`, `room`, `latitude`, `longitude`, `altitude`, `locations_id`, `level`, `completename`, `date_creation`, `date_mod`) VALUES ('0', 'MATRIZ', '', 'AV GERALDO FLAUSINO GOSMES 78', '', '', '', '', '', '', '', '', '', '0', '1', 'MATRIZ', '2023-03-22 10:21:29', '2023-03-22 10:21:29')
+  Error: Duplicate entry '0-0-MATRIZ' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  front/dropdown.common.form.php:62                  CommonDBTM->add()
+  front/location.form.php:39                         include()
+  {"user":"17@localhost"} 
+[2023-03-22 12:23:13] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_dashboards_rights` (`dashboards_dashboards_id`, `itemtype`, `items_id`) VALUES ('5', 'Profile', '13')
+  Error: Duplicate entry '5-Profile-13' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  marketplace/formcreator/hook.php:695               CommonDBTM->add()
+  src/Plugin.php:1528                                plugin_formcreator_hook_update_profile()
+  src/CommonDBTM.php:1686                            Plugin::doHook()
+  front/profile.form.php:85                          CommonDBTM->update()
+  {"user":"2@localhost"} 
+[2023-03-22 12:23:37] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_dashboards_rights` (`dashboards_dashboards_id`, `itemtype`, `items_id`) VALUES ('5', 'Profile', '13')
+  Error: Duplicate entry '5-Profile-13' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  marketplace/formcreator/hook.php:695               CommonDBTM->add()
+  src/Plugin.php:1528                                plugin_formcreator_hook_update_profile()
+  src/CommonDBTM.php:1686                            Plugin::doHook()
+  front/profile.form.php:85                          CommonDBTM->update()
+  {"user":"2@localhost"} 
+[2023-03-23 17:00:19] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_locations` (`entities_id`, `name`, `comment`, `address`, `postcode`, `town`, `state`, `country`, `building`, `room`, `latitude`, `longitude`, `altitude`, `locations_id`, `level`, `completename`, `date_creation`, `date_mod`) VALUES ('0', 'WAPS ASSESSORIA EMPRESARIAL LTDA', '', '', '', '', '', '', '', '', '', '', '', '0', '1', 'WAPS ASSESSORIA EMPRESARIAL LTDA', '2023-03-23 17:00:04', '2023-03-23 17:00:04')
+  Error: Duplicate entry '0-0-WAPS ASSESSORIA EMPRESARIAL LTDA' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  front/dropdown.common.form.php:62                  CommonDBTM->add()
+  front/location.form.php:39                         include()
+  {"user":"10@localhost"} 
+[2023-03-27 14:20:17] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: UPDATE `glpi_locations` SET `name` = 'Estoque Cajamar - SP', `completename` = 'Estoque Cajamar - SP', `date_mod` = '2023-03-27 14:20:17' WHERE `id` = '4'
+  Error: Duplicate entry '0-0-Estoque Cajamar - SP' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1439                               
+  src/CommonDBTM.php:685                             DBmysql->update()
+  src/CommonDBTM.php:1681                            CommonDBTM->updateInDB()
+  front/dropdown.common.form.php:136                 CommonDBTM->update()
+  front/location.form.php:39                         include()
+  {"user":"10@localhost"} 
+[2023-03-27 14:20:49] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: UPDATE `glpi_locations` SET `name` = 'Estoque Cajamar - SP', `completename` = 'Estoque Cajamar - SP', `date_mod` = '2023-03-27 14:20:49' WHERE `id` = '4'
+  Error: Duplicate entry '0-0-Estoque Cajamar - SP' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1439                               
+  src/CommonDBTM.php:685                             DBmysql->update()
+  src/CommonDBTM.php:1681                            CommonDBTM->updateInDB()
+  front/dropdown.common.form.php:136                 CommonDBTM->update()
+  front/location.form.php:39                         include()
+  {"user":"10@localhost"} 
+[2023-03-27 14:21:01] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: UPDATE `glpi_locations` SET `name` = 'Estoque Cajamar - SP', `completename` = 'Estoque Cajamar - SP', `date_mod` = '2023-03-27 14:21:01' WHERE `id` = '4'
+  Error: Duplicate entry '0-0-Estoque Cajamar - SP' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1439                               
+  src/CommonDBTM.php:685                             DBmysql->update()
+  src/CommonDBTM.php:1681                            CommonDBTM->updateInDB()
+  front/dropdown.common.form.php:136                 CommonDBTM->update()
+  front/location.form.php:39                         include()
+  {"user":"10@localhost"} 
+[2023-04-03 11:54:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-04-03 11:54:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.004\", 2.88Mio)"} 
+[2023-04-03 11:54:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.019\", 2.90Mio)"} 
+[2023-04-03 11:54:02] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.001\", 2.88Mio)"} 
+[2023-04-04 14:24:33] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-04-10 17:18:21] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-04-10 17:18:21] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.002\", 3.08Mio)"} 
+[2023-04-10 17:18:21] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.015\", 3.10Mio)"} 
+[2023-04-10 17:18:21] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.001\", 3.08Mio)"} 
+[2023-04-11 08:21:46] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-04-11 08:21:46] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.005\", 2.91Mio)"} 
+[2023-04-11 08:21:46] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.013\", 2.93Mio)"} 
+[2023-04-11 08:21:46] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.000\", 2.91Mio)"} 
+[2023-04-11 11:42:30] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost"} 
+[2023-04-11 11:42:30] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.002\", 3.09Mio)"} 
+[2023-04-11 11:42:30] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.014\", 3.11Mio)"} 
+[2023-04-11 11:42:30] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"15@localhost","mem_usage":"0.001\", 3.10Mio)"} 
+[2023-04-11 11:44:35] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-11 12:02:30] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-11 12:02:49] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-11 12:08:40] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-12 14:23:56] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost"} 
+[2023-04-12 14:23:56] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.005\", 2.98Mio)"} 
+[2023-04-12 14:23:56] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.012\", 3.00Mio)"} 
+[2023-04-12 14:23:56] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.001\", 2.99Mio)"} 
+[2023-04-12 14:24:35] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost"} 
+[2023-04-12 14:24:35] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.001\", 2.98Mio)"} 
+[2023-04-12 14:24:35] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.011\", 3.00Mio)"} 
+[2023-04-12 14:24:35] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"10@localhost","mem_usage":"0.000\", 2.99Mio)"} 
+[2023-04-13 04:11:23] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-13 10:31:42] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_unmanageds` WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_unmanageds.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"42@localhost"} 
+[2023-04-13 10:31:42] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS cpt FROM `glpi_appliances` WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0'))
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:224                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"42@localhost","mem_usage":"0.002\", 3.02Mio)"} 
+[2023-04-13 10:31:42] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_unmanagedtypes`.`name` AS `name` FROM `glpi_unmanageds` LEFT JOIN `glpi_unmanagedtypes` ON (`glpi_unmanageds`.`unmanagedtypes_id` = `glpi_unmanagedtypes`.`id`) WHERE `glpi_unmanageds`.`is_deleted` = '0' AND `glpi_unmanageds`.`is_template` = '0' AND (`glpi_unmanageds`.`entities_id` IN ('0')) GROUP BY `glpi_unmanagedtypes`.`name`
+  Error: Table 'glpi.glpi_unmanagedtypes' doesn't exist
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"42@localhost","mem_usage":"0.011\", 3.04Mio)"} 
+[2023-04-13 10:31:42] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT COUNT(*) AS `count`, `glpi_appliancetypes`.`name` AS `name` FROM `glpi_appliances` LEFT JOIN `glpi_appliancetypes` ON (`glpi_appliances`.`appliancetypes_id` = `glpi_appliancetypes`.`id`) WHERE `glpi_appliances`.`is_deleted` = '0' AND `glpi_appliances`.`is_template` = '0' AND (`glpi_appliances`.`entities_id` IN ('0')) GROUP BY `glpi_appliancetypes`.`name`
+  Error: Unknown column 'glpi_appliances.is_template' in 'where clause'
+  Backtrace :
+  src/DBmysqlIterator.php:112                        
+  src/DBmysql.php:1056                               DBmysqlIterator->execute()
+  src/Report.php:308                                 DBmysql->request()
+  front/report.default.php:44                        Report::showDefaultReport()
+  {"user":"42@localhost","mem_usage":"0.000\", 3.02Mio)"} 
+[2023-04-13 14:24:20] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-14 06:34:38] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-14 11:58:03] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-14 21:22:56] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-04-15 12:25:21] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-04-25 04:42:59] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-04-25 04:45:10] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-04-26 04:51:50] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-05-03 08:15:39] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-05-16 12:32:05] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-05-19 09:49:01] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-05-26 21:43:58] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-05-31 12:16:46] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: UPDATE `glpi_locations` SET `name` = 'ESTOQUE MATRIZ - SP', `completename` = 'ESTOQUE MATRIZ - SP', `date_mod` = '2023-05-31 12:16:46' WHERE `id` = '5'
+  Error: Duplicate entry '0-0-ESTOQUE MATRIZ - SP' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1439                               
+  src/CommonDBTM.php:685                             DBmysql->update()
+  src/CommonDBTM.php:1681                            CommonDBTM->updateInDB()
+  front/dropdown.common.form.php:136                 CommonDBTM->update()
+  front/location.form.php:39                         include()
+  {"user":"17@localhost"} 
+[2023-06-09 01:53:36] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-06-14 14:25:54] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-06-17 13:17:24] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-06-19 20:28:40] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-06-20 08:41:17] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_savedsearches`.`id` AS id, '' AS currentuser,
+                        `glpi_savedsearches`.`entities_id`, `glpi_savedsearches`.`is_recursive`,  `glpi_savedsearches`.`name` AS `ITEM_SavedSearch_1`,
+                        `glpi_savedsearches`.`id` AS `ITEM_SavedSearch_1_id`,
+                        `glpi_savedsearches`.`itemtype` AS `ITEM_SavedSearch_8`,  `glpi_savedsearches`.`last_execution_time` AS `ITEM_SavedSearch_9`,   `glpi_users`.`name` AS `ITEM_SavedSearch_3`,
+                        `glpi_users`.`realname` AS `ITEM_SavedSearch_3_realname`,
+                        `glpi_users`.`id`  AS `ITEM_SavedSearch_3_id`,
+                        `glpi_users`.`firstname` AS `ITEM_SavedSearch_3_firstname`,
+                        `glpi_savedsearches`.`do_count` AS `ITEM_SavedSearch_10`,  `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`users_id` AS `ITEM_SavedSearch_11` FROM `glpi_savedsearches`LEFT JOIN `glpi_users` 
+                                          ON (`glpi_savedsearches`.`users_id` = `glpi_users`.`id`
+                                              ) LEFT JOIN `glpi_savedsearches_users`  AS `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`
+                                             ON (`glpi_savedsearches`.`id` = `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.`savedsearches_id`
+                                                 AND `glpi_savedsearches_users_6c90e398805e15bccc46a70a12369b47`.users_id =  ) WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`users_id` = '0' AND  ( `glpi_savedsearches`.`entities_id` = '0'  )  ORDER BY `ITEM_SavedSearch_1` ASC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ') WHERE `glpi_savedsearches`.`is_private` = '1' AND `glpi_savedsearches`.`use...' at line 12
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  front/savedsearch.php:57                           Search::show()
+  {"user":"@localhost"} 
+[2023-06-27 23:01:41] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SHOW COLUMNS FROM `glpi_configs`
+  Error: Disk full (/tmp/#sql-temptable-3a2-81-8.MAI); waiting for someone to free some space... (errno: 28 "No space left on device")
+  Backtrace :
+  src/DBmysql.php:889                                
+  src/DBmysql.php:1191                               DBmysql->listFields()
+  src/DBmysql.php:298                                DBmysql->fieldExists()
+  src/DBmysql.php:275                                DBmysql->guessTimezone()
+  src/DBmysql.php:209                                DBmysql->connect()
+  src/DBConnection.php:412                           DBmysql->__construct()
+  src/DBConnection.php:501                           DBConnection::switchToMaster()
+  inc/config.php:116                                 DBConnection::establishDBConnection()
+  inc/includes.php:53                                include_once()
+  index.php:89                                       include()
+  {"user":"@localhost"} 
+[2023-06-30 11:42:22] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: INSERT INTO `glpi_locations` (`entities_id`, `name`, `comment`, `address`, `postcode`, `town`, `state`, `country`, `building`, `room`, `latitude`, `longitude`, `altitude`, `locations_id`, `level`, `completename`, `date_creation`, `date_mod`) VALUES ('0', 'EXTERNO-PB', '', '', '', '', '', '', '', '', '', '', '', '0', '1', 'EXTERNO-PB', '2023-06-30 11:42:22', '2023-06-30 11:42:22')
+  Error: Duplicate entry '0-0-EXTERNO-PB' for key 'unicity'
+  Backtrace :
+  src/DBmysql.php:1320                               
+  src/CommonDBTM.php:721                             DBmysql->insert()
+  src/CommonDBTM.php:1326                            CommonDBTM->addToDB()
+  front/dropdown.common.form.php:62                  CommonDBTM->add()
+  front/location.form.php:39                         include()
+  {"user":"15@localhost"} 
+[2023-07-02 08:10:03] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-07-03 14:01:18] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-07-04 03:47:11] glpisqllog.ERROR: DBmysql::query() in /var/www/html/glpi/src/DBmysql.php line 370
+  *** MySQL query error:
+  SQL: SELECT DISTINCT `glpi_plugin_formcreator_formanswers`.`id` AS id, '' AS currentuser,
+                        `glpi_plugin_formcreator_formanswers`.`entities_id`, `glpi_plugin_formcreator_formanswers`.`is_recursive`,  `glpi_plugin_formcreator_formanswers`.`name` AS `ITEM_PluginFormcreatorFormAnswer_1`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_1_id`,
+                         `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2`,
+                        `glpi_plugin_formcreator_formanswers`.`id` AS `ITEM_PluginFormcreatorFormAnswer_2_id`,
+                        `glpi_plugin_formcreator_forms`.`name` AS `ITEM_PluginFormcreatorFormAnswer_3`,   `glpi_users_requester_id`.`name` AS `ITEM_PluginFormcreatorFormAnswer_4`,
+                        `glpi_users_requester_id`.`realname` AS `ITEM_PluginFormcreatorFormAnswer_4_realname`,
+                        `glpi_users_requester_id`.`id`  AS `ITEM_PluginFormcreatorFormAnswer_4_id`,
+                        `glpi_users_requester_id`.`firstname` AS `ITEM_PluginFormcreatorFormAnswer_4_firstname`,
+                         GROUP_CONCAT(DISTINCT `glpi_users_users_id_validator`.`id` SEPARATOR '$$##$$')
+                                       AS `ITEM_PluginFormcreatorFormAnswer_5`,
+                           
+                           `glpi_plugin_formcreator_formanswers`.`request_date` AS `ITEM_PluginFormcreatorFormAnswer_6` FROM `glpi_plugin_formcreator_formanswers`LEFT JOIN `glpi_plugin_formcreator_forms` 
+                                          ON (`glpi_plugin_formcreator_formanswers`.`plugin_formcreator_forms_id` = `glpi_plugin_formcreator_forms`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_requester_id`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`requester_id` = `glpi_users_requester_id`.`id`
+                                              )LEFT JOIN `glpi_users`  AS `glpi_users_users_id_validator`
+                                          ON (`glpi_plugin_formcreator_formanswers`.`users_id_validator` = `glpi_users_users_id_validator`.`id`
+                                              ) WHERE `glpi_plugin_formcreator_formanswers`.`requester_id` =  AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY `glpi_plugin_formcreator_formanswers`.`id` ORDER BY `ITEM_PluginFormcreatorFormAnswer_6` DESC  LIMIT 0, 15
+  Error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'AND  ( `glpi_plugin_formcreator_formanswers`.`entities_id` = '0'  )  GROUP BY...' at line 19
+  Backtrace :
+  src/Search.php:1452                                
+  src/Search.php:448                                 Search::constructData()
+  src/Search.php:200                                 Search::getDatas()
+  src/Search.php:177                                 Search::showList()
+  marketplace/formcreator/front/formanswer.php:54    Search::show()
+  {"user":"@localhost"} 
+[2023-07-14 14:28:43] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi108\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `status`, `name`, `content`, `urgency`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `entities_id`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_ttr_begin_date`, `internal_time_to_resolve`, `ola_waiting_duration`, `time_to_own`, `internal_time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '5', '1', 'Teste', '&#60;p&#62;Teste ok&#60;/p&#62;', '3', '3', '3', '22', '22', '0', '2023-07-14 14:28:43', '1', '1', '2', '1', '1', '2', '0', '2023-07-18 14:28:43', '0', '0', '2023-07-14 14:28:43', '2023-07-18 14:28:43', '0', '2023-07-14 16:28:43', '2023-07-14 16:28:43', '2023-07-14 14:28:43', '2023-07-14 14:28:43')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\ticket.form.php:74                           CommonDBTM->add()
+  {"user":"22@GS003021"} 
+[2023-07-14 14:30:11] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi108\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `status`, `name`, `content`, `urgency`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `entities_id`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_ttr_begin_date`, `internal_time_to_resolve`, `ola_waiting_duration`, `time_to_own`, `internal_time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '21', '1', 'Integração de SLA', '&#60;p&#62;Este teste é para verificar a possibilidade do SLA.&#60;/p&#62;', '3', '3', '3', '22', '22', '0', '2023-07-14 14:30:11', '1', '1', '2', '1', '1', '2', '0', '2023-07-18 14:30:11', '0', '0', '2023-07-14 14:30:11', '2023-07-18 14:30:11', '0', '2023-07-14 16:30:11', '2023-07-14 16:30:11', '2023-07-14 14:30:11', '2023-07-14 14:30:11')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\ticket.form.php:74                           CommonDBTM->add()
+  {"user":"22@GS003021"} 
+[2023-07-14 14:39:49] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi108\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `status`, `name`, `content`, `urgency`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `entities_id`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_ttr_begin_date`, `internal_time_to_resolve`, `ola_waiting_duration`, `time_to_own`, `internal_time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '20', '1', 'Teste', '&#60;p&#62;testestes&#60;/p&#62;', '3', '3', '3', '22', '22', '0', '2023-07-14 14:39:49', '1', '1', '2', '1', '1', '2', '0', '2023-07-18 14:39:49', '0', '0', '2023-07-14 14:39:49', '2023-07-18 14:39:49', '0', '2023-07-14 16:39:49', '2023-07-14 16:39:49', '2023-07-14 14:39:49', '2023-07-14 14:39:49')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\ticket.form.php:74                           CommonDBTM->add()
+  {"user":"22@GS003021"} 

@@ -267,6 +267,7 @@ function step4($databasename, $newdatabasename)
 
    //Check if the port is in url
     $hostport = explode(":", $host);
+    mysqli_report(MYSQLI_REPORT_OFF);
     if (count($hostport) < 2) {
         $link = new mysqli($hostport[0], $user, $password);
     } else {
@@ -540,8 +541,6 @@ if (!isset($_SESSION['can_process_install']) || !isset($_POST["install"])) {
     header_html(__("Select your language"));
     choose_language();
 } else {
-   // Check valid Referer :
-    Toolbox::checkValidReferer();
    // Check CSRF: ensure nobody strap first page that checks if config file exists ...
     Session::checkCSRF($_POST);
 

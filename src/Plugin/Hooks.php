@@ -133,7 +133,7 @@ class Hooks
 
     const STALE_AGENT_CONFIG = 'stale_agent_config';
 
-   // Debug / Development hooks
+    // Debug / Development hooks
     const DEBUG_TABS = 'debug_tabs';
 
     // Helpdesk Menu Hooks
@@ -159,7 +159,7 @@ class Hooks
     }
 
     /**
-     * Get functionnals hooks
+     * Get functionals hooks
      *
      * @return array
      */

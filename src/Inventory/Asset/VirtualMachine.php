@@ -42,6 +42,7 @@ use ComputerVirtualMachine;
 use Glpi\Inventory\Conf;
 use Glpi\Toolbox\Sanitizer;
 use RuleImportAssetCollection;
+use Toolbox;
 
 class VirtualMachine extends InventoryAsset
 {
@@ -222,45 +223,44 @@ class VirtualMachine extends InventoryAsset
             $computerVirtualmachine->getFromDB($keydb);
             foreach ($value as $key => $val) {
                 $handled_input = $this->handleInput($val, $computerVirtualmachine);
-                $sinput = [
-                    'name'                     => $handled_input['name'] ?? '',
-                    'uuid'                     => $handled_input['uuid'] ?? '',
-                    'virtualmachinesystems_id' => $handled_input['virtualmachinesystems_id'] ?? 0
-                ];
-                if ($sinput == $arraydb) {
-                    $input = [
-                        'id'           => $keydb,
-                        'is_dynamic'   => 1
+
+                //search ComputervirtualMachine on cleaned UUID if it changed
+                foreach (ComputerVirtualMachine::getUUIDRestrictCriteria($handled_input['uuid'] ?? '') as $cleaned_uuid) {
+                    $sinput = [
+                        'name'                     => $handled_input['name'] ?? '',
+                        'uuid'                     => Sanitizer::unsanitize($cleaned_uuid ?? ''),
+                        'virtualmachinesystems_id' => $handled_input['virtualmachinesystems_id'] ?? 0
                     ];
 
-                    foreach (['vcpu', 'ram', 'virtualmachinetypes_id', 'virtualmachinestates_id'] as $prop) {
-                        if (property_exists($val, $prop)) {
-                            $input[$prop] = $handled_input[$prop];
+                    //strtolower to be the same as getUUIDRestrictCriteria()
+                    $arraydb['uuid'] = strtolower($arraydb['uuid']);
+
+                    if ($sinput == $arraydb) {
+                        $input = [
+                            'id'           => $keydb,
+                            'uuid'         => strtolower($handled_input['uuid'] ?? ''),
+                            'is_dynamic'   => 1
+                        ];
+
+                        foreach (['vcpu', 'ram', 'virtualmachinetypes_id', 'virtualmachinestates_id'] as $prop) {
+                            if (property_exists($val, $prop)) {
+                                $input[$prop] = $handled_input[$prop];
+                            }
                         }
+
+                        $computerVirtualmachine->update(Sanitizer::sanitize($input));
+                        unset($value[$key]);
+                        unset($db_vms[$keydb]);
+                        break 2;
                     }
-                    $computerVirtualmachine->update(Sanitizer::sanitize($input));
-                    unset($value[$key]);
-                    unset($db_vms[$keydb]);
-                    break;
                 }
             }
         }
 
         if ((!$this->main_asset || !$this->main_asset->isPartial()) && count($db_vms) != 0) {
-           // Delete virtual machines links in DB
+            // Delete virtual machines links in DB
             foreach ($db_vms as $idtmp => $data) {
-                if (isset($data['uuid']) && $data['uuid'] != '') {
-                    $vm = new \stdClass();
-                    $vm->uuid = $data['uuid'];
-                    $computers_vm_id = $this->getExistingVMAsComputer($vm);
-                    if ($computers_vm_id) {
-                        $computer->getFromDB($computers_vm_id);
-                        if ($computer->fields['is_dynamic'] == 1) {
-                            $computer->delete(['id' => $computers_vm_id], false);
-                        }
-                    }
-                }
-                $computerVirtualmachine->delete(['id' => $idtmp], true);
+                $computerVirtualmachine->delete(['id' => $idtmp], 1);
             }
         }
 
@@ -294,6 +294,7 @@ class VirtualMachine extends InventoryAsset
             }
             // Define location of physical computer (host)
             $vm->locations_id = $this->item->fields['locations_id'];
+            $vm->last_inventory_update = $_SESSION["glpi_currenttime"];
             $vm->autoupdatesystems_id = $this->item->fields['autoupdatesystems_id'];
             $vm->is_dynamic = 1;
 
@@ -336,6 +337,19 @@ class VirtualMachine extends InventoryAsset
                 if (isset($this->allports[$vm->uuid])) {
                     $this->ports = $this->allports[$vm->uuid];
                     $this->handlePorts('Computer', $computers_vm_id);
+                }
+
+                //manage operating system
+                if (property_exists($vm, 'operatingsystem')) {
+                    $os = new OperatingSystem($computervm, (array)$vm->operatingsystem);
+                    if ($os->checkConf($this->conf)) {
+                        $os->setAgent($this->getAgent());
+                        $os->setExtraData($this->data);
+                        $os->setEntityID($computervm->getEntityID());
+                        $os->prepare();
+                        $os->handleLinks();
+                        $os->handle();
+                    }
                 }
 
                 //manage extra components created form hosts information

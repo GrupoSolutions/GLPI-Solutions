@@ -155,20 +155,17 @@ if ($report->canView() || Session::haveRight("config", UPDATE)) {
 
    echo "<div align='center'><form action=\"./financialreport.php\" method=\"post\">";
    echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
-
-   echo "<td class='right'>Data Limite de Compras:</td>";
+   echo "<td class='right'>" . __('Report date', 'financialreports') . " :</td>";
    echo "<td>";
    Html::showDateField("date", ['value' => $_POST["date"]]);
    echo "</td>";
-   echo "<td class='right'>Localização:</td>";
    echo "<td width='60%'>";
    Dropdown::show('Location', ['name' => "locations_id",
       'value' => $_POST["locations_id"],
       'entity' => $_SESSION["glpiactive_entity"]]);
    echo "</td>";
-   echo "<br>";
    echo "<td rowspan='2' class='center'>";
-   echo Html::submit('Filtrar', ['name' => 'choice_date', 'class' => 'btn btn-primary']);
+   echo Html::submit(_sx('button', 'Post'), ['name' => 'choice_date', 'class' => 'btn btn-primary']);
    echo "</td></tr>";
    echo "</table>";
    Html::closeForm();

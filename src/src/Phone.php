@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -95,28 +95,8 @@ class Phone extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong);
-        $this->addImpactTab($ong, $options);
-        $this->addStandardTab('Item_OperatingSystem', $ong, $options);
-        $this->addStandardTab('Item_SoftwareVersion', $ong, $options);
-        $this->addStandardTab('Item_Devices', $ong, $options);
-        $this->addStandardTab('Item_Disk', $ong, $options);
-        $this->addStandardTab('Computer_Item', $ong, $options);
-        $this->addStandardTab('NetworkPort', $ong, $options);
-        $this->addStandardTab(Socket::class, $ong, $options);
-        $this->addStandardTab('Item_RemoteManagement', $ong, $options);
         $this->addStandardTab('Infocom', $ong, $options);
-        $this->addStandardTab('Contract_Item', $ong, $options);
         $this->addStandardTab('Document_Item', $ong, $options);
-        $this->addStandardTab('KnowbaseItem_Item', $ong, $options);
-        $this->addStandardTab('Ticket', $ong, $options);
-        $this->addStandardTab('Item_Problem', $ong, $options);
-        $this->addStandardTab('Change_Item', $ong, $options);
-        $this->addStandardTab('ManualLink', $ong, $options);
-        $this->addStandardTab('Lock', $ong, $options);
-        $this->addStandardTab('Notepad', $ong, $options);
-        $this->addStandardTab('Reservation', $ong, $options);
-        $this->addStandardTab('Domain_Item', $ong, $options);
-        $this->addStandardTab('Appliance_Item', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
 
         return $ong;
@@ -302,13 +282,6 @@ class Phone extends CommonDBTM
             'datatype'           => 'string',
         ];
 
-        $tab[] = [
-            'id'                 => '9',
-            'table'              => $this->getTable(),
-            'field'              => 'number_line',
-            'name'               => _x('quantity', 'Number of lines'),
-            'datatype'           => 'integer',
-        ];
 
         $tab[] = [
             'id'                 => '70',
@@ -398,49 +371,6 @@ class Phone extends CommonDBTM
             ]
         ];
 
-        $tab[] = [
-            'id'                 => '24',
-            'table'              => 'glpi_users',
-            'field'              => 'name',
-            'linkfield'          => 'users_id_tech',
-            'name'               => __('Technician in charge of the hardware'),
-            'datatype'           => 'dropdown',
-            'right'              => 'own_ticket'
-        ];
-
-        $tab[] = [
-            'id'                 => '49',
-            'table'              => 'glpi_groups',
-            'field'              => 'completename',
-            'linkfield'          => 'groups_id_tech',
-            'name'               => __('Group in charge of the hardware'),
-            'condition'          => ['is_assign' => 1],
-            'datatype'           => 'dropdown'
-        ];
-
-        $tab[] = [
-            'id'                 => '42',
-            'table'              => 'glpi_phonepowersupplies',
-            'field'              => 'name',
-            'name'               => DevicePowerSupply::getTypeName(1),
-            'datatype'           => 'dropdown'
-        ];
-
-        $tab[] = [
-            'id'                 => '43',
-            'table'              => $this->getTable(),
-            'field'              => 'have_headset',
-            'name'               => __('Headset'),
-            'datatype'           => 'bool'
-        ];
-
-        $tab[] = [
-            'id'                 => '44',
-            'table'              => $this->getTable(),
-            'field'              => 'have_hp',
-            'name'               => __('Speaker'),
-            'datatype'           => 'bool'
-        ];
 
         $tab[] = [
             'id'                 => '61',
@@ -453,14 +383,6 @@ class Phone extends CommonDBTM
             'nodisplay'          => true,
         ];
 
-        $tab[] = [
-            'id'                 => '80',
-            'table'              => 'glpi_entities',
-            'field'              => 'completename',
-            'name'               => Entity::getTypeName(1),
-            'massiveaction'      => false,
-            'datatype'           => 'dropdown'
-        ];
 
         $tab[] = [
             'id'                 => '82',

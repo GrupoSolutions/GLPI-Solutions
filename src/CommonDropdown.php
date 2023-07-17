@@ -122,6 +122,9 @@ abstract class CommonDropdown extends CommonDBTM
                         $menu['options'][$key]['page']            = $tmp->getSearchURL(false);
                         $menu['options'][$key]['icon']            = $tmp->getIcon();
                         $menu['options'][$key]['links']['search'] = $tmp->getSearchURL(false);
+                        //saved search list
+                        $menu['options'][$key]['links']['lists']  = "";
+                        $menu['options'][$key]['lists_itemtype']  = $tmp::getType();
                         if ($tmp->canCreate()) {
                             $menu['options'][$key]['links']['add'] = $tmp->getFormURL(false);
                         }
@@ -517,44 +520,67 @@ abstract class CommonDropdown extends CommonDBTM
     }
 
 
-    /** Check if the dropdown $ID is used into item tables
+    /**
+     * Check if the dropdown $ID is used into item tables
      *
      * @return boolean : is the value used ?
-     **/
+     */
     public function isUsed()
     {
         global $DB;
 
-        $ID = $this->fields['id'];
-
         $RELATION = getDbRelations();
-        if (isset($RELATION[$this->getTable()])) {
-            foreach ($RELATION[$this->getTable()] as $tablename => $field) {
-                if ($tablename[0] != '_') {
-                    if (!is_array($field)) {
-                        $row = $DB->request([
-                            'FROM'   => $tablename,
-                            'COUNT'  => 'cpt',
-                            'WHERE'  => [$field => $ID]
-                        ])->current();
-                        if ($row['cpt'] > 0) {
-                             return true;
-                        }
+
+        if (!array_key_exists($this->getTable(), $RELATION)) {
+            return false;
+        }
+
+        foreach ($RELATION[$this->getTable()] as $tablename => $fields) {
+            if ($tablename[0] == '_') {
+                continue; // Ignore relations prefxed by `_`
+            }
+
+            $or_criteria = [];
+
+            foreach ($fields as $field) {
+                if (is_array($field)) {
+                    // Relation based on 'itemtype'/'items_id' (polymorphic relationship)
+                    if ($this instanceof IPAddress && in_array('mainitemtype', $field) && in_array('mainitems_id', $field)) {
+                        // glpi_ipaddresses relationship that does not respect naming conventions
+                        $itemtype_field = 'mainitemtype';
+                        $items_id_field = 'mainitems_id';
                     } else {
-                        foreach ($field as $f) {
-                             $row = $DB->request([
-                                 'FROM'   => $tablename,
-                                 'COUNT'  => 'cpt',
-                                 'WHERE'  => [$f => $ID]
-                             ])->current();
-                            if ($row['cpt'] > 0) {
-                                return true;
-                            }
-                        }
+                        $itemtype_matches = preg_grep('/^itemtype/', $field);
+                        $items_id_matches = preg_grep('/^items_id/', $field);
+                        $itemtype_field = reset($itemtype_matches);
+                        $items_id_field = reset($items_id_matches);
                     }
+                    $or_criteria[] = [
+                        $itemtype_field => $this->getType(),
+                        $items_id_field => $this->getID(),
+                    ];
+                } else {
+                    // Relation based on single foreign key
+                    $or_criteria[] = [
+                        $field => $this->getID(),
+                    ];
                 }
             }
+
+            if (count($or_criteria) === 0) {
+                return false;
+            }
+
+            $row = $DB->request([
+                'FROM'   => $tablename,
+                'COUNT'  => 'cpt',
+                'WHERE'  => ['OR' => $or_criteria]
+            ])->current();
+            if ($row['cpt'] > 0) {
+                 return true;
+            }
         }
+
         return false;
     }
 
@@ -949,16 +975,16 @@ abstract class CommonDropdown extends CommonDBTM
                     $ret .= "</div>"; // .faqadd_block_content
                 } else {
                     $ret .= Html::scriptBlock("
-                  var getKnowbaseItemAnswer$rand = function() {
-                     var knowbaseitems_id = $('#dropdown_knowbaseitems_id$rand').val();
-                     $('#faqadd_block_content$rand').load(
-                        '" . $CFG_GLPI['root_doc'] . "/ajax/getKnowbaseItemAnswer.php',
-                        {
-                           'knowbaseitems_id': knowbaseitems_id
-                        }
-                     );
-                  };
-               ");
+                        var getKnowbaseItemAnswer$rand = function() {
+                            var knowbaseitems_id = $('#dropdown_knowbaseitems_id$rand').val();
+                            $('#faqadd_block_content$rand').load(
+                                '" . $CFG_GLPI['root_doc'] . "/ajax/getKnowbaseItemAnswer.php',
+                                {
+                                    'knowbaseitems_id': knowbaseitems_id
+                                }
+                            );
+                        };
+                    ");
                     $ret .= "<label for='dropdown_knowbaseitems_id$rand'>" .
                     KnowbaseItem::getTypeName() . "</label>&nbsp;";
                     $ret .= KnowbaseItem::dropdown([
@@ -972,6 +998,14 @@ abstract class CommonDropdown extends CommonDBTM
                     $ret .= $kbitem->showFull(['display' => false]);
                     $ret .= "</div>"; // .faqadd_block_content
                 }
+                $ret .= Html::scriptBlock("
+                        var setMaxWidth = function() {
+                            var maxWidth = $('#faqadd_block_content$rand').closest('.form-field').width();
+                            $('.faqadd_entries').css('max-width', maxWidth);
+                        }
+                        $(window).resize(setMaxWidth);
+                        setMaxWidth();
+                    ");
                 $ret .= "</div>"; // .faqadd_entries
                 $ret .= "</div>"; // .faqadd_block
             }

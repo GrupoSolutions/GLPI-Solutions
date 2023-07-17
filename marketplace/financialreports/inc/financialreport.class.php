@@ -110,7 +110,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
       $first      = true;
       $items      = [];
 
-      $query = "SELECT `$itemtable`.`name` AS ITEM_0, `glpi_locations`.`completename` AS ITEM_1,  `glpi_locations`.`completename` AS ITEM_2, 
+      $query = "SELECT `$itemtable`.`name` AS ITEM_0, `glpi_locations`.`completename` AS ITEM_1, `$itemtable`.`otherserial` AS ITEM_2, 
       `glpi_infocoms`.`buy_date` AS ITEM_3, `glpi_users`.`name` AS ITEM_4, `glpi_users`.`realname` AS ITEM_4_2, 
       `glpi_users`.`id` AS ITEM_4_3, `glpi_users`.`firstname` AS ITEM_4_4,`glpi_groups`.`name` AS ITEM_5,`glpi_groups`.`id` AS ITEM_5_1,
       `$modeltable`.`name` AS ITEM_6 ";
@@ -120,7 +120,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
                LEFT JOIN `glpi_locations` ON (`$itemtable`.`locations_id` = `glpi_locations`.`id`)
                LEFT JOIN `glpi_infocoms` ON (`$itemtable`.`id` = `glpi_infocoms`.`items_id` AND `glpi_infocoms`.`itemtype` = '" . $itemtype . "')
                LEFT JOIN `glpi_users` ON (`$itemtable`.`users_id` = `glpi_users`.`id`)
-               LEFT JOIN `glpi_groups` ON (`$itemtable`.`groups_id` = `glpi_groups`.`id`)  ";
+               LEFT JOIN `glpi_groups` ON (`$itemtable`.`groups_id` = `glpi_groups`.`id`) ";
 
       $query .= "LEFT JOIN `$modeltable` ON (`" . $itemtable . "`.`$modelfield` = `$modeltable`.`id`) ";
       $query .= "LEFT JOIN `glpi_manufacturers` ON (`$itemtable`.`manufacturers_id` = `glpi_manufacturers`.`id`)
@@ -393,8 +393,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
          $query .= " AND " . self::getRealQueryForTreeItem('glpi_locations', $locations_id, "`$itemtable`.`locations_id`");
       }
 
-      print_r($query);
-      return false;
+      return $query;
    }
 
    /**
@@ -590,7 +589,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
       $item_num = 1;
       echo Search::showNewLine($output_type, $row_num % 2);
       echo Search::showItem($output_type, __('General Total', 'financialreports'), $item_num, $row_num);
-      echo Search::showItem($output_type, Html::formatNumber($master_total) . " " . _n('R$', 'R$', 2, 'financialreports'), $item_num, $row_num);
+      echo Search::showItem($output_type, Html::formatNumber($master_total) . " " . _n('Euro', 'Euros', 2, 'financialreports'), $item_num, $row_num);
       echo Search::showEndLine($output_type);
 
       $title = "";
@@ -636,12 +635,11 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
             echo Search::showEndLine($output_type);
          }
          echo Search::showNewLine($output_type); //tr
-         $formatter = new NumberFormatter('pt_BR',  NumberFormatter::CURRENCY);
 
          if ($output_type == Search::HTML_OUTPUT) {
             if ($total != -1) {
-               echo "<th>" . $titre . "</th><th><span style='color:green'>".
-               _n('R$', 'R$', 2, 'financialreports'). " " . number_format($total, 2, ',', '.') .  "</span></th><th>";
+               echo "<th>" . $titre . "</th><th><span style='color:red'>"
+                    . Html::formatNumber($total) . " " . _n('Euro', 'Euros', 2, 'financialreports') . "</span></th><th>";
             } else {
                echo "<th>" . $titre . "</th><th></th><th>";
             }
@@ -652,15 +650,12 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
 
             echo "<a href='" . PLUGIN_FINANCIALREPORTS_WEBDIR . "/front/financialreport.php?"
                  . $display . "=" . $status . "&date=" . $date . "&locations_id=" . $locations_id . "'>";
-            if ($_SESSION[$display]){
-               echo '<i style="margin-right:2px;" class="fa fa-eye-slash" aria-hidden="true">  </i>';
+            if ($_SESSION[$display])
                echo __('Hide', 'financialreports');
-            }
-            else{
-               echo '<i style="margin-right:2px;" class="fa fa-eye" aria-hidden="true"></i>';
+            else
                echo __('Display', 'financialreports');
             echo "</a>";
-            }
+
             if ($itemtable != 'disposal') {
                echo "</th><th colspan='4'><th>";
             } else {
@@ -682,8 +677,9 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
          echo Search::showHeaderItem($output_type, __('Name'), $header_num);
          echo Search::showHeaderItem($output_type, __('Inventory number'), $header_num);
          echo Search::showHeaderItem($output_type, __('Date of purchase'), $header_num);
+
          if ($itemtable != 'disposal') {
-            echo Search::showHeaderItem($output_type, 'Usuário', $header_num);
+            echo Search::showHeaderItem($output_type, __('User / Group', 'financialreports'), $header_num);
             echo Search::showHeaderItem($output_type, __('Location'), $header_num);
          }
          echo Search::showHeaderItem($output_type, __('Model'), $header_num);
@@ -693,7 +689,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
             echo Search::showHeaderItem($output_type, __('Decommission date'), $header_num);
             echo Search::showHeaderItem($output_type, __('Comments'), $header_num);
          } else {
-            echo Search::showHeaderItem($output_type, 'Preço (R$)' , $header_num);
+            echo Search::showHeaderItem($output_type, __('Purchase Price HT in', 'financialreports') . " " . _n('Euro', 'Euros', 2, 'financialreports'), $header_num);
          }
          // End Line for column headers
          echo Search::showEndLine($output_type);
@@ -704,6 +700,7 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
             foreach ($items as $data) {
                $row_num++;
                $item_num = 1;
+
                echo Search::showNewLine($output_type, $row_num % 2);
                //name
                $link         = Toolbox::getItemTypeFormURL($data["TYPE"]);
@@ -743,9 +740,9 @@ class PluginFinancialreportsFinancialreport extends CommonDBTM {
                } else {
                   //value
                   if ($output_type == Search::HTML_OUTPUT) {
-                     $ouput_value = "<span style='color:green'>R$" . number_format($data["ITEM_8"], 2, ',', '.') . "</span>";
+                     $ouput_value = "<span style='color:red'>" . Html::formatNumber($data["ITEM_8"]) . "</span>";
                   } else {
-                     $ouput_value = number_format($data["ITEM_8"], 2, ',', '.');
+                     $ouput_value = Html::formatNumber($data["ITEM_8"]);
                   }
                   echo Search::showItem($output_type, $ouput_value, $item_num, $row_num);
                }

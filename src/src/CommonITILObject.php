@@ -88,6 +88,10 @@ abstract class CommonITILObject extends CommonDBTM
     const TEST          = 11; // test
     const QUALIFICATION = 12; // qualification
 
+    const WAITINGSOL         = 13; // Aguardando solicitante
+    
+    const WAITINGTHIRD  = 14; // Aguardando terceiros
+
     const NO_TIMELINE       = -1;
     const TIMELINE_NOTSET   = 0;
     const TIMELINE_LEFT     = 1;
@@ -4448,6 +4452,9 @@ abstract class CommonITILObject extends CommonDBTM
             case Change::CANCELED:
                 $class = 'ban';
                 break;
+            case self::WAITINGSOL:
+                $class = 'question-circle';
+                break;
         }
 
         return $class == null
@@ -4481,6 +4488,9 @@ abstract class CommonITILObject extends CommonDBTM
                 break;
             case self::SOLVED:
                 $key = 'solved';
+                break;
+            case self::WAITINGSOL:
+                $key = 'test';
                 break;
             case self::CLOSED:
                 $key = 'closed';

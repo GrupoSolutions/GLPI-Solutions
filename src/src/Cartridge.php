@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -364,8 +364,8 @@ class Cartridge extends CommonDBRelation
 
                  return true;
             }
+            return false;
         }
-        return false;
     }
 
 
@@ -1380,15 +1380,14 @@ class Cartridge extends CommonDBRelation
                 $info->showForPrinter($item);
                 self::showForPrinter($item);
                 self::showForPrinter($item, 1);
-                break;
+                return true;
 
             case 'CartridgeItem':
                 self::showAddForm($item);
                 self::showForCartridgeItem($item);
                 self::showForCartridgeItem($item, 1);
-                break;
+                return true;
         }
-        return true;
     }
 
     public function getRights($interface = 'central')

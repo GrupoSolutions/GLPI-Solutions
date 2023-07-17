@@ -40,6 +40,7 @@ use Glpi\Inventory\Conf;
 use Glpi\Inventory\FilesToJSON;
 use Glpi\Toolbox\Sanitizer;
 use NetworkPort as GlobalNetworkPort;
+use NetworkPortAggregate;
 use NetworkPortType;
 use QueryParam;
 use RuleImportAssetCollection;
@@ -543,6 +544,7 @@ class NetworkPort extends InventoryAsset
             $input_db['ifoutbytes']  = $input['ifoutbytes'];
             $input_db['ifinerrors']  = $input['ifinerrors'];
             $input_db['ifouterrors'] = $input['ifouterrors'];
+            $input_db['is_dynamic'] = true;
             $netport->update($input_db);
         }
     }
@@ -710,6 +712,11 @@ class NetworkPort extends InventoryAsset
             if (property_exists($port, 'mac') && !empty($port->mac)) {
                 $input['mac'] = $port->mac;
             }
+
+            if (property_exists($port, 'logical_number') && !empty($port->logical_number)) {
+                $input['logical_number'] = $port->logical_number;
+            }
+
             $ports_id[] = $netport->add(Sanitizer::sanitize($input));
         }
 
@@ -768,13 +775,42 @@ class NetworkPort extends InventoryAsset
     {
         $mainasset = $this->extra_data['\Glpi\Inventory\Asset\\' . $this->item->getType()];
 
+        //remove management port for Printer on netinventory
+        //to prevent twice IP (NetworkPortAggregate / NetworkPortEthernet)
+        if ($mainasset instanceof Printer && !$this->item->isNewItem()) {
+            if (empty($this->extra_data['\Glpi\Inventory\Asset\\' . $this->item->getType()]->getManagementPorts())) {
+                //remove all port management ports
+                $networkport = new GlobalNetworkPort();
+                $networkport->deleteByCriteria([
+                    "itemtype"           => $this->item->getType(),
+                    "items_id"           => $this->item->getID(),
+                    "instantiation_type" => NetworkPortAggregate::getType(),
+                    "name"               => "Management"
+                ], 1);
+            }
+        }
+
         //handle ports for stacked switches
         if ($mainasset->isStackedSwitch()) {
             $bkp_ports = $this->ports;
+            $stack_id = $mainasset->getStackId();
+            $need_increment_index = false;
             foreach ($this->ports as $k => $val) {
                 $matches = [];
-                if (preg_match('@[\w-]+(\d+)/\d+/\d+@', $val->name, $matches)) {
-                    if ($matches[1] != $mainasset->getStackId()) {
+                if (
+                    preg_match('@[\w\s+]+(\d+)/[\w]@', $val->name, $matches)
+                ) {
+                    //in case when port is related to chassis index 0 (stack_id)
+                    //ex : GigabitEthernet 0/1    Gi0/0/1
+                    //GLPI compute stack_id by starting with 1 (see: NetworkEquipment->getStackedSwitches)
+                    //so we need to increment index to match related stack_id
+                    if ((int) $matches[1] == 0 || $need_increment_index) {
+                        $matches[1]++;
+                        //current NetworkEquipement must have the index incremented
+                        $need_increment_index = true;
+                    }
+
+                    if ($matches[1] != $stack_id) {
                         //port attached to another stack entry, remove from here
                         unset($this->ports[$k]);
                         continue;
@@ -782,6 +818,7 @@ class NetworkPort extends InventoryAsset
                 }
             }
         }
+
 
         $this->handlePortsTrait($itemtype, $items_id);
         if (isset($bkp_ports)) {

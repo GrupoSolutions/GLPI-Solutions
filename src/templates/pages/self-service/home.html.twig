@@ -1,0 +1,137 @@
+{#
+ # ---------------------------------------------------------------------
+ #
+ # GLPI - Gestionnaire Libre de Parc Informatique
+ #
+ # http://glpi-project.org
+ #
+ # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2003-2014 by the INDEPNET Development Team.
+ # @licence   https://www.gnu.org/licenses/gpl-3.0.html
+ #
+ # ---------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of GLPI.
+ #
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation, either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ #
+ # ---------------------------------------------------------------------
+ #}
+
+{% if password_alert|length %}
+   <div class="alert alert-warning alert-dismissible" role="alert">
+      <div class="d-flex mb-2">
+         <div>
+            <i class="fas fa-exclamation-triangle me-1"></i>
+         </div>
+         <div>
+            {{ password_alert }}
+         </div>
+      </div>
+
+      <div class="btn-list">
+         <a class="btn btn-outline-warning" href="{{ path('/front/updatepassword.php') }} ">
+            {{ __('Update my password') }}
+         </a>
+      </div>
+   </div>
+{% endif %}
+
+<table class="central">
+   {{ call_plugin_hook(constant('Glpi\\Plugin\\Hooks::DISPLAY_CENTRAL')) }}
+</table>
+
+{% set optional_grid_item_keys = [
+   'survey_list', 'reminder_list', 'rss_feed', 'kb_popular', 'kb_recent', 'kb_lastupdate'
+] %}
+{% set grid_items = [
+   ticket_summary
+] %}
+
+{% for optional_grid_item_key in optional_grid_item_keys %}
+   {% set item_content = _context[optional_grid_item_key] %}
+   {% if item_content is not empty %}
+      {% set grid_items = grid_items|merge([
+         '<div class="card">' ~ item_content ~ '</div>'
+      ]) %}
+   {% endif %}
+{% endfor %}
+
+{{ include('components/masonry_grid.html.twig', {
+   'grid_items': grid_items,
+}, with_context = false) }}
+        <div class="toasters" style="z-index:2000; position:fixed; right:0; bottom:0;">
+{% for i in novo_chamado %}
+   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
+      
+   
+      <div class="toast-header">
+      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
+         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
+         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+         <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ i }}">
+
+         #{{ i }} - Novo Chamado 
+         </a>
+      </div>
+      <audio id="myAudsio" src="../sound/sound_c.ogg"></a>
+      
+   </div>
+{% endfor %}
+{% for j in sem_resposta %}
+   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
+      
+   
+      <div class="toast-header">
+      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
+         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
+         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      
+      <div class="toast-body">
+      <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ j }}">
+         #{{ j }} - Aguardando Resposta
+      </a>
+      </div>
+     
+
+      <a style="display:none;" id="audio" onclick="play()" src="../sound/sound_c.ogg"></a>
+
+   </div>
+{% endfor %}
+</div>
+<script src="/glpi/lib/howler.js/dist/howler.js"></script>
+<script type="text/javascript">
+
+$(function() {
+  var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+  var toastList = toastElList.map(function(toastEl) {
+    return new bootstrap.Toast(toastEl);
+  })
+  console.log(toastList);
+  toastList.forEach(toast => toast.show());
+  if(toastList.length > 0){
+   var sound = new Howl({
+   src: ['../sound/sound_c.ogg']
+   });
+   sound.play(); 
+  }
+  
+})
+
+</script>

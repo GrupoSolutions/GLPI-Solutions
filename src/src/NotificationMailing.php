@@ -114,7 +114,7 @@ class NotificationMailing implements NotificationInterface
         }
 
         $mmail->AddAddress($recipient, $CFG_GLPI["admin_email_name"]);
-        $mmail->Subject = "[GLPI] " . __('Mail test');
+        $mmail->Subject = "[Ativo] " . __('Mail test');
         $mmail->Body    = $text;
 
         if (!$mmail->Send()) {

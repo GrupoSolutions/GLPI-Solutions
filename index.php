@@ -50,8 +50,6 @@ use Glpi\Toolbox\Sanitizer;
 define('GLPI_ROOT', __DIR__);
 include(GLPI_ROOT . "/inc/based_config.php");
 
-define('DO_NOT_CHECK_HTTP_REFERER', 1);
-
 // If config_db doesn't exist -> start installation
 if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
     if (file_exists(GLPI_ROOT . '/install/install.php')) {
@@ -133,7 +131,11 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
         Toolbox::manageRedirect($redirect);
     }
 
+    // Random number for html id/label
+    $rand = mt_rand();
+
     TemplateRenderer::getInstance()->display('pages/login.html.twig', [
+        'rand'                => $rand,
         'card_bg_width'       => true,
         'lang'                => $CFG_GLPI["languages"][$_SESSION['glpilanguage']][3],
         'title'               => __('Authentication'),
@@ -151,6 +153,7 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
                               ]),
         'languages_dropdown'  => Dropdown::showLanguages('language', [
             'display'             => false,
+            'rand'                => $rand,
             'display_emptychoice' => true,
             'emptylabel'          => __('Default (from user profile)'),
             'width'               => '100%'
@@ -158,7 +161,7 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
         'right_panel'         => strlen($CFG_GLPI['text_login']) > 0
                                || count($PLUGIN_HOOKS[Hooks::DISPLAY_LOGIN] ?? []) > 0
                                || $CFG_GLPI["use_public_faq"],
-        'auth_dropdown_login' => Auth::dropdownLogin(false),
+        'auth_dropdown_login' => Auth::dropdownLogin(false, $rand),
         'copyright_message'   => Html::getCopyrightMessage(false),
         'errors'              => $errors
     ]);

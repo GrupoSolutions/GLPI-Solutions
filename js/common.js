@@ -155,9 +155,9 @@ function displayOtherSelectOptions(select_object, other_option_name) {
  * @param {HTMLElement} reference
  * @param {string} container_id
 **/
-function checkAsCheckboxes(reference, container_id) {
+function checkAsCheckboxes(reference, container_id, checkboxes_selector = 'input[type="checkbox"]') {
     reference = typeof(reference) === 'string' ? document.getElementById(reference) : reference;
-    $('#' + container_id + ' input[type="checkbox"]:enabled')
+    $('#' + container_id + ' ' + checkboxes_selector + ':enabled')
         .prop('checked', $(reference).is(':checked'));
 
     return true;
@@ -1346,7 +1346,7 @@ function tableToDetails(table) {
     section_els.each((i, e) => {
         if (e.classList.contains('section-header')) {
             if (in_details) {
-                details += '</details>';
+                details += '</pre></details>';
             }
             details += `<details><summary>${e.innerText}</summary><pre>`;
             in_details = true;
@@ -1414,7 +1414,7 @@ function blockFormSubmit(form, e) {
 
     // if submitter is not a button, find the first submit button with add or update as the name
     if (submitter === null || !submitter.is('button')) {
-        submitter = submitter.find('button[name="add"]:first, button[name="update"]:first');
+        submitter = form.find('button[name="add"]:first, button[name="update"]:first');
         // If no submit button was found, use the first submit button
         if (submitter.length === 0) {
             submitter = form.find('button[type="submit"]:first');
@@ -1431,14 +1431,16 @@ function blockFormSubmit(form, e) {
     form.attr('data-submitted', 'true');
 }
 
-$(document.body).on('submit', 'form[data-submit-once]', (e) => {
-    const form = $(e.target).closest('form');
-    if (form.attr('data-submitted') === 'true') {
-        e.preventDefault();
-        return false;
-    } else {
-        blockFormSubmit(form, e);
-    }
+$(() => {
+    $(document.body).on('submit', 'form[data-submit-once]', (e) => {
+        const form = $(e.target).closest('form');
+        if (form.attr('data-submitted') === 'true') {
+            e.preventDefault();
+            return false;
+        } else {
+            blockFormSubmit(form, e);
+        }
+    });
 });
 
 /**
@@ -1531,8 +1533,17 @@ function initSortableTable(element_id) {
 
         const rows = element.find('tbody tr');
         const sorted_rows = rows.sort((a, b) => {
-            let a_value = $(a).find('td').eq(column_index).text();
-            let b_value = $(b).find('td').eq(column_index).text();
+            const a_cell = $(a).find('td').eq(column_index);
+            const b_cell = $(b).find('td').eq(column_index);
+            let a_value = a_cell.text();
+            let b_value = b_cell.text();
+
+            if (a_cell.attr('data-value-unit') !== undefined) {
+                a_value = a_value.replace(a_cell.attr('data-value-unit'), '').trim();
+            }
+            if (b_cell.attr('data-value-unit') !== undefined) {
+                b_value = b_value.replace(b_cell.attr('data-value-unit'), '').trim();
+            }
             // if the values are numberic, cast them to numbers to sort them correctly
             if (!isNaN(a_value) && !isNaN(b_value)) {
                 a_value = Number(a_value);

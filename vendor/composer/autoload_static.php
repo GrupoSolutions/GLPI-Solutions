@@ -4,28 +4,28 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef615b4517eca093b91c12408f512fb8
+class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '383eaff206634a77a1be54e64e6459c7' => __DIR__ . '/..' . '/sabre/uri/lib/functions.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '2b9d0f43f9552984cfa82fee95491826' => __DIR__ . '/..' . '/sabre/event/lib/coroutine.php',
         'd81bab31d3feb45bfe2f283ea3c8fdf7' => __DIR__ . '/..' . '/sabre/event/lib/Loop/functions.php',
         'a1cce3d26cc15c00fcd0b3354bd72c88' => __DIR__ . '/..' . '/sabre/event/lib/Promise/functions.php',
         '3569eecfeed3bcf0bad3c998a494ecb8' => __DIR__ . '/..' . '/sabre/xml/lib/Deserializer/functions.php',
         '93aa591bc4ca510c520999e34229ee79' => __DIR__ . '/..' . '/sabre/xml/lib/Serializer/functions.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'ebdb698ed4152ae445614b69b5e4bb6a' => __DIR__ . '/..' . '/sabre/http/lib/functions.php',
         'da5f6548f070d3d306f90eee42dd5de6' => __DIR__ . '/..' . '/donatj/phpuseragentparser/src/UserAgentParser.php',
         'e1b904afbd54085bf43ec4d5eeb961d5' => __DIR__ . '/..' . '/glpi-project/inventory_format/lib/php/Converter.php',
         '6f00a0b76de6ce056d502806cbb082c7' => __DIR__ . '/..' . '/glpi-project/inventory_format/lib/php/FilesToJSON.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'ef836782e1b8d747e78815386b148139' => __DIR__ . '/..' . '/htmlawed/htmlawed/htmLawed.php',
         'fe735e1c17efbbf6962819fa4f3f0701' => __DIR__ . '/..' . '/iamcal/lib_autolink/lib_autolink.php',
         '9e4824c5afbdc1482b6025ce3d4dfde8' => __DIR__ . '/..' . '/league/csv/src/functions_include.php',
@@ -53,6 +53,7 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
             'Twig\\Extra\\String\\' => 18,
             'Twig\\' => 5,
             'TrueBV\\' => 7,
+            'TheNetworg\\OAuth2\\Client\\' => 25,
         ),
         'S' => 
         array (
@@ -110,6 +111,7 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'L' => 
         array (
             'LitEmoji\\' => 9,
+            'League\\OAuth2\\Client\\' => 21,
             'League\\Csv\\' => 11,
             'Laminas\\Validator\\' => 18,
             'Laminas\\Stdlib\\' => 15,
@@ -133,6 +135,10 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'Glpi\\' => 5,
+        ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
         ),
         'B' => 
         array (
@@ -164,6 +170,10 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'TrueBV\\' => 
         array (
             0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'TheNetworg\\OAuth2\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src',
         ),
         'Symfony\\Polyfill\\Php82\\' => 
         array (
@@ -334,6 +344,11 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         array (
             0 => __DIR__ . '/..' . '/elvanto/litemoji/src',
         ),
+        'League\\OAuth2\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/oauth2-client/src',
+            1 => __DIR__ . '/..' . '/league/oauth2-google/src',
+        ),
         'League\\Csv\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/csv/src',
@@ -391,6 +406,10 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
@@ -427,6 +446,13 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Brick\\Math\\RoundingMode' => __DIR__ . '/..' . '/brick/math/src/RoundingMode.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
+        'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
+        'Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
+        'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
+        'Firebase\\JWT\\JWK' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWK.php',
+        'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
+        'Firebase\\JWT\\Key' => __DIR__ . '/..' . '/firebase/php-jwt/src/Key.php',
+        'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
         'Glpi\\Agent\\Communication\\AbstractRequest' => __DIR__ . '/../..' . '/src/Agent/Communication/AbstractRequest.php',
         'Glpi\\Agent\\Communication\\Headers\\Common' => __DIR__ . '/../..' . '/src/Agent/Communication/Headers/Common.php',
         'Glpi\\Api\\API' => __DIR__ . '/../..' . '/src/Api/API.php',
@@ -513,6 +539,7 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Glpi\\Console\\Plugin\\ActivateCommand' => __DIR__ . '/../..' . '/src/Console/Plugin/ActivateCommand.php',
         'Glpi\\Console\\Plugin\\DeactivateCommand' => __DIR__ . '/../..' . '/src/Console/Plugin/DeactivateCommand.php',
         'Glpi\\Console\\Plugin\\InstallCommand' => __DIR__ . '/../..' . '/src/Console/Plugin/InstallCommand.php',
+        'Glpi\\Console\\Plugin\\UninstallCommand' => __DIR__ . '/../..' . '/src/Console/Plugin/UninstallCommand.php',
         'Glpi\\Console\\Rules\\ProcessSoftwareCategoryRulesCommand' => __DIR__ . '/../..' . '/src/Console/Rules/ProcessSoftwareCategoryRulesCommand.php',
         'Glpi\\Console\\Rules\\ReplayDictionnaryRulesCommand' => __DIR__ . '/../..' . '/src/Console/Rules/ReplayDictionnaryRulesCommand.php',
         'Glpi\\Console\\Security\\ChangekeyCommand' => __DIR__ . '/../..' . '/src/Console/Security/ChangekeyCommand.php',
@@ -559,11 +586,26 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Glpi\\Csv\\StatCsvExport' => __DIR__ . '/../..' . '/src/Csv/StatCsvExport.php',
         'Glpi\\Dashboard\\Dashboard' => __DIR__ . '/../..' . '/src/Dashboard/Dashboard.php',
         'Glpi\\Dashboard\\Filter' => __DIR__ . '/../..' . '/src/Dashboard/Filter.php',
+        'Glpi\\Dashboard\\Filters\\AbstractFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/AbstractFilter.php',
+        'Glpi\\Dashboard\\Filters\\DatesFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/DatesFilter.php',
+        'Glpi\\Dashboard\\Filters\\DatesModFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/DatesModFilter.php',
+        'Glpi\\Dashboard\\Filters\\GroupTechFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/GroupTechFilter.php',
+        'Glpi\\Dashboard\\Filters\\ItilCategoryFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/ItilCategoryFilter.php',
+        'Glpi\\Dashboard\\Filters\\LocationFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/LocationFilter.php',
+        'Glpi\\Dashboard\\Filters\\ManufacturerFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/ManufacturerFilter.php',
+        'Glpi\\Dashboard\\Filters\\RequestTypeFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/RequestTypeFilter.php',
+        'Glpi\\Dashboard\\Filters\\StateFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/StateFilter.php',
+        'Glpi\\Dashboard\\Filters\\TicketTypeFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/TicketTypeFilter.php',
+        'Glpi\\Dashboard\\Filters\\UserTechFilter' => __DIR__ . '/../..' . '/src/Dashboard/Filters/UserTechFilter.php',
         'Glpi\\Dashboard\\Grid' => __DIR__ . '/../..' . '/src/Dashboard/Grid.php',
         'Glpi\\Dashboard\\Item' => __DIR__ . '/../..' . '/src/Dashboard/Item.php',
         'Glpi\\Dashboard\\Provider' => __DIR__ . '/../..' . '/src/Dashboard/Provider.php',
         'Glpi\\Dashboard\\Right' => __DIR__ . '/../..' . '/src/Dashboard/Right.php',
         'Glpi\\Dashboard\\Widget' => __DIR__ . '/../..' . '/src/Dashboard/Widget.php',
+        'Glpi\\Debug\\Profile' => __DIR__ . '/../..' . '/src/Debug/Profile.php',
+        'Glpi\\Debug\\Profiler' => __DIR__ . '/../..' . '/src/Debug/Profiler.php',
+        'Glpi\\Debug\\ProfilerSection' => __DIR__ . '/../..' . '/src/Debug/ProfilerSection.php',
+        'Glpi\\Debug\\Toolbar' => __DIR__ . '/../..' . '/src/Debug/Toolbar.php',
         'Glpi\\Event' => __DIR__ . '/../..' . '/src/Event.php',
         'Glpi\\Exception\\ForgetPasswordException' => __DIR__ . '/../..' . '/src/Exception/ForgetPasswordException.php',
         'Glpi\\Exception\\PasswordTooWeakException' => __DIR__ . '/../..' . '/src/Exception/PasswordTooWeakException.php',
@@ -578,6 +620,7 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Glpi\\Features\\Teamwork' => __DIR__ . '/../..' . '/src/Features/Teamwork.php',
         'Glpi\\Features\\Timeline' => __DIR__ . '/../..' . '/src/Features/Timeline.php',
         'Glpi\\Features\\TreeBrowse' => __DIR__ . '/../..' . '/src/Features/TreeBrowse.php',
+        'Glpi\\Http\\ProxyRouter' => __DIR__ . '/../..' . '/src/Http/ProxyRouter.php',
         'Glpi\\Http\\Response' => __DIR__ . '/../..' . '/src/Http/Response.php',
         'Glpi\\Inventory\\Asset\\Antivirus' => __DIR__ . '/../..' . '/src/Inventory/Asset/Antivirus.php',
         'Glpi\\Inventory\\Asset\\Battery' => __DIR__ . '/../..' . '/src/Inventory/Asset/Battery.php',
@@ -618,6 +661,10 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Glpi\\Inventory\\Inventory' => __DIR__ . '/../..' . '/src/Inventory/Inventory.php',
         'Glpi\\Inventory\\Request' => __DIR__ . '/../..' . '/src/Inventory/Request.php',
         'Glpi\\Mail\\Protocol\\ProtocolInterface' => __DIR__ . '/../..' . '/src/Mail/Protocol/ProtocolInterface.php',
+        'Glpi\\Mail\\SMTP\\OauthConfig' => __DIR__ . '/../..' . '/src/Mail/SMTP/OauthConfig.php',
+        'Glpi\\Mail\\SMTP\\OauthProvider\\Azure' => __DIR__ . '/../..' . '/src/Mail/SMTP/OauthProvider/Azure.php',
+        'Glpi\\Mail\\SMTP\\OauthProvider\\Google' => __DIR__ . '/../..' . '/src/Mail/SMTP/OauthProvider/Google.php',
+        'Glpi\\Mail\\SMTP\\OauthProvider\\ProviderInterface' => __DIR__ . '/../..' . '/src/Mail/SMTP/OauthProvider/ProviderInterface.php',
         'Glpi\\Marketplace\\Api\\Plugins' => __DIR__ . '/../..' . '/src/Marketplace/Api/Plugins.php',
         'Glpi\\Marketplace\\Controller' => __DIR__ . '/../..' . '/src/Marketplace/Controller.php',
         'Glpi\\Marketplace\\NotificationTargetController' => __DIR__ . '/../..' . '/src/Marketplace/NotificationTargetController.php',
@@ -662,12 +709,15 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Glpi\\System\\Requirement\\ExtensionFunction' => __DIR__ . '/../..' . '/src/System/Requirement/ExtensionFunction.php',
         'Glpi\\System\\Requirement\\ExtensionGroup' => __DIR__ . '/../..' . '/src/System/Requirement/ExtensionGroup.php',
         'Glpi\\System\\Requirement\\InstallationNotOverriden' => __DIR__ . '/../..' . '/src/System/Requirement/InstallationNotOverriden.php',
+        'Glpi\\System\\Requirement\\IntegerSize' => __DIR__ . '/../..' . '/src/System/Requirement/IntegerSize.php',
         'Glpi\\System\\Requirement\\LogsWriteAccess' => __DIR__ . '/../..' . '/src/System/Requirement/LogsWriteAccess.php',
         'Glpi\\System\\Requirement\\MemoryLimit' => __DIR__ . '/../..' . '/src/System/Requirement/MemoryLimit.php',
         'Glpi\\System\\Requirement\\MysqliMysqlnd' => __DIR__ . '/../..' . '/src/System/Requirement/MysqliMysqlnd.php',
+        'Glpi\\System\\Requirement\\PhpSupportedVersion' => __DIR__ . '/../..' . '/src/System/Requirement/PhpSupportedVersion.php',
         'Glpi\\System\\Requirement\\PhpVersion' => __DIR__ . '/../..' . '/src/System/Requirement/PhpVersion.php',
         'Glpi\\System\\Requirement\\ProtectedWebAccess' => __DIR__ . '/../..' . '/src/System/Requirement/ProtectedWebAccess.php',
         'Glpi\\System\\Requirement\\RequirementInterface' => __DIR__ . '/../..' . '/src/System/Requirement/RequirementInterface.php',
+        'Glpi\\System\\Requirement\\SafeDocumentRoot' => __DIR__ . '/../..' . '/src/System/Requirement/SafeDocumentRoot.php',
         'Glpi\\System\\Requirement\\SeLinux' => __DIR__ . '/../..' . '/src/System/Requirement/SeLinux.php',
         'Glpi\\System\\Requirement\\SessionsConfiguration' => __DIR__ . '/../..' . '/src/System/Requirement/SessionsConfiguration.php',
         'Glpi\\System\\Requirement\\SessionsSecurityConfiguration' => __DIR__ . '/../..' . '/src/System/Requirement/SessionsSecurityConfiguration.php',
@@ -1174,6 +1224,35 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'League\\Csv\\UnavailableStream' => __DIR__ . '/..' . '/league/csv/src/UnavailableStream.php',
         'League\\Csv\\Writer' => __DIR__ . '/..' . '/league/csv/src/Writer.php',
         'League\\Csv\\XMLConverter' => __DIR__ . '/..' . '/league/csv/src/XMLConverter.php',
+        'League\\OAuth2\\Client\\Exception\\HostedDomainException' => __DIR__ . '/..' . '/league/oauth2-google/src/Exception/HostedDomainException.php',
+        'League\\OAuth2\\Client\\Grant\\AbstractGrant' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/AbstractGrant.php',
+        'League\\OAuth2\\Client\\Grant\\AuthorizationCode' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/AuthorizationCode.php',
+        'League\\OAuth2\\Client\\Grant\\ClientCredentials' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/ClientCredentials.php',
+        'League\\OAuth2\\Client\\Grant\\Exception\\InvalidGrantException' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/Exception/InvalidGrantException.php',
+        'League\\OAuth2\\Client\\Grant\\GrantFactory' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/GrantFactory.php',
+        'League\\OAuth2\\Client\\Grant\\Password' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/Password.php',
+        'League\\OAuth2\\Client\\Grant\\RefreshToken' => __DIR__ . '/..' . '/league/oauth2-client/src/Grant/RefreshToken.php',
+        'League\\OAuth2\\Client\\OptionProvider\\HttpBasicAuthOptionProvider' => __DIR__ . '/..' . '/league/oauth2-client/src/OptionProvider/HttpBasicAuthOptionProvider.php',
+        'League\\OAuth2\\Client\\OptionProvider\\OptionProviderInterface' => __DIR__ . '/..' . '/league/oauth2-client/src/OptionProvider/OptionProviderInterface.php',
+        'League\\OAuth2\\Client\\OptionProvider\\PostAuthOptionProvider' => __DIR__ . '/..' . '/league/oauth2-client/src/OptionProvider/PostAuthOptionProvider.php',
+        'League\\OAuth2\\Client\\Provider\\AbstractProvider' => __DIR__ . '/..' . '/league/oauth2-client/src/Provider/AbstractProvider.php',
+        'League\\OAuth2\\Client\\Provider\\Exception\\IdentityProviderException' => __DIR__ . '/..' . '/league/oauth2-client/src/Provider/Exception/IdentityProviderException.php',
+        'League\\OAuth2\\Client\\Provider\\GenericProvider' => __DIR__ . '/..' . '/league/oauth2-client/src/Provider/GenericProvider.php',
+        'League\\OAuth2\\Client\\Provider\\GenericResourceOwner' => __DIR__ . '/..' . '/league/oauth2-client/src/Provider/GenericResourceOwner.php',
+        'League\\OAuth2\\Client\\Provider\\Google' => __DIR__ . '/..' . '/league/oauth2-google/src/Provider/Google.php',
+        'League\\OAuth2\\Client\\Provider\\GoogleUser' => __DIR__ . '/..' . '/league/oauth2-google/src/Provider/GoogleUser.php',
+        'League\\OAuth2\\Client\\Provider\\ResourceOwnerInterface' => __DIR__ . '/..' . '/league/oauth2-client/src/Provider/ResourceOwnerInterface.php',
+        'League\\OAuth2\\Client\\Token\\AccessToken' => __DIR__ . '/..' . '/league/oauth2-client/src/Token/AccessToken.php',
+        'League\\OAuth2\\Client\\Token\\AccessTokenInterface' => __DIR__ . '/..' . '/league/oauth2-client/src/Token/AccessTokenInterface.php',
+        'League\\OAuth2\\Client\\Token\\ResourceOwnerAccessTokenInterface' => __DIR__ . '/..' . '/league/oauth2-client/src/Token/ResourceOwnerAccessTokenInterface.php',
+        'League\\OAuth2\\Client\\Tool\\ArrayAccessorTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/ArrayAccessorTrait.php',
+        'League\\OAuth2\\Client\\Tool\\BearerAuthorizationTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/BearerAuthorizationTrait.php',
+        'League\\OAuth2\\Client\\Tool\\GuardedPropertyTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/GuardedPropertyTrait.php',
+        'League\\OAuth2\\Client\\Tool\\MacAuthorizationTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/MacAuthorizationTrait.php',
+        'League\\OAuth2\\Client\\Tool\\ProviderRedirectTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/ProviderRedirectTrait.php',
+        'League\\OAuth2\\Client\\Tool\\QueryBuilderTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/QueryBuilderTrait.php',
+        'League\\OAuth2\\Client\\Tool\\RequestFactory' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/RequestFactory.php',
+        'League\\OAuth2\\Client\\Tool\\RequiredParameterTrait' => __DIR__ . '/..' . '/league/oauth2-client/src/Tool/RequiredParameterTrait.php',
         'LitEmoji\\LitEmoji' => __DIR__ . '/..' . '/elvanto/litemoji/src/LitEmoji.php',
         'Mexitek\\PHPColors\\Color' => __DIR__ . '/..' . '/mexitek/phpcolors/src/Mexitek/PHPColors/Color.php',
         'Michelf\\Markdown' => __DIR__ . '/..' . '/michelf/php-markdown/Michelf/Markdown.php',
@@ -1295,6 +1374,7 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Monolog\\Test\\TestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/TestCase.php',
         'Monolog\\Utils' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Utils.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
+        'PHPMailer\\PHPMailer\\DSNConfigurator' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/DSNConfigurator.php',
         'PHPMailer\\PHPMailer\\Exception' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/Exception.php',
         'PHPMailer\\PHPMailer\\OAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/OAuth.php',
         'PHPMailer\\PHPMailer\\OAuthTokenProvider' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/OAuthTokenProvider.php',
@@ -2302,6 +2382,10 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'TCPDF_IMPORT' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_import.php',
         'TCPDF_PARSER' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_parser.php',
         'TCPDF_STATIC' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_static.php',
+        'TheNetworg\\OAuth2\\Client\\Grant\\JwtBearer' => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src/Grant/JwtBearer.php',
+        'TheNetworg\\OAuth2\\Client\\Provider\\Azure' => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src/Provider/Azure.php',
+        'TheNetworg\\OAuth2\\Client\\Provider\\AzureResourceOwner' => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src/Provider/AzureResourceOwner.php',
+        'TheNetworg\\OAuth2\\Client\\Token\\AccessToken' => __DIR__ . '/..' . '/thenetworg/oauth2-azure/src/Token/AccessToken.php',
         'TrueBV\\Exception\\DomainOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/DomainOutOfBoundsException.php',
         'TrueBV\\Exception\\LabelOutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/LabelOutOfBoundsException.php',
         'TrueBV\\Exception\\OutOfBoundsException' => __DIR__ . '/..' . '/true/punycode/src/Exception/OutOfBoundsException.php',
@@ -2372,6 +2456,8 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'Twig\\Node\\Expression\\Binary\\FloorDivBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/FloorDivBinary.php',
         'Twig\\Node\\Expression\\Binary\\GreaterBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/GreaterBinary.php',
         'Twig\\Node\\Expression\\Binary\\GreaterEqualBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/GreaterEqualBinary.php',
+        'Twig\\Node\\Expression\\Binary\\HasEveryBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/HasEveryBinary.php',
+        'Twig\\Node\\Expression\\Binary\\HasSomeBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/HasSomeBinary.php',
         'Twig\\Node\\Expression\\Binary\\InBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/InBinary.php',
         'Twig\\Node\\Expression\\Binary\\LessBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/LessBinary.php',
         'Twig\\Node\\Expression\\Binary\\LessEqualBinary' => __DIR__ . '/..' . '/twig/twig/src/Node/Expression/Binary/LessEqualBinary.php',
@@ -2495,17 +2581,42 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'wapmorgan\\UnifiedArchive\\Archive7z' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Archive7z.php',
         'wapmorgan\\UnifiedArchive\\ArchiveEntry' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/ArchiveEntry.php',
         'wapmorgan\\UnifiedArchive\\ArchiveInformation' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/ArchiveInformation.php',
-        'wapmorgan\\UnifiedArchive\\CamApplication' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/CamApplication.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\AddFileCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/AddFileCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\BaseArchiveCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/BaseArchiveCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\BaseCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/BaseCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\BaseFileCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/BaseFileCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\CommentCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/CommentCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\CreateCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/CreateCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\DeleteFileCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/DeleteFileCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\DetailsCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/DetailsCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\DriversCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/DriversCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\ExtractArchiveCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/ExtractArchiveCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\ExtractFileCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/ExtractFileCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\ExtractFilesCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/ExtractFilesCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\FoldersCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/FoldersCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\FormatCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/FormatCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\FormatsCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/FormatsCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\InfoCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/InfoCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\ListCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/ListCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\PrintCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/PrintCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\TableCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/TableCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\TestCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/TestCommand.php',
+        'wapmorgan\\UnifiedArchive\\Commands\\TypesCommand' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Commands/TypesCommand.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\AlchemyZippy' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/AlchemyZippy.php',
-        'wapmorgan\\UnifiedArchive\\Drivers\\BasicDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/BasicDriver.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\Basic\\BasicDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Basic/BasicDriver.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\Basic\\BasicExtensionDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Basic/BasicExtensionDriver.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\Basic\\BasicPureDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Basic/BasicPureDriver.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\Basic\\BasicUtilityDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Basic/BasicUtilityDriver.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\Cab' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Cab.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\Iso' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Iso.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\NelexaZip' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/NelexaZip.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\OneFile\\Bzip' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/OneFile/Bzip.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\OneFile\\Gzip' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/OneFile/Gzip.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\OneFile\\Lzma' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/OneFile/Lzma.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\OneFile\\OneFileDriver' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/OneFile/OneFileDriver.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\Rar' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Rar.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\SevenZip' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/SevenZip.php',
+        'wapmorgan\\UnifiedArchive\\Drivers\\SplitbrainPhpArchive' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/SplitbrainPhpArchive.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\TarByPear' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/TarByPear.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\TarByPhar' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/TarByPhar.php',
         'wapmorgan\\UnifiedArchive\\Drivers\\Zip' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Drivers/Zip.php',
@@ -2519,17 +2630,17 @@ class ComposerStaticInitef615b4517eca093b91c12408f512fb8
         'wapmorgan\\UnifiedArchive\\Exceptions\\UnsupportedOperationException' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Exceptions/UnsupportedOperationException.php',
         'wapmorgan\\UnifiedArchive\\Formats' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/Formats.php',
         'wapmorgan\\UnifiedArchive\\LzwStreamWrapper' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/LzwStreamWrapper.php',
-        'wapmorgan\\UnifiedArchive\\PclzipZipInterface' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/PclzipZipInterface.php',
+        'wapmorgan\\UnifiedArchive\\PclZipInterface' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/PclZipInterface.php',
         'wapmorgan\\UnifiedArchive\\UnifiedArchive' => __DIR__ . '/..' . '/wapmorgan/unified-archive/src/UnifiedArchive.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef615b4517eca093b91c12408f512fb8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef615b4517eca093b91c12408f512fb8::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitef615b4517eca093b91c12408f512fb8::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitef615b4517eca093b91c12408f512fb8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$classMap;
 
         }, null, ClassLoader::class);
     }

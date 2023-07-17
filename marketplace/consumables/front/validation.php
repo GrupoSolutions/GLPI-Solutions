@@ -29,3 +29,43 @@
 
 include('../../../inc/includes.php');
 Session::checkLoginUser();
+
+$plugin = new Plugin();
+
+if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
+   Html::header(PluginConsumablesWizard::getTypeName(2), '', "management", "pluginconsumablesmenu");
+} else {
+   if ($plugin->isActivated('servicecatalog')) {
+      PluginServicecatalogMain::showDefaultHeaderHelpdesk(PluginConsumablesWizard::getTypeName(2));
+   } else {
+      Html::helpHeader(PluginConsumablesWizard::getTypeName(2));
+   }
+}
+
+   $p = ['criteria'   => [
+      [
+         'field'      => 6,        // field index in search options
+         'searchtype' => 'equals',  // type of search
+         'value'      => 2,         // value to search
+      ]
+   ],
+      'as_map'=>0];
+$p = Search::manageParams(PluginConsumablesValidation::getType(), $_GET);
+$p["criteria"][0] =  [
+   'field'      => 6,        // field index in search options
+   'searchtype' => 'equals',  // type of search
+   'value'      => 2,         // value to search
+];
+   Search::showList("PluginConsumablesValidation",$p);
+
+if (Session::getCurrentInterface() != 'central'
+    && $plugin->isActivated('servicecatalog')) {
+
+   PluginServicecatalogMain::showNavBarFooter('consumables');
+}
+
+if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
+   Html::footer();
+} else {
+   Html::helpFooter();
+}

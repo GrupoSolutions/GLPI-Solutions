@@ -1,0 +1,1413 @@
+2022-11-16 11:48:01 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 11:48:02 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 11:53:02 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 11:53:02 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 11:53:02 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 11:53:02 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 11:53:02 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 11:53:02 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 11:58:02 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 11:58:02 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 11:58:02 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 11:58:02 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 11:58:02 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 11:58:02 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 12:03:02 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 12:03:02 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 12:03:02 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 12:03:02 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 12:03:02 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 12:03:02 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 12:08:02 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 12:08:02 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 12:08:02 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 12:08:02 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 14:37:12 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 14:37:12 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 14:42:12 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 14:42:12 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 14:42:12 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 14:42:12 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 14:42:12 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 14:42:12 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 14:47:12 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 14:47:12 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 14:47:12 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 14:47:12 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 14:47:12 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 14:47:12 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 14:52:13 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 14:52:13 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 14:52:13 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 14:52:13 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 14:52:13 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 14:52:13 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 14:57:13 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 14:57:13 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 14:57:13 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 14:57:13 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2022-11-16 14:57:13 [2@172-104-194-111]
+3 - Connection: opening to email-ssl.com.br:465, timeout=300, options=array()2022-11-16 14:57:13 [2@172-104-194-111]
+3 - Connection: opened2022-11-16 15:02:13 [2@172-104-194-111]
+2 - SERVER -> CLIENT: 2022-11-16 15:02:13 [2@172-104-194-111]
+3 - Connection: closing due to error2022-11-16 15:02:13 [2@172-104-194-111]
+3 - Connection: closed2022-11-16 15:02:13 [2@172-104-194-111]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:02 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:03 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:03 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:03 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:03 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:03 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:03 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:03 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:04 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:04 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:06 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:06 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:06 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:06 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:06 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:06 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:06 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:06 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:06 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:06 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:06 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:06 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:06 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:11 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:11 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:11 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:11 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:13 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:13 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:13 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:13 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:13 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:13 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:13 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:13 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:13 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:13 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:13 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:13 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:13 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:18 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:18 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:18 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:18 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:20 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:20 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:20 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:20 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:20 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:20 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:20 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:20 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:20 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:20 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:20 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:20 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:20 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:21 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:21 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:21 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:21 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:23 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:23 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:23 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:23 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:23 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:23 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:23 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:23 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:23 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:23 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:23 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:23 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:23 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:24 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:24 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:24 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:24 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:26 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:26 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:26 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:26 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:26 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:26 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:26 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:26 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:26 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:26 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:26 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:26 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:26 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:27 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:27 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:27 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:27 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:29 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:29 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:29 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:29 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:29 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:29 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:29 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:29 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:29 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:29 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:29 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:29 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:29 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:30 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:30 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:30 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:30 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:32 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:32 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:32 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:32 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:32 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:32 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:32 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:32 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:32 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:32 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:32 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:32 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:32 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:33 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:33 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:33 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:33 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:35 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:35 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:35 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:35 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:35 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:35 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:35 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:35 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:35 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:35 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:35 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:35 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:35 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:36 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:36 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:36 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:36 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:38 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:38 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:38 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:38 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:38 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:38 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:38 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:38 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:38 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:38 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:38 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:38 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:38 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:39 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:39 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:39 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:39 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:41 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:41 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:41 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:41 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:41 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:41 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:41 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:41 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:41 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:41 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:41 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:41 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:41 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:42 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:42 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:42 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:42 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:44 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:44 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:44 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:44 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:44 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:44 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:44 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:44 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:44 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:44 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:44 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:45 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:45 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:45 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:45 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:45 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:45 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:47 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:47 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:47 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:47 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:47 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:47 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:47 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:47 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:47 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:47 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:47 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:47 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:47 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:48 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:48 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:48 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:48 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:50 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:50 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:50 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:50 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:50 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:50 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:50 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:50 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:50 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:50 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:50 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:50 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:50 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:51 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:51 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:51 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:51 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:53 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:53 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:53 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:53 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:53 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:53 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:53 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:53 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:53 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:54 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:54 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:54 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:54 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:54 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:54 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:54 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:54 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:56 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:56 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:56 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:56 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:56 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:56 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:56 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:56 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:56 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:56 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:56 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:56 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:56 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:35:57 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:35:57 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:57 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:35:57 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:35:59 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:59 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:35:59 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:35:59 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:35:59 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:35:59 [2@GS003021]
+3 - Connection: closed2023-06-17 21:35:59 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:35:59 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:35:59 [2@GS003021]
+3 - Connection: opened2023-06-17 21:35:59 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:35:59 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:35:59 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:35:59 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:00 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:00 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:00 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:00 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:02 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:02 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:02 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:02 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:02 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:02 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:02 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:02 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:02 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:02 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:02 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:02 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:02 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:03 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:03 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:03 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:03 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:05 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:05 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:05 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:05 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:05 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:05 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:05 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:05 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:05 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:05 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:05 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:05 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:05 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:06 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:06 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:06 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:06 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:08 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:08 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:08 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:08 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:08 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:08 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:08 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:08 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:08 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:08 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:08 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:08 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:08 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:09 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:09 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:09 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:09 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:11 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:11 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:11 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:11 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:11 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:11 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:11 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:11 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:11 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:11 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:11 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:11 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:11 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:12 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:12 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:12 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:12 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:14 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:14 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:14 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:14 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:14 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:14 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:14 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:14 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:14 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:14 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:14 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:14 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:14 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:15 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:15 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:15 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:15 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:17 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:17 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:17 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:17 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:17 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:17 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:17 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:17 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:17 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:17 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:17 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:17 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:17 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:18 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:18 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:18 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:18 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:20 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:20 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:20 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:20 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:20 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:20 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:20 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:20 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:20 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:20 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:20 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:20 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:20 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:21 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:21 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:21 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:21 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:23 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:23 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:23 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:23 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:23 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:23 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:23 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:23 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:23 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:23 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:23 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:23 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:23 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:24 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:24 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:24 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:24 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:26 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:26 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:26 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:26 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:26 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:26 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:26 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:26 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:26 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:27 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:27 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:27 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:27 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:27 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:27 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:27 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:27 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:29 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:29 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:29 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:29 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:29 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:29 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:29 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:29 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:29 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:29 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:29 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:29 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:29 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:30 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:30 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:30 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:30 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:32 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:32 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:32 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:32 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:32 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:32 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:32 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:32 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:32 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:32 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:32 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:32 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:32 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:33 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:33 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:33 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:33 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:35 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:35 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:35 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:35 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:35 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:35 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:35 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:35 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:35 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:35 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:35 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:35 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:35 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:36 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:36 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:36 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:36 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:38 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:38 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:38 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:38 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:38 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:38 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:38 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:38 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:38 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:38 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:38 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:39 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:39 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:39 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:39 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:39 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:39 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:41 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:41 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:41 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:41 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:41 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:41 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:41 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:41 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:41 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:41 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:41 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:41 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:41 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:42 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:42 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:42 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:42 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:44 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:44 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:44 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:44 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:44 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:44 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:44 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:44 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:44 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:44 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:44 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:45 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:45 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:45 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:45 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:45 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:45 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:47 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:47 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:47 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:47 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:47 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:47 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:47 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:47 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:47 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:47 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:47 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:47 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:47 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:48 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:48 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:48 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:48 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:50 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:50 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:50 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:50 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:50 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:50 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:50 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:50 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:50 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:50 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:50 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:50 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:50 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:51 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:51 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:51 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:51 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:53 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:53 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:53 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:53 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:53 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:53 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:53 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:53 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:53 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:53 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:53 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:53 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:53 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:54 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:54 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:54 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:54 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:56 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:56 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:56 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:56 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:56 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:56 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:56 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:56 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:56 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:56 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:56 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:56 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:56 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:36:57 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:36:57 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:57 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:36:57 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:36:59 [2@GS003021]
+2 - SERVER -> CLIENT: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:59 [2@GS003021]
+1 - SMTP ERROR: Password command failed: 535 5.7.8 Error: authentication failed: UGFzc3dvcmQ6
+2023-06-17 21:36:59 [2@GS003021]
+3 - SMTP Error: Could not authenticate.2023-06-17 21:36:59 [2@GS003021]
+1 - CLIENT -> SERVER: QUIT
+2023-06-17 21:36:59 [2@GS003021]
+2 - SERVER -> CLIENT: 221 2.0.0 Bye
+2023-06-17 21:36:59 [2@GS003021]
+3 - Connection: closed2023-06-17 21:36:59 [2@GS003021]
+3 - SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting2023-06-17 21:36:59 [2@GS003021]
+3 - Connection: opening to ssl://email-ssl.com.br:465, timeout=300, options=array()2023-06-17 21:36:59 [2@GS003021]
+3 - Connection: opened2023-06-17 21:36:59 [2@GS003021]
+2 - SERVER -> CLIENT: 220 proxy.email-ssl.com.br ESMTP Postfix
+2023-06-17 21:36:59 [2@GS003021]
+1 - CLIENT -> SERVER: EHLO localhost
+2023-06-17 21:36:59 [2@GS003021]
+2 - SERVER -> CLIENT: 250-proxy.email-ssl.com.br
+250-PIPELINING
+250-SIZE 50000000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250-SMTPUTF8
+250 CHUNKING
+2023-06-17 21:36:59 [2@GS003021]
+1 - CLIENT -> SERVER: AUTH LOGIN
+2023-06-17 21:37:00 [2@GS003021]
+2 - SERVER -> CLIENT: 334 VXNlcm5hbWU6
+2023-06-17 21:37:00 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]2023-06-17 21:37:00 [2@GS003021]
+2 - SERVER -> CLIENT: 334 UGFzc3dvcmQ6
+2023-06-17 21:37:00 [2@GS003021]
+1 - CLIENT -> SERVER: [credentials hidden]

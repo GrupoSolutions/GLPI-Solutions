@@ -42,6 +42,7 @@ class KnowbaseItemCategory extends CommonTreeDropdown
 
     public static $rightname          = 'knowbasecategory';
 
+    const SEEALL = -1;
 
     public static function getTypeName($nb = 0)
     {
@@ -60,5 +61,14 @@ class KnowbaseItemCategory extends CommonTreeDropdown
     public static function getIcon()
     {
         return KnowbaseItem::getIcon();
+    }
+
+    public function cleanDBonPurge()
+    {
+        $this->deleteChildrenAndRelationsFromDb(
+            [
+                KnowbaseItem_KnowbaseItemCategory::class
+            ]
+        );
     }
 }

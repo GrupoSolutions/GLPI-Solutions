@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2023 Teclib' and contributors.
+ * @copyright 2015-2022 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -249,66 +249,27 @@ class Ticket extends CommonITILObject
      **/
     public function canViewItem()
     {
+
         if (!Session::haveAccessToEntity($this->getEntityID())) {
             return false;
         }
-
-        // Can see all tickets
-        if (Session::haveRight(self::$rightname, self::READALL)) {
-            return true;
-        }
-
-        // Can see my tickets
-        if (
-            Session::haveRight(self::$rightname, self::READMY)
-            && (
-                $this->fields["users_id_recipient"] === Session::getLoginUserID()
-                || $this->isUser(CommonITILActor::REQUESTER, Session::getLoginUserID())
-                || $this->isUser(CommonITILActor::OBSERVER, Session::getLoginUserID())
-            )
-        ) {
-            return true;
-        }
-
-        // Can see my groups tickets
-        if (
-            Session::haveRight(self::$rightname, self::READGROUP)
-            && isset($_SESSION["glpigroups"])
-            && (
-                $this->haveAGroup(CommonITILActor::REQUESTER, $_SESSION["glpigroups"])
-                || $this->haveAGroup(CommonITILActor::OBSERVER, $_SESSION["glpigroups"])
-            )
-        ) {
-            return true;
-        }
-
-        // Can see assigned tickets
-        if (
-            Session::haveRight(self::$rightname, self::READASSIGN)
-            && (
-                $this->isUser(CommonITILActor::ASSIGN, Session::getLoginUserID())
-                || (
-                    isset($_SESSION["glpigroups"])
-                    && $this->haveAGroup(CommonITILActor::ASSIGN, $_SESSION["glpigroups"])
-                )
-                || (
-                    Session::haveRight(self::$rightname, self::ASSIGN)
-                    && ($this->fields["status"] == self::INCOMING)
-                )
-            )
-        ) {
-            return true;
-        }
-
-        // Can validate tickets
-        if (
-            Session::haveRightsOr('ticketvalidation', TicketValidation::getValidateRights())
-            && TicketValidation::canValidate($this->fields["id"])
-        ) {
-            return true;
-        }
-
-        return false;
+        return (Session::haveRight(self::$rightname, self::READALL)
+              || (Session::haveRight(self::$rightname, self::READMY)
+                  && (($this->fields["users_id_recipient"] === Session::getLoginUserID())
+                      || $this->isUser(CommonITILActor::REQUESTER, Session::getLoginUserID())
+                      || $this->isUser(CommonITILActor::OBSERVER, Session::getLoginUserID())))
+              || (Session::haveRight(self::$rightname, self::READGROUP)
+                  && isset($_SESSION["glpigroups"])
+                  && ($this->haveAGroup(CommonITILActor::REQUESTER, $_SESSION["glpigroups"])
+                      || $this->haveAGroup(CommonITILActor::OBSERVER, $_SESSION["glpigroups"])))
+              || (Session::haveRight(self::$rightname, self::READASSIGN)
+                  && ($this->isUser(CommonITILActor::ASSIGN, Session::getLoginUserID())
+                      || (isset($_SESSION["glpigroups"])
+                          && $this->haveAGroup(CommonITILActor::ASSIGN, $_SESSION["glpigroups"]))
+                      || (Session::haveRight(self::$rightname, self::ASSIGN)
+                          && ($this->fields["status"] == self::INCOMING))))
+              || (Session::haveRightsOr('ticketvalidation', TicketValidation::getValidateRights())
+                  && TicketValidation::canValidate($this->fields["id"])));
     }
 
 
@@ -931,23 +892,8 @@ class Ticket extends CommonITILObject
         $ong = [];
         $this->addDefaultFormTab($ong);
         $this->addStandardTab(__CLASS__, $ong, $options);
-        $this->addStandardTab('TicketValidation', $ong, $options);
-        $this->addStandardTab('KnowbaseItem_Item', $ong, $options);
-        $this->addStandardTab('Item_Ticket', $ong, $options);
+      
 
-        if ($this->hasImpactTab()) {
-            $this->addStandardTab('Impact', $ong, $options);
-        }
-
-        $this->addStandardTab('TicketCost', $ong, $options);
-        $this->addStandardTab('Itil_Project', $ong, $options);
-        $this->addStandardTab('ProjectTask_Ticket', $ong, $options);
-        $this->addStandardTab('Problem_Ticket', $ong, $options);
-        $this->addStandardTab('Change_Ticket', $ong, $options);
-
-        if (Session::getCurrentInterface() == 'central') {
-            $this->addStandardTab(Ticket_Contract::class, $ong, $options);
-        }
 
         if (
             Entity::getAnonymizeConfig($this->getEntityID()) == Entity::ANONYMIZE_DISABLED
@@ -1724,6 +1670,7 @@ class Ticket extends CommonITILObject
            // Read again ticket to be sure that all data are up to date
             $this->getFromDB($this->fields['id']);
             NotificationEvent::raiseEvent($mailtype, $this);
+            $this->input['_disablenotif'] = true;
         }
 
        // inquest created immediatly if delay = O
@@ -2524,7 +2471,7 @@ class Ticket extends CommonITILObject
         ]
         ],
             'sort'     => 19,
-            'order'    => 'DESC'
+            'order'    => 'asc'
         ];
 
         if (Session::haveRight(self::$rightname, self::READALL)) {
@@ -2729,7 +2676,7 @@ JAVASCRIPT;
                 $label = SolutionType::getTypeName(1);
                 echo "<label for='solutiontypes_id'>$label</label>";
                 SolutionType::dropdown([
-                    'name'  => 'solutintypes_id',
+                    'name'  => 'solutiontypes_id',
                     'rand'  => $rand
                 ]);
                 echo '</div>'; // .form-row
@@ -3762,8 +3709,7 @@ JAVASCRIPT;
             self::PLANNED  => _x('status', 'Processing (planned)'),
             self::WAITING  => __('Pending'),
             self::SOLVED   => _x('status', 'Solved'),
-            self::CLOSED   => _x('status', 'Closed'),
-            self::WAITINGSOL    => "Aguardando Solicitante"
+            self::CLOSED   => _x('status', 'Closed')
         ];
 
         if ($withmetaforsearch) {
@@ -3911,7 +3857,7 @@ JAVASCRIPT;
 
         $email  = UserEmail::getDefaultForUser($ID);
         $default_use_notif = Entity::getUsedConfig('is_notif_enable_default', $_SESSION['glpiactive_entity'], '', 1);
-
+        
        // Set default values...
         $default_values = [
             '_users_id_requester_notif' => [
@@ -3943,7 +3889,7 @@ JAVASCRIPT;
             '_tag_content'              => [],
             '_filename'                 => [],
             '_tag_filename'             => [],
-            '_tasktemplates_id'         => []
+            '_tasktemplates_id'         => [],
         ];
         $options = [];
 
@@ -4393,7 +4339,6 @@ JAVASCRIPT;
             'canassigntome'      => $canassigntome,
             'load_kb_sol'        => $options['load_kb_sol'] ?? 0,
             'userentities'       => $userentities,
-            'has_pending_reason' => PendingReason_Item::getForItem($this) !== false,
         ]);
 
         return true;
@@ -6285,11 +6230,11 @@ JAVASCRIPT;
         } elseif ($this->fields['takeintoaccount_delay_stat'] > 0) {
             $date_takeintoaccount = $date_creation + $this->fields['takeintoaccount_delay_stat'];
         }
-        $internal_time_to_own     = strtotime($this->fields['internal_time_to_own'] ?? '');
-        $time_to_own              = strtotime($this->fields['time_to_own'] ?? '');
+        $internal_time_to_own     = strtotime($now ?? '');
+        $time_to_own              = strtotime($now ?? '');
         $internal_time_to_resolve = strtotime($this->fields['internal_time_to_resolve'] ?? '');
-        $time_to_resolve          = strtotime($this->fields['time_to_resolve'] ?? '');
-        $solvedate                = strtotime($this->fields['solvedate'] ?? '');
+        $time_to_resolve          = strtotime($now ?? '');
+        $solvedate                = strtotime($now ?? '');
         $closedate                = strtotime($this->fields['closedate'] ?? '');
         $goal_takeintoaccount     = ($date_takeintoaccount > 0 ? $date_takeintoaccount : $now);
         $goal_solvedate           = ($solvedate > 0 ? $solvedate : $now);
@@ -6355,7 +6300,7 @@ JAVASCRIPT;
             ],
             $time_to_resolve . '_time_to_resolve' => [
                 'timestamp' => $time_to_resolve,
-                'label'     => __('Time to resolve') . " " . $sla_ttr_link,
+                'label'     => "__('Time to resolve')" . " " . $sla_ttr_link,
                 'class'     => ($time_to_resolve < $goal_solvedate
                                ? 'passed' : '') . " " .
                            ($solvedate != ''

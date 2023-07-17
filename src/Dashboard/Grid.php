@@ -36,13 +36,13 @@
 namespace Glpi\Dashboard;
 
 use DateInterval;
-use DBConnection;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Plugin\Hooks;
 use Html;
 use Plugin;
 use Ramsey\Uuid\Uuid;
+use Reminder;
 use Session;
 use ShareDashboardDropdown;
 use Telemetry;
@@ -150,14 +150,6 @@ class Grid
                <i class="fas fa-spinner fa-spin fa-3x"></i>
             </div>
 HTML;
-           // manage cache
-            $dashboard_key = $this->current;
-            $footprint = sha1(serialize($card_options) .
-            ($_SESSION['glpiactiveentities_string'] ?? "") .
-            ($_SESSION['glpilanguage']));
-            $cache_key    = "dashboard_card_{$dashboard_key}_{$footprint}";
-            $card_options['cache_key'] = $cache_key;
-
             $this->addGridItem(
                 $card_html,
                 $gridstack_id,
@@ -195,7 +187,6 @@ HTML;
      */
     public static function canViewOneDashboard($context = null): bool
     {
-       // check global (admin) right
         if (Dashboard::canView()) {
             return true;
         }
@@ -240,7 +231,7 @@ HTML;
      *
      * @return void display html of the grid
      */
-    public function show(bool $mini = false)
+    public function show(bool $mini = false, ?string $token = null)
     {
         global $GLPI_CACHE;
 
@@ -259,6 +250,7 @@ HTML;
         }
 
         $embed_str     = self::$embed ? "true" : "false";
+        $token_str     = $token !== null ? "'{$token}'" : "null";
         $embed_class   = self::$embed ? "embed" : "";
         $mini_class    = $mini ? "mini" : "";
 
@@ -280,7 +272,7 @@ HTML;
 
         // Force clear the cards cache in debug mode
         if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
-            $GLPI_CACHE->delete('getAllDasboardCards');
+            $GLPI_CACHE->delete(self::getAllDashboardCardsCacheKey());
         }
 
         // prepare all available cards
@@ -429,12 +421,15 @@ HTML;
             rows:        {$this->grid_rows},
             cell_margin: {$this->cell_margin},
             rand:        '{$rand}',
-            embed:       {$embed_str},
             ajax_cards:  {$ajax_cards},
             all_cards:   {$cards_json},
             all_widgets: {$all_widgets_json},
             context:     "{$this->context}",
             cache_key:   "{$cache_key}",
+            embed:       {$embed_str},
+            token:       {$token_str},
+            entities_id: {$_SESSION['glpiactive_entity']},
+            is_recursive:{$_SESSION['glpiactive_entity_recursive']},
          })
       });
 JAVASCRIPT;
@@ -495,7 +490,7 @@ JAVASCRIPT;
         $_SESSION['glpiactiveentities_string'] = "'" . implode("', '", $entities) . "'";
 
        // show embeded dashboard
-        $this->show(true);
+        $this->show(true, $params['token']);
     }
 
     public static function getToken(string $dasboard = "", int $entities_id = 0, int $is_recursive = 0): string
@@ -536,8 +531,6 @@ JAVASCRIPT;
 
         if ($token !== $params['token']) {
             return false;
-            Html::displayRightError();
-            exit;
         }
 
         return true;
@@ -619,6 +612,8 @@ HTML;
         $refresh_label = __("Refresh this card");
         $edit_label    = __("Edit this card");
         $delete_label  = __("Delete this card");
+
+        $gridstack_id = htmlspecialchars($gridstack_id);
 
         $this->items[] = <<<HTML
          <div class="grid-stack-item"
@@ -759,7 +754,8 @@ HTML;
         $params = array_merge($default_params, $params);
 
         $used         = array_flip($params['used']);
-        $list_filters = array_diff_key(Filter::getAll(), $used);
+        $filters      = Filter::getFilterChoices();
+        $list_filters = array_diff_key($filters, $used);
 
         $rand = mt_rand();
         echo "<form class='display-filter-form'>";
@@ -913,20 +909,9 @@ HTML;
             }
             $card = $cards[$card_id];
 
-            // allows plugins to control uniqueness of its cards in cache system
-            if (isset($card['custom_hash'])) {
-                $card_options['custom_hash'] = $card['custom_hash'];
-            }
-
-            // manage cache
-            $options_footprint = sha1(serialize($card_options) .
-                ($_SESSION['glpiactiveentities_string'] ?? "") .
-                ($_SESSION['glpilanguage']));
-
             $use_cache = !$force
                 && $_SESSION['glpi_use_mode'] != Session::DEBUG_MODE
                 && (!isset($card['cache']) || $card['cache'] == true);
-            $cache_key = "dashboard_card_{$dashboard}_{$options_footprint}";
             $cache_age = 40;
 
             if ($use_cache) {
@@ -935,12 +920,6 @@ HTML;
                 header('Cache-Control: public');
                 header('Cache-Control: max-age=' . $cache_age);
                 header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + $cache_age));
-
-                // server cache
-                $dashboard_cards = $GLPI_CACHE->get($cache_key, []);
-                if (isset($dashboard_cards[$gridstack_id])) {
-                    return (string)$dashboard_cards[$gridstack_id];
-                }
             }
 
             $html = "";
@@ -995,14 +974,7 @@ HTML;
             }
 
             $execution_time = round(microtime(true) - $start, 3);
-
-            // store server cache
-            if (strlen($dashboard)) {
-                $dashboard_cards = $GLPI_CACHE->get($cache_key, []);
-                $dashboard_cards[$gridstack_id] = $html;
-                $GLPI_CACHE->set($cache_key, $dashboard_cards, new \DateInterval("PT" . $cache_age . "S"));
-            }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $html = $render_error_html;
             $execution_time = round(microtime(true) - $start, 3);
             // Log the error message without exiting
@@ -1051,8 +1023,10 @@ HTML;
      */
     public function getFilterHtml(string $filter_id = "", $filter_values = ""): string
     {
-        if (method_exists("Glpi\Dashboard\Filter", $filter_id)) {
-            return call_user_func("Glpi\Dashboard\Filter::$filter_id", $filter_values);
+        foreach (Filter::getRegisteredFilterClasses() as $filter) {
+            if ($filter::getId() == $filter_id) {
+                return $filter::getHtml($filter_values);
+            }
         }
 
         return "";
@@ -1098,6 +1072,22 @@ HTML;
     }
 
     /**
+     * Get cache key for the "getAllDasboardCards" function data.
+     * The data will contain some translated strings and thus must be kept in a
+     * separate cache entry for each languages
+     *
+     * @return string
+     */
+    public static function getAllDashboardCardsCacheKey(): string
+    {
+        return sprintf(
+            'getAllDashboardCards_%s_%s',
+            sha1(json_encode(Filter::getRegisteredFilterClasses())),
+            Session::getLanguage() ?? ''
+        );
+    }
+
+    /**
      * Construct catalog of all possible cards addable in a dashboard.
      *
      * @param bool $force Force rebuild the catalog of cards
@@ -1108,43 +1098,11 @@ HTML;
     {
         global $CFG_GLPI, $GLPI_CACHE;
 
-        $cards = $GLPI_CACHE->get('getAllDasboardCards');
+        $cards = $GLPI_CACHE->get(self::getAllDashboardCardsCacheKey());
 
         if ($cards === null || $force) {
-            // anonymous fct for adding relevant filters to cards
-            $add_filters_fct = static function ($itemtable, $DB) {
-                $add_filters = [];
-                if ($DB->fieldExists($itemtable, "ititlcategories_id")) {
-                    $add_filters[] = "itilcategory";
-                }
-                if ($DB->fieldExists($itemtable, "requesttypes_id")) {
-                    $add_filters[] = "requesttype";
-                }
-                if ($DB->fieldExists($itemtable, "locations_id")) {
-                    $add_filters[] = "location";
-                }
-                if ($DB->fieldExists($itemtable, "manufacturers_id")) {
-                    $add_filters[] = "manufacturer";
-                }
-                if ($DB->fieldExists($itemtable, "groups_id_tech")) {
-                    $add_filters[] = "group_tech";
-                }
-                if ($DB->fieldExists($itemtable, "users_id_tech")) {
-                    $add_filters[] = "user_tech";
-                }
-                if ($DB->fieldExists($itemtable, "states_id")) {
-                    $add_filters[] = "state";
-                }
-                if ($itemtable == Ticket::getTable()) {
-                    $add_filters[] = "tickettype";
-                }
-
-                return $add_filters;
-            };
-
             $cards = [];
             $menu_itemtypes = $this->getMenuItemtypes();
-            $DB_read = DBConnection::getReadConnection();
 
             foreach ($menu_itemtypes as $firstlvl => $itemtypes) {
                 foreach ($itemtypes as $itemtype) {
@@ -1155,10 +1113,7 @@ HTML;
                         'itemtype'   => "\\$itemtype",
                         'label'      => sprintf(__("Number of %s"), $itemtype::getTypeName()),
                         'provider'   => "Glpi\\Dashboard\\Provider::bigNumber$itemtype",
-                        'filters'    => array_merge([
-                            'dates',
-                            'dates_mod',
-                        ], $add_filters_fct($itemtype::getTable(), $DB_read))
+                        'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                     ];
                 }
             }
@@ -1177,10 +1132,7 @@ HTML;
                     'group'      =>  _n('Device', 'Devices', 1),
                     'label'      => $label,
                     'provider'   => "Glpi\\Dashboard\\Provider::multipleNumber" . $itemtype . "By" . $fk_itemtype,
-                    'filters'    => array_merge([
-                        'dates',
-                        'dates_mod',
-                    ], $add_filters_fct($itemtype::getTable(), $DB_read))
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
 
                 $clean_itemtype = str_replace('\\', '_', $itemtype);
@@ -1190,10 +1142,7 @@ HTML;
                     'itemtype'   => "\\$itemtype",
                     'label'      => sprintf(__("Number of %s"), $itemtype::getTypeName()),
                     'provider'   => "Glpi\\Dashboard\\Provider::bigNumber$itemtype",
-                    'filters'    => array_merge([
-                        'dates',
-                        'dates_mod',
-                    ], $add_filters_fct($itemtype::getTable(), $DB_read))
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
             }
 
@@ -1205,10 +1154,7 @@ HTML;
                     'itemtype'   => "\\$itemtype",
                     'label'      => sprintf(__("Number of type of %s"), $itemtype::getTypeName()),
                     'provider'   => "Glpi\\Dashboard\\Provider::bigNumber$itemtype",
-                    'filters'    => array_merge([
-                        'dates',
-                        'dates_mod',
-                    ], $add_filters_fct($itemtype::getTable(), $DB_read))
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
             }
 
@@ -1242,10 +1188,7 @@ HTML;
                         'group'      => _n('Asset', 'Assets', Session::getPluralNumber()),
                         'label'      => $label,
                         'provider'   => "Glpi\\Dashboard\\Provider::multipleNumber" . $itemtype . "By" . $fk_itemtype,
-                        'filters'    => array_merge([
-                            'dates',
-                            'dates_mod',
-                        ], $add_filters_fct($itemtype::getTable(), $DB_read))
+                        'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                     ];
                 }
             }
@@ -1275,10 +1218,7 @@ HTML;
                         ]
                     ],
                     'cache'      => false,
-                    'filters'    => [
-                        'dates', 'dates_mod', 'itilcategory',
-                        'group_tech', 'user_tech', 'requesttype', 'location'
-                    ]
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
 
                 $cards["table_count_tickets_$case"] = [
@@ -1293,10 +1233,7 @@ HTML;
                             'validation_check_user' => true,
                         ]
                     ],
-                    'filters'    => [
-                        'dates', 'dates_mod', 'itilcategory',
-                        'group_tech', 'user_tech', 'requesttype', 'location'
-                    ]
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
             }
 
@@ -1307,10 +1244,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => __("Number of tickets by month"),
                 'provider'   => "Glpi\\Dashboard\\Provider::ticketsOpened",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $cards["ticket_evolution"] = [
@@ -1319,10 +1253,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => __("Evolution of ticket in the past year"),
                 'provider'   => "Glpi\\Dashboard\\Provider::getTicketsEvolution",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $cards["ticket_status"] = [
@@ -1331,10 +1262,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => __("Tickets status by month"),
                 'provider'   => "Glpi\\Dashboard\\Provider::getTicketsStatus",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $cards["ticket_times"] = [
@@ -1343,10 +1271,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => __("Tickets times (in hours)"),
                 'provider'   => "Glpi\\Dashboard\\Provider::averageTicketTimes",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $cards["tickets_summary"] = [
@@ -1355,10 +1280,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => __("Tickets summary"),
                 'provider'   => "Glpi\\Dashboard\\Provider::getTicketSummary",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $case = '';
@@ -1368,10 +1290,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => sprintf(__("Number of tickets by SLA status and technician")),
                 'provider'   => "Glpi\\Dashboard\\Provider::nbTicketsByAgreementStatusAndTechnician",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'user_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             $cards["bn_count_tickets_expired_by_tech_group"] = [
@@ -1380,10 +1299,7 @@ HTML;
                 'group'      => __('Assistance'),
                 'label'      => sprintf(__("Number of tickets by SLA status and technician group")),
                 'provider'   => "Glpi\\Dashboard\\Provider::nbTicketsByAgreementStatusAndTechnicianGroup",
-                'filters'    => [
-                    'dates', 'dates_mod', 'itilcategory',
-                    'group_tech', 'requesttype', 'location'
-                ]
+                'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
             ];
 
             foreach (
@@ -1400,10 +1316,7 @@ HTML;
                     'group'      => __('Assistance'),
                     'label'      => $label,
                     'provider'   => "Glpi\\Dashboard\\Provider::multipleNumberTicketBy$itemtype",
-                    'filters'    => [
-                        'dates', 'dates_mod', 'itilcategory',
-                        'group_tech', 'user_tech', 'requesttype', 'location'
-                    ]
+                    'filters'    => Filter::getAppliableFilters($itemtype::getTable()),
                 ];
             }
 
@@ -1426,10 +1339,7 @@ HTML;
                     'args'       => [
                         'case' => $type,
                     ],
-                    'filters'    => [
-                        'dates', 'dates_mod', 'itilcategory',
-                        'group_tech', 'user_tech', 'requesttype', 'location'
-                    ]
+                    'filters'    => Filter::getAppliableFilters(Ticket::getTable()),
                 ];
             }
 
@@ -1438,7 +1348,7 @@ HTML;
                 'label'      => __("List of reminders"),
                 'group'      => __('Tools'),
                 'provider'   => "Glpi\\Dashboard\\Provider::getArticleListReminder",
-                'filters'    => ['dates', 'dates_mod']
+                'filters'    => Filter::getAppliableFilters(Reminder::getTable()),
             ];
 
             $cards["markdown_editable"] = [
@@ -1449,7 +1359,7 @@ HTML;
                     'content' => __("Toggle edit mode to edit content"),
                 ]
             ];
-            $GLPI_CACHE->set('getAllDasboardCards', $cards);
+            $GLPI_CACHE->set(self::getAllDashboardCardsCacheKey(), $cards);
         }
 
         $more_cards = Plugin::doHookFunction(Hooks::DASHBOARD_CARDS);

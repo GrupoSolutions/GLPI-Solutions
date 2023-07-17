@@ -483,6 +483,7 @@ class NetworkPort extends CommonDBChild
                 'ifoutbytes'      => $this->fields['ifoutbytes'] ?? 0,
                 'ifinerrors'      => $this->fields['ifinerrors'] ?? 0,
                 'ifouterrors'     => $this->fields['ifouterrors'] ?? 0,
+                'is_dynamic'     =>  $this->fields['is_dynamic'] ?? 0,
             ],
             $unicity_input
         );
@@ -539,6 +540,14 @@ class NetworkPort extends CommonDBChild
                 NetworkName::class,
                 NetworkPort_NetworkPort::class,
                 NetworkPort_Vlan::class,
+                NetworkPortAggregate::class,
+                NetworkPortAlias::class,
+                NetworkPortDialup::class,
+                NetworkPortEthernet::class,
+                NetworkPortFiberchannel::class,
+                NetworkPortLocal::class,
+                NetworkPortMetrics::class,
+                NetworkPortWifi::class,
             ]
         );
     }
@@ -655,14 +664,18 @@ class NetworkPort extends CommonDBChild
         $itemtype = $item->getType();
         $items_id = $item->getField('id');
 
-        //from dynamic asset, deleted items are displayed from lock tab
-        //from manual asset, deleted items are always displayed (with is_deleted column)
-        $deleted_criteria = [];
-        if ($item->isDynamic()) {
-            $deleted_criteria = [
-                "is_deleted" => 0
-            ];
-        }
+        //no matter if the main item is dynamic,
+        //deleted and dynamic networkport are displayed from lock tab
+        //deleted and non dynamic networkport are always displayed (with is_deleted column)
+        $deleted_criteria = [
+            'OR'  => [
+                'AND' => [
+                    "is_deleted" => 0,
+                    "is_dynamic" => 1
+                ],
+                "is_dynamic" => 0
+            ]
+        ];
 
         if (
             !NetworkEquipment::canView()
@@ -1048,13 +1061,13 @@ class NetworkPort extends CommonDBChild
                             }
 
                             if (!empty($in)) {
-                                $in = Toolbox::getSize($in, 1000);
+                                $in = Toolbox::getSize($in);
                             } else {
                                 $in = ' - ';
                             }
 
                             if (!empty($out)) {
-                                $out = Toolbox::getSize($out, 1000);
+                                $out = Toolbox::getSize($out);
                             } else {
                                 $out = ' - ';
                             }
@@ -1443,7 +1456,7 @@ class NetworkPort extends CommonDBChild
                 'joinparams' => $joinparams
             ]
         ];
-        NetworkName::rawSearchOptionsToAdd($tab, $networkNameJoin, $itemtype);
+        NetworkName::rawSearchOptionsToAdd($tab, $networkNameJoin);
 
         $instantjoin = ['jointype'   => 'child',
             'beforejoin' => ['table'      => 'glpi_networkports',

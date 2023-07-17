@@ -36,15 +36,6 @@
 class RuleDictionnaryOperatingSystemServicePack extends RuleDictionnaryDropdown
 {
     /**
-     * Constructor
-     **/
-    public function __construct()
-    {
-        parent::__construct('RuleDictionnaryOperatingSystemServicePack');
-    }
-
-
-    /**
      * @see Rule::getCriterias()
      **/
     public function getCriterias()
@@ -56,9 +47,9 @@ class RuleDictionnaryOperatingSystemServicePack extends RuleDictionnaryDropdown
             return $criterias;
         }
 
-        $criterias['servicepack_name']['field'] = 'name';
-        $criterias['servicepack_name']['name']  = OperatingSystemServicePack::getTypeName(1);
-        $criterias['servicepack_name']['table'] = 'glpi_operatingsystemservicepacks';
+        $criterias['name']['field'] = 'name';
+        $criterias['name']['name']  = OperatingSystemServicePack::getTypeName(1);
+        $criterias['name']['table'] = 'glpi_operatingsystemservicepacks';
 
         $criterias['os_name']['field'] = 'name';
         $criterias['os_name']['name']  = OperatingSystem::getTypeName(1);

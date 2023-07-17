@@ -81,6 +81,10 @@ class ITILFollowup extends CommonDBChild
         return _n('Followup', 'Followups', $nb);
     }
 
+    public static function getIcon()
+    {
+        return 'ti ti-message-circle';
+    }
 
     /**
      * can read the parent ITIL Object ?
@@ -368,6 +372,7 @@ class ITILFollowup extends CommonDBChild
        // if ($input["_isadmin"] && $input["_type"]!="update") {
         if (isset($input["add_close"])) {
             $input['_close'] = 1;
+            $input['_no_reopen'] = 1;
             if (empty($input['content'])) {
                 $input['content'] = __('Solution approved');
             }
@@ -840,7 +845,7 @@ class ITILFollowup extends CommonDBChild
                 $fup   = new self();
                 foreach ($ids as $id) {
                     if ($item->getFromDB($id)) {
-                        if (in_array($item->fields['status'], $item->getClosedStatusArray())) {
+                        if (in_array($item->fields['status'], array_merge($item->getSolvedStatusArray(), $item->getClosedStatusArray()))) {
                             $ma->itemDone($item->getType(), $id, MassiveAction::ACTION_KO);
                             $ma->addMessage($item->getErrorMessage(ERROR_RIGHT));
                         } else {

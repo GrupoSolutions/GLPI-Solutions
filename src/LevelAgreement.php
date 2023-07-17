@@ -96,6 +96,11 @@ abstract class LevelAgreement extends CommonDBChild
         return [$dateField, $laField];
     }
 
+    public static function getWaitingFieldName(): string
+    {
+        return static::$prefix . '_waiting_duration';
+    }
+
     public function defineTabs($options = [])
     {
 
@@ -431,6 +436,7 @@ abstract class LevelAgreement extends CommonDBChild
                     ]
                 );
                 echo "</td>";
+                $link = '';
                 if ($slm->fields['use_ticket_calendar']) {
                     $link = __('Calendar of the ticket');
                 } else if (!$slm->fields['calendars_id']) {
@@ -794,12 +800,11 @@ abstract class LevelAgreement extends CommonDBChild
 
         if (isset($this->fields['id'])) {
             $cal          = new Calendar();
-            $work_in_days = ($this->fields['definition_time'] == 'day');
 
            // Based on a calendar
             if ($this->fields['calendars_id'] > 0) {
                 if ($cal->getFromDB($this->fields['calendars_id'])) {
-                    return $cal->getActiveTimeBetween($start, $end, $work_in_days);
+                    return $cal->getActiveTimeBetween($start, $end);
                 }
             } else { // No calendar
                 $timestart = strtotime($start);
@@ -1013,8 +1018,33 @@ abstract class LevelAgreement extends CommonDBChild
 
         if ($levels_id) {
             $toadd = [];
+
+            // Compute start date
+            if ($pre === "ola") {
+                // OLA have their own start date which is set when the OLA is added to the ticket
+                if (
+                    (int) $this->fields['type'] === SLM::TTO
+                    && $ticket->fields['ola_tto_begin_date'] !== null
+                ) {
+                    $date_field = "ola_tto_begin_date";
+                } elseif (
+                    (int) $this->fields['type'] === SLM::TTR
+                    && $ticket->fields['ola_ttr_begin_date'] !== null
+                ) {
+                    $date_field = "ola_ttr_begin_date";
+                } else {
+                    // Fall back to default date in case the specific date fields
+                    // are not set (which may be the case for tickets created
+                    // before their addition)
+                    $date_field = 'date';
+                }
+            } else {
+                // SLA are based on the ticket opening date
+                $date_field = 'date';
+            }
+
             $date = $this->computeExecutionDate(
-                $ticket->fields['date'],
+                $ticket->fields[$date_field],
                 $levels_id,
                 $ticket->fields[$pre . '_waiting_duration']
             );

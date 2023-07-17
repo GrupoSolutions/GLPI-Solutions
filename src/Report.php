@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -86,8 +86,6 @@ class Report extends CommonGLPI
             $report_list["Infocoms"]["file"]  = "report.infocom.php";
             $report_list["Infocoms2"]["name"] = __('Other financial and administrative information (licenses, cartridges, consumables)');
             $report_list["Infocoms2"]["file"] = "report.infocom.conso.php";
-            $report_list["Infocoms2"]["name"] = "Relatório Financeiro de Ativos e Insumos";
-            $report_list["Infocoms2"]["file"] = "report.financeiro.php";
         }
         if (Session::haveRight("networking", READ)) {
             $report_list["Rapport prises reseau"]["name"] = __('Network report');
@@ -203,10 +201,14 @@ class Report extends CommonGLPI
                 'COUNT'  => 'cpt',
                 'FROM'   => $table_item,
                 'WHERE'  => [
-                    "$table_item.is_deleted"   => 0,
-                    "$table_item.is_template"  => 0
+                    "$table_item.is_deleted"   => 0
                 ] + getEntitiesRestrictCriteria($table_item)
             ];
+
+            $itemtype_object = new $itemtype();
+            if ($itemtype_object->maybeTemplate()) {
+                $criteria["WHERE"]["$table_item.is_template"] = 0;
+            }
 
             if (in_array($itemtype, $linkitems)) {
                 $criteria['LEFT JOIN'] = [
@@ -247,7 +249,7 @@ class Report extends CommonGLPI
                     ]
                 ]
             ],
-            'WHERE'     => ['is_deleted' => 0],
+            'WHERE'     => ['is_deleted' => 0] + getEntitiesRestrictCriteria('glpi_items_operatingsystems'),
             'GROUPBY'   => 'glpi_operatingsystems.name'
         ]);
 
@@ -267,6 +269,11 @@ class Report extends CommonGLPI
         foreach ($items as $itemtype) {
             echo "<tr class='tab_bg_1'><td colspan='2' class='b'>" . $itemtype::getTypeName(Session::getPluralNumber()) .
               "</td></tr>";
+
+            //no type for unmanaged
+            if ($itemtype == Unmanaged::class) {
+                continue;
+            }
 
             $table_item = getTableForItemType($itemtype);
             $typeclass  = $itemtype . "Type";
@@ -288,11 +295,15 @@ class Report extends CommonGLPI
                     ]
                 ],
                 'WHERE'     => [
-                    "$table_item.is_deleted"   => 0,
-                    "$table_item.is_template"  => 0
+                    "$table_item.is_deleted"   => 0
                 ] + getEntitiesRestrictCriteria($table_item),
                 'GROUPBY'   => "$type_table.name"
             ];
+
+            $itemtype_object = new $itemtype();
+            if ($itemtype_object->maybeTemplate()) {
+                $criteria["WHERE"]["$table_item.is_template"] = 0;
+            }
 
             if (in_array($itemtype, $linkitems)) {
                 $criteria['LEFT JOIN']['glpi_computers_items'] = [

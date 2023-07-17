@@ -1706,7 +1706,10 @@ HTML;
         bool $add_id = true
     ) {
         global $CFG_GLPI, $HEADER_LOADED, $DB;
-
+        include_once("ToastNotificacao.php");
+        $user_id = Session::getLoginUserID();
+        $novoChamado = buscarNovosChamados($user_id);
+        $unresolvedChamado = buscarRespostaChamados($user_id);
         // If in modal : display popHeader
         if (isset($_REQUEST['_in_modal']) && $_REQUEST['_in_modal']) {
             return self::popHeader($title, $url, false, $sector, $item, $option);
@@ -1735,6 +1738,8 @@ HTML;
             'item'        => $item,
             'option'      => $option,
             'menu_active' => $menu_active,
+            'novo_chamado'=> $novoChamado,
+            'sem_resposta'=> $unresolvedChamado,
         ];
         $tpl_vars += self::getPageHeaderTplVars();
 
@@ -5515,15 +5520,12 @@ HTML;
 
             if ($p['showtitle']) {
                 $display .= "<b>";
-                $display .= sprintf(__('%1$s (%2$s)'), __('File(s)'), Document::getMaxUploadSize());
-                $display .= DocumentType::showAvailableTypesLink([
-                    'display' => false,
-                    'rand'    => $p['rand']
-                ]);
+                
+                
                 if ($p['required']) {
                     $display .= '<span class="required">*</span>';
                 }
-                $display .= "</b>";
+                $display .= " </b>";
             }
         }
 
@@ -5543,9 +5545,19 @@ HTML;
             $required = "required='required'";
         }
 
+        
         if (!$p['only_uploaded_files']) {
            // manage file upload without tinymce editor
-            $display .= "<span class='b'>" . __('Drag and drop your file here, or') . '</span><br>';
+            $display .= "<span class='b'>Arraste ou importe seu arquivo aqui</span>";
+           
+            $display .= '<span style="color:gray;font-size:12px;">  (';
+            $display .=  Document::getMaxUploadSize();
+            $display .= ")</span>";
+            $display .= DocumentType::showAvailableTypesLink([
+                'display' => false,
+                'rand'    => $p['rand']
+            ]);
+            $display .= '<br>';
         }
         $display .= "<input id='fileupload{$p['rand']}' type='file' name='_uploader_" . $p['name'] . "[]'
                       class='form-control'
@@ -5555,7 +5567,7 @@ HTML;
                       data-form-data='{\"name\": \"_uploader_" . $p['name'] . "\", \"showfilesize\": \"" . $p['showfilesize'] . "\"}'"
                       . ($p['multiple'] ? " multiple='multiple'" : "")
                       . ($p['onlyimages'] ? " accept='.gif,.png,.jpg,.jpeg'" : "") . ">";
-
+        
         $progressall_js = '';
         if (!$p['only_uploaded_files']) {
             $display .= "<div id='progress{$p['rand']}' style='display:none'>" .

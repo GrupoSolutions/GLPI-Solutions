@@ -52,9 +52,10 @@ if (isset($_POST['update'])) {
    $formanswer->redirectToList();
 
 } else if (isset($_POST['accept_formanswer'])) {
-      $formanswer->update($_POST);
-      $formanswer->redirectToList();
-   
+   	 require_once("loading.php");
+         $formanswer->update($_POST);
+         $formanswer->redirectToList(); 
+
 } else if (isset($_POST['save_formanswer'])) {
    if (!$formanswer->update($_POST)) {
       Html::back();

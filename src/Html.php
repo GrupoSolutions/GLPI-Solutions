@@ -194,7 +194,7 @@ class Html
 
         try {
             $date = new \DateTime($time);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             ErrorHandler::getInstance()->handleException($e);
             Session::addMessageAfterRedirect(
                 sprintf(
@@ -573,7 +573,7 @@ class Html
         }
 
         if (!empty($params)) {
-            if (str_contains('?', $dest)) {
+            if (str_contains($dest, '?')) {
                 $dest .= '&' . $params;
             } else {
                 $dest .= '?' . $params;
@@ -626,6 +626,7 @@ class Html
      **/
     public static function displayRightError(string $additional_info = '')
     {
+        Toolbox::handleProfileChangeRedirect();
         $requested_url = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'Unknown');
         $user_id = Session::getLoginUserID() ?? 'Anonymous';
         if (empty($additional_info)) {
@@ -739,74 +740,11 @@ class Html
      * @param boolean $ajax         If we're called from ajax (false by default)
      *
      * @return void
+     * @deprecated 10.0.0
      **/
     public static function displayDebugInfos($with_session = true, $ajax = false, $rand = null)
     {
-        global $CFG_GLPI, $DEBUG_SQL, $SQL_TOTAL_REQUEST, $TIMER_DEBUG, $PLUGIN_HOOKS;
-
-       // Only for debug mode so not need to be translated
-        if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) { // mode debug
-            if ($rand === null) {
-                $rand = mt_rand();
-            }
-
-            $plugin_tabs = [];
-            if (isset($PLUGIN_HOOKS[Hooks::DEBUG_TABS])) {
-                foreach ($PLUGIN_HOOKS[Hooks::DEBUG_TABS] as $tabs) {
-                    $plugin_tabs = array_merge($plugin_tabs, $tabs);
-                }
-            }
-
-            $queries_duration = $CFG_GLPI["debug_sql"] ? array_sum($DEBUG_SQL['times']) : 0;
-            $execution_time = $TIMER_DEBUG->getTime();
-            $summary = [
-                'execution_time'    => sprintf(_n('%s second', '%s seconds', $execution_time), $execution_time),
-                'memory_usage'      => memory_get_usage(),
-                'sql_queries_count'     => $CFG_GLPI["debug_sql"] ? $SQL_TOTAL_REQUEST : 0,
-                'sql_queries_duration'  => $CFG_GLPI["debug_sql"] ? sprintf(_n('%s second', '%s seconds', $queries_duration), $queries_duration) : 0,
-            ];
-            $sql_info = [];
-
-            if ($CFG_GLPI['debug_sql']) {
-                $sql_info['total_requests'] = $summary['sql_queries_count'];
-                $sql_info['total_duration'] = $summary['sql_queries_duration'];
-                $sql_info['queries'] = [];
-                foreach ($DEBUG_SQL['queries'] as $num => $query) {
-                    $info = [
-                        'num'       => $num,
-                        'query'     => $query,
-                        'time'      => $DEBUG_SQL['times'][$num] ?? '',
-                        'rows'      => $DEBUG_SQL['rows'][$num] ?? 0,
-                        'errors'    => $DEBUG_SQL['errors'][$num] ?? '',
-                        'warnings'  => '',
-                    ];
-                    if (isset($DEBUG_SQL['warnings'][$num])) {
-                        foreach ($DEBUG_SQL['warnings'][$num] as $warning) {
-                            $info['warnings'] .= sprintf('%s: %s', $warning['Code'], $warning['Message']) . "\n";
-                        }
-                    }
-                    $sql_info['queries'][] = $info;
-                }
-            }
-            $vars_info = [
-                'get'      => $_GET ?? [],
-                'post'     => $_POST ?? [],
-                'session'  => $_SESSION ?? [],
-                'server'   => $_SERVER ?? [],
-            ];
-
-            TemplateRenderer::getInstance()->display('debug_panel.html.twig', [
-                'summary'       => $summary,
-                'sql_info'      => $sql_info,
-                'vars_info'     => $vars_info,
-                'with_session'  => $with_session,
-                'debug_sql'     => $CFG_GLPI['debug_sql'],
-                'debug_vars'    => $CFG_GLPI['debug_vars'],
-                'ajax'          => $ajax,
-                'rand'          => $rand,
-                'plugin_tabs'   => $plugin_tabs,
-            ]);
-        }
+        Toolbox::deprecated('Html::displayDebugInfo is not used anymore. It was replaced by a unified debug bar.');
     }
 
 
@@ -1145,21 +1083,25 @@ HTML;
         $sector = 'none',
         $item = 'none',
         $option = '',
-        bool $add_id = true
+        bool $add_id = true,
+        bool $allow_insecured_iframe = false
     ) {
         global $CFG_GLPI, $PLUGIN_HOOKS;
 
-       // complete title with id if exist
+        // complete title with id if exist
         if ($add_id && isset($_GET['id']) && $_GET['id']) {
             $title = sprintf(__('%1$s - %2$s'), $title, $_GET['id']);
         }
 
-       // Send UTF8 Headers
+        // Send UTF8 Headers
         header("Content-Type: text/html; charset=UTF-8");
-       // Allow only frame from same server to prevent click-jacking
-        header('x-frame-options:SAMEORIGIN');
 
-       // Send extra expires header
+        if (!$allow_insecured_iframe) {
+            // Allow only frame from same server to prevent click-jacking
+            header('x-frame-options:SAMEORIGIN');
+        }
+
+        // Send extra expires header
         self::header_nocache();
 
         $theme = $_SESSION['glpipalette'] ?? 'auror';
@@ -1278,7 +1220,7 @@ HTML;
                 Html::requireJs('charts');
             }
 
-            if (in_array('codemirror', $jslibs)) {
+            if (in_array('codemirror', $jslibs) || $_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
                 $tpl_vars['css_files'][] = ['path' => 'public/lib/codemirror.css'];
                 Html::requireJs('codemirror');
             }
@@ -1336,11 +1278,20 @@ HTML;
         $tpl_vars['css_files'][] = ['path' => 'css/palettes/' . $theme . '.scss'];
 
         $tpl_vars['js_files'][] = ['path' => 'public/lib/base.js'];
+        $tpl_vars['js_files'][] = ['path' => 'js/webkit_fix.js'];
         $tpl_vars['js_files'][] = ['path' => 'js/common.js'];
+
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
+            $tpl_vars['js_modules'][] = ['path' => 'js/modules/Debug/Debug.js'];
+        }
 
        // Search
         $tpl_vars['js_modules'][] = ['path' => 'js/modules/Search/ResultsView.js'];
         $tpl_vars['js_modules'][] = ['path' => 'js/modules/Search/Table.js'];
+
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE) {
+            $tpl_vars['glpi_request_id'] = \Glpi\Debug\Profile::getCurrent()->getID();
+        }
 
         TemplateRenderer::getInstance()->display('layout/parts/head.html.twig', $tpl_vars);
 
@@ -1500,7 +1451,8 @@ HTML;
             foreach ($menu as $category => $entries) {
                 if (isset($entries['types']) && count($entries['types'])) {
                     foreach ($entries['types'] as $type) {
-                        if ($data = $type::getMenuContent()) {
+                        $data = $type::getMenuContent();
+                        if ($data) {
                           // Multi menu entries management
                             if (isset($data['is_multi_entries']) && $data['is_multi_entries']) {
                                 if (!isset($menu[$category]['content'])) {
@@ -1609,7 +1561,7 @@ HTML;
             }
         }
 
-        if (Session::haveRight("reservation", ReservationItem::RESERVEANITEM)) {
+        if (Session::haveRightsOr("reservation", [READ, ReservationItem::RESERVEANITEM])) {
             $menu['reservation'] = [
                 'default' => '/front/reservationitem.php',
                 'title'   => _n('Reservation', 'Reservations', Session::getPluralNumber()),
@@ -1706,10 +1658,7 @@ HTML;
         bool $add_id = true
     ) {
         global $CFG_GLPI, $HEADER_LOADED, $DB;
-        include_once("ToastNotificacao.php");
-        $user_id = Session::getLoginUserID();
-        $novoChamado = buscarNovosChamados($user_id);
-        $unresolvedChamado = buscarRespostaChamados($user_id);
+
         // If in modal : display popHeader
         if (isset($_REQUEST['_in_modal']) && $_REQUEST['_in_modal']) {
             return self::popHeader($title, $url, false, $sector, $item, $option);
@@ -1723,7 +1672,9 @@ HTML;
         $sector = strtolower($sector);
         $item   = strtolower($item);
 
+        \Glpi\Debug\Profiler::getInstance()->start('Html::includeHeader');
         self::includeHeader($title, $sector, $item, $option, $add_id);
+        \Glpi\Debug\Profiler::getInstance()->stop('Html::includeHeader');
 
         $tmp_active_item = explode("/", $item);
         $active_item     = array_pop($tmp_active_item);
@@ -1738,8 +1689,6 @@ HTML;
             'item'        => $item,
             'option'      => $option,
             'menu_active' => $menu_active,
-            'novo_chamado'=> $novoChamado,
-            'sem_resposta'=> $unresolvedChamado,
         ];
         $tpl_vars += self::getPageHeaderTplVars();
 
@@ -1879,7 +1828,10 @@ HTML;
 
         TemplateRenderer::getInstance()->display('layout/parts/page_footer.html.twig', $tpl_vars);
 
-        self::displayDebugInfos();
+        if ($_SESSION['glpi_use_mode'] === Session::DEBUG_MODE && !str_starts_with($_SERVER['PHP_SELF'], $CFG_GLPI['root_doc'] . '/install/')) {
+            \Glpi\Debug\Profiler::getInstance()->stopAll();
+            (new Glpi\Debug\Toolbar())->show();
+        }
 
         if (!$keepDB && function_exists('closeDBConnections')) {
             closeDBConnections();
@@ -1892,27 +1844,8 @@ HTML;
      **/
     public static function ajaxFooter()
     {
-
-        if ($_SESSION['glpi_use_mode'] == Session::DEBUG_MODE) { // mode debug
-            $rand = mt_rand();
-            echo "<div class='center d-none d-md-block btn-group' id='debugajax'>";
-            echo "<a class='btn btn-sm btn-danger debug-float' href=\"javascript:showHideDiv('debugpanel$rand','','','');\">
-            <i class='fas fa-bug'></i>
-            <span>AJAX DEBUG</span>
-         </a>";
-            if (
-                !isset($_GET['full_page_tab'])
-                && strstr($_SERVER['REQUEST_URI'], '/ajax/common.tabs.php')
-            ) {
-                echo "<a href='" . $_SERVER['REQUEST_URI'] . "&full_page_tab=1' class='btn btn-sm btn-danger'>
-               <i class='fas fa-external-link-alt'></i>
-               <span>Display only tab for debug</span>
-            </a>";
-            }
-            echo "</div>";
-            self::displayDebugInfos(false, true, $rand);
-            echo "</div>";
-        }
+        // Not currently used. Old debug stuff is now in the new debug bar.
+        // FIXME: Deprecate this in GLPI 10.1.
     }
 
 
@@ -2120,7 +2053,7 @@ HTML;
     public static function popHeader(
         $title,
         $url = '',
-        $iframed = false,
+        $in_modal = false,
         $sector = "none",
         $item = "none",
         $option = ""
@@ -2134,9 +2067,41 @@ HTML;
         $HEADER_LOADED = true;
 
         self::includeHeader($title, $sector, $item, $option); // Body
-        echo "<body class='" . ($iframed ? "iframed" : "") . "'>";
+        echo "<body class='" . ($in_modal ? "in_modal" : "") . "'>";
         self::displayMessageAfterRedirect();
         echo "<div id='page'>"; // Force legacy styles for now
+    }
+
+
+    /**
+     * Print a nice HTML head for iframed windows
+     * This header remove any security for iframe (NO SAMEORIGIN, etc)
+     * And should be used ONLY for iframing windows in other applications.
+     * It should NOT be used for GLPI internal iframing.
+     *
+     * @since 10.0.7
+     *
+     * @param string  $sector    sector in which the page displayed is (default 'none')
+     * @param string  $item      item corresponding to the page displayed (default 'none')
+     * @param string  $option    option corresponding to the page displayed (default '')
+     * @return void
+     */
+    public static function zeroSecurityIframedHeader(
+        string $sector = "none",
+        string $item = "none",
+        string $option = ""
+    ): void {
+        global $HEADER_LOADED;
+
+        if ($HEADER_LOADED) {
+            return;
+        }
+        $HEADER_LOADED = true;
+
+        self::includeHeader('', $sector, $item, $option, true, true);
+        echo "<body class='iframed'>";
+        self::displayMessageAfterRedirect();
+        echo "<div id='page'>";
     }
 
 
@@ -2284,10 +2249,10 @@ HTML;
             $rand = mt_rand();
         }
 
-        $out  = "<input title='" . __s('Check all as') . "' type='checkbox' class='form-check-input'
+        $out  = "<input title='" . __s('Check all as') . "' type='checkbox' class='form-check-input massive_action_checkbox'
                       title='" . __s('Check all as') . "'
                       name='_checkall_$rand' id='checkall_$rand'
-                      onclick= \"if ( checkAsCheckboxes(this, '$container_id')) {return true;}\">";
+                      onclick= \"if ( checkAsCheckboxes(this, '$container_id', '.massive_action_checkbox')) {return true;}\">";
 
        // permit to shift select checkboxes
         $out .= Html::scriptBlock("\$(function() {\$('#$container_id input[type=\"checkbox\"]').shiftSelectable();});");
@@ -2386,6 +2351,7 @@ HTML;
         $params['zero_on_empty']   = true;
         $params['specific_tags']   = [];
         $params['criterion']       = [];
+        $params['class']           = '';
 
         if (is_array($options) && count($options)) {
             foreach ($options as $key => $val) {
@@ -2399,7 +2365,7 @@ HTML;
             $out .= '<input type="hidden" name="' . $params['name'] . '" value="0" />';
         }
 
-        $out .= "<input type='checkbox' class='form-check-input' title=\"" . $params['title'] . "\" ";
+        $out .= "<input type='checkbox' class='form-check-input " . $params['class'] . "' title=\"" . $params['title'] . "\" ";
         if (isset($params['onclick'])) {
             $params['onclick'] = htmlspecialchars($params['onclick'], ENT_QUOTES);
             $out .= " onclick='{$params['onclick']}'";
@@ -2489,6 +2455,7 @@ HTML;
             $options['name'] = "item[$itemtype][" . $id . "]";
         }
 
+        $options['class']         = 'massive_action_checkbox';
         $options['zero_on_empty'] = false;
 
         return self::getCheckbox($options);
@@ -2846,6 +2813,7 @@ HTML;
             dateFormat: 'Y-m-d',
             wrap: true, // permits to have controls in addition to input (like clear or open date buttons
             weekNumbers: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             {$min_attr}
             {$max_attr}
@@ -3028,6 +2996,7 @@ HTML;
             enableTime: true,
             enableSeconds: true,
             weekNumbers: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             minuteIncrement: "{$p['timestep']}",
             {$min_attr}
@@ -3151,6 +3120,7 @@ HTML;
             enableTime: true,
             noCalendar: true, // only time picker
             enableSeconds: true,
+            time_24hr: true,
             locale: getFlatPickerLocale("{$locale['language']}", "{$locale['region']}"),
             minuteIncrement: "{$p['timestep']}",
             onChange: function(selectedDates, dateStr, instance) {
@@ -3372,8 +3342,16 @@ JS;
                 $dates[$i . 'WEEK'] = sprintf(_n('+ %d week', '+ %d weeks', $i), $i);
             }
 
+            if ($params['with_days']) {
+                $dates['ENDMONTH']  = __('End of the month');
+            }
+
             for ($i = 1; $i <= 12; $i++) {
                 $dates[$i . 'MONTH'] = sprintf(_n('+ %d month', '+ %d months', $i), $i);
+            }
+
+            if ($params['with_days']) {
+                $dates['ENDYEAR']  = __('End of the year');
             }
 
             for ($i = 1; $i <= 10; $i++) {
@@ -3417,8 +3395,8 @@ JS;
                 return date("Y-m-d", $specifictime);
         }
 
-       // Search on begin of month / year
-        if (strstr($val, 'BEGIN')) {
+       // Search on begin /end of month / year
+        if (strstr($val, 'BEGIN') || strstr($val, 'END')) {
             $hour   = 0;
             $minute = 0;
             $second = 0;
@@ -3432,6 +3410,15 @@ JS;
                     break;
 
                 case "BEGINMONTH":
+                    break;
+
+                case "ENDYEAR":
+                    $month = 12;
+                    $day = 31;
+                    break;
+
+                case "ENDMONTH":
+                    $day = date("t", $specifictime);
                     break;
             }
 
@@ -3593,7 +3580,7 @@ JS;
             'contentid'     => '',
             'link'          => '',
             'linkid'        => '',
-            'linktarget'    => '',
+            'linktarget'    => '_top',
             'awesome-class' => 'fa-info',
             'popup'         => '',
             'ajax'          => '',
@@ -3824,7 +3811,10 @@ JS;
                 'language_url' => $language_url
             ]);
         }
-       // init tinymce
+
+        $mandatory_field_msg = json_encode(__('The %s field is mandatory'));
+
+        // init tinymce
         $js = <<<JS
          $(function() {
             var is_dark = $('html').css('--is-dark').trim() === 'true';
@@ -3886,7 +3876,7 @@ JS;
                      editor.on('submit', function (e) {
                         if ($('#$id').val() == '') {
                            const field = $('#$id').closest('.form-field').find('label').text().replace('*', '').trim();
-                           alert(__('The %s field is mandatory').replace('%s', field));
+                           alert({$mandatory_field_msg}.replace('%s', field));
                            e.preventDefault();
 
                            // Prevent other events to run
@@ -4849,7 +4839,7 @@ JAVASCRIPT
          const select2_el = $('#$field_id').select2({
             width: '$width',
             multiple: '$multiple',
-            placeholder: '$placeholder',
+            placeholder: " . json_encode($placeholder) . ",
             allowClear: $allowclear,
             minimumInputLength: 0,
             quietMillis: 100,
@@ -5520,12 +5510,15 @@ HTML;
 
             if ($p['showtitle']) {
                 $display .= "<b>";
-                
-                
+                $display .= sprintf(__('%1$s (%2$s)'), __('File(s)'), Document::getMaxUploadSize());
+                $display .= DocumentType::showAvailableTypesLink([
+                    'display' => false,
+                    'rand'    => $p['rand']
+                ]);
                 if ($p['required']) {
                     $display .= '<span class="required">*</span>';
                 }
-                $display .= " </b>";
+                $display .= "</b>";
             }
         }
 
@@ -5545,19 +5538,9 @@ HTML;
             $required = "required='required'";
         }
 
-        
         if (!$p['only_uploaded_files']) {
            // manage file upload without tinymce editor
-            $display .= "<span class='b'>Arraste ou importe seu arquivo aqui</span>";
-           
-            $display .= '<span style="color:gray;font-size:12px;">  (';
-            $display .=  Document::getMaxUploadSize();
-            $display .= ")</span>";
-            $display .= DocumentType::showAvailableTypesLink([
-                'display' => false,
-                'rand'    => $p['rand']
-            ]);
-            $display .= '<br>';
+            $display .= "<span class='b'>" . __('Drag and drop your file here, or') . '</span><br>';
         }
         $display .= "<input id='fileupload{$p['rand']}' type='file' name='_uploader_" . $p['name'] . "[]'
                       class='form-control'
@@ -5567,22 +5550,19 @@ HTML;
                       data-form-data='{\"name\": \"_uploader_" . $p['name'] . "\", \"showfilesize\": \"" . $p['showfilesize'] . "\"}'"
                       . ($p['multiple'] ? " multiple='multiple'" : "")
                       . ($p['onlyimages'] ? " accept='.gif,.png,.jpg,.jpeg'" : "") . ">";
-        
-        $progressall_js = '';
-        if (!$p['only_uploaded_files']) {
-            $display .= "<div id='progress{$p['rand']}' style='display:none'>" .
-                 "<div class='uploadbar' style='width: 0%;'></div></div>";
-            $progressall_js = "
-            progressall: function(event, data) {
-               var progress = parseInt(data.loaded / data.total * 100, 10);
-               $('#progress{$p['rand']}').show();
-               $('#progress{$p['rand']} .uploadbar')
-                  .text(progress + '%')
-                  .css('width', progress + '%')
-                  .show();
-            },
-         ";
-        }
+
+        $display .= "<div id='progress{$p['rand']}' style='display:none'>" .
+                "<div class='uploadbar' style='width: 0%;'></div></div>";
+        $progressall_js = "
+        progressall: function(event, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress{$p['rand']}').show();
+            $('#progress{$p['rand']} .uploadbar')
+                .text(progress + '%')
+                .css('width', progress + '%')
+                .show();
+        },
+        ";
 
         $display .= Html::scriptBlock("
       $(function() {
@@ -5601,6 +5581,8 @@ HTML;
             maxFileSize: {$max_file_size},
             maxChunkSize: {$max_chunk_size},
             add: function (e, data) {
+               // disable submit button during upload
+               $(this).closest('form').find(':submit').prop('disabled', true);
                // randomize filename
                for (var i = 0; i < data.files.length; i++) {
                   data.files[i].uploadName = uniqid('', true) + data.files[i].name;
@@ -5616,14 +5598,22 @@ HTML;
                   $('#{$p['filecontainer']}'),
                   '{$p['editor_id']}'
                );
+               // enable submit button after upload
+               $(this).closest('form').find(':submit').prop('disabled', false);
+               // remove required
+                $('#fileupload{$p['rand']}').removeAttr('required');
             },
             fail: function (e, data) {
+                // enable submit button after upload
+                $(this).closest('form').find(':submit').prop('disabled', false);
                const err = 'responseText' in data.jqXHR && data.jqXHR.responseText.length > 0
                   ? data.jqXHR.responseText
                   : data.jqXHR.statusText;
                alert(err);
             },
             processfail: function (e, data) {
+                // enable submit button after upload
+                $(this).closest('form').find(':submit').prop('disabled', false);
                $.each(
                   data.files,
                   function(index, file) {
@@ -5631,7 +5621,8 @@ HTML;
                         $('#progress{$p['rand']}').show();
                         $('#progress{$p['rand']} .uploadbar')
                            .text(file.error)
-                           .css('width', '100%');
+                           .css('width', '100%')
+                           .show();
                         return;
                      }
                   }
@@ -6630,7 +6621,7 @@ HTML;
                     }
 
                     if (isset($firstlvl['default'])) {
-                        if (strlen($menu['title']) > 0) {
+                        if (strlen($firstlvl['title']) > 0) {
                             $fuzzy_entries[] = [
                                 'url'   => $firstlvl['default'],
                                 'title' => $firstlvl['title']

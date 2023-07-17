@@ -38,8 +38,8 @@
  **/
 class NotificationTargetTicket extends NotificationTargetCommonITILObject
 {
-    const HEADERTAG = '=-=-=-=';
-    const FOOTERTAG = '=_=_=_=';
+    const HEADERTAG = '';
+    const FOOTERTAG = '';
 
     public function validateSendTo($event, array $infos, $notify_me = false, $emitter = null)
     {

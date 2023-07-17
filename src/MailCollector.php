@@ -711,6 +711,7 @@ class MailCollector extends CommonDBTM
             $rejected->deleteByCriteria(['mailcollectors_id' => $this->fields['id']]);
 
             if ($this->storage) {
+                $maxfetch_emails  = $this->maxfetch_emails;
                 $error            = 0;
                 $refused          = 0;
                 $alreadyseen      = 0;
@@ -726,10 +727,44 @@ class MailCollector extends CommonDBTM
                         break;
                     }
 
+                    $extra_retrieve_limit = 250;
+                    if ($this->fetch_emails >= $this->maxfetch_emails + $extra_retrieve_limit) {
+                        // It was retrieved 250 emails more than the initial limit. It means that there were
+                        // 250 email either already seen, either in error.
+                        // To prevent performances issues, retrieve process is stopped here.
+                        trigger_error(
+                            sprintf(
+                                'More than %d emails in mailbox are either already imported, either errored. To avoid a too long execution time, the retrieval of emails has been stopped after %dth email.',
+                                $extra_retrieve_limit,
+                                $this->fetch_emails
+                            ),
+                            E_USER_WARNING
+                        );
+                        Toolbox::logInFile(
+                            'mailgate',
+                            sprintf(
+                                __('Emails retrieve limit reached. Check in "%s" for more details.') . "\n",
+                                GLPI_LOG_DIR . '/php-errors.log'
+                            )
+                        );
+                        break;
+                    }
+
                     try {
                         $this->fetch_emails++;
-                        $messages[$this->storage->getUniqueId($this->storage->key())] = $this->storage->current();
-                    } catch (\Exception $e) {
+                        $message = $this->storage->current();
+                        $message_id = $this->storage->getUniqueId($this->storage->key());
+
+                        // prevent loop when message is read but when it's impossible to move / delete
+                        // due to mailbox problem (ie: full)
+                        if ($this->fields['collect_only_unread'] && $message->hasFlag(Storage::FLAG_SEEN)) {
+                            $alreadyseen++;
+                            $maxfetch_emails++; // allow fetching one more email, as this one will not be processed
+                            continue;
+                        }
+
+                        $messages[$message_id] = $message;
+                    } catch (\Throwable $e) {
                         $GLPI->getErrorHandler()->handleException($e);
                         Toolbox::logInFile(
                             'mailgate',
@@ -739,9 +774,10 @@ class MailCollector extends CommonDBTM
                                 GLPI_LOG_DIR . '/php-errors.log'
                             )
                         );
-                        ++$error;
+                        $error++;
+                        $maxfetch_emails++; // allow fetching one more email, as this one will not be processed
                     }
-                } while ($this->fetch_emails < $this->maxfetch_emails);
+                } while ($this->fetch_emails < $maxfetch_emails);
 
                 foreach ($messages as $uid => $message) {
                     $rejinput = [
@@ -751,13 +787,6 @@ class MailCollector extends CommonDBTM
                         'messageid'         => '',
                         'date'              => $_SESSION["glpi_currenttime"],
                     ];
-
-                  //prevent loop when message is read but when it's impossible to move / delete
-                  //due to mailbox problem (ie: full)
-                    if ($this->fields['collect_only_unread'] && $message->hasFlag(Storage::FLAG_SEEN)) {
-                        ++$alreadyseen;
-                        continue;
-                    }
 
                     try {
                         $tkt = $this->buildTicket(
@@ -1364,7 +1393,7 @@ class MailCollector extends CommonDBTM
         }
 
         if (!empty($config['mailbox'])) {
-            $params['folder'] = $config['mailbox'];
+            $params['folder'] = mb_convert_encoding($config['mailbox'], 'UTF7-IMAP', 'UTF-8');
         }
 
         if ($config['validate-cert'] === false) {
@@ -1383,7 +1412,7 @@ class MailCollector extends CommonDBTM
                     'errors' => 0
                 ]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->update([
                 'id'     => $this->getID(),
                 'errors' => ($this->fields['errors'] + 1)
@@ -1579,8 +1608,7 @@ class MailCollector extends CommonDBTM
 
            // Try to get filename from Content-Disposition header
             if (
-                empty($filename)
-                && $part->getHeaders()->has('content-disposition')
+                $part->getHeaders()->has('content-disposition')
                 && ($content_disp_header = $part->getHeader('content-disposition')) instanceof ContentDisposition
             ) {
                 $filename = $content_disp_header->getParameter('filename') ?? '';
@@ -1621,11 +1649,6 @@ class MailCollector extends CommonDBTM
                 } else {
                     $filename = "msg_$subpart.EML"; // default trivial one :)!
                 }
-            }
-
-           // if no filename found, ignore this part
-            if (empty($filename)) {
-                return false;
             }
 
             $filename = Toolbox::filename($filename);
@@ -1819,7 +1842,7 @@ class MailCollector extends CommonDBTM
             try {
                 $this->storage->moveMessage($this->storage->getNumberByUniqueId($uid), $name);
                 return true;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                // raise an error and fallback to delete
                 trigger_error(
                     sprintf(
@@ -1892,7 +1915,7 @@ class MailCollector extends CommonDBTM
             case 'mailgate':
                 return [
                     'description' => __('Retrieve email (Mails receivers)'),
-                    'parameter'   => __('Number of emails to retrieve')
+                    'parameter'   => __('Number of emails to process')
                 ];
 
             case 'mailgateerror':
@@ -1967,6 +1990,10 @@ class MailCollector extends CommonDBTM
 
             case MAIL_SMTPTLS:
                 $msg .= 'SMTP+TLS';
+                break;
+
+            case MAIL_SMTPOAUTH:
+                $msg .= 'SMTP+OAUTH';
                 break;
         }
         if ($CFG_GLPI['smtp_mode'] != MAIL_MAIL) {
@@ -2095,16 +2122,15 @@ class MailCollector extends CommonDBTM
             return null;
         }
 
-        $pattern = $this->getMessageIdExtractPattern();
-
         foreach (['in_reply_to', 'references'] as $header_name) {
-            $matches = [];
-            if (
-                $message->getHeaders()->has($header_name)
-                && preg_match($pattern, $message->getHeader($header_name)->getFieldValue(), $matches)
-            ) {
-                $itemtype = $matches['itemtype'] ?? '';
-                $items_id = $matches['items_id'] ?? '';
+            if (!$message->getHeaders()->has($header_name)) {
+                continue;
+            }
+
+            $matches = $this->extractValuesFromRefHeader($message->getHeader($header_name)->getFieldValue());
+            if ($matches !== null) {
+                $itemtype = $matches['itemtype'];
+                $items_id = $matches['items_id'];
 
                // Handle old format MessageId where itemtype was not in header
                 if (empty($itemtype) && !empty($items_id)) {
@@ -2137,21 +2163,19 @@ class MailCollector extends CommonDBTM
      */
     public function isMessageSentByGlpi(Message $message): bool
     {
-        $pattern = $this->getMessageIdExtractPattern();
-
         if (!$message->getHeaders()->has('message-id')) {
            // Messages sent by GLPI now have always a message-id header.
             return false;
         }
 
         $message_id = $message->getHeader('message_id')->getFieldValue();
-        $matches = [];
-        if (!preg_match($pattern, $message_id, $matches)) {
+        $matches = $this->extractValuesFromRefHeader($message_id);
+        if ($matches === null) {
            // message-id header does not match GLPI format.
             return false;
         }
 
-        $uuid = $matches['uuid'] ?? '';
+        $uuid = $matches['uuid'];
         if (empty($uuid)) {
            // message-id corresponds to old format, without uuid.
            // We assume that in most environments this message have been sent by this instance of GLPI,
@@ -2175,16 +2199,14 @@ class MailCollector extends CommonDBTM
      */
     public function isResponseToMessageSentByAnotherGlpi(Message $message): bool
     {
-        $pattern = $this->getMessageIdExtractPattern();
-
         $has_uuid_from_another_glpi = false;
         $has_uuid_from_current_glpi = false;
         foreach (['in-reply-to', 'references'] as $header_name) {
-            $matches = [];
-            if (
-                $message->getHeaders()->has($header_name)
-                && preg_match($pattern, $message->getHeader($header_name)->getFieldValue(), $matches)
-            ) {
+            if (!$message->getHeaders()->has($header_name)) {
+                continue;
+            }
+            $matches = $this->extractValuesFromRefHeader($message->getHeader($header_name)->getFieldValue());
+            if ($matches !== null) {
                 if (empty($matches['uuid'])) {
                     continue;
                 }
@@ -2203,28 +2225,75 @@ class MailCollector extends CommonDBTM
     }
 
     /**
-     * Get pattern that can be used to extract information from a GLPI MessageId (uuid, itemtype and items_id).
+     * Extract information from a `Message-Id` or `Reference` header.
+     * Headers mays contains `uuid`, `itemtype`, `items_id` and `event` values.
      *
-     * @see NotificationTarget::getMessageID()
+     * @see NotificationTarget::getMessageIdForEvent()
      *
      * @return string
      */
-    private function getMessageIdExtractPattern(): string
+    private function extractValuesFromRefHeader(string $header): ?array
     {
-       // old format for tickets:           GLPI-{$items_id}.{$time}.{$rand}@{$uname}
-       // old format without related item:  GLPI.{$time}.{$rand}@{$uname}
-       // old format with related item:     GLPI-{$itemtype}-{$items_id}.{$time}.{$rand}@{$uname}
-       // new format without related item:  GLPI_{$uuid}.{$time}.{$rand}@{$uname}
-       // new format with related item:     GLPI_{$uuid}-{$itemtype}-{$items_id}.{$time}.{$rand}@{$uname}
+        $defaults = [
+            'uuid'      => null,
+            'itemtype'  => null,
+            'items_id'  => null,
+            'event'     => null,
+        ];
 
-        return '/GLPI'
-         . '(_(?<uuid>[a-z0-9]+))?' // uuid was not be present in old format
-         . '(-(?<itemtype>[a-z]+))?' // itemtype is not present if notification is not related to any object and was not present in old format
-         . '(-(?<items_id>[0-9]+))?' // items_id is not present if notification is not related to any object
-         . '\.[0-9]+' // time()
-         . '\.[0-9]+' // rand()
-         . '@\w*' // uname
-         . '/i'; // insensitive
+        $values = [];
+
+        // Message-Id generated in GLPI >= 10.0.7
+        // - without related item:                  GLPI_{$uuid}/{$event}.{$time}.{$rand}@{$uname}
+        // - with related item (reference event):   GLPI_{$uuid}-{$itemtype}-{$items_id}/{$event}@{$uname}
+        // - with related item (other events):      GLPI_{$uuid}-{$itemtype}-{$items_id}/{$event}.{$time}.{$rand}@{$uname}
+        $pattern = '/'
+            . 'GLPI'
+            . '_(?<uuid>[a-z0-9]+)' // uuid
+            . '(-(?<itemtype>[a-z]+)-(?<items_id>[0-9]+))?' // optional itemtype + items_id (only when related to an item)
+            . '\/(?<event>[a-z_]+)' // event
+            . '(\.[0-9]+\.[0-9]+)?' // optional time + rand (only when NOT related to an item OR when event is not the reference one)
+            . '@.+'     // uname
+            . '/i';
+        if (preg_match($pattern, $header, $values) === 1) {
+            $values += $defaults;
+            return $values;
+        }
+
+        // Message-Id generated by GLPI >= 10.0.0 < 10.0.7
+        // - without related item:  GLPI_{$uuid}.{$time}.{$rand}@{$uname}
+        // - with related item:     GLPI_{$uuid}-{$itemtype}-{$items_id}.{$time}.{$rand}@{$uname}
+        $pattern = '/'
+            . 'GLPI'
+            . '_(?<uuid>[a-z0-9]+)' // uuid
+            . '(-(?<itemtype>[a-z]+)-(?<items_id>[0-9]+))?' // optionnal itemtype + items_id
+            . '\.[0-9]+' // time()
+            . '\.[0-9]+' // rand()
+            . '@.+'     // uname
+            . '/i';
+        if (preg_match($pattern, $header, $values) === 1) {
+            $values += $defaults;
+            return $values;
+        }
+
+        // Message-Id generated by GLPI < 10.0.0
+        // - for tickets:           GLPI-{$items_id}.{$time}.{$rand}@{$uname}
+        // - without related item:  GLPI.{$time}.{$rand}@{$uname}
+        // - with related item:     GLPI-{$itemtype}-{$items_id}.{$time}.{$rand}@{$uname}
+        $pattern = '/'
+            . 'GLPI'
+            . '(-(?<itemtype>[a-z]+))?' // optionnal itemtype
+            . '(-(?<items_id>[0-9]+))?' // optionnal items_id
+            . '\.[0-9]+' // time()
+            . '\.[0-9]+' // rand()
+            . '@.+' // uname
+            . '/i';
+        if (preg_match($pattern, $header, $values) === 1) {
+            $values += $defaults;
+            return $values;
+        }
+
+        return null;
     }
 
     /**

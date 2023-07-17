@@ -42,57 +42,10 @@
 
 <div class="mx-n2 mb-n2 itil-footer itil-footer p-0 border-top" id="itil-footer">
    <div class="buttons-bar d-flex py-2">
-      <div class="{{ timeline_btns_cls }} ps-3 timeline-buttons">
-         {% if not item.isNewItem() %}
-            {% set default_action_data = timeline_itemtypes|first %}
-            {% if item.isNotSolved() and default_action_data != false %}
-               {% if timeline_itemtypes|length > 1 %}
-                  <div class="btn-group me-2 main-actions" style="{{ load_kb_sol > 0 ? 'display:none;' : '' }}">
-               {% else %}
-                  {# Don't use d-inline-flex class as it add an '!important' tag that mess with our javascript that will hide this div #}
-                  <div class="main-actions" style="display:inline-flex">
-               {% endif %}
-                  <button class="btn btn-primary answer-action" data-bs-toggle="collapse" data-bs-target="#new-{{ default_action_data.class }}-block">
-                     <i class="{{ default_action_data.icon }}"></i>
-                     <span>{{ default_action_data.label }}</span>
-                  </button>
-
-                  {% set main_actions_itemtypes = timeline_itemtypes|filter((v, k) => v.hide_in_menu is not defined or v.hide_in_menu != true) %}
-                  {% if main_actions_itemtypes|length > 1 %}
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">{{ __('View other actions') }}</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        {% for action, timeline_itemtype in main_actions_itemtypes %}
-                            {% if loop.index0 > 0 %}
-                            <li><a class="dropdown-item action-{{ action }} answer-action" href="#"
-                                data-bs-toggle="collapse" data-bs-target="#new-{{ timeline_itemtype.class }}-block">
-                                <i class="{{ timeline_itemtype.icon }}"></i>
-                                <span>{{ timeline_itemtype.label }}</span>
-                            </a></li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                  {% endif %}
-               </div>
-            {% endif %}
-
-            <ul class="legacy-timeline-actions">
-               {{ legacy_timeline_actions|default('')|raw }}
-            </ul>
-            {{ include('components/itilobject/timeline/filter_timeline.html.twig') }}
-         {% endif %}
-     </div>
-
-      <div class="form-buttons {{ form_btns_cls }} d-flex justify-content-end ms-auto ms-md-0 my-n2 py-2 pe-3 card-footer border-top-0 position-relative">
+   <div class="form-buttons {{ form_btns_cls }} d-flex ms-auto ms-md-0 my-n2 py-2 pe-3 card-footer border-top-0 position-relative">
          <span class="d-none d-md-block position-absolute top-0 start-0"
                data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('Toggle panels width') }}">
-            <button type="button" class="switch-panel-width btn btn-sm btn-square btn-icon btn-ghost-secondary px-0">
-               <i class="fas {{ switch_btn_cls }}"></i>
-            </button>
-            <button type="button" class="collapse-panel btn btn-sm btn-square btn-icon btn-ghost-secondary px-0 mr-1">
-               <i class="fas fa-caret-right"></i>
-            </button>
+           
          </span>
 
          {% if item.isNewItem() %}
@@ -146,6 +99,49 @@
 
          {% endif %}
       </div>
+      <div class="{{ timeline_btns_cls }} ps-3 timeline-buttons">
+         {% if not item.isNewItem() %}
+            {% set default_action_data = timeline_itemtypes|first %}
+            {% if item.isNotSolved() and default_action_data != false %}
+               {% if timeline_itemtypes|length > 1 %}
+                  <div class="btn-group me-2 main-actions" style="{{ load_kb_sol > 0 ? 'display:none;' : '' }}">
+               {% else %}
+                  {# Don't use d-inline-flex class as it add an '!important' tag that mess with our javascript that will hide this div #}
+                  <div class="main-actions" style="display:inline-flex">
+               {% endif %}
+                  <button class="btn btn-primary answer-action" data-bs-toggle="collapse" data-bs-target="#new-{{ default_action_data.class }}-block">
+                     <i class="{{ default_action_data.icon }}"></i>
+                     <span>{{ default_action_data.label }}</span>
+                  </button>
+
+                  {% set main_actions_itemtypes = timeline_itemtypes|filter((v, k) => v.hide_in_menu is not defined or v.hide_in_menu != true) %}
+                  {% if main_actions_itemtypes|length > 1 %}
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">{{ __('View other actions') }}</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for action, timeline_itemtype in main_actions_itemtypes %}
+                            {% if loop.index0 > 0 %}
+                            <li><a class="dropdown-item action-{{ action }} answer-action" href="#"
+                                data-bs-toggle="collapse" data-bs-target="#new-{{ timeline_itemtype.class }}-block">
+                                <i class="{{ timeline_itemtype.icon }}"></i>
+                                <span>{{ timeline_itemtype.label }}</span>
+                            </a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                  {% endif %}
+               </div>
+            {% endif %}
+
+            <ul class="legacy-timeline-actions">
+               {{ legacy_timeline_actions|default('')|raw }}
+            </ul>
+            {{ include('components/itilobject/timeline/filter_timeline.html.twig') }}
+         {% endif %}
+     </div>
+
+      
    </div>
 </div>
 

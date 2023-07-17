@@ -1302,6 +1302,7 @@ abstract class NotificationTargetCommonITILObject extends NotificationTarget
 
         $data["##$objettype.solution.type##"] = '';
         $data["##$objettype.solution.description##"] = '';
+        $data["##$objettype.solution.author##"] = '';
 
         $itilsolution = new ITILSolution();
         $solution = $itilsolution->getFromDBByRequest([
@@ -1322,6 +1323,7 @@ abstract class NotificationTargetCommonITILObject extends NotificationTarget
                 );
             }
 
+            $data["##$objettype.solution.author##"] = getUserName($itilsolution->getField('users_id'));
             $data["##$objettype.solution.description##"] = $itilsolution->getField('content');
         }
 
@@ -1596,7 +1598,7 @@ abstract class NotificationTargetCommonITILObject extends NotificationTarget
 
                 $tmptimelineitem['##timelineitems.type##']        = $timeline_data['type']::getType();
                 $tmptimelineitem['##timelineitems.typename##']    = $tmptimelineitem['##timelineitems.type##']::getTypeName(0);
-                $tmptimelineitem['##timelineitems.date##']        = $timeline_data['item']['date'];
+                $tmptimelineitem['##timelineitems.date##']        = Html::convDateTime($timeline_data['item']['date']);
                 $tmptimelineitem['##timelineitems.description##'] = $timeline_data['item']['content'];
                 $tmptimelineitem['##timelineitems.position##']    = $this->getUserPositionFromTimelineItemPosition($timeline_data['item']['timeline_position']);
 
@@ -1796,6 +1798,7 @@ abstract class NotificationTargetCommonITILObject extends NotificationTarget
             $objettype . '.assigntogroups'        => __('Assigned to groups'),
             $objettype . '.solution.type'         => SolutionType::getTypeName(1),
             $objettype . '.solution.description'  => ITILSolution::getTypeName(1),
+            $objettype . '.solution.author'       => __('Writer'),
             $objettype . '.observerusers'         => _n('Watcher', 'Watchers', Session::getPluralNumber()),
             $objettype . '.action'                => _n('Event', 'Events', 1),
             'followup.date'                     => __('Opening date'),

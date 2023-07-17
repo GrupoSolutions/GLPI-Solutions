@@ -1034,7 +1034,7 @@ PluginFormcreatorTranslatableInterface
       global $TRANSLATE;
 
       // Print css media
-      $css = '/' . Plugin::getWebDir('formcreator', false) . '/css/print_form.css';
+      $css = '/marketplace/css/print_form.css';
       echo Html::css($css, ['media' => 'print']);
 
       $formId = $this->getID();

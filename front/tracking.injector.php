@@ -54,8 +54,6 @@ if (isset($_POST["_type"]) && ($_POST["_type"] == "Helpdesk")) {
     Html::nullHeader(Ticket::getTypeName(Session::getPluralNumber()));
 } else if ($_POST["_from_helpdesk"]) {
     Html::helpHeader(__('Simplified interface'));
-} else {
-    Html::header(__('Simplified interface'), '', $_SESSION["glpiname"], "helpdesk", "tracking");
 }
 
 if (isset($_POST['_actors']) && is_string($_POST['_actors'])) {
