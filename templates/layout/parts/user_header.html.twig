@@ -50,10 +50,14 @@
                {% if not anonymous %}
                   <div class="pe-2 d-none d-xl-block">
                      <div>{{ (session('glpiactiveprofile')['name'] ?? '')|verbatim_value|u.truncate(35, '...') }}</div>
-                     {% set entity_completename = session('glpiactive_entity_name')|verbatim_value %}
-                     <div class="mt-1 small text-muted" title="{{ entity_completename }}"
+                     {% set entity_completename = session('glpiactive_entity_name') %}
+                     <div class="mt-1 small text-muted "  title="{{ entity_completename }}"
                           data-bs-toggle="tooltip" data-bs-placement="bottom">
+<<<<<<< HEAD
                         {{ entity_completename }}
+=======
+                        {{ entity_completename}}
+>>>>>>> 4da57d3b525f7854ad330f81531da1f6e7167122
                      </div>
                   </div>
 

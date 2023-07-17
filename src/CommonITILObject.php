@@ -2886,21 +2886,13 @@ abstract class CommonITILObject extends CommonDBTM
         }
 
         if (isset($CFG_GLPI[static::URGENCY_MASK_FIELD])) {
+           
             if (
                 ($p['showtype'] == 'search')
-                || ($CFG_GLPI[static::URGENCY_MASK_FIELD] & (1 << 5))
+                || ($CFG_GLPI[static::URGENCY_MASK_FIELD] & (1 << 3))
             ) {
-                $values[5]  = static::getUrgencyName(5);
+                $values[3]  = static::getUrgencyName(3);
             }
-
-            if (
-                ($p['showtype'] == 'search')
-                || ($CFG_GLPI[static::URGENCY_MASK_FIELD] & (1 << 4))
-            ) {
-                $values[4]  = static::getUrgencyName(4);
-            }
-
-            $values[3]  = static::getUrgencyName(3);
 
             if (
                 ($p['showtype'] == 'search')
@@ -2930,20 +2922,15 @@ abstract class CommonITILObject extends CommonDBTM
     {
 
         switch ($value) {
-            case 5:
-                return _x('urgency', 'Very high');
-
-            case 4:
-                return _x('urgency', 'High');
+            
 
             case 3:
-                return _x('urgency', 'Medium');
+                return _x('urgency', 'Media');
 
             case 2:
-                return _x('urgency', 'Low');
-
+                return _x('urgency', 'Baixa');
             case 1:
-                return _x('urgency', 'Very low');
+                return _x('urgency', 'Alta');
 
            // No standard one :
             case 0:

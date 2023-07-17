@@ -28,7 +28,7 @@
  * -------------------------------------------------------------------------
  */
 
-define('PLUGIN_GANTT_VERSION', '1.0.0');
+define('PLUGIN_GANTT_VERSION', '1.0.1');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_GANTT_MIN_GLPI_VERSION", "10.0.1");
@@ -49,11 +49,7 @@ function plugin_init_gantt()
 
     $PLUGIN_HOOKS['csrf_compliant']['gantt'] = true;
 
-    $plugin = new Plugin();
-    if (
-        !$plugin->isInstalled('gantt')
-        || !$plugin->isActivated('gantt')
-    ) {
+    if (!Plugin::isPluginActive('gantt')) {
         return false;
     }
 

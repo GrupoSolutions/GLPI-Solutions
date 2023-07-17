@@ -6789,7 +6789,7 @@ msgstr "Criar uma tarefa"
 
 #: src/Html.php:1636 src/Profile.php:2806 src/Ticket.php:5181
 msgid "Create a ticket"
-msgstr "Cria um chamado"
+msgstr "Criar um chamado"
 
 #: src/ProjectTask_Ticket.php:195
 msgid "Create a ticket from this task"

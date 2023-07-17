@@ -30,7 +30,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define ('PLUGIN_ESCALADE_VERSION', '2.8.0');
+define ('PLUGIN_ESCALADE_VERSION', '2.8.1');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_ESCALADE_MIN_GLPI", "10.0.0");
@@ -48,10 +48,7 @@ function plugin_init_escalade() {
 
    $PLUGIN_HOOKS['csrf_compliant']['escalade'] = true;
 
-   $plugin = new Plugin();
-   if ((isset($_SESSION['glpiID']) || isCommandLine())
-      && $plugin->isInstalled('escalade')
-      && $plugin->isActivated('escalade')) {
+   if ((isset($_SESSION['glpiID']) || isCommandLine()) && Plugin::isPluginActive('escalade')) {
 
       //load config in session
       if ($DB->tableExists("glpi_plugin_escalade_configs")) {

@@ -20014,6 +20014,9 @@ Form control
 .form-control[size] {
   width: auto;
 }
+.usu{
+  width:200px;
+}
 .form-control[type="number"]::-webkit-inner-spin-button {
   opacity: 1;
   cursor: pointer;

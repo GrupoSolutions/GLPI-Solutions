@@ -71,44 +71,6 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
         }
         return parent::getSubjectPrefix();
     }
-
-    /**
-     * Get header to add to content
-     **/
-    public function getContentHeader()
-    {
-
-        if (
-            $this->getMode() == \Notification_NotificationTemplate::MODE_MAIL
-            && MailCollector::countActiveCollectors()
-            && $this->allowResponse()
-        ) {
-            return self::HEADERTAG . ' ' . __('To answer by email, write above this line') . ' ' .
-                self::HEADERTAG;
-        }
-
-        return '';
-    }
-
-
-    /**
-     * Get footer to add to content
-     **/
-    public function getContentFooter()
-    {
-
-        if (
-            $this->getMode() == \Notification_NotificationTemplate::MODE_MAIL
-            && MailCollector::countActiveCollectors()
-            && $this->allowResponse()
-        ) {
-            return self::FOOTERTAG . ' ' . __('To answer by email, write under this line') . ' ' .
-                self::FOOTERTAG;
-        }
-
-        return '';
-    }
-
     public function getObjectItem($event = '')
     {
 

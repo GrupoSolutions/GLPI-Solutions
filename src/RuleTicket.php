@@ -337,7 +337,6 @@ class RuleTicket extends Rule
                         $urgency = (isset($output['urgency']) ? $output['urgency'] : 3);
                         $impact  = (isset($output['impact']) ? $output['impact'] : 3);
                         // Apply priority_matrix from config
-                        $output['priority'] = Ticket::computePriority($urgency, $impact);
                         break;
 
                     case 'do_not_compute':
@@ -633,8 +632,6 @@ class RuleTicket extends Rule
         $criterias['impact']['name']                          = __('Impact');
         $criterias['impact']['type']                          = 'dropdown_impact';
 
-        $criterias['priority']['name']                        = __('Priority');
-        $criterias['priority']['type']                        = 'dropdown_priority';
 
         $criterias['status']['name']                          = __('Status');
         $criterias['status']['type']                          = 'dropdown_status';
@@ -813,9 +810,7 @@ class RuleTicket extends Rule
         $actions['impact']['name']                            = __('Impact');
         $actions['impact']['type']                            = 'dropdown_impact';
 
-        $actions['priority']['name']                          = __('Priority');
-        $actions['priority']['type']                          = 'dropdown_priority';
-        $actions['priority']['force_actions']                 = ['assign', 'compute'];
+     
 
         $actions['status']['name']                            = __('Status');
         $actions['status']['type']                            = 'dropdown_status';
