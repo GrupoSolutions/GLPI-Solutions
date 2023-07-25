@@ -538,16 +538,16 @@ class Consumable extends CommonDBChild
         if ($ID > 0) {
             ?>
                 <div class="boxMovimentacao " align="center">
-                    <div class="boxP"> 
-                        <p>Alteração de Localidade:</p>
-                    </div>
+                   
 
                    
                     <div class="container">
-                        <input type="checkbox" onchange="showDiv()" class="checkbox" id="checkbox">
-                        <label class="switch" for="checkbox">
-                            <span class="slider"></span>
-                        </label>
+                        <div class="boxP"> 
+                            <p>Alteração de Localidade:</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" onchange="showDiv()" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        </div>
                     </div>
                 </div>
 

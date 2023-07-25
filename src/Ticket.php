@@ -3680,9 +3680,6 @@ JAVASCRIPT;
     {
 
         switch ($value) {
-            case self::INCIDENT_TYPE:
-                return __('Incident');
-
             case self::DEMAND_TYPE:
                 return __('Request');
 
@@ -3706,10 +3703,9 @@ JAVASCRIPT;
        // To be overridden by class
         $tab = [self::INCOMING => _x('status', 'New'),
             self::ASSIGNED => _x('status', 'Processing (assigned)'),
-            self::PLANNED  => _x('status', 'Processing (planned)'),
-            self::WAITING  => __('Pending'),
+            self::WAITING  => __('Aguardando terceiros'),
             self::SOLVED   => _x('status', 'Solved'),
-            self::CLOSED   => _x('status', 'Closed')
+            self::CLOSED   => _x('status', 'Closed'),
         ];
 
         if ($withmetaforsearch) {
@@ -4317,7 +4313,9 @@ JAVASCRIPT;
         if ($options['_canupdate']) {
             $item_ticket = new Item_Ticket();
         }
-
+        if($ID > 0){
+            require('slat.php');
+        }
         TemplateRenderer::getInstance()->display('components/itilobject/layout.html.twig', [
             'item'               => $this,
             'timeline_itemtypes' => $this->getTimelineItemtypes(),
@@ -5851,7 +5849,7 @@ JAVASCRIPT;
                         self::INCOMING,
                         self::ASSIGNED,
                         self::PLANNED,
-                        self::WAITING
+                        self::WAITING,
                     ],
                     'closedate'    => null,
                     new QueryExpression("ADDDATE(" . $DB->quoteName('date') . ", INTERVAL $value DAY) < NOW()")

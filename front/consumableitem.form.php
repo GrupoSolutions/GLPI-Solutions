@@ -64,7 +64,6 @@ if (isset($_POST["add"])) {
     Html::back();
 } else if (isset($_POST["delete"])) {
     
-var_dump($_POST);
     $constype->check($_POST["id"], DELETE);
 
     if ($constype->delete($_POST)) {
@@ -79,8 +78,6 @@ var_dump($_POST);
     }
     $constype->redirectToList();
 } else if (isset($_POST["restore"])) {
-    
-var_dump($_POST);
     $constype->check($_POST["id"], DELETE);
 
     if ($constype->restore($_POST)) {
@@ -109,8 +106,6 @@ var_dump($_POST);
     }
     $constype->redirectToList();
 } else if (isset($_POST["update"])) {
-    
-var_dump($_POST);
     $constype->check($_POST["id"], UPDATE);
 
     if ($constype->update($_POST)) {
@@ -123,7 +118,7 @@ var_dump($_POST);
             sprintf(__('%s updates an item'), $_SESSION["glpiname"])
         );
     }
-    //Html::back();
+    Html::back();
 } else {
     $menus = ["assets", "consumableitem"];
     ConsumableItem::displayFullPageForItem($_GET["id"], $menus, [
