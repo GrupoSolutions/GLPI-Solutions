@@ -1034,7 +1034,7 @@ PluginFormcreatorTranslatableInterface
       global $TRANSLATE;
 
       // Print css media
-      $css = '/marketplace/css/print_form.css';
+      $css = '/' . Plugin::getWebDir('formcreator', false) . '/css/print_form.css';
       echo Html::css($css, ['media' => 'print']);
 
       $formId = $this->getID();
@@ -1043,10 +1043,11 @@ PluginFormcreatorTranslatableInterface
       if (file_exists($phpfile)) {
          $TRANSLATE->addTranslationFile('phparray', $phpfile, $domain, $_SESSION['glpilanguage']);
       }
-
+      $idSolicitante = $_SESSION['glpiID'];
       $formanswer = new PluginFormcreatorFormAnswer();
       TemplateRenderer::getInstance()->display('@formcreator/pages/userform.html.twig', [
          'item'    => $this,
+         'idSolicitante'  => $idSolicitante,
          'options' => [
             'columns' => PluginFormcreatorSection::COLUMNS,
             'domain'  => $domain, // For translation

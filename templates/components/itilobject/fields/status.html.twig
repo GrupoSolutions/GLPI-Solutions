@@ -32,11 +32,10 @@
  #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
-
 {% if canupdate %}
    {% set status_field %}
       {{ item.dropdownStatus({
-         'value': item.input['status']|default("SIM"),
+         'value': status,
          'value_calculation': item.fields['status'],
          'showtype': 'allowed',
          'width': '100%',
@@ -53,6 +52,7 @@
    {% set status_field %}
       {{ item.getStatusIcon(item.fields['status'])|raw }}
       {{ item.getStatus(item.fields['status']) }}
+      
 
       {% if item.canReopen() %}
          <a href="{{ item.getLinkURL() }}&amp;_openfollowup=1"

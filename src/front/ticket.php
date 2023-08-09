@@ -36,11 +36,14 @@
 include('../inc/includes.php');
 
 Session::checkLoginUser();
-
 if (Session::getCurrentInterface() == "helpdesk") {
     Html::helpHeader(Ticket::getTypeName(Session::getPluralNumber()), 'tickets', 'ticket');
+    require('../assets/php/tickets/ticket.form.php');
+
 } else {
     Html::header(Ticket::getTypeName(Session::getPluralNumber()), '', "helpdesk", "ticket");
+    require('../assets/php/tickets/ticket.form.php');
+
 }
 
 require('../assets/php/tickets/ticket.form.php');

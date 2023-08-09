@@ -516,61 +516,6 @@ class Log extends CommonDBTM
                         $tmp['change'] = $data["new_value"];
                         break;
 
-                    case self::HISTORY_ADD_RELATION:
-                        $tmp['field'] = NOT_AVAILABLE;
-                        if ($item2 = getItemForItemtype($data["itemtype_link"])) {
-                            $tmp['field'] = $item2->getTypeName(1);
-                        }
-                        $tmp['change'] = sprintf(__('%1$s: %2$s'), $action_label, $data["new_value"]);
-
-                        if ($data['itemtype'] == 'Ticket') {
-                            if ($data['id_search_option']) { // Recent record - see CommonITILObject::getSearchOptionsActors()
-                                $as = $SEARCHOPTION[$data['id_search_option']]['name'];
-                            } else { // Old record
-                                $is = $isr = $isa = $iso = false;
-                                switch ($data['itemtype_link']) {
-                                    case 'Group':
-                                        $is = 'isGroup';
-                                        break;
-
-                                    case 'User':
-                                        $is = 'isUser';
-                                        break;
-
-                                    case 'Supplier':
-                                        $is = 'isSupplier';
-                                        break;
-                                }
-                                if ($is) {
-                                    $iditem = intval(substr($data['new_value'], strrpos($data['new_value'], '(') + 1)); // This is terrible idea
-                                    $isr = $item->$is(CommonITILActor::REQUESTER, $iditem);
-                                    $isa = $item->$is(CommonITILActor::ASSIGN, $iditem);
-                                    $iso = $item->$is(CommonITILActor::OBSERVER, $iditem);
-                                }
-                            // Simple Heuristic, of course not enough
-                                if ($isr && !$isa && !$iso) {
-                                    $as = _n('Requester', 'Requesters', 1);
-                                } else if (!$isr && $isa && !$iso) {
-                                    $as = __('Assigned to');
-                                } else if (!$isr && !$isa && $iso) {
-                                    $as = _n('Watcher', 'Watchers', 1);
-                                } else {
-                      // Deleted or Ambiguous
-                                    $as = false;
-                                }
-                            }
-                            if ($as) {
-                                $tmp['change'] = sprintf(
-                                    __('%1$s: %2$s'),
-                                    $action_label,
-                                    sprintf(__('%1$s (%2$s)'), $data["new_value"], $as)
-                                );
-                            } else {
-                                $tmp['change'] = sprintf(__('%1$s: %2$s'), $action_label, $data["new_value"]);
-                            }
-                        }
-                        break;
-
                     case self::HISTORY_UPDATE_RELATION:
                         $tmp['field']   = NOT_AVAILABLE;
                         if ($linktype_field = explode('#', $data["itemtype_link"])) {

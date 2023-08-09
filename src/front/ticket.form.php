@@ -34,7 +34,6 @@
  */
 
 use Glpi\Event;
-
 include('../inc/includes.php');
 
 Session::checkLoginUser();
@@ -49,7 +48,6 @@ $date_fields = [
     'due_date',
     'time_to_own'
 ];
-
 foreach ($date_fields as $date_field) {
    //handle not clean dates...
     if (
@@ -76,11 +74,13 @@ if (isset($_POST["add"])) {
             Html::redirect($track->getLinkURL());
         }
     }
+    
     Html::back();
 } else if (isset($_POST['update'])) {
     if (!$track::canUpdate()) {
         Html::displayRightError();
     }
+    print_r($_POST);
     $track->update($_POST);
 
     if (isset($_POST['kb_linked_id'])) {
@@ -122,7 +122,7 @@ if (isset($_POST["add"])) {
         true,
         ERROR
     );
-    Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.php");
+    //Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.php");
 } else if (isset($_POST['delete'])) {
     $track->check($_POST['id'], DELETE);
     if ($track->delete($_POST)) {

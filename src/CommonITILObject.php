@@ -4485,6 +4485,7 @@ abstract class CommonITILObject extends CommonDBTM
      */
     public static function getStatusClass($status)
     {
+        echo "<script src='../assets/css/fa6.js' crossorigin='anonymous'></script>";
         $class = null;
         $solid = true;
 
@@ -4493,22 +4494,22 @@ abstract class CommonITILObject extends CommonDBTM
                 $class = 'circle';
                 break;
             case self::ASSIGNED:
-                $class = 'circle';
+                $class = ' fa-regular fa-spinner fa-spin';
                 $solid = false;
                 break;
             case self::PLANNED:
-                $class = 'calendar';
+                $class = ' fa-light fa-hourglass-half';
                 $solid = false;
                 break;
             case self::WAITING:
-                $class = 'circle';
+                $class = ' fa-light fa-hourglass-half';
                 break;
             case self::SOLVED:
                 $class = 'circle';
                 $solid = false;
                 break;
             case self::CLOSED:
-                $class = 'circle';
+                $class = 'fa-times-circle';
                 break;
             case self::ACCEPTED:
                 $class = 'check-circle';

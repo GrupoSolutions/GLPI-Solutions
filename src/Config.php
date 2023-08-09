@@ -770,7 +770,6 @@ class Config extends CommonDBTM
 
         echo "<tr class='tab_bg_2'><td colspan='4' class='center'>";
         echo "<input type='submit' name='update' class='btn btn-primary' value=\"" . _sx('button', 'Save') . "\">";
-        echo "<br><br><br>";
         echo "</td></tr>";
 
         echo "</table>";

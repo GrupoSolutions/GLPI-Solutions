@@ -40,7 +40,10 @@ Session::checkLoginUser();
 if (Session::getCurrentInterface() == "helpdesk") {
     Html::helpHeader(Ticket::getTypeName(Session::getPluralNumber()), 'tickets', 'ticket');
 } else {
+
     Html::header(Ticket::getTypeName(Session::getPluralNumber()), '', "helpdesk", "ticket");
+    
+
 }
 
 $refresh_callback = <<<JS
@@ -51,14 +54,15 @@ if (container.length > 0 && container.data('js_class') !== undefined) {
     // Fallback when fluid search isn't initialized
     window.location.reload();
 }
-JS;
 
-echo Html::manageRefreshPage(false, $refresh_callback);
+JS;
 
 Search::show('Ticket');
 
 if (Session::getCurrentInterface() == "helpdesk") {
     Html::helpFooter();
 } else {
+
     Html::footer();
 }
+

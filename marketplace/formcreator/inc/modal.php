@@ -171,7 +171,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
       
       <br><br>
       <?php 
-      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306');
+      $sqlcon = mysqli_connect('localhost', 'glpi', '16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@', 'glpi', '3306');
       $GLOBALS['sqlcon'] = $sqlcon;
 
       $buscaIDRequerente = "SELECT requester_id as REQUERENTE FROM glpi_plugin_formcreator_formanswers WHERE id = '{$ID}'";

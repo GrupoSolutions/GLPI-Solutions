@@ -722,7 +722,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
          echo "<input type='hidden' id='validatorID' name='validatorID' value='{$validatorID}'>";
          //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]))
-         echo "<input type='button' id='myBtn' value='Enviar'>";
+         echo "<input type='button' id='myBtn' value='Enviar'";
          require_once("modal.php");
       }
 
@@ -739,6 +739,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]);
 
       echo '</div>';
+      echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+
       echo '<script type="text/javascript">
                function plugin_formcreator_checkComment(field) {
                   if ($("textarea[name=comment]").val() == "") {
@@ -746,14 +748,54 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      return false;
                   }
                }
-               var modal = document.getElementById("myModal");
+               var formId = document.getElementById("formID").value;
+               var validatorID = document.getElementById("validatorID").value;
                var btn = document.getElementById("myBtn");
-               var span = document.getElementsByClassName("close")[0];
+               const formu = document.getElementById("plugin_formcreator_form");
+                  
                btn.onclick = function() {
-               modal.style.display = "block";
-               }
-               span.onclick = function() {
-               modal.style.display = "none";
+                  const { value: entrega } =  Swal.fire({
+                     title: "Selecione o tipo de entrega",
+                     icon: "question",
+                     input: "select",
+                     inputOptions: {
+                       "Locais de Entrega": {
+                         0: "Correios",
+                         1: "Via Varejo",
+                         2: "Matriz",
+                       }
+                     },
+                     inputPlaceholder: "Selecione um tipo de entrega",
+                     showCancelButton: true,
+                     inputValidator: (value) => {
+                       return new Promise((resolve) => {
+                         if (value) {
+                           const formData = new FormData();
+                           formData.append("entrega", value);
+                           formData.append("idF", formId);
+                           formData.append("validator", validatorID);
+
+                           fetch("../ajax/enviaEntrega.php", {
+                              method: "POST",
+                              body: formData
+                           })
+                           .then(response => response.text())
+                           .then(data => {
+                              console.log("Resposta do Servidor: ", data);
+                              formu.submit();
+                              console.log(formu.submit());
+                           })
+                           .catch(error => {
+                              console.error("Ocorreu um erro: ", error);
+                           });
+                         } else {
+                           resolve("Você precisa selecionar um tipo de entrega!")
+                         }
+                       })
+                     },
+                     
+                   });
+                  
                }
             </script>';
 

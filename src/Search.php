@@ -159,14 +159,17 @@ class Search
         ]);
         echo "<div class='col search-container'>";
 
-        if (
-            $itemtype == "Ticket"
-            && Session::getCurrentInterface() === 'central'
-            && $default = Glpi\Dashboard\Grid::getDefaultDashboardForMenu('mini_ticket', true)
-        ) {
+        if ($itemtype == "Ticket" && Session::getCurrentInterface() === 'central' && $default = Glpi\Dashboard\Grid::getDefaultDashboardForMenu('mini_ticket', true)) {
             $dashboard = new Glpi\Dashboard\Grid($default, 33, 2);
             $dashboard->show(true);
+
+        } 
+        if ( $itemtype == "Ticket" && Session::getCurrentInterface() === 'central'){
+            require('../assets/php/tickets/carregaTickets.php');
         }
+        //print_r(Session::getCurrentInterface());
+        //if($itemtype == "Ticket" && )
+
 
         self::showGenericSearch($itemtype, $params);
         if ($params['as_map'] == 1) {
@@ -2560,6 +2563,8 @@ class Search
             $p[$key] = $val;
         }
 
+        $caractereProcurado = "ticket.php";
+        if (stripos($p['target'], $caractereProcurado) == false) {
        // Itemtype name used in JS function names, etc
         $normalized_itemtype = strtolower(str_replace('\\', '', $itemtype));
         $rand_criteria = mt_rand();
@@ -2582,7 +2587,8 @@ class Search
          var $nbsearchcountvar = " . count($p['criteria']) . ";
       ");
 
-        echo "<div class='list-group list-group-flush list-group-hoverable criteria-list pt-2' id='$searchcriteriatableid'>";
+            echo "<div class='list-group list-group-flush list-group-hoverable criteria-list pt-2' id='$searchcriteriatableid'>";
+        
 
        // Display normal search parameters
         $i = 0;
@@ -2599,7 +2605,6 @@ class Search
             style='display: none;'></a>";
 
         echo "</div>"; // .list
-
        // Keep track of the current savedsearches on reload
         if (isset($_GET['savedsearches_id'])) {
             echo Html::input("savedsearches_id", [
@@ -2756,6 +2761,7 @@ JAVASCRIPT;
         if ($p['mainform'] && $p['showaction']) {
             Html::closeForm();
         }
+    }
     }
 
     /**
