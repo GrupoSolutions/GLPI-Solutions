@@ -29,7 +29,7 @@
  #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
-<link rel="stylesheet" href="../../../../glpi108/assets/css/fa6.js">
+<script src='/glpi108/assets/css/fa6.js' crossorigin='anonymous'></script>;
 <style>
 	{% set widthPercent = 100 / options.columns %}
 	{% for i in range(1, options.columns ) %}
@@ -157,13 +157,14 @@
               __('Send'),
               {'name': 'submit_formcreator'}
           ]) }} #}
+          <button type='button' id="btnEnvia" onclick="atualizaEnd()" value='Enviar' name="submit_formcreator" class="btn"> <span>Enviar</span> </button>&nbsp;
         </div>
-        <button type='button' id="btnEnvia" onclick="atualizaEnd()" value='Enviar' name="submit_formcreator" class="btn"> <span>Enviar <i class="fa-duotone fa-spinner-third fa-spin"></i></span> </button>&nbsp;
         
+         <i class="fa-duotone fa-spinner-third fa-spin"></i>
         {{ fields.hiddenField('plugin_formcreator_forms_id', item.fields['id']) }}
         <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
 	</form>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <script>
 
     //Função que limpa o forumlário(retirada do site viacep)
@@ -254,6 +255,22 @@
         }
     }
 
+    function desfazerAlteracao() {
+        const botao = document.getElementById('btnEnvia');
+
+        // Remove o elemento <i>
+        botao.removeChild(botao.querySelector('i'));
+
+        // Cria um novo elemento <span> com o texto original "Enviar"
+        const span = document.createElement('span');
+        span.textContent = 'Enviar';
+
+        // Adiciona o novo elemento <span> ao botão
+        botao.appendChild(span);
+
+        // Habilita novamente o botão para que possa ser clicado
+        botao.disabled = false;
+    }
     //Esta função tem como objetivo não permitir o input de caracteres não numéricos no input
     function validarNumero(input) {
         // Remove caracteres não numéricos do valor do input
@@ -344,12 +361,12 @@
                             const { value: formValues } = Swal.fire({
                             title: 'Editar endereço',
                             html:
-                                '<label for="cep" class="ende">CEP</label><br><input id="cep" oninput="validarNumero(this);" onblur="pesquisacep(this.value);"  value="' + data[3] + '" class="ende">' +
-                                '<label for="endereco" class="ende">Endereço</label><br><input id="endereco" class="ende" value="' + data[1] + '">' + 
-                                '<label for="bairro" class="ende">Bairro</label><br><input id="bairro" class="ende" value="' + data[2] + '">' +
-                                '<label for="cidade" class="ende">Cidade</label><br><input id="cidade" class="ende" value="' + data[4] + '">' +
-                                '<label for="estado" class="ende">Estado</label><br><input id="estado" class="ende" value="' + data[5] + '">' +
-                                '<label for="num" class="ende">Número</label><br><input id="num" class="ende" value="' + data[6] + '">' +
+                                '<label for="cep" class="ende">CEP</label><br><input id="cep" oninput="validarNumero(this);" onblur="pesquisacep(this.value);" required value="' + data[3] + '" class="ende">' +
+                                '<label for="endereco" class="ende">Endereço</label><br><input id="endereco" class="ende" required value="' + data[1] + '">' + 
+                                '<label for="bairro" class="ende">Bairro</label><br><input id="bairro" class="ende" required value="' + data[2] + '">' +
+                                '<label for="cidade" class="ende">Cidade</label><br><input id="cidade" class="ende" required value="' + data[4] + '">' +
+                                '<label for="estado" class="ende">Estado</label><br><input id="estado" class="ende" required value="' + data[5] + '">' +
+                                '<label for="num" class="ende">Número</label><br><input id="num" class="ende" required value="' + data[6] + '">' +
                                 '<label for="comp" class="ende">Complemento</label><br><input id="comp" class="ende" value="' + data[7] + '">',
                             focusConfirm: false,
                             allowOutsideClick: false,
@@ -371,10 +388,10 @@
                                 if(hasEmptyFields(dados)){
                                     Swal.fire(
                                         'Falha!',
-                                        'Erro ao enviar dados, contate o suporte!',
+                                        'Informe corretamente os dados, tente novamente!',
                                         'error'
                                     );
-
+                                    desfazerAlteracao();
                                 } else{
                                     enviaEndereco(retorno);
                                     plugin_formcreator.submitUserForm();
@@ -404,12 +421,8 @@
                     'Erro na requisição AJAX: ' + error,
                     'error'
                 );
+                desfazerAlteracao()
             });
-
-        
-
-
-        
     }
     </script>
 </div>

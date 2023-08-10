@@ -1,0 +1,37 @@
+1679402896
+e0c33e648252d77117899139c4d84c2d9b3cbb11
+a:1:{s:52:"bn_count_Ticket_344e761b-f7e8-4617-8c90-154b266b4d67";s:1118:"      <style>
+         #bn_17502664 {
+            background-color: #ffdc64;
+            color: #977500;
+         }
+
+         #bn_17502664:hover {
+            background-color: #ffcb18;
+            border: 1px solid #ca9c00;
+         }
+
+         .theme-dark #bn_17502664 {
+            background-color: #977500;
+            color: #ffdc64;
+         }
+
+         .theme-dark #bn_17502664:hover {
+            background-color: #ffcb18;
+            color: #977500;
+            border: 1px solid #ca9c00;
+         }
+      </style>
+      <a href='/front/ticket.php?reset=reset'
+         id="bn_17502664"
+         class="card big-number  filter-dates filter-dates_mod filter-requesttype filter-location filter-tickettype"
+         title="">
+         <span class="content">            <span title="103"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">103</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Chamados">Chamados</div>
+         <i class="main-icon ti ti-alert-circle"></i>
+      </a>";}

@@ -52,9 +52,9 @@ if (isset($_POST['update'])) {
    $formanswer->redirectToList();
 
 } else if (isset($_POST['accept_formanswer'])) {
-   	 require_once("loading.php");
-         $formanswer->update($_POST);
-         $formanswer->redirectToList(); 
+   $formanswer->update($_POST);
+   $formanswer->redirectToList();
+
 
 } else if (isset($_POST['save_formanswer'])) {
    if (!$formanswer->update($_POST)) {
@@ -64,7 +64,7 @@ if (isset($_POST['update'])) {
       $issue = new PluginFormcreatorIssue();
       $issue->redirectToList();
    } else {
-      $formanswer->redirectToList();
+      Html::back();
    }
 
 }
@@ -84,6 +84,7 @@ if (Session::getCurrentInterface() == 'helpdesk') {
       'PluginFormcreatorForm'
    );
 }
+
 
 
 $formanswer->display($_REQUEST);

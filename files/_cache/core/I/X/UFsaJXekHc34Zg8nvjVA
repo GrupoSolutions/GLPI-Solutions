@@ -1,0 +1,37 @@
+1679915426
+ef6bd3e80d5a4beba3b7b9c0e3a8fdda24fe3396
+a:1:{s:53:"bn_count_Monitor_890e16d3-b121-48c6-9713-d9c239d9a970";s:1157:"      <style>
+         #bn_128578878 {
+            background-color: #dc6f6f;
+            color: #661919;
+         }
+
+         #bn_128578878:hover {
+            background-color: #cd3232;
+            border: 1px solid #8f2323;
+         }
+
+         .theme-dark #bn_128578878 {
+            background-color: #661919;
+            color: #dc6f6f;
+         }
+
+         .theme-dark #bn_128578878:hover {
+            background-color: #cd3232;
+            color: #661919;
+            border: 1px solid #8f2323;
+         }
+      </style>
+      <a href='/front/monitor.php?reset=reset'
+         id="bn_128578878"
+         class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech filter-state"
+         title="">
+         <span class="content">            <span title="48"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">48</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Monitores">Monitores</div>
+         <i class="main-icon ti ti-device-desktop"></i>
+      </a>";}

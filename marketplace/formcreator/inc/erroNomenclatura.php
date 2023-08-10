@@ -154,8 +154,6 @@ button:active {
     <b><h2>Erro ao efetuar pedido de <span style="color:red;"><?php echo $consumivel; ?>!</span><br> Favor contate o suporte!</h2></b><br>
     <button type="button" onclick="erro()" class="btn-82" role="button"><b>Voltar<b></a>
     <br>
- 
-
 </div>
      
   <div class="modal-footer">

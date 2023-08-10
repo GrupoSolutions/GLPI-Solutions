@@ -1,0 +1,37 @@
+1678711221
+17399b8de6e2cffc275673d559c42699c50c505e
+a:1:{s:62:"bn_count_tickets_incoming_336a36d9-67fe-4475-880e-447bd766b8fe";s:1803:"      <style>
+         #bn_2109600619 {
+            background-color: #a0e19d;
+            color: #2e882a;
+         }
+
+         #bn_2109600619:hover {
+            background-color: #67cf62;
+            border: 1px solid #3baf36;
+         }
+
+         .theme-dark #bn_2109600619 {
+            background-color: #2e882a;
+            color: #a0e19d;
+         }
+
+         .theme-dark #bn_2109600619:hover {
+            background-color: #67cf62;
+            color: #2e882a;
+            border: 1px solid #3baf36;
+         }
+      </style>
+      <a href='/front/ticket.php?criteria%5B0%5D%5Bfield%5D=12&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=1&criteria%5Bcriteria%5D%5Bcriteria%5D%5B0%5D%5Blink%5D=AND&criteria%5Bcriteria%5D%5Bcriteria%5D%5B0%5D%5Bfield%5D=15&criteria%5Bcriteria%5D%5Bcriteria%5D%5B0%5D%5Bsearchtype%5D=morethan&criteria%5Bcriteria%5D%5Bcriteria%5D%5B0%5D%5Bvalue%5D=2023-03-01%2000%3A00%3A00&criteria%5Bcriteria%5D%5Bcriteria%5D%5B1%5D%5Blink%5D=AND&criteria%5Bcriteria%5D%5Bcriteria%5D%5B1%5D%5Bfield%5D=15&criteria%5Bcriteria%5D%5Bcriteria%5D%5B1%5D%5Bsearchtype%5D=lessthan&criteria%5Bcriteria%5D%5Bcriteria%5D%5B1%5D%5Bvalue%5D=2023-03-13%2000%3A00%3A00&reset=reset'
+         id="bn_2109600619"
+         class="card big-number  filter-dates filter-dates_mod filter-itilcategory filter-group_tech filter-user_tech filter-requesttype filter-location"
+         title="">
+         <span class="content">            <span title="3"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">3</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Chamados novos">Chamados novos</div>
+         <i class="main-icon ti ti-alert-circle"></i>
+      </a>";}

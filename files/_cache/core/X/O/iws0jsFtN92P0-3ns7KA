@@ -1,0 +1,35 @@
+1679915197
+072e7113688e0e198797d0876a1427a857df59b0
+a:1:{s:58:"count_Unmanaged_State_57fd3607-8ffc-418e-9607-f02af4ed6b4c";s:1007:"      <style>
+         #chart-1934107627 {
+            background-color: #fafafa;
+            color: #949494
+         }
+
+         .theme-dark #chart-1934107627 {
+            background-color: #2e2e2e;
+            color: #949494;
+         }
+
+         #chart-1934107627 .ct-label {
+            fill: #949494;
+            color: #949494;
+         }
+
+         .theme-dark #chart-1934107627 .ct-label {
+            fill: #949494;
+            color: #949494;
+         }
+
+         
+      </style>
+      <div style="height: 100%">
+         <div class="card g-chart pie filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-state"
+            id="chart-1934107627">
+            <div class="chart ct-chart"><span class='empty-card no-data'>
+               <div>Nenhum dado encontrado</div>
+            <span></div>
+            <span class="main-label">Dispositivos não gerenciados por Status</span>
+            <i class="main-icon ti ti-subtask"></i>
+         </div>
+      </div>";}

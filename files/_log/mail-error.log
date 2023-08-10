@@ -1,0 +1,1077 @@
+2023-02-02 15:02:55 [@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [GLPI] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-02-03 14:33:57 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [GLPI] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-02-07 09:30:27 [2@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [GLPI #0000221] NOVA RESPOSTA 0000221 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-02-07 09:30:34 [2@localhost]
+Atenção: um e-mail não foi entregue para thais.martins@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [GLPI #0000221] NOVA RESPOSTA 0000221 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-02-07 10:00:37 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000276] NOVA RESPOSTA 0000276 - Manutenção do computador - Criação de PC Reversa SJC, Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-07 10:01:28 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000276] NOVA RESPOSTA 0000276 - Manutenção do computador - Criação de PC Reversa SJC, Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-07 10:02:05 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000276] NOVA RESPOSTA 0000276 - Manutenção do computador - Criação de PC Reversa SJC, Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-07 10:08:42 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000276] NOVA RESPOSTA 0000276 - Manutenção do computador - Criação de PC Reversa SJC, Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:19:39 [34@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:24:00 [2@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:26:02 [34@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:32:08 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:32:10 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:35:29 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:35:31 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:41:05 [30@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:41:08 [30@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:49:05 [30@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000341] Novo chamado 0000341	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 14:49:05 [30@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [GLPI #0000341] Novo chamado 0000341	
+2023-02-24 14:49:06 [30@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:06:19 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:06:24 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:17:38 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:17:39 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:33:43 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000344] Novo chamado 0000344	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:33:43 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [GLPI #0000344] Novo chamado 0000344	
+2023-02-24 15:33:45 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:40:08 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 15:47:54 [60@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 16:01:28 [34@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 16:20:40 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-24 16:20:40 [15@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres
+2023-02-28 08:20:18 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:20:27 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:29:57 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:29:58 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:37:04 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:37:07 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:50:02 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 08:50:04 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:01:44 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:01:46 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:05:07 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:05:09 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:10:30 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:10:30 [2@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [GLPI #0000311] NOVA RESPOSTA 0000311 - Solicitação de Vestimenta
+2023-02-28 09:10:32 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:10:32 [2@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [GLPI #0000310] NOVA RESPOSTA 0000310 - Solicitação de Material
+2023-02-28 09:23:35 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:24:06 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:27:01 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:27:04 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:32:01 [2@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:32:03 [2@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:37:55 [2@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:37:57 [2@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:45:07 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:45:10 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:56:44 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 09:56:46 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 10:13:41 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 10:13:41 [31@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [GLPI #0000344] NOVA RESPOSTA 0000344 - Solicitação de Material
+2023-02-28 10:13:45 [31@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-02-28 10:13:45 [31@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [GLPI #0000341] NOVA RESPOSTA 0000341 - Solicitação de Etiquetas e Lacres
+2023-03-03 12:38:13 [10@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 6 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 12:52:56 [10@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 5 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 13:23:55 [10@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 4 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 14:28:20 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 3 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 15:16:40 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 2 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 15:41:44 [2@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 1 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 16:06:54 [10@localhost]
+Atenção: um e-mail não foi entregue para adm_sda@gruposolutions.com com mais 0 tentativas restantes. Mensagem: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. , Erro: SMTP Error: The following recipients failed: adm_sda@gruposolutions.com: <adm_sda@gruposolutions.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-03 16:06:54 [10@localhost]
+Erro fatal: desistindo da entrega do e-mail para adm_sda@gruposolutions.com: [GLPI #0000287] NOVA RESPOSTA 0000287 - Solicitação - Distribuição de Retornos / SUP Patrícia. 
+2023-03-27 10:01:09 [42@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:11:54 [42@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:16:11 [17@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:19:22 [54@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:24:29 [10@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:27:48 [2@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:34:33 [17@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000473] Novo chamado 0000473	, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-03-27 10:34:33 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para mauricioluiz21@outlook.com: [ATIVO #0000473] Novo chamado 0000473	
+2023-04-04 13:30:05 [42@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 13:38:49 [15@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:20:25 [@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:30:07 [82@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:42:31 [124@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:48:03 [15@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:57:35 [15@localhost]
+Atenção: um e-mail não foi entregue para mauricioluiz21@outlook.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: mauricioluiz21@outlook.com: <mauricioluiz21@outlook.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-04 14:57:35 [15@localhost]
+Erro fatal: desistindo da entrega do e-mail para mauricioluiz21@outlook.com: [ATIVO #0000473] NOVA RESPOSTA 0000473 - Solicitação de Vestimenta
+2023-04-10 14:58:55 [54@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 14:59:00 [54@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:01:42 [124@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:01:43 [124@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:07:31 [15@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:07:33 [15@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:16:29 [@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:16:31 [@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:28:17 [15@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:28:18 [15@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:49:48 [42@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:49:50 [42@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 15:49:56 [42@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 16:01:59 [@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000542] Novo chamado 0000542	, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 16:01:59 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para qualidade01ne@gmail.com: [ATIVO #0000542] Novo chamado 0000542	
+2023-04-10 16:02:01 [@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 16:02:01 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para qualidade01ne@gmail.com: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta
+2023-04-10 16:02:03 [@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 16:09:31 [42@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 16:37:02 [42@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 17:00:23 [124@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 17:18:05 [10@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 17:25:36 [124@localhost]
+Atenção: um e-mail não foi entregue para qualidade01ne@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: qualidade01ne@gmail.com: <qualidade01ne@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-10 17:25:36 [124@localhost]
+Erro fatal: desistindo da entrega do e-mail para qualidade01ne@gmail.com: [ATIVO #0000542] NOVA RESPOSTA 0000542 - Solicitação de Vestimenta
+2023-04-24 17:52:19 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-24 17:52:20 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 08:18:20 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 08:18:22 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 09:34:30 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 09:34:32 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:27:03 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:27:05 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:43:27 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:43:29 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:50:32 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 10:50:34 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 11:15:22 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000604] Novo chamado 0000604	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 11:15:22 [10@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000604] Novo chamado 0000604	
+2023-04-25 11:15:24 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000605] Novo chamado 0000605	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-25 11:15:24 [10@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000605] Novo chamado 0000605	
+2023-04-27 08:41:09 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000587] NOVA RESPOSTA 0000587 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:41:21 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000587] NOVA RESPOSTA 0000587 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:41:32 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000596] NOVA RESPOSTA 0000596 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:41:44 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000596] NOVA RESPOSTA 0000596 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:41:55 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000597] NOVA RESPOSTA 0000597 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:42:07 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000597] NOVA RESPOSTA 0000597 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:42:18 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000591] NOVA RESPOSTA 0000591 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:42:30 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000591] NOVA RESPOSTA 0000591 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:42:41 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000606] NOVA RESPOSTA 0000606 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:42:52 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000606] NOVA RESPOSTA 0000606 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:43:04 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000607] NOVA RESPOSTA 0000607 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:43:15 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000607] NOVA RESPOSTA 0000607 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:43:27 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:43:38 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:43:50 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:44:01 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:44:13 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:44:24 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:44:36 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor2.praiagrande@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000621] Novo chamado 0000621	, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:57:51 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000587] NOVA RESPOSTA 0000587 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:58:03 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000587] NOVA RESPOSTA 0000587 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:58:14 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000596] NOVA RESPOSTA 0000596 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:58:26 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000596] NOVA RESPOSTA 0000596 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:58:37 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000597] NOVA RESPOSTA 0000597 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:58:49 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000597] NOVA RESPOSTA 0000597 - Solicitação de Vestimenta, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:00 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000591] NOVA RESPOSTA 0000591 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:12 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000591] NOVA RESPOSTA 0000591 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:23 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000606] NOVA RESPOSTA 0000606 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:34 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000606] NOVA RESPOSTA 0000606 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:46 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000607] NOVA RESPOSTA 0000607 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 08:59:57 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000607] NOVA RESPOSTA 0000607 - Solicitação de Etiquetas e Lacres, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:00:09 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:00:33 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:00:45 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:00:56 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:01:08 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:01:19 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:01:31 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor2.praiagrande@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000621] Novo chamado 0000621	, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:01:42 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor1.diadema@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000622] Novo chamado 0000622	, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:01:54 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000599] NOVA RESPOSTA 0000599 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:02:05 [10@localhost]
+Atenção: um e-mail não foi entregue para ana.soares@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000599] NOVA RESPOSTA 0000599 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:02:17 [10@localhost]
+Atenção: um e-mail não foi entregue para barbara.silva@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000599] NOVA RESPOSTA 0000599 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:17:23 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 09:17:31 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 09:39:20 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:40:38 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:40:50 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000622] NOVA RESPOSTA 0000622 - E-mail solicita senhas ( Ferramenta indisponíveis , Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:41:01 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor1.diadema@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000622] NOVA RESPOSTA 0000622 - E-mail solicita senhas ( Ferramenta indisponíveis , Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:41:13 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000620] NOVA RESPOSTA 0000620 - Erro realização de chamadas MicroSIP, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 09:41:24 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor1.praiagrande@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000620] NOVA RESPOSTA 0000620 - Erro realização de chamadas MicroSIP, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:00 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:12 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:23 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000622] NOVA RESPOSTA 0000622 - E-mail solicita senhas ( Ferramenta indisponíveis , Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:35 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor1.diadema@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000622] NOVA RESPOSTA 0000622 - E-mail solicita senhas ( Ferramenta indisponíveis , Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:46 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000620] NOVA RESPOSTA 0000620 - Erro realização de chamadas MicroSIP, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:05:58 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor1.praiagrande@gruposolutions.com.br com mais 5 tentativas restantes. Mensagem: [ATIVO #0000620] NOVA RESPOSTA 0000620 - Erro realização de chamadas MicroSIP, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:06:09 [10@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000621] NOVA RESPOSTA 0000621 - Acompanhamento de boletos  SDA, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:06:21 [10@localhost]
+Atenção: um e-mail não foi entregue para supervisor2.praiagrande@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000621] NOVA RESPOSTA 0000621 - Acompanhamento de boletos  SDA, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 10:38:13 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 10:38:15 [10@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 11:45:09 [15@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 11:45:09 [15@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000604] NOVA RESPOSTA 0000604 - Solicitação de Material
+2023-04-27 11:45:21 [15@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-04-27 11:45:21 [15@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000605] NOVA RESPOSTA 0000605 - Solicitação de Material
+2023-04-27 17:05:59 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 17:06:00 [15@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-27 17:06:03 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 07:46:45 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 07:46:47 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 07:46:49 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 07:46:54 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 10:17:56 [17@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 10:17:58 [17@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 10:18:00 [17@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 10:18:02 [17@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:51:49 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:51:51 [15@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:51:53 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:51:54 [15@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:52:28 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 11:52:37 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:24 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:25 [15@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:27 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:29 [15@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:31 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 13:06:33 [15@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:21 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:23 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:25 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:27 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:28 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 14:59:30 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:09 [124@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000624] Novo chamado 0000624	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:09 [124@localhost]
+Erro fatal: desistindo da entrega do e-mail para jean_oliveirab@hotmail.com: [ATIVO #0000624] Novo chamado 0000624	
+2023-04-28 15:27:11 [124@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000625] Novo chamado 0000625	, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:11 [124@localhost]
+Erro fatal: desistindo da entrega do e-mail para guilhermesilva72727@gmail.com: [ATIVO #0000625] Novo chamado 0000625	
+2023-04-28 15:27:13 [124@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000626] Novo chamado 0000626	, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:13 [124@localhost]
+Erro fatal: desistindo da entrega do e-mail para jean_oliveirab@hotmail.com: [ATIVO #0000626] Novo chamado 0000626	
+2023-04-28 15:27:15 [124@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:17 [124@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 15:27:18 [124@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 23:39:25 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 23:39:25 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para guilhermesilva72727@gmail.com: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta
+2023-04-28 23:39:26 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-28 23:39:28 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-30 06:01:26 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-04-30 06:01:28 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-02 09:09:29 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-02 09:09:29 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para jean_oliveirab@hotmail.com: [ATIVO #0000624] NOVA RESPOSTA 0000624 - Solicitação de Vestimenta
+2023-05-02 09:09:31 [@localhost]
+Atenção: um e-mail não foi entregue para jean_oliveirab@hotmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: jean_oliveirab@hotmail.com: <jean_oliveirab@hotmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-02 09:09:31 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para jean_oliveirab@hotmail.com: [ATIVO #0000626] NOVA RESPOSTA 0000626 - Solicitação de Vestimenta
+2023-05-17 14:41:01 [124@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 14:59:34 [54@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 16:01:10 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 16:27:28 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 16:31:29 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 16:38:28 [136@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 17:27:44 [@localhost]
+Atenção: um e-mail não foi entregue para guilhermesilva72727@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: guilhermesilva72727@gmail.com: <guilhermesilva72727@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-17 17:27:44 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para guilhermesilva72727@gmail.com: [ATIVO #0000625] NOVA RESPOSTA 0000625 - Solicitação de Vestimenta
+2023-05-19 08:41:50 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-19 13:48:07 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-19 17:02:16 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-20 19:00:16 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:04:43 [124@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:41:55 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:42:36 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:42:38 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:42:40 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:50:59 [124@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000712] Novo chamado 0000712	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:50:59 [124@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000712] Novo chamado 0000712	
+2023-05-22 09:51:04 [124@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:51:05 [124@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 09:51:07 [124@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:13:04 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:13:05 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:13:07 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:31:09 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:31:11 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:31:21 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:48:19 [56@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:48:21 [56@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 10:48:23 [56@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:02:44 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:02:46 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:02:48 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:17:12 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000726] Novo chamado 0000726	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:17:12 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000726] Novo chamado 0000726	
+2023-05-22 11:17:14 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000727] Novo chamado 0000727	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:17:14 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000727] Novo chamado 0000727	
+2023-05-22 11:17:15 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000728] Novo chamado 0000728	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-05-22 11:17:15 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000728] Novo chamado 0000728	
+2023-06-16 11:14:39 [@localhost]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000814] NOVA RESPOSTA 0000814 - Acesso lento no computador, Erro: SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Error: queue file write error
+ SMTP code: 451 Additional SMTP info: 4.3.0
+2023-06-16 11:14:43 [@localhost]
+Atenção: um e-mail não foi entregue para supervisor1_hortolandia@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO #0000814] NOVA RESPOSTA 0000814 - Acesso lento no computador, Erro: SMTP Error: data not accepted.SMTP server error: DATA END command failed Detail: Error: queue file write error
+ SMTP code: 451 Additional SMTP info: 4.3.0
+2023-06-20 12:25:25 [@localhost]
+Aviso: um e-mail não foi entregue a luizdepaulaped@gmail.com com 6 restantes tentativas. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 13:33:24 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 13:33:26 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 14:56:03 [136@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 14:56:05 [136@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 15:32:52 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 15:32:54 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 16:10:54 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 16:10:55 [124@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 16:26:11 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 16:26:12 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 17:02:31 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 17:02:33 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000883] Novo chamado 0000883	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 17:02:33 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000883] Novo chamado 0000883	
+2023-06-20 20:46:56 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000884] Novo chamado 0000884	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-06-20 20:46:56 [@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000884] Novo chamado 0000884	
+2023-07-07 11:07:08 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 11:07:10 [2@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 12:11:03 [@localhost]
+Aviso: um e-mail não foi entregue a luizdepaulaped@gmail.com com 5 restantes tentativas. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 12:11:05 [@localhost]
+Aviso: um e-mail não foi entregue a luizdepaulaped@gmail.com com 5 restantes tentativas. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 13:16:00 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 13:16:01 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 15:06:22 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 15:06:24 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 18:33:20 [15@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 18:33:21 [15@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 21:08:56 [69@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-07 21:08:58 [69@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 08:07:46 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000960] Novo chamado 0000960	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 08:07:46 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000960] Novo chamado 0000960	
+2023-07-10 08:07:48 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000961] Novo chamado 0000961	, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 08:07:48 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000961] Novo chamado 0000961	
+2023-07-10 09:36:07 [140@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 09:36:15 [140@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 09:36:23 [140@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 09:51:29 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 09:51:41 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 09:51:42 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:04:06 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:04:08 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:04:10 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:20:57 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:20:59 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:21:00 [17@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:39:07 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:39:09 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:39:11 [@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:46:41 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:46:43 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:46:45 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:55:37 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:55:37 [54@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000961] NOVA RESPOSTA 0000961 - Solicitação de Material
+2023-07-10 10:55:39 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:55:39 [54@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000960] NOVA RESPOSTA 0000960 - Solicitação de Material
+2023-07-10 10:55:41 [54@localhost]
+Atenção: um e-mail não foi entregue para luizdepaulaped@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: luizdepaulaped@gmail.com: <luizdepaulaped@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-10 10:55:41 [54@localhost]
+Erro fatal: desistindo da entrega do e-mail para luizdepaulaped@gmail.com: [ATIVO #0000883] NOVA RESPOSTA 0000883 - Solicitação de Material
+2023-07-13 10:46:08 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 10:46:13 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 10:46:15 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 11:08:38 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 11:08:40 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 11:08:41 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 12:39:22 [134@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 12:39:23 [134@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 12:39:25 [134@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:20:39 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:20:41 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:20:43 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:59:12 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:59:14 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 14:59:16 [15@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:08:15 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:08:17 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:08:19 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:51:37 [135@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000985] Novo chamado 0000985	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:51:37 [135@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000985] Novo chamado 0000985	
+2023-07-13 15:51:38 [135@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000987] Novo chamado 0000987	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:51:38 [135@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000987] Novo chamado 0000987	
+2023-07-13 15:51:40 [135@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000988] Novo chamado 0000988	, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-13 15:51:40 [135@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000988] Novo chamado 0000988	
+2023-07-14 10:56:30 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 10:56:38 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 10:56:46 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 6 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:07:26 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:07:27 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:07:29 [@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 5 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:10:07 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:10:09 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:10:10 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 4 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:13:14 [142@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:13:16 [142@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:13:18 [142@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 3 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:25:53 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:25:55 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:25:56 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 2 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:37:27 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:37:29 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:37:30 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 1 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:53:38 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:53:38 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000985] NOVA RESPOSTA 0000985 - Solicitação de Vestimenta
+2023-07-14 11:53:39 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:53:39 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000987] NOVA RESPOSTA 0000987 - Solicitação de Material
+2023-07-14 11:53:41 [17@localhost]
+Atenção: um e-mail não foi entregue para brunnoavellar@gmail.com com mais 0 tentativas restantes. Mensagem: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta, Erro: SMTP Error: The following recipients failed: brunnoavellar@gmail.com: <brunnoavellar@gmail.com>: Recipient address rejected: You cannot send mails to this account
+
+2023-07-14 11:53:41 [17@localhost]
+Erro fatal: desistindo da entrega do e-mail para brunnoavellar@gmail.com: [ATIVO #0000988] NOVA RESPOSTA 0000988 - Solicitação de Vestimenta
+2023-07-17 12:36:30 [@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-18 13:57:51 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-20 17:05:58 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-24 17:36:01 [22@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-27 12:26:25 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-28 14:48:06 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-07-31 11:56:20 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-01 12:44:38 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-03 17:31:44 [19@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-07 10:47:31 [19@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-08 17:32:37 [54@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

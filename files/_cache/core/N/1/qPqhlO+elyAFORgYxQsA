@@ -1,0 +1,37 @@
+1689226667
+eebf9607b299b3a1889f56f3adb825c7468ec05c
+a:1:{s:64:"bn_count_PassiveDCEquipment_3399f1e0-6f81-4a70-8620-73ad5f23e95b";s:1198:"      <style>
+         #bn_1099966266 {
+            background-color: #ffd966;
+            color: #997300;
+         }
+
+         #bn_1099966266:hover {
+            background-color: #ffc61a;
+            border: 1px solid #cc9900;
+         }
+
+         .theme-dark #bn_1099966266 {
+            background-color: #997300;
+            color: #ffd966;
+         }
+
+         .theme-dark #bn_1099966266:hover {
+            background-color: #ffc61a;
+            color: #997300;
+            border: 1px solid #cc9900;
+         }
+      </style>
+      <a href='/front/passivedcequipment.php?reset=reset'
+         id="bn_1099966266"
+         class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech filter-state"
+         title="">
+         <span class="content">            <span title="186"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">186</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Dispositivos passivos">Dispositivos passivos</div>
+         <i class="main-icon ti ti-layout-navbar"></i>
+      </a>";}

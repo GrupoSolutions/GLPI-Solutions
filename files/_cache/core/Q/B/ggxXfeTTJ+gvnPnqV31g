@@ -1,0 +1,37 @@
+1684528948
+478099faad8597656aba83843ae543892b30e253
+a:1:{s:56:"bn_count_Peripheral_1e2636eb-4d74-42cb-8f6b-a19531aebf71";s:1158:"      <style>
+         #bn_903962419 {
+            background-color: #c27ba0;
+            color: #4d2439;
+         }
+
+         #bn_903962419:hover {
+            background-color: #a44c7a;
+            border: 1px solid #703453;
+         }
+
+         .theme-dark #bn_903962419 {
+            background-color: #4d2439;
+            color: #c27ba0;
+         }
+
+         .theme-dark #bn_903962419:hover {
+            background-color: #a44c7a;
+            color: #4d2439;
+            border: 1px solid #703453;
+         }
+      </style>
+      <a href='/front/peripheral.php?reset=reset'
+         id="bn_903962419"
+         class="card big-number  filter-dates filter-dates_mod filter-location filter-manufacturer filter-group_tech filter-user_tech filter-state"
+         title="">
+         <span class="content">            <span title="576"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">576</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Dispositivos">Dispositivos</div>
+         <i class="main-icon fab fa-usb"></i>
+      </a>";}

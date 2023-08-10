@@ -1,0 +1,161 @@
+1684771295
+9f2dc9b452b81d515d40e98eab88129ea23ef88a
+a:1:{s:49:"ticket_times_9f17b5d5-9c9a-4ef5-9f77-a3e287c895f3";s:6153:"      <style>
+
+      #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 {
+         background-color: #fafafa;
+         color: #949494
+      }
+
+      .theme-dark #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 {
+         background-color: #2e2e2e;
+         color: #949494;
+      }
+
+      #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-label {
+         color: #949494;
+      }
+
+      .theme-dark #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-label {
+         color: #949494;
+      }
+
+      #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-grid {
+         stroke: #e1e1e1;
+      }
+
+      .theme-dark #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-grid {
+         stroke: #151515;
+      }
+
+      #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-circle {
+         stroke: #fafafa;
+         stroke-width: 3;
+      }
+      #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-circle + .ct-label {
+         stroke: #fafafa;
+      }
+      
+      </style>
+
+      <div style="height: 100%">
+          <div class="card g-chart line multiple filter-dates filter-dates_mod filter-itilcategory filter-group_tech filter-user_tech filter-requesttype filter-location"
+               id="chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737">
+             <div class="chart ct-chart"></div>
+             <span class="main-label mt-4">Tempo dos chamados (em horas)</span>
+             <i class="main-icon fas fa-stopwatch"></i>
+          </div>
+      </div><script type="text/javascript">
+//<![CDATA[
+
+      $(function () {
+         var chart = new Chartist.Line(Dashboard.getActiveDashboard().element.find('#chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .chart')[0], {
+            labels: ["2023-01","2023-02","2023-03","2023-04","2023-05"],
+            series: [{"name":"Tempo para atendimento","data":[0.8,2.9,2.8,3.5,1.7]},{"name":"Tempo de espera","data":[28.2,9.3,4.9,8.9,4.2]},{"name":"Tempo para solu\u00e7\u00e3o","data":[17,6.8,35,14,6.9]},{"name":"Tempo para fechar","data":[17,6.9,35,14,6.7]}],
+         }, {
+            width: '100%',
+            fullWidth: true,
+            chartPadding: {
+               right: 40
+            },
+            axisY: {
+                labelInterpolationFnc: function(value) {
+                    let display_value = 0;
+                    let unit = "";
+                    if (value < 1e3) {
+                        // less than 1K
+                        display_value = value;
+                    } else if (value < 1e6) {
+                        // More than 1k, less than 1M
+                        display_value =  value / 1e3;
+                        unit = "K";
+                    } else {
+                        // More than 1M
+                        display_value = value / 1e6;
+                        unit = "M";
+                    }
+
+                    // 1 decimal max
+                    display_value = Math.round(display_value * 10) / 10;
+
+                    return display_value + unit;
+                },
+            },
+            
+            plugins: [
+               
+            Chartist.plugins.legend(),
+               Chartist.plugins.tooltip({
+                  appendToBody: true,
+                  class: 'dashboard-tooltip',
+                  pointClass: 'ct-circle'
+               })
+               
+            ]
+         });
+
+         chart.on('draw', function(data) {
+            // animation
+            if (data.type === 'line' || data.type === 'area') {
+               data.element.animate({
+                  d: {
+                     begin: 300 * data.index,
+                     dur: 1000,
+                     from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                     to: data.path.clone().stringify(),
+                     easing: Chartist.Svg.Easing.easeOutQuint
+                  }
+               });
+            }
+
+            if (data.type === 'point') {
+               // set url redirecting on line
+               var url = _.get(data, 'series['+data.index+'].url')
+                      || _.get(data, 'series.data['+data.index+'].url')
+                      || _.get(data, 'series.url')
+                      || '';
+               var clickable = url.length > 0;
+
+               var circle = new Chartist.Svg('circle', {
+                  cx: [data.x],
+                  cy: [data.y],
+                  r: data.value.y > 0 ? [5] : [0],
+                  "ct:value": data.value.y,
+                  "data-clickable": clickable
+               }, 'ct-circle');
+               var circle = data.element.replace(circle);
+
+               if (clickable) {
+                  circle.getNode().onclick = function() {
+                     if (!Dashboard.getActiveDashboard().edit_mode) {
+                        window.location = url;
+                     }
+                  }
+               }
+            }
+         });
+
+         // hide other lines when hovering a point
+         chart.on('created', function(bar) {
+            $('#chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-series .ct-circle, #chart_dashboard_card_assistance_53783ab7ead94f84084eff85f2ab3b69a0d80737 .ct-series .ct-circle + .ct-label')
+               .mouseover(function() {
+                  $(this)
+                     .attr('r', "9")
+                     .parent(".ct-series")
+                     .siblings().children()
+                     .css('stroke-opacity', "0.05")
+                     .filter(".ct-circle, .ct-label").css('fill-opacity', "0.1");
+               })
+               .mouseout(function() {
+                  $(this)
+                     .attr('r', "5")
+                     .parent(".ct-series")
+                     .siblings().children()
+                     .css('stroke-opacity', "1")
+                     .filter(".ct-circle, .ct-label").css('fill-opacity', "1");
+               });
+         });
+      });
+
+//]]>
+</script>";}

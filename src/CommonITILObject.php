@@ -4509,7 +4509,7 @@ abstract class CommonITILObject extends CommonDBTM
                 $solid = false;
                 break;
             case self::CLOSED:
-                $class = 'fa-times-circle';
+                $class = ' fa-times-circle';
                 break;
             case self::ACCEPTED:
                 $class = 'check-circle';

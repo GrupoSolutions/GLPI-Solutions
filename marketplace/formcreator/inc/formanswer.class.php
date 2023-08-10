@@ -564,10 +564,11 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       $formUrl = static::getFormURL(); // May be called from iinherited classes
       $formName = 'plugin_formcreator_form';
+      print_r($formUrl);
       echo '<form name="' . $formName . '" method="post" role="form" enctype="multipart/form-data"'
       . ' class="plugin_formcreator_form"'
       . ' action="' . $formUrl . '"'
-      . ' id="plugin_formcreator_form"'
+      . ' id="plugin_formcreator_form" '
       . '>';
 
       $form = $this->getForm();
@@ -693,6 +694,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          echo '</div>';
        
          
+         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
 
          echo '<div class="form-group line1">';
          echo '<div class="center" style="float: left; width: 30%;">';
@@ -722,8 +724,10 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
          echo "<input type='hidden' id='validatorID' name='validatorID' value='{$validatorID}'>";
          //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]))
-         echo "<input type='button' id='myBtn' value='Enviar'>";
-         require_once("modal.php");
+         echo "<input type='submit' id='myBtn' value='Enviar'>";
+         echo "<input type='hidden' name='accept_formanswer' >";
+
+         //require_once("modal.php");
       }
 
       if (Plugin::isPluginActive(PLUGIN_FORMCREATOR_ADVANCED_VALIDATION)) {
@@ -746,15 +750,81 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      return false;
                   }
                }
+
+               document.getElementById("myBtn").addEventListener("click", function(event) {
+                  event.preventDefault(); // Impede a submissão padrão do formulário
+                  
+                  confirmacao((confirmado) => {
+                    if (confirmado) {
+                      // O usuário confirmou, agora podemos submeter o formulário
+                      document.getElementById("plugin_formcreator_form").submit();
+                    }
+                  });
+                });
+                
+                function confirmacao(callback) {
+                  const idF = document.getElementById("formID").value;
+                  const validatorID = document.getElementById("validatorID").value;
+
+                  const {value: tipoEntrega} = Swal.fire({
+                     title: "Informe o tipo de entrega",
+                     input: "select",
+                     inputOptions: {
+                        0: "Via Varejo",
+                        1: "Matriz",
+                        2: "Correio"
+                     },
+                     inputPlaceholder: "Selecione um tipo de entrega",
+                     icon: "question",
+                     showCancelButton: true,
+                     confirmButtonColor: "#3085d6",
+                     cancelButtonColor: "#d33",
+                     confirmButtonText: "Aprovar Solicitação"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                     // Construa os dados que serão enviados ao PHP
+                     const formData = new FormData();
+                     formData.append("idF", idF);
+                     formData.append("entrega", result.value);
+                     formData.append("validator", validatorID);
+                     // Adicione mais campos, se necessário.
+             
+                     // Use a função fetch para enviar a requisição POST para o arquivo PHP
+                     fetch("/glpi108/marketplace/formcreator/ajax/enviaEntrega.php", {
+                         method: "POST",
+                         body: formData
+                     })
+                     .then(response => response.text())
+                     .then(data => {
+                         // Manipule a resposta do servidor aqui, se necessário.
+                         Swal.fire(
+                              "Sucesso",
+                              "Solicitação Aprovada!",
+                              "success"
+                         )
+                     })
+                     .catch(error => {
+                         Swal.fire(
+                             "Falha!",
+                             "Erro ao atualizar endereço " + error,
+                             "error"
+                         )
+                     }); 
+                      callback(true);
+                    } else {
+                      callback(false);
+                    }
+                  });
+                }
                var modal = document.getElementById("myModal");
                var btn = document.getElementById("myBtn");
-               var span = document.getElementsByClassName("close")[0];
-               btn.onclick = function() {
-               modal.style.display = "block";
-               }
-               span.onclick = function() {
-               modal.style.display = "none";
-               }
+               // var span = document.getElementsByClassName("close")[0];
+               // btn.onclick = function() {
+               // modal.style.display = "block";
+               // }
+               // span.onclick = function() {
+               // modal.style.display = "none";
+               // }
             </script>';
 
       echo '</td></tr>';
@@ -972,14 +1042,17 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       Session::addMessageAfterRedirect(__('The form has been successfully saved!', 'formcreator'), true, INFO);
       $formID = $_POST['formID'];
       $validatorID = $_POST['validatorID'];
+      echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
 
+      
       foreach ($this->targetList as $target) {
          // TRANS: %1$s is the name of the target, %2$s is the type of the target, %3$s is the ID of the target in a HTML hyperlink
          $targetUrl = '<a href="' . $target->getFormURLWithID($target->getID()) . '">' . $target->getID() . '</a>';
          $idChamado = $target->getID();
-         Session::addMessageAfterRedirect(sprintf(__('Item sucessfully added: %1$s (%2$s: %3$s)', 'formcreator'), $target->getName(), $target->getTypeName(1), $targetUrl), false, INFO);
+         $_SESSION['chamadoCriado'] = $idChamado;
       }
-      $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306');      
+      
+      require_once('../../../src/db_config.php');
       $GLOBALS['sqlcon'] = $sqlcon;
       
       //Busca as perguntas e respostas do formulario
@@ -993,13 +1066,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $retornaIDRequerente = mysqli_query($sqlcon, $buscaIDRequerente);
 
       $_SESSION['validaPedido'] = [$formID, $validatorID];
-      $endereco = $_POST['endereco'];
-      $cep = $_POST['cep'];
-      $estado = $_POST['estado'];
-      $tipoentrega = $_POST['entrega'];
-      $cidade = $_POST['cidade'];
-
-      $_SESSION['dataPedido'] = [$endereco, $cep, $estado, $tipoentrega, $cidade];
+   
       if($retornaIDRequerente){
          while($req = mysqli_fetch_row($retornaIDRequerente)){
             $idRequerente = $req['0'];
@@ -1032,19 +1099,13 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      } else{
                         echo'<script>alert("ERRO: " . $sqlINSERT . "<br>" . mysqli_error($sqlcon))</script>';
                      }
-                     $endereco = $_POST['endereco'];
-                     $cep = $_POST['cep'];
-                     $estado = $_POST['estado'];
-                     $tipoentrega = $_POST['entrega'];
-                     $cidade = $_POST['cidade'];
-                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
                     
                   }
                   else{
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . ", favor contatar o suporte!'); history.go(-1);</script>";
                      require_once('erroNomenclatura.php');
 
-                     exit;
+                     return false;
                   }
                } else{
 
@@ -1072,14 +1133,15 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      }
                     
                      print_r($target->getID());
+                     
 
-                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+                     //$insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
                      
                   }
                   else {
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . " , favor contatar o suporte!'); history.go(-1);;</script>";
                      require_once("../inc/erroNomenclatura.php");
-                     exit;
+                     return false;
                   }
                    /** @var CommonDBTM $target */
                  
@@ -1093,7 +1155,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
      
 
       unset($CFG_GLPI['plugin_formcreator_disable_hook_create_ticket']);
-      return $success;
+      
+       return $success;
+   
    }
 
    /**

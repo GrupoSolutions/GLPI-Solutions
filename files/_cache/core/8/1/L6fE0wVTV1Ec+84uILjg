@@ -1,0 +1,37 @@
+1678711221
+e5ae7124688680762bb1942cfca9cacb4a018f03
+a:1:{s:52:"bn_count_Ticket_344e761b-f7e8-4617-8c90-154b266b4d67";s:1434:"      <style>
+         #bn_1700870696 {
+            background-color: #ffdc64;
+            color: #977500;
+         }
+
+         #bn_1700870696:hover {
+            background-color: #ffcb18;
+            border: 1px solid #ca9c00;
+         }
+
+         .theme-dark #bn_1700870696 {
+            background-color: #977500;
+            color: #ffdc64;
+         }
+
+         .theme-dark #bn_1700870696:hover {
+            background-color: #ffcb18;
+            color: #977500;
+            border: 1px solid #ca9c00;
+         }
+      </style>
+      <a href='/front/ticket.php?criteria%5B0%5D%5Blink%5D=AND&criteria%5B0%5D%5Bfield%5D=15&criteria%5B0%5D%5Bsearchtype%5D=morethan&criteria%5B0%5D%5Bvalue%5D=2023-03-01%2000%3A00%3A00&criteria%5B1%5D%5Blink%5D=AND&criteria%5B1%5D%5Bfield%5D=15&criteria%5B1%5D%5Bsearchtype%5D=lessthan&criteria%5B1%5D%5Bvalue%5D=2023-03-13%2000%3A00%3A00&reset=reset'
+         id="bn_1700870696"
+         class="card big-number  filter-dates filter-dates_mod filter-requesttype filter-location filter-tickettype"
+         title="">
+         <span class="content">            <span title="26"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">26</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Chamados">Chamados</div>
+         <i class="main-icon ti ti-alert-circle"></i>
+      </a>";}

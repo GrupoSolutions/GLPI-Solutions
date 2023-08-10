@@ -1,0 +1,37 @@
+1685622520
+f85cc0cd0df4a3993b62d26c968468cd4205a04a
+a:1:{s:71:"plugin_formcreator_assigned_issues_b3c4ab94-8e18-4d11-bc78-d4465e3e9d4e";s:1165:"      <style>
+         #bn_1381381056 {
+            background-color: #fafafa;
+            color: #949494;
+         }
+
+         #bn_1381381056:hover {
+            background-color: #d4d4d4;
+            border: 1px solid #aeaeae;
+         }
+
+         .theme-dark #bn_1381381056 {
+            background-color: #949494;
+            color: #fafafa;
+         }
+
+         .theme-dark #bn_1381381056:hover {
+            background-color: #d4d4d4;
+            color: #949494;
+            border: 1px solid #aeaeae;
+         }
+      </style>
+      <a href='/marketplace/formcreator/front/issue.php?criteria%5B0%5D%5Bfield%5D=4&criteria%5B0%5D%5Bsearchtype%5D=equals&criteria%5B0%5D%5Bvalue%5D=process&reset=reset'
+         id="bn_1381381056"
+         class="card big-number "
+         title="">
+         <span class="content">            <span title="4"
+                  class="formatted-number"
+                  data-precision='0'>
+               <span class="number">4</span>
+               <span class="suffix"></span>
+            </span></span>
+         <div class="label" title="Atribuído">Atribuído</div>
+         <i class="main-icon fas fa-users"></i>
+      </a>";}
