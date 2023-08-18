@@ -564,7 +564,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       $formUrl = static::getFormURL(); // May be called from iinherited classes
       $formName = 'plugin_formcreator_form';
-      print_r($formUrl);
       echo '<form name="' . $formName . '" method="post" role="form" enctype="multipart/form-data"'
       . ' class="plugin_formcreator_form"'
       . ' action="' . $formUrl . '"'
@@ -723,8 +722,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          echo "<input type='hidden' id='formID' name='formID' value='{$ID}'>";
 
          echo "<input type='hidden' id='validatorID' name='validatorID' value='{$validatorID}'>";
-         //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]))
-         echo "<input type='submit' id='myBtn' value='Enviar'>";
+        //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]));
+         echo "<input type='submit' id='myBtn' class='btn' value='Enviar'>";
          echo "<input type='hidden' name='accept_formanswer' >";
 
          //require_once("modal.php");

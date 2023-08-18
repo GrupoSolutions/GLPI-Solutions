@@ -49,7 +49,8 @@ $date_fields = [
     'due_date',
     'time_to_own'
 ];
-
+//Kunai do minato pra eu poder voltar aqui depois
+ print_r($_POST['status']);
 foreach ($date_fields as $date_field) {
    //handle not clean dates...
     if (

@@ -1075,3 +1075,5 @@ Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 
 Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
 2023-08-08 17:32:37 [54@GS003021]
 Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-14 10:35:28 [2@GS003021]
+Atenção: um e-mail não foi entregue para glpi@gruposolutions.com.br com mais 6 tentativas restantes. Mensagem: [ATIVO] Monitoramento de ações automáticas, Erro: SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting

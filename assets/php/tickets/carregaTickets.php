@@ -80,7 +80,6 @@ require_once('../assets/php/tickets/sla.php');
                     $minutos = $valorTotal % 60;
                     $percentSLA = ($valorTotal / $totalSLA) * 100;
                     $percentBadge = $percentSLA;
-
                     if($percentSLA <= 30) {
                         $avisoSLA = "#49bf4d";
                         $badge = "badge-soft-success";

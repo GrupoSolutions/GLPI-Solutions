@@ -148,6 +148,9 @@
 		case 'manutencao':
 			require 'termomanut.php';
 			break;
+		case 'ar':
+			require 'ar.php';
+			break;
 		default:
 			require 'termomanut.php';
 	}

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./bootstrap.css"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Etiquetas - Correios</title>
+    <style>
+        <?php include 'styles.css'; ?>
+        <?php include 'bootstrap.css'; ?>
+        <?php include 'ar.css'; ?>
+    </style>
+    <?php 
+        function format_string($mask, $str, $ch = '#') {
+            $c = 0;
+            $rs = '';
+            for ($i = 0; $i < strlen($mask); $i++) {
+                if ($mask[$i] == $ch) {
+                    $rs .= $str[$c];
+                    $c++;
+                } else {
+                    $rs .= $mask[$i];
+                }
+            }
+            return $rs;
+    }?>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-5">
+        <div class="ml-4 col AR">
+            
+        <div class="borda">
+            <div class="textoA">
+                <p>USO EXCLUSIVO DOS CORREIOS</p>
+                <p>Cole aqui a etiqueta com o código identificador da encomenda</p>
+            </div>  
+        </div>
+        <div class="dadosRecebedor">
+            <p>Recebedor:</p>
+            <span>_____________________________________</span>
+            <p>Assinatura:</p>
+            <span>______________</span>
+            <p>Documento:</p>
+            <span>_______________</span>
+        </div>
+    
+        <div class="entregaVizinho">
+            <p style="margin: inherit;">ENTREGA NO VIZINHO AUTORIZADA?</p>
+            <span class="ml-2">Entrega no vizinho não autorizada</span>
+        </div>
+
+        <div class="destinatario pb-2 ">
+            <h6>DESTINATÁRIO</h6>
+            <div><img src="correios.png" width="50"/></div>
+            <p class="ml-2">NOME COLABORADOR<br>Rua Maria Quintela 260B<br>BAIRRO<br>00000-00     Estado-UF</p>
+            <div class="pl-1">
+            <?php
+                $cep = '74480395';
+                include "../vendor/autoload.php";
+                $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
+                echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
+
+            ?>
+            </div>
+        </div>
+            <p class="ml-2"><strong>Remetente:</strong> GRUPO SOLUTIONS<br>Rua Geraldo Flausino Gomes<br>N°78, 9 ANDAR CONJ 94<br>Cidade Monções<br><strong>04575-060</strong> São Paulo - SP</p> 
+        </div>
+        <div class="ml-5 col AR">
+                
+            <div class="borda">
+                <div class="textoA">
+                    <p>USO EXCLUSIVO DOS CORREIOS</p>
+                    <p>Cole aqui a etiqueta com o código identificador da encomenda</p>
+                </div>  
+            </div>
+            <div class="dadosRecebedor">
+                <p>Recebedor:</p>
+                <span>_____________________________________</span>
+                <p>Assinatura:</p>
+                <span>______________</span>
+                <p>Documento:</p>
+                <span>_______________</span>
+            </div>
+        
+            <div class="entregaVizinho">
+                <p style="margin: inherit;">ENTREGA NO VIZINHO AUTORIZADA?</p>
+                <span class="ml-2">Entrega no vizinho não autorizada</span>
+            </div>
+
+            <div class="destinatario pb-2 ">
+                <h6>DESTINATÁRIO</h6>
+                <div><img src="correios.png" width="50"/></div>
+                <p class="ml-2">NOME COLABORADOR<br>Rua Maria Quintela 260B<br>BAIRRO<br>00000-00     Estado-UF</p>
+                <div class="pl-1">
+                <?php
+                    $cep = '74480395';
+                    include "../vendor/autoload.php";
+                    $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
+                    echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
+
+                ?>
+                </div>
+            </div>
+            <p class="ml-2"><strong>Remetente:</strong> GRUPO SOLUTIONS<br>Rua Geraldo Flausino Gomes<br>N°78, 9 ANDAR CONJ 94<br>Cidade Monções<br><strong>04575-060</strong> São Paulo - SP</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+    <table border="0" cellspacing="0" class="BordaTodas" style="width:100%" >
+            <tbody><tr>
+                <td width="21" rowspan="12" class="BordaDirTracejada"><img src="ar2_r3_c2.gif"></td>
+                <td width="7" height="30">&nbsp;</td>
+                <td width="124" class="BordaInf mt-4"><img src="correios.png" width="119" height="25" style="margin-top:5px;" alt=""></td>
+                <td width="86" class="style58 BordaInf"><span class="style59">AVISO DE <br>
+                RECEBIMENTO</span></td>
+                <td colspan="3" align="center" valign="middle" class="BordaInf style60">AR</td>
+                <td align="center" valign="middle" class="BordaInf style62">&nbsp;</td>
+                <td width="126" class="BordaInfEsq">DATA DE POSTAGEM </td>
+            </tr>
+            <tr>
+                <td height="32">&nbsp;</td>
+                <td colspan="6" rowspan="2" class="BordaInfEsq">
+                
+                        <table border="0" width="370px" height="176px">
+                            <tbody><tr>
+                            <td valign="top" class="style24">
+                                <span class="style34">DESTINATÁRIO</span><span class="style33"><br>
+                                NOME
+                                <br> RUA SARGENTO DELFINO FRANCISCO REZENDE 123 <br>
+                                    JARDIM MARINGÁ 							
+                                <br>
+                                04814-090 - SÃO PAULO - SP
+                            </span> </td>
+                            </tr>
+                            <p></p><p></p>
+                            <tr>
+                                    <td align="center" valign="middle"><div id="divCodBarras" style="border: 1px dotted black; font-family: Arial, Helvetica, sans-serif; font-size: 12px;">(CÓDIGO DE BARRAS OU Nº DE REGISTRO DO OBJETO)</div></td>
+                            </tr>
+                            <p></p><p></p>
+
+                            <tr>
+                            <td align="left" valign="bottom">
+                                    <span class="style37">ENDEREÇO PARA DEVOLUÇÃO DO AR </span><br>
+                                    <span class="style39">GRUPO SOLUTIONS<br>
+                                        RUA SARGENTO DELFINO FRANCISCO REZENDE 123<br>
+                                        JARDIM MARINGÁ 
+                                        <br>
+                                    04814-090 - SÃO PAULO - SP
+                            </span> </td>
+                            </tr>
+            </tbody></table>	
+                
+                
+                </td>
+                <td class="BordaInfEsq">UNIDADE DE POSTAGEM </td>
+            </tr>
+            <tr>
+                <td height="148">&nbsp;</td>
+                <td align="center" class="BordaInfEsq">CARIMBO<br>
+                UNIDADE DE ENTREGA </td>
+            </tr>
+            <tr>
+                <td height="32">&nbsp;</td>
+                <td colspan="2" align="center" class="BordaEsq"><strong>TENTATIVAS DE ENTREGA </strong></td>
+                <td colspan="5" class="BordaInfEsq">OBSERVAÇÃO
+                <br><span class="style57"></span></td>
+            </tr>
+            <tr>
+                <td height="71" rowspan="6">&nbsp;</td>
+                <td rowspan="5" class="BordaEsq">1ª ________/________/________<br>
+                <br>
+                2ª ________/________/________<br>
+                <br>
+                3ª ________/________/________ </td>
+                <td rowspan="5" align="center">______ : ______h<br>
+                <br>
+                ______ : ______h<br>
+                <br>
+                ______ : ______ h </td>
+                <td height="9" colspan="4" align="center" valign="top" class="style57 BordaEsq"><strong>MOTIVO DE DEVOLUÇÃO </strong></td>
+                <td rowspan="6" class="BordaInfEsq">RUBRICA E MATRÍCULA DO<br>
+                CARTEIRO </td>
+            </tr>
+            <tr>
+                <td width="21" height="58" rowspan="5" class="BordaInfEsq"><img src="ar2_r6_c10.gif" style="height: 80px;" alt=""></td>
+                <td width="71" height="13"><span class="style57">Mudou-se</span></td>
+                <td width="15" rowspan="5" class="BordaInf"><img src="ar2_r5_c5.gif" style="height: 80px;" alt=""></td>
+                <td width="49"><span class="style57">Recusado</span></td>
+            </tr>
+            <tr>
+                <td height="12"><span class="style57">Endereço insuficiente </span></td>
+                <td width="49"><span class="style57">Não procurado </span></td>
+            </tr>
+            <tr>
+                <td height="11"><span class="style57">Não existe o número </span></td>
+                <td width="49"><span class="style57">Ausente</span></td>
+            </tr>
+            <tr>
+                <td height="9" valign="middle"><span class="style57">Desconhecido</span></td>
+                <td width="49" valign="middle"><span class="style57">Falecido</span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="BordaInfEsq"><br>
+                <span class="style57"></span></td>
+                <td height="11" class="BordaInf style57">Outros</td>
+                <td width="49" align="right" valign="bottom" class="BordaInf style58">.</td>
+            </tr>
+            <tr>
+                <td height="24">&nbsp;</td>
+                <td colspan="6" class="BordaInfEsq">ASSINATURA DO RECEBEDOR<p></p></td>
+                <td class="BordaInfEsq">DATA DE ENTREGA </td>
+            </tr>
+            <tr style="margin-bottom:5px">
+                <td>&nbsp;</td>
+                <td colspan="6" class="BordaEsq">NOME LEGÍVEL DO RECEBEDOR<p></p></td>
+                <td class="BordaEsq" >Nº DOC. DE IDENTIDADE </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+<div style="page-break-after: always"></div>
+
+<div class="decConteudo mt-5">
+<div class="declaracao">
+    <div class="row"><div class="col linha bloco tabela">DECLARAÇÃO DE CONTEÚDO</div></div>
+          <div class="row linha mt-2">
+            <div class="col-6">
+              <div class="bloco tabela">
+                REMETENTE
+                <div class="celula">
+                  NOME:
+                  <span class="texto">
+                    Fulano de Tal
+                  </span>
+                </div>
+                <div class="celula">
+                  ENDEREÇO:
+                  <span class="texto">
+                    Av. Um, 123, Jardim Dois
+                  </span>
+                </div>
+                <div class="celula texto">
+                  Apto. 4, próximo ao Super Cinco
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <div class="celula">
+                      CIDADE:
+                      <span class="texto">
+                        Sete Lagoas
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="celula">
+                      UF:
+                      <span class="texto">
+                        MG
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="celula">
+                      CEP:
+                      <span class="texto">
+                        35700-000
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="celula">
+                      CPF/CNPJ:
+                      <span class="texto">
+                        12.334.567/890
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="bloco tabela">
+                DESTINATÁRIO
+                <div class="celula">
+                  NOME:
+                  <span class="texto">
+                    Ciclano de Tal
+                  </span>
+                </div>
+                <div class="celula">
+                  ENDEREÇO:
+                  <span class="texto">
+                    Av. Mil, 1223, Jardim Dois Mil
+                  </span>
+                </div>
+                <div class="celula texto">
+                  &nbsp;
+                </div>
+                <div class="row">
+                  <div class="col-9">
+                    <div class="celula">
+                      CIDADE:
+                      <span class="texto">
+                        Belo Horizonte
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="celula">
+                      UF:
+                      <span class="texto">
+                        MG
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="celula">
+                      CEP:
+                      <span class="texto">
+                        30000-000
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="celula">
+                      CPF/CNPJ:
+                      <span class="texto">
+                        02.334.567/890
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row linha">
+            <div class="col-12">
+              <div class="bloco tabela">
+                I D E N T I F I C A Ç Ã O &nbsp;&nbsp;D O S &nbsp;&nbsp;B E N S
+                <div class="row texto-centro">
+                  <div class="col-1">
+                    <div class="celula">
+                      ITEM
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="celula">
+                      CONTEÚDO
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="celula">
+                      QUANT.
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="celula">
+                      VALOR
+                    </div>
+                  </div>
+                </div>
+
+                
+                    <div class="row">
+                      <div class="col-1">
+                        <div class="celula texto">
+                          1
+                        </div>
+                      </div>
+                      <div class="col-7">
+                        <div class="celula texto">
+                          Produto 1
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          1
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          R$
+                          R$&nbsp;10,50
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-1">
+                        <div class="celula texto">
+                          2
+                        </div>
+                      </div>
+                      <div class="col-7">
+                        <div class="celula texto">
+                          Produto 2
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          2
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          R$
+                          R$&nbsp;20,75
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-1">
+                        <div class="celula texto">
+                          3
+                        </div>
+                      </div>
+                      <div class="col-7">
+                        <div class="celula texto">
+                          Produto 3
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          3
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="celula texto">
+                          R$
+                          R$&nbsp;100,00
+                        </div>
+                      </div>
+                    </div>
+
+                <div class="row texto-direita">
+                  <div class="col-8">
+                    <div class="celula cinza">
+                      TOTAIS
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="celula">
+                      6
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <div class="celula">
+                      R$ R$&nbsp;352,00
+                    </div>
+                  </div>
+                </div>
+                <div class="row texto-direita">
+                  <div class="col-8">
+                    <div class="celula cinza">
+                      PESO TOTAL (kg)
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="celula">
+                      8,120
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row linha">
+            <div class="col-md-12">
+              <div class="bloco">
+                D E C L A R A Ç Ã O
+                <div class="celula celula-unica">
+                  <div class="texto" style="padding: 18px 6px; font-size: 15px">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Declaro que não me enquadro no conceito de contribuinte previsto no
+                    art. 4º da Lei Complementar nº 87/1996, uma vez que não realizo,
+                    com habitualidade ou em volume que caracterize intuito comercial,
+                    operações de circulação de mercadoria, ainda que se iniciem no exterior,
+                    ou estou dispensado da emissão da nota fiscal por força da legislação tributária vigente,
+                    responsabilizando-me, nos termos da lei e a quem de direito, por informações inverídicas.
+                  </div>
+                </div>
+                <div style="padding: 30px 10px 5px 10px">
+                  <div class="row">
+                    <div class="col-3 ass">
+                      <span>,</span>
+                    </div>
+                    <div class="col-1 ass">
+                      <span>de</span>
+                    </div>
+                    <div class="col-2 ass">
+                      <span>de</span>
+                    </div>
+                    <div class="col-2 ass">
+                      <span> </span>
+                    </div>
+                    <div class="col-4 ass">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-8"></div>
+                    <div class="col-4 texto">Assinatura do Declarante/Remetente</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row linha">
+            <div class="col-md-12">
+              <div class="bloco" style="text-align: left; padding: 10px">
+                OBSERVAÇÃO:
+                <div class="texto" style="font-size: 15px">
+                  Constitui crime contra a ordem tributária suprimir ou reduzir tributo,
+                  ou contribuição social e qualquer acessório (Lei 8.137/90 Art. 1º, V).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+<div style="page-break-after: always"></div>
+</div>
+<div class="romaneio mt-5 bordaBaixo">
+    <div class="row" class="">
+        <div class="col" style="text-align:center;">
+            <img src="sedex.png" class="mt-2" width="150"/>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col bordCimaBaixo">
+            <span><strong>EMPRESA: SERVICE SOLUTIONS SOLUCOES EM CONTACT CENTER LTDA - ME</span><span class="ml-5">CONTRATO: 9912361195</strong></span></span>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col">
+            <table class="romane">
+                <tr class="bordaT">
+                    <td class="">DATA</td>
+                    <td class="BordaEsq">DE</td>
+                    <td class="BordaEsq">PARA</td>
+                    <td class="BordaEsq">CEP</td>
+                    <td class="BordaEsq">CC</td>
+                    <td class="BordaEsq">QUANT</td>
+                    <td class="BordaEsq">SERVICOS ADICIONAIS</td>
+                </tr>
+                <tr>
+                    <td class="bordCimaBaixo font-weight-normal">08/08/2023</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">Service</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">Colaborador da Silva</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">01234-567</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">RMA</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">1</td>
+                    <td class="BordaEsq bordCimaBaixo font-weight-normal">AR</td>
+                </tr>
+                <tr>
+                    <td colspan="9" class="mr-3 bordCimaBaixo" style="text-align:right">TOTAL EMBALAGENS: 1</td>
+                </tr>   
+            </table>
+            <table class="romane" style="border-bottom: 3px solid #000">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>NOME LEGÍVEL: USUARIO COLABORADOR</td>
+                    <td></td>
+                    <td></td>
+                    <td>ASSINATURA: _________________________________</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    </div>
+</body>
+</html>

@@ -103,9 +103,15 @@ function buscaSLATotal($ID) {
     $horasSLA = mysqli_query($sqlcon, $SQL);
     if($horasSLA){
         $r = $horasSLA->fetch_assoc();
-        $horas = $r['number_time'];
+        if (isset($r) && isset($r['number_time'])) {
+            $horas = $r['number_time'];
+        }
     }
-    return $horas;
+    if(isset($horas)){
+        return $horas;
+    } else{
+        return "00";
+    }
 }
 
 function buscaAtendente($ID){

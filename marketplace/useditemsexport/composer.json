@@ -1,6 +1,7 @@
 {
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "picqer/php-barcode-generator": "^2.3"
     },
     "require-dev": {
         "glpi-project/tools": "^0.4"

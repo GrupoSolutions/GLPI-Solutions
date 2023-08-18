@@ -59,10 +59,12 @@ switch($status){
 require ('../assets/php/tickets/sla.php');
 $dataFinal = new DateTime();
 if(!$dataFim){
-    echo "<p>Erro! Categoria sem SLA configurado corretamente.</p>";
-
+    echo "<script>alert('Erro! Categoria sem SLA configurado corretamente');</script>";
 }
+if(isset($dataFim)){
     $dataMax = new DateTime($dataFim);
+}
+$dataMax = new DateTime();
 $dataInicial = new DateTime($dataInicio);
 if($dataSolucao) {
     $dataSolucionada = new DateTime($dataSolucao);

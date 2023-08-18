@@ -107,99 +107,98 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
         echo twig_escape_filter($this->env, (($__internal_compile_0 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 66)) && is_array($__internal_compile_0) || $__internal_compile_0 instanceof ArrayAccess ? ($__internal_compile_0["id"] ?? null) : null), "html", null, true);
         echo "\" data-submit-once=\"true\">
 \t\t<h1 class='form-title'>
-\t\t        ";
+            ";
         // line 68
         echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("Glpi\\Toolbox\\Sanitizer::unsanitize", [0 => __((($__internal_compile_1 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 68)) && is_array($__internal_compile_1) || $__internal_compile_1 instanceof ArrayAccess ? ($__internal_compile_1["name"] ?? null) : null), twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 68))]), "html", null, true);
         echo "
-\t\t\t<i class=\"fas fa-print\" style=\"cursor: pointer;\" onclick=\"window.print();\"></i>
 \t\t</h1>
         ";
-        // line 71
-        if ((((($__internal_compile_2 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 71)) && is_array($__internal_compile_2) || $__internal_compile_2 instanceof ArrayAccess ? ($__internal_compile_2["content"] ?? null) : null) != "") || (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getExtraHeader", [], "method", false, false, false, 71) != ""))) {
-            // line 72
+        // line 70
+        if ((((($__internal_compile_2 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 70)) && is_array($__internal_compile_2) || $__internal_compile_2 instanceof ArrayAccess ? ($__internal_compile_2["content"] ?? null) : null) != "") || (twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getExtraHeader", [], "method", false, false, false, 70) != ""))) {
+            // line 71
             echo "            <div class=\"form_header\">
             ";
-            // line 73
-            echo $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getSafeHtml(__((($__internal_compile_3 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 73)) && is_array($__internal_compile_3) || $__internal_compile_3 instanceof ArrayAccess ? ($__internal_compile_3["content"] ?? null) : null), twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 73)));
+            // line 72
+            echo $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getSafeHtml(__((($__internal_compile_3 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 72)) && is_array($__internal_compile_3) || $__internal_compile_3 instanceof ArrayAccess ? ($__internal_compile_3["content"] ?? null) : null), twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 72)));
             echo "
             ";
-            // line 74
-            echo $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getSafeHtml(twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getExtraHeader", [], "method", false, false, false, 74));
+            // line 73
+            echo $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getSafeHtml(twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getExtraHeader", [], "method", false, false, false, 73));
             echo "
             </div>
         ";
         }
-        // line 77
+        // line 76
         echo "        <ol>
         ";
-        // line 78
-        $context["sections"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorSection::getSectionsFromForm", [0 => (($__internal_compile_4 = twig_get_attribute($this->env, $this->source,         // line 79
-($context["item"] ?? null), "fields", [], "any", false, false, false, 79)) && is_array($__internal_compile_4) || $__internal_compile_4 instanceof ArrayAccess ? ($__internal_compile_4["id"] ?? null) : null)]);
-        // line 81
+        // line 77
+        $context["sections"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorSection::getSectionsFromForm", [0 => (($__internal_compile_4 = twig_get_attribute($this->env, $this->source,         // line 78
+($context["item"] ?? null), "fields", [], "any", false, false, false, 78)) && is_array($__internal_compile_4) || $__internal_compile_4 instanceof ArrayAccess ? ($__internal_compile_4["id"] ?? null) : null)]);
+        // line 80
         echo "        ";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["sections"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["section"]) {
-            // line 82
+            // line 81
             echo "            ";
-            $context["sectionId"] = (($__internal_compile_5 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 82)) && is_array($__internal_compile_5) || $__internal_compile_5 instanceof ArrayAccess ? ($__internal_compile_5["id"] ?? null) : null);
-            // line 83
+            $context["sectionId"] = (($__internal_compile_5 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 81)) && is_array($__internal_compile_5) || $__internal_compile_5 instanceof ArrayAccess ? ($__internal_compile_5["id"] ?? null) : null);
+            // line 82
             echo "            <li class=\"card plugin_formcreator_section\" data-itemtype=\"PluginFormcreatorSection\" data-id=";
             echo twig_escape_filter($this->env, ($context["sectionId"] ?? null), "html", null, true);
             echo ">
                 <div class=\"card-header\">
                     <h2 class=\"card-title\">
                         ";
-            // line 86
-            if (((($__internal_compile_6 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 86)) && is_array($__internal_compile_6) || $__internal_compile_6 instanceof ArrayAccess ? ($__internal_compile_6["name"] ?? null) : null) == "")) {
-                // line 87
+            // line 85
+            if (((($__internal_compile_6 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 85)) && is_array($__internal_compile_6) || $__internal_compile_6 instanceof ArrayAccess ? ($__internal_compile_6["name"] ?? null) : null) == "")) {
+                // line 86
                 echo "                            (";
                 echo twig_escape_filter($this->env, ($context["sectionId"] ?? null), "html", null, true);
                 echo ")
                         ";
             } else {
-                // line 89
+                // line 88
                 echo "                            ";
-                echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("Glpi\\Toolbox\\Sanitizer::unsanitize", [0 => __((($__internal_compile_7 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 89)) && is_array($__internal_compile_7) || $__internal_compile_7 instanceof ArrayAccess ? ($__internal_compile_7["name"] ?? null) : null), twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 89))]), "html", null, true);
+                echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("Glpi\\Toolbox\\Sanitizer::unsanitize", [0 => __((($__internal_compile_7 = twig_get_attribute($this->env, $this->source, $context["section"], "fields", [], "any", false, false, false, 88)) && is_array($__internal_compile_7) || $__internal_compile_7 instanceof ArrayAccess ? ($__internal_compile_7["name"] ?? null) : null), twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 88))]), "html", null, true);
                 echo "
                         ";
             }
-            // line 91
+            // line 90
             echo "                    </h2>
                 </div>
                 <div class=\"card-body\">
                     ";
-            // line 94
+            // line 93
             $context["lastQuestion"] = null;
-            // line 95
+            // line 94
             echo "                    ";
-            $context["questions"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorQuestion::getQuestionsFromSection", [0 =>             // line 96
+            $context["questions"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorQuestion::getQuestionsFromSection", [0 =>             // line 95
 ($context["sectionId"] ?? null)]);
-            // line 98
+            // line 97
             echo "                    ";
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable(($context["questions"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["question"]) {
-                // line 99
+                // line 98
                 echo "                        ";
                 if ( !(null === ($context["lastQuestion"] ?? null))) {
-                    // line 100
+                    // line 99
                     echo "                            ";
-                    if (((($__internal_compile_8 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 100)) && is_array($__internal_compile_8) || $__internal_compile_8 instanceof ArrayAccess ? ($__internal_compile_8["row"] ?? null) : null) < (($__internal_compile_9 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 100)) && is_array($__internal_compile_9) || $__internal_compile_9 instanceof ArrayAccess ? ($__internal_compile_9["row"] ?? null) : null))) {
-                        // line 101
+                    if (((($__internal_compile_8 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 99)) && is_array($__internal_compile_8) || $__internal_compile_8 instanceof ArrayAccess ? ($__internal_compile_8["row"] ?? null) : null) < (($__internal_compile_9 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 99)) && is_array($__internal_compile_9) || $__internal_compile_9 instanceof ArrayAccess ? ($__internal_compile_9["row"] ?? null) : null))) {
+                        // line 100
                         echo "                                <div class=\"plugin_formcreator_newRow\"></div>
                                 ";
-                        // line 102
-                        if (((($__internal_compile_10 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 102)) && is_array($__internal_compile_10) || $__internal_compile_10 instanceof ArrayAccess ? ($__internal_compile_10["col"] ?? null) : null) > 0)) {
+                        // line 101
+                        if (((($__internal_compile_10 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 101)) && is_array($__internal_compile_10) || $__internal_compile_10 instanceof ArrayAccess ? ($__internal_compile_10["col"] ?? null) : null) > 0)) {
+                            // line 102
+                            echo "                                    ";
                             // line 103
                             echo "                                    ";
+                            $context["x"] = 0;
                             // line 104
                             echo "                                    ";
-                            $context["x"] = 0;
+                            $context["width"] = (($__internal_compile_11 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 104)) && is_array($__internal_compile_11) || $__internal_compile_11 instanceof ArrayAccess ? ($__internal_compile_11["col"] ?? null) : null);
                             // line 105
-                            echo "                                    ";
-                            $context["width"] = (($__internal_compile_11 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 105)) && is_array($__internal_compile_11) || $__internal_compile_11 instanceof ArrayAccess ? ($__internal_compile_11["col"] ?? null) : null);
-                            // line 106
                             echo "                                    <div class=\"plugin_formcreator_gap\" gs-x=\"";
                             echo twig_escape_filter($this->env, ($context["x"] ?? null), "html", null, true);
                             echo "\" gs-w=\"";
@@ -207,21 +206,21 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
                             echo "\"></div>
                                 ";
                         }
-                        // line 108
+                        // line 107
                         echo "                            ";
                     } else {
+                        // line 108
+                        echo "                                ";
+                        $context["x"] = ((($__internal_compile_12 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 108)) && is_array($__internal_compile_12) || $__internal_compile_12 instanceof ArrayAccess ? ($__internal_compile_12["col"] ?? null) : null) + (($__internal_compile_13 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 108)) && is_array($__internal_compile_13) || $__internal_compile_13 instanceof ArrayAccess ? ($__internal_compile_13["width"] ?? null) : null));
                         // line 109
                         echo "                                ";
-                        $context["x"] = ((($__internal_compile_12 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 109)) && is_array($__internal_compile_12) || $__internal_compile_12 instanceof ArrayAccess ? ($__internal_compile_12["col"] ?? null) : null) + (($__internal_compile_13 = twig_get_attribute($this->env, $this->source, ($context["lastQuestion"] ?? null), "fields", [], "any", false, false, false, 109)) && is_array($__internal_compile_13) || $__internal_compile_13 instanceof ArrayAccess ? ($__internal_compile_13["width"] ?? null) : null));
+                        $context["width"] = ((($__internal_compile_14 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 109)) && is_array($__internal_compile_14) || $__internal_compile_14 instanceof ArrayAccess ? ($__internal_compile_14["col"] ?? null) : null) - ($context["x"] ?? null));
                         // line 110
                         echo "                                ";
-                        $context["width"] = ((($__internal_compile_14 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 110)) && is_array($__internal_compile_14) || $__internal_compile_14 instanceof ArrayAccess ? ($__internal_compile_14["col"] ?? null) : null) - ($context["x"] ?? null));
-                        // line 111
-                        echo "                                ";
-                        if ((($context["x"] ?? null) < (($__internal_compile_15 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 111)) && is_array($__internal_compile_15) || $__internal_compile_15 instanceof ArrayAccess ? ($__internal_compile_15["col"] ?? null) : null))) {
-                            // line 112
+                        if ((($context["x"] ?? null) < (($__internal_compile_15 = twig_get_attribute($this->env, $this->source, $context["question"], "fields", [], "any", false, false, false, 110)) && is_array($__internal_compile_15) || $__internal_compile_15 instanceof ArrayAccess ? ($__internal_compile_15["col"] ?? null) : null))) {
+                            // line 111
                             echo "                                    ";
-                            // line 113
+                            // line 112
                             echo "                                    <div class=\"plugin_formcreator_gap\" gs-x=\"";
                             echo twig_escape_filter($this->env, ($context["x"] ?? null), "html", null, true);
                             echo "\" gs-w=\"";
@@ -229,34 +228,34 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
                             echo "\"></div>
                                 ";
                         }
-                        // line 115
+                        // line 114
                         echo "                            ";
                     }
-                    // line 116
+                    // line 115
                     echo "                        ";
                 }
-                // line 117
+                // line 116
                 echo "                        ";
-                if (( !twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "public", [], "any", false, false, false, 117) || twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, $context["question"], "getSubField", [], "method", false, false, false, 117), "isPublicFormCompatible", [], "method", false, false, false, 117))) {
-                    // line 118
+                if (( !twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "public", [], "any", false, false, false, 116) || twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, $context["question"], "getSubField", [], "method", false, false, false, 116), "isPublicFormCompatible", [], "method", false, false, false, 116))) {
+                    // line 117
                     echo "                            ";
                     $context["sessionData"] = $this->extensions['Glpi\Application\View\Extension\SessionExtension']->session("formcreator");
-                    // line 119
+                    // line 118
                     echo "                            ";
-                    echo twig_get_attribute($this->env, $this->source, $context["question"], "getRenderedHtml", [0 => twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 119), 1 => true, 2 => twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "formanswer", [], "any", false, false, false, 119)], "method", false, false, false, 119);
+                    echo twig_get_attribute($this->env, $this->source, $context["question"], "getRenderedHtml", [0 => twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "domain", [], "any", false, false, false, 118), 1 => true, 2 => twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "formanswer", [], "any", false, false, false, 118)], "method", false, false, false, 118);
                     echo "
                         ";
                 }
-                // line 121
+                // line 120
                 echo "                        ";
                 $context["lastQuestion"] = $context["question"];
-                // line 122
+                // line 121
                 echo "                    ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['question'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 123
+            // line 122
             echo "                </div>
             </li>
         ";
@@ -264,40 +263,40 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['section'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 126
+        // line 125
         echo "        ";
-        if (twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "use_captcha", [], "any", false, false, false, 126)) {
-            // line 127
+        if (twig_get_attribute($this->env, $this->source, ($context["options"] ?? null), "use_captcha", [], "any", false, false, false, 125)) {
+            // line 126
             echo "            ";
             $context["captchaTime"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("time");
+            // line 127
+            echo "            ";
+            $context["catchaId"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("md5", [0 => (($context["captchaTime"] ?? null) . (($__internal_compile_16 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 127)) && is_array($__internal_compile_16) || $__internal_compile_16 instanceof ArrayAccess ? ($__internal_compile_16["id"] ?? null) : null))]);
             // line 128
             echo "            ";
-            $context["catchaId"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("md5", [0 => (($context["captchaTime"] ?? null) . (($__internal_compile_16 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 128)) && is_array($__internal_compile_16) || $__internal_compile_16 instanceof ArrayAccess ? ($__internal_compile_16["id"] ?? null) : null))]);
-            // line 129
-            echo "            ";
             $context["captcha"] = $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorCommon::getCaptcha", [0 => ($context["captchaId"] ?? null)]);
-            // line 130
+            // line 129
             echo "            <li class=\"plugin_formcreator_section\" id=\"plugin_formcreator_captcha_section\">
                 <div class=\"card-header\">";
-            // line 131
+            // line 130
             echo twig_escape_filter($this->env, __("Are you a robot ?", "formcreator"), "html", null, true);
             echo "</div>
                 <div class=\"card-body\"><label for=\"plugin_formcreator_captcha\">";
-            // line 132
+            // line 131
             echo twig_escape_filter($this->env, __("Are you a robot ?", "formcreator"), "html", null, true);
             echo "</label>
                     <div><i onclick=\"plugin_formcreator_refreshCaptcha()\" class=\"fas fa-sync-alt\"></i>&nbsp;<img src=\"";
-            // line 133
+            // line 132
             echo (($__internal_compile_17 = ($context["captcha"] ?? null)) && is_array($__internal_compile_17) || $__internal_compile_17 instanceof ArrayAccess ? ($__internal_compile_17["img"] ?? null) : null);
             echo "\">
                         <div style=\"width: 50%; float: right\" class=\"form_field\"><span class=\"no-wrap\">
                         ";
-            // line 135
-            echo twig_call_macro($macros["fields"], "macro_textField", ["plugin_formcreator_captcha", "", "", ["no_label" => true]], 135, $context, $this->getSourceContext());
+            // line 134
+            echo twig_call_macro($macros["fields"], "macro_textField", ["plugin_formcreator_captcha", "", "", ["no_label" => true]], 134, $context, $this->getSourceContext());
             echo "
                         ";
-            // line 136
-            echo twig_call_macro($macros["fields"], "macro_hiddenField", ["plugin_formcreator_captcha_id", ($context["captchaId"] ?? null)], 136, $context, $this->getSourceContext());
+            // line 135
+            echo twig_call_macro($macros["fields"], "macro_hiddenField", ["plugin_formcreator_captcha_id", ($context["captchaId"] ?? null)], 135, $context, $this->getSourceContext());
             echo "
                         </div>
                     </div>
@@ -305,13 +304,13 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
             </li>
         ";
         }
-        // line 142
+        // line 141
         echo "        </ol>
         <script>
            \$(
               function() {
                  plugin_formcreator.showFields(\$(\"form[name='";
-        // line 146
+        // line 145
         echo twig_escape_filter($this->env, ($context["formName"] ?? null), "html", null, true);
         echo "']\"));
               }
@@ -319,25 +318,24 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
         </script>
 
         ";
-        // line 151
-        echo $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorForm_Validator::dropdownValidator", [0 =>         // line 152
+        // line 150
+        echo $this->extensions['Glpi\Application\View\Extension\PhpExtension']->call("PluginFormcreatorForm_Validator::dropdownValidator", [0 =>         // line 151
 ($context["item"] ?? null)]);
-        // line 153
+        // line 152
         echo "
 
         <div class=\"center\">
           ";
-        // line 160
+        // line 159
         echo "          <button type='button' id=\"btnEnvia\" onclick=\"atualizaEnd()\" value='Enviar' name=\"submit_formcreator\" class=\"btn\"> <span>Enviar</span> </button>&nbsp;
         </div>
         
-         <i class=\"fa-duotone fa-spinner-third fa-spin\"></i>
         ";
-        // line 164
-        echo twig_call_macro($macros["fields"], "macro_hiddenField", ["plugin_formcreator_forms_id", (($__internal_compile_18 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 164)) && is_array($__internal_compile_18) || $__internal_compile_18 instanceof ArrayAccess ? ($__internal_compile_18["id"] ?? null) : null)], 164, $context, $this->getSourceContext());
+        // line 162
+        echo twig_call_macro($macros["fields"], "macro_hiddenField", ["plugin_formcreator_forms_id", (($__internal_compile_18 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 162)) && is_array($__internal_compile_18) || $__internal_compile_18 instanceof ArrayAccess ? ($__internal_compile_18["id"] ?? null) : null)], 162, $context, $this->getSourceContext());
         echo "
         <input type=\"hidden\" name=\"_glpi_csrf_token\" value=\"";
-        // line 165
+        // line 163
         echo twig_escape_filter($this->env, Session::getNewCSRFToken(), "html", null, true);
         echo "\" />
 \t</form>
@@ -508,7 +506,7 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
     function atualizaEnd(){
         substituirPorItalico();
         fetch('/glpi108/marketplace/formcreator/ajax/buscaEndereco.php?id=' + ";
-        // line 333
+        // line 331
         echo twig_escape_filter($this->env, ($context["idSolicitante"] ?? null), "html", null, true);
         echo ")
             .then(response => response.json())
@@ -554,7 +552,7 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
                             allowEscapeKey: false,
                             preConfirm: () => {
                                 var idUsu = ";
-        // line 376
+        // line 374
         echo twig_escape_filter($this->env, ($context["idSolicitante"] ?? null), "html", null, true);
         echo ";
                                 var cep = document.getElementById('cep').value;
@@ -624,7 +622,7 @@ class __TwigTemplate_789a061b7a6d5698cd35ad148a9f80fa extends Template
 
     public function getDebugInfo()
     {
-        return array (  558 => 376,  512 => 333,  341 => 165,  337 => 164,  331 => 160,  326 => 153,  324 => 152,  323 => 151,  315 => 146,  309 => 142,  300 => 136,  296 => 135,  291 => 133,  287 => 132,  283 => 131,  280 => 130,  277 => 129,  274 => 128,  271 => 127,  268 => 126,  260 => 123,  254 => 122,  251 => 121,  245 => 119,  242 => 118,  239 => 117,  236 => 116,  233 => 115,  225 => 113,  223 => 112,  220 => 111,  217 => 110,  214 => 109,  211 => 108,  203 => 106,  200 => 105,  197 => 104,  195 => 103,  193 => 102,  190 => 101,  187 => 100,  184 => 99,  179 => 98,  177 => 96,  175 => 95,  173 => 94,  168 => 91,  162 => 89,  156 => 87,  154 => 86,  147 => 83,  144 => 82,  139 => 81,  137 => 79,  136 => 78,  133 => 77,  127 => 74,  123 => 73,  120 => 72,  118 => 71,  112 => 68,  104 => 66,  102 => 65,  79 => 44,  69 => 40,  65 => 39,  61 => 38,  56 => 37,  53 => 36,  48 => 35,  46 => 34,  42 => 32,  40 => 31,  37 => 30,);
+        return array (  556 => 374,  510 => 331,  339 => 163,  335 => 162,  330 => 159,  325 => 152,  323 => 151,  322 => 150,  314 => 145,  308 => 141,  299 => 135,  295 => 134,  290 => 132,  286 => 131,  282 => 130,  279 => 129,  276 => 128,  273 => 127,  270 => 126,  267 => 125,  259 => 122,  253 => 121,  250 => 120,  244 => 118,  241 => 117,  238 => 116,  235 => 115,  232 => 114,  224 => 112,  222 => 111,  219 => 110,  216 => 109,  213 => 108,  210 => 107,  202 => 105,  199 => 104,  196 => 103,  194 => 102,  192 => 101,  189 => 100,  186 => 99,  183 => 98,  178 => 97,  176 => 95,  174 => 94,  172 => 93,  167 => 90,  161 => 88,  155 => 86,  153 => 85,  146 => 82,  143 => 81,  138 => 80,  136 => 78,  135 => 77,  132 => 76,  126 => 73,  122 => 72,  119 => 71,  117 => 70,  112 => 68,  104 => 66,  102 => 65,  79 => 44,  69 => 40,  65 => 39,  61 => 38,  56 => 37,  53 => 36,  48 => 35,  46 => 34,  42 => 32,  40 => 31,  37 => 30,);
     }
 
     public function getSourceContext()

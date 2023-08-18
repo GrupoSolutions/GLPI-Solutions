@@ -73,7 +73,7 @@ if (isset($_POST["add"])) {
     $now = date('Y-m-d H:i:s');
     $arrAtendentes = array();
 
-    //Esta parte seta o status para Aguardando Terceiros (Quando o Atendente responde e aguarda resposta do cliente/solicitante) e atribui o atendente que respondeu ao chamado. 
+    //Esta parte seta o status para Aguardando Resposta (Quando o Atendente responde e aguarda resposta do cliente/solicitante) e atribui o atendente que respondeu ao chamado. 
     if($ticketStatus == 1 && $ticketUltimoUpd != $idUsuario && $ticketRecipiente != $idUsuario){
         $sqlAtribuiChamado = "INSERT INTO glpi_tickets_users(tickets_id, users_id, type, use_notification) VALUES ({$idChamado}, {$idUsuario}, 2, 1)";
         $atribuiChamado =  mysqli_query($sqlcon, $sqlAtribuiChamado);
@@ -89,6 +89,7 @@ if (isset($_POST["add"])) {
 
    
 
+    //Esta parte setará o status para Em atendimento, quando for igual a Pendente/Aguardando Terceiros
     if ($ticketStatus == 4) {
         $arrClientes = array();
         $sqlBuscaClientes = "SELECT users_id FROM glpi_tickets_users WHERE tickets_id = '{$idChamado}' AND type IN (1,3)";
@@ -116,7 +117,7 @@ if (isset($_POST["add"])) {
             $statusSQL = "UPDATE glpi_tickets SET status = 2 WHERE id = {$idChamado}";
             $execStatus = mysqli_query($sqlcon, $statusSQL);
         }
-    } else if ($ticketStatus > 1 && $tickeStatus != 4) {
+    } else if ($ticketStatus == 2) {
         $arrAtendentes = array();
         $sqlBuscaAtendentes = "SELECT users_id FROM glpi_tickets_users where tickets_id = '{$idChamado}' and type = 2";
         $buscaAtendentes = mysqli_query($sqlcon, $sqlBuscaAtendentes);

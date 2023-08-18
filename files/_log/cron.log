@@ -22051,3 +22051,103 @@ Interno #1: Executar slaticket
 Interno #1: Executar olaticket
 2023-08-10 20:03:45 [2@GS003021]
 Interno #1: Executar checkdbreplicate
+2023-08-10 20:18:09 [10@GS003021]
+Interno #1: Executar temp
+2023-08-10 20:18:18 [@GS003021]
+Interno #1: Executar graph
+2023-08-10 20:25:41 [10@GS003021]
+Interno #1: Executar contract
+2023-08-10 20:31:12 [2@GS003021]
+Interno #1: Executar infocom
+2023-08-10 20:37:43 [2@GS003021]
+Interno #1: Executar watcher
+2023-08-10 20:42:58 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-10 20:48:36 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-10 20:53:59 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-10 21:06:09 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-10 21:16:40 [19@GS003021]
+Interno #1: Executar olaticket
+2023-08-10 21:20:55 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-10 21:59:28 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-10 22:00:02 [@GS003021]
+Interno #1: Executar graph
+2023-08-10 22:04:34 [2@GS003021]
+Interno #1: Executar temp
+2023-08-11 08:56:55 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-11 09:09:54 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-11 09:15:29 [2@GS003021]
+Interno #1: Executar closeticket
+2023-08-11 09:24:51 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-11 10:01:55 [2@GS003021]
+Interno #1: Executar graph
+2023-08-11 10:02:10 [2@GS003021]
+Interno #1: Executar temp
+2023-08-11 10:07:17 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2023-08-11 10:13:43 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-11 11:03:05 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-11 11:21:27 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-11 15:13:03 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-12 17:20:31 [2@GS003021]
+Interno #1: Executar graph
+2023-08-14 08:06:29 [2@GS003021]
+Interno #1: Executar temp
+2023-08-14 08:15:01 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-14 08:22:27 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-14 08:27:44 [2@GS003021]
+Interno #1: Executar session
+2023-08-14 09:06:43 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-14 09:12:29 [2@GS003021]
+Interno #1: Executar queuednotificationclean
+2023-08-14 10:09:48 [2@GS003021]
+Interno #1: Executar mailgateerror
+2023-08-14 10:14:56 [2@GS003021]
+Interno #1: Executar certificate
+2023-08-14 10:20:43 [2@GS003021]
+Interno #1: Executar contract
+2023-08-14 10:26:06 [2@GS003021]
+Interno #1: Executar infocom
+2023-08-14 10:35:23 [2@GS003021]
+Interno #1: Executar watcher
+2023-08-14 10:35:28 [2@GS003021]
+Erro ao enviar o e-mail<br/>SMTP connect() failed. https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting
+2023-08-14 10:54:33 [2@GS003021]
+Interno #1: Executar closeticket
+2023-08-14 11:00:01 [2@GS003021]
+Interno #1: Executar alertnotclosed
+2023-08-14 11:25:14 [2@GS003021]
+Interno #1: Executar graph
+2023-08-14 13:59:44 [@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-14 14:46:55 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-15 10:49:34 [2@GS003021]
+Interno #1: Executar temp
+2023-08-15 13:51:49 [2@GS003021]
+Interno #1: Executar olaticket
+2023-08-15 13:57:03 [2@GS003021]
+Interno #1: Executar graph
+2023-08-15 14:38:52 [2@GS003021]
+Interno #1: Executar checkdbreplicate
+2023-08-16 16:05:01 [2@GS003021]
+Interno #1: Executar slaticket
+2023-08-18 03:55:58 [2@GS003021]
+Interno #1: Executar closeticket
+2023-08-18 12:00:20 [2@GS003021]
+Interno #1: Executar alertnotclosed

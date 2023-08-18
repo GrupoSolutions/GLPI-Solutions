@@ -63,23 +63,37 @@
 
 {% if (nametype == 'Computador') or (nametype == 'Monitor') or (nametype == 'Impressora') or (nametype == 'Telefone') or (nametype == 'Dispositivo') or (nametype == 'Dispositivo de rede')  %}
    {% if not item.isNewItem %}
+   
+      <script src="/glpi108/assets/css/fa6.js"></script>
    <form method='post' name='useditemsexport_form$rand' id='useditemsexport_form$rand' action="{{ path('/marketplace/useditemsexport/inc/termounit.php') }}">
-      <table class='' style="margin:0px 40px">
-      <tr class=''><td colspan='1'>
-         <td style='padding:0px 15px'><p> Termo de devolução
-            <input type='submit' name='generate' value="Gerar" class='submit'>
+      <table class='row '>
+      <tr class='row'>
+         <td class="col" >
+            <button type='submit' name='generate' class="btn btn-primary" style="display:inline-grid;">
+               <i class="fa-sharp fa-solid fa-file-pdf fa-xl mt-3"></i>
+               <span class="mt-3">Termo de Devolução</span>
+            </button>
             <input type="hidden" name="entities_id" value="{{ id }}" />
             <input type="hidden" name="tipo" value="{{nametype}}"/>
-            </td>
          </td>
-         <td style='padding:0px 240px'>
-            <td colspan='6'><p> Termo de Manutenção
-            <input type='submit' name='manutencao' value="Gerar" class='submit'>
+         <td class="col" >
+            <button type='submit' name='generate' class="btn btn-primary" style="display:inline-grid;">
+               <i class="fa-sharp fa-solid fa-file-circle-info fa-xl mt-3"></i>
+               <span class="mt-3">Termo de Manutenção</span>
+            </button>
             <input type="hidden" name="entities_id" value="{{ id }}" />
             <input type="hidden" name="acao" value="manutencao"/>
          </td>
       </tr>
    </table>
+   </form>
+   <form method='post' action="{{ path('/marketplace/useditemsexport/inc/aer.php') }}">
+   <td class="col">
+            <p> Gerar AR
+            <input type='submit' name='aer' value="Gerar" class='submit'>
+            <input type="hidden" name="entities_id" value="{{ id }}" />
+            <input type="hidden" name="acao" value="ar"/>
+         </td>
    </form>
    {% endif %}
    

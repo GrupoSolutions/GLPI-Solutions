@@ -65,8 +65,7 @@
     {% set formName = 'plugin_formcreator_form' %}
 	<form name="{{ formName }}" method="post" role="form" enctype="multipart/form-data" class="plugin_formcreator_form" action="#" onkeypress="return plugin_formcreator.submitUserFormByKeyPress(event);" id="plugin_formcreator_form" data-itemtype="PluginFormcreatorForm" data-id="{{ item.fields['id'] }}" data-submit-once="true">
 		<h1 class='form-title'>
-		        {{ call('Glpi\\Toolbox\\Sanitizer::unsanitize', [__(item.fields['name'], options.domain)]) }}
-			<i class="fas fa-print" style="cursor: pointer;" onclick="window.print();"></i>
+            {{ call('Glpi\\Toolbox\\Sanitizer::unsanitize', [__(item.fields['name'], options.domain)]) }}
 		</h1>
         {% if item.fields['content'] != '' or item.getExtraHeader() != "" %}
             <div class="form_header">
@@ -160,7 +159,6 @@
           <button type='button' id="btnEnvia" onclick="atualizaEnd()" value='Enviar' name="submit_formcreator" class="btn"> <span>Enviar</span> </button>&nbsp;
         </div>
         
-         <i class="fa-duotone fa-spinner-third fa-spin"></i>
         {{ fields.hiddenField('plugin_formcreator_forms_id', item.fields['id']) }}
         <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
 	</form>

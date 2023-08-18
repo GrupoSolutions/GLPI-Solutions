@@ -164,11 +164,9 @@ class Search
             $dashboard->show(true);
 
         } 
-        if ( $itemtype == "Ticket" && Session::getCurrentInterface() === 'central'){
+        if ( $itemtype == "Ticket" && Session::getCurrentInterface() === 'central' || Session::getCurrentInterface() === 'helpdesk'){
             require('../assets/php/tickets/carregaTickets.php');
-        }
-        //print_r(Session::getCurrentInterface());
-        //if($itemtype == "Ticket" && )
+        } 
 
 
         self::showGenericSearch($itemtype, $params);
