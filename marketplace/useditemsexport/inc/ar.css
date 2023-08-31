@@ -273,3 +273,10 @@ margin: 0px 50%;
     text-align:center;
     font-weight:800;
   }
+  @media print {
+    .minha-div {
+      width: 100%; /* Ajuste para ocupar a largura da página de impressão */
+      height: auto; /* Altura automática com base no conteúdo */
+      background-color: yellow; /* Ajuste de cor para modo de impressão */
+    }
+  }

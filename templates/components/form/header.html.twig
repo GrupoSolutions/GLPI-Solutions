@@ -64,7 +64,7 @@
 {% if (nametype == 'Computador') or (nametype == 'Monitor') or (nametype == 'Impressora') or (nametype == 'Telefone') or (nametype == 'Dispositivo') or (nametype == 'Dispositivo de rede')  %}
    {% if not item.isNewItem %}
    
-      <script src="/glpi108/assets/css/fa6.js"></script>
+   <script src="/glpi108/assets/css/fa6.js"></script>
    <form method='post' name='useditemsexport_form$rand' id='useditemsexport_form$rand' action="{{ path('/marketplace/useditemsexport/inc/termounit.php') }}">
       <table class='row '>
       <tr class='row'>
@@ -87,13 +87,219 @@
       </tr>
    </table>
    </form>
-   <form method='post' action="{{ path('/marketplace/useditemsexport/inc/aer.php') }}">
-   <td class="col">
-            <p> Gerar AR
-            <input type='submit' name='aer' value="Gerar" class='submit'>
+   <form method='post' id="frmEtq" action="{{ path('/marketplace/useditemsexport/inc/aer.php') }}">
+      <td class="col">
+         <p> Gerar AR
+         <input type='button' onclick="geraAr()" name='aer' value="Gerar" class='submit'>
+         <div id="itensContainer">
             <input type="hidden" name="entities_id" value="{{ id }}" />
+            <input type="hidden" id="user_id" name="user_id" value="{{ id }}" />
+            <input type="hidden" id="nametype" name="nametype" value="{{ nametype }}" />
+
             <input type="hidden" name="acao" value="ar"/>
-         </td>
+         </div>
+      </td>
+   </form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  .ende {
+        text-align:initial;
+        font-size:18px;
+        width:100%;
+    }
+    .ende label {
+        
+        font-weight:500;
+    }
+</style>
+   <script>
+   var dadosArray = [];
+
+   function inserirNovoItem() {
+      
+      if(!conteudo.value || !quantidade.value || !valor.value){
+         console.warn("Erro, Campos nulos ou vazios");
+         return "erro";
+      }
+      else {
+         var novoItem = {
+            conteudo: conteudo.value,
+            quantidade: quantidade.value,
+            valor: valor.value
+         };
+         dadosArray.push(novoItem);
+
+         // Limpar os inputs após adicionar ao array
+         document.getElementById('conteudo').value = '';
+         document.getElementById('quantidade').value = '';
+         document.getElementById('valor').value = '';
+
+      
+         var itensContainer = document.getElementById("itensContainer");
+
+         // Preencha os campos de entrada ocultos com os valores dos arrays
+         dadosArray.forEach(function(itemc, index) {
+            var inputNome = document.createElement("input");
+            inputNome.type = "hidden";
+            inputNome.name = "itens[" + index + "][conteudo]";
+            inputNome.value = itemc.conteudo;
+            
+            var inputQuantidade = document.createElement("input");
+            inputQuantidade.type = "hidden";
+            inputQuantidade.name = "itens[" + index + "][quantidade]";
+            inputQuantidade.value = itemc.quantidade;
+            
+            var inputValor = document.createElement("input");
+            inputValor.type = "hidden";
+            inputValor.name = "itens[" + index + "][valor]";
+            inputValor.value = itemc.valor;
+            
+            itensContainer.appendChild(inputNome);
+            itensContainer.appendChild(inputQuantidade);
+            itensContainer.appendChild(inputValor);
+         });
+      }
+      
+   }
+
+   function geraAr(){
+      //aqui tem que vir uma requisição ajax, buscando a localização do usuario, e em seguida exibindo no sweet alert,
+      //A operação informada, vai ficar armazenada na session, após requerir a página em php para impressão, irá ser esvaziada
+      const usuario_id = document.getElementById("user_id").value;
+      const nametype = document.getElementById("nametype").value;
+      $.ajax({
+         type: "POST",
+         data: {
+            usuario_id: usuario_id,
+            nametype: nametype,
+         },
+         url: "/glpi108/templates/components/ajax/buscaLocalizacao.php",
+         success: function(response){
+            var arrayRecebido = response;
+            var rua = arrayRecebido[0];
+            var bairro = arrayRecebido[1];
+            var cep = arrayRecebido[2];
+            var cidade = arrayRecebido[3];
+            var estado = arrayRecebido[4];
+            var numero = arrayRecebido[5];
+            var complemento = arrayRecebido[6];
+            var nome = arrayRecebido[7];
+            var tipo = arrayRecebido[8];
+
+            const { value: fruit } = Swal.fire({      
+            title: 'Confirme os dados de entrega',
+            html: '<p>Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>CEP: ' + cep + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>Numero: ' + numero + '<br>Complemento: ' + complemento,
+            input: 'select',
+            inputOptions: {
+               'whp': 'WHP',
+               'rma': 'RMA',
+               'triagem': 'TRIAGEM',
+               'trirma': 'TRIAGEM/RMA'
+            },
+            inputPlaceholder: 'Informe a Operação',
+            showCancelButton: true,
+            inputValidator: (value) => {
+               return new Promise((resolve) => {
+                  if (!value) {
+                  resolve('Informe uma operação.')
+                  } else {
+                     Swal.fire({
+                        title: 'Será enviado outros itens na mesma embalagem?',
+                        text: "Dados importantes para a declaração de conteúdo!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                           const { value: formValues } = Swal.fire({
+                              title: 'Identificação dos Bens',
+                              html:
+                                 '<label for="conteudo" class="ende">Conteúdo:</label>' +
+                                 '<input id="conteudo" class="ende" required>' +
+                                 '<label for="quantidade" class="ende">Quantidade:</label>' +
+                                 '<input id="quantidade"  class="ende" onkeypress="return somenteNumeros(event)" required>' +
+                                 '<label for="valor" class="ende">Valor(R$):</label>' +
+                                 '<input type="text" id="valor" oninput="formatarValor(this)" class="ende" required>' +
+                                 '<button type="button" class="btn btn-success mt-2" onclick="inserirNovoItem()">Adicionar mais um item</button>',
+                              focusConfirm: false,
+                              showConfirmButton: true,
+                              confirmButtonText: 'Finalizar',
+                              preConfirm: () => {
+                                 var conteudo = document.getElementById('conteudo').value;
+                                 var quantidade = document.getElementById('quantidade').value;
+                                 var vlr = document.getElementById('valor').value;
+                                 var valor = vlr.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                 });
+                                 return [
+                                   conteudo, quantidade, valor
+                                 ]
+                              }
+                           }).then((result) => {
+                              //Aqui ele deve verificar se há algum item preenchido antes de efetuar o envio para a página de impressão
+                              if(result.isConfirmed){
+                               if(!conteudo.value || !quantidade.value || !valor.value){
+                                    imprimirAR();
+                                 } else {
+                                       inserirNovoItem();
+                                       imprimirAR();
+                                 }
+                              
+                              }
+                           });
+                        } else {
+                           //Aqui deve mandar os unicos dados para busca do ativo, sem o array.
+                           imprimirAR();
+                        }
+                     })
+                  }
+               })
+            }
+         })
+         }
+
+      });
+
+   }
+
+   // parâmetros da função moeda (pelo que entendi)
+// a = objeto do input // e = separador milésimo
+// r = separador decimal // t = evento
+function imprimirAR(){
+   let frmEtq = document.getElementById("frmEtq");
+   frmEtq.submit();
+}
+function formatarValor(input) {
+   const valorEntrada = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+   const valorNumerico = parseInt(valorEntrada) / 100; // Converte para número e divide por 100 para trazer os centavos
+
+   input.value = valorNumerico.toLocaleString('pt-BR', {
+         style: 'currency',
+         currency: 'BRL',
+         minimumFractionDigits: 2,
+         maximumFractionDigits: 2
+   });
+}
+function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+        // charCode 8 = backspace   
+        // charCode 9 = tab
+        if (charCode != 8 && charCode != 9) {
+            // charCode 48 equivale a 0   
+            // charCode 57 equivale a 9
+            if (charCode < 48 || charCode > 57) {
+                return false;
+            }
+        }
+    }
+</script>
    </form>
    {% endif %}
    
@@ -135,7 +341,7 @@
                {% endif %}
                <span>
                {% if item.id > 0 %}
-                  {{ nametype }} - {{ friendlyname }} 
+                  {{ nametype }} - {{  friendlyname }} 
                {% else %}
                   {{ nametype }}
                {% endif %}

@@ -119,7 +119,7 @@ class __TwigTemplate_ba9f483e809077aec3aee58044d18470 extends Template
                 if ( !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "any", false, false, false, 65)) {
                     // line 66
                     echo "   
-      <script src=\"/glpi108/assets/css/fa6.js\"></script>
+   <script src=\"/glpi108/assets/css/fa6.js\"></script>
    <form method='post' name='useditemsexport_form\$rand' id='useditemsexport_form\$rand' action=\"";
                     // line 68
                     echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path("/marketplace/useditemsexport/inc/termounit.php"), "html", null, true);
@@ -154,130 +154,349 @@ class __TwigTemplate_ba9f483e809077aec3aee58044d18470 extends Template
       </tr>
    </table>
    </form>
-   <form method='post' action=\"";
+   <form method='post' id=\"frmEtq\" action=\"";
                     // line 90
                     echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path("/marketplace/useditemsexport/inc/aer.php"), "html", null, true);
                     echo "\">
-   <td class=\"col\">
-            <p> Gerar AR
-            <input type='submit' name='aer' value=\"Gerar\" class='submit'>
+      <td class=\"col\">
+         <p> Gerar AR
+         <input type='button' onclick=\"geraAr()\" name='aer' value=\"Gerar\" class='submit'>
+         <div id=\"itensContainer\">
             <input type=\"hidden\" name=\"entities_id\" value=\"";
-                    // line 94
+                    // line 95
                     echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
                     echo "\" />
+            <input type=\"hidden\" id=\"user_id\" name=\"user_id\" value=\"";
+                    // line 96
+                    echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
+                    echo "\" />
+            <input type=\"hidden\" id=\"nametype\" name=\"nametype\" value=\"";
+                    // line 97
+                    echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
+                    echo "\" />
+
             <input type=\"hidden\" name=\"acao\" value=\"ar\"/>
-         </td>
+         </div>
+      </td>
+   </form>
+
+<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>
+<style>
+  .ende {
+        text-align:initial;
+        font-size:18px;
+        width:100%;
+    }
+    .ende label {
+        
+        font-weight:500;
+    }
+</style>
+   <script>
+   var dadosArray = [];
+
+   function inserirNovoItem() {
+      
+      console.log(\"Function inserirNovoItem: \" + conteudo.value);
+      if(!conteudo.value || !quantidade.value || !valor.value){
+         console.warn(\"Erro, Campos nulos ou vazios\");
+         return \"erro\";
+      }
+      else {
+         var novoItem = {
+            conteudo: conteudo.value,
+            quantidade: quantidade.value,
+            valor: valor.value
+         };
+         dadosArray.push(novoItem);
+
+         // Limpar os inputs após adicionar ao array
+         document.getElementById('conteudo').value = '';
+         document.getElementById('quantidade').value = '';
+         document.getElementById('valor').value = '';
+
+      
+         var itensContainer = document.getElementById(\"itensContainer\");
+
+         // Preencha os campos de entrada ocultos com os valores dos arrays
+         dadosArray.forEach(function(itemc, index) {
+            var inputNome = document.createElement(\"input\");
+            inputNome.type = \"hidden\";
+            inputNome.name = \"itens[\" + index + \"][conteudo]\";
+            inputNome.value = itemc.conteudo;
+            
+            var inputQuantidade = document.createElement(\"input\");
+            inputQuantidade.type = \"hidden\";
+            inputQuantidade.name = \"itens[\" + index + \"][quantidade]\";
+            inputQuantidade.value = itemc.quantidade;
+            
+            var inputValor = document.createElement(\"input\");
+            inputValor.type = \"hidden\";
+            inputValor.name = \"itens[\" + index + \"][valor]\";
+            inputValor.value = itemc.valor;
+            
+            itensContainer.appendChild(inputNome);
+            itensContainer.appendChild(inputQuantidade);
+            itensContainer.appendChild(inputValor);
+         });
+         console.log('Dados adicionados ao array:', dadosArray);
+      }
+      
+   }
+
+   function geraAr(){
+      //aqui tem que vir uma requisição ajax, buscando a localização do usuario, e em seguida exibindo no sweet alert,
+      //A operação informada, vai ficar armazenada na session, após requerir a página em php para impressão, irá ser esvaziada
+      const usuario_id = document.getElementById(\"user_id\").value;
+      const nametype = document.getElementById(\"nametype\").value;
+      \$.ajax({
+         type: \"POST\",
+         data: {
+            usuario_id: usuario_id,
+            nametype: nametype,
+         },
+         url: \"/glpi108/templates/components/ajax/buscaLocalizacao.php\",
+         success: function(response){
+            var arrayRecebido = response;
+            var rua = arrayRecebido[0];
+            var bairro = arrayRecebido[1];
+            var cep = arrayRecebido[2];
+            var cidade = arrayRecebido[3];
+            var estado = arrayRecebido[4];
+            var numero = arrayRecebido[5];
+            var complemento = arrayRecebido[6];
+            var nome = arrayRecebido[7];
+            var tipo = arrayRecebido[8];
+
+            const { value: fruit } = Swal.fire({      
+            title: 'Confirme os dados de entrega',
+            html: '<p>Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>CEP: ' + cep + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>Numero: ' + numero + '<br>Complemento: ' + complemento,
+            input: 'select',
+            inputOptions: {
+               'whp': 'WHP',
+               'rma': 'RMA',
+               'triagem': 'TRIAGEM',
+               'trirma': 'TRIAGEM/RMA'
+            },
+            inputPlaceholder: 'Informe a Operação',
+            showCancelButton: true,
+            inputValidator: (value) => {
+               return new Promise((resolve) => {
+                  if (!value) {
+                  resolve('Informe uma operação.')
+                  } else {
+                     Swal.fire({
+                        title: 'Será enviado outros itens na mesma embalagem?',
+                        text: \"Dados importantes para a declaração de conteúdo!\",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                           const { value: formValues } = Swal.fire({
+                              title: 'Identificação dos Bens',
+                              html:
+                                 '<label for=\"conteudo\" class=\"ende\">Conteúdo:</label>' +
+                                 '<input id=\"conteudo\" class=\"ende\" required>' +
+                                 '<label for=\"quantidade\" class=\"ende\">Quantidade:</label>' +
+                                 '<input id=\"quantidade\"  class=\"ende\" onkeypress=\"return somenteNumeros(event)\" required>' +
+                                 '<label for=\"valor\" class=\"ende\">Valor(R\$):</label>' +
+                                 '<input type=\"text\" id=\"valor\" oninput=\"formatarValor(this)\" class=\"ende\" required>' +
+                                 '<button type=\"button\" class=\"btn btn-success mt-2\" onclick=\"inserirNovoItem()\">Adicionar mais um item</button>',
+                              focusConfirm: false,
+                              showConfirmButton: true,
+                              confirmButtonText: 'Finalizar',
+                              preConfirm: () => {
+                                 var conteudo = document.getElementById('conteudo').value;
+                                 var quantidade = document.getElementById('quantidade').value;
+                                 var vlr = document.getElementById('valor').value;
+                                 var valor = vlr.toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                 });
+                                 return [
+                                   conteudo, quantidade, valor
+                                 ]
+                              }
+                           }).then((result) => {
+                              //Aqui ele deve verificar se há algum item preenchido antes de efetuar o envio para a página de impressão
+                              if(result.isConfirmed){
+                               if(!conteudo.value || !quantidade.value || !valor.value){
+                                    imprimirAR();
+                                 } else {
+                                       inserirNovoItem();
+                                       imprimirAR();
+                                 }
+                              
+                              }
+                           });
+                              if (formValues) {
+                                 console.log(\"foi\");
+                                 //Swal.fire(JSON.stringify(formValues));
+                                 resolve()
+                              }
+                        } else {
+                           //Aqui deve mandar os unicos dados para busca do ativo, sem o array.
+                           imprimirAR();
+                        }
+                     })
+                  }
+               })
+            }
+         })
+         }
+
+      });
+
+   }
+
+   // parâmetros da função moeda (pelo que entendi)
+// a = objeto do input // e = separador milésimo
+// r = separador decimal // t = evento
+function imprimirAR(){
+   let frmEtq = document.getElementById(\"frmEtq\");
+   frmEtq.submit();
+}
+function formatarValor(input) {
+   const valorEntrada = input.value.replace(/\\D/g, ''); // Remove tudo que não é dígito
+   const valorNumerico = parseInt(valorEntrada) / 100; // Converte para número e divide por 100 para trazer os centavos
+
+   input.value = valorNumerico.toLocaleString('pt-BR', {
+         style: 'currency',
+         currency: 'BRL',
+         minimumFractionDigits: 2,
+         maximumFractionDigits: 2
+   });
+}
+function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+        // charCode 8 = backspace   
+        // charCode 9 = tab
+        if (charCode != 8 && charCode != 9) {
+            // charCode 48 equivale a 0   
+            // charCode 57 equivale a 9
+            if (charCode < 48 || charCode > 57) {
+                return false;
+            }
+        }
+    }
+</script>
    </form>
    ";
                 }
-                // line 99
+                // line 312
                 echo "   
 ";
             }
-            // line 101
+            // line 314
             echo "
 
 <form name=\"asset_form\" method=\"post\" action=\"";
-            // line 103
+            // line 316
             echo twig_escape_filter($this->env, ($context["target"] ?? null), "html", null, true);
             echo "\" ";
             echo ($context["formoptions"] ?? null);
             echo " enctype=\"multipart/form-data\" data-submit-once>
    <input type=\"hidden\" name=\"entities_id\" value=\"";
-            // line 104
+            // line 317
             echo twig_escape_filter($this->env, ($context["entity_id"] ?? null), "html", null, true);
             echo "\" />
 
 ";
         }
-        // line 107
+        // line 320
         echo "   <div id=\"mainformtable\">
       ";
-        // line 108
-        $context["template_name"] = $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getVerbatimValue((($__internal_compile_20 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 108)) && is_array($__internal_compile_20) || $__internal_compile_20 instanceof ArrayAccess ? ($__internal_compile_20["template_name"] ?? null) : null));
-        // line 109
+        // line 321
+        $context["template_name"] = $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getVerbatimValue((($__internal_compile_20 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 321)) && is_array($__internal_compile_20) || $__internal_compile_20 instanceof ArrayAccess ? ($__internal_compile_20["template_name"] ?? null) : null));
+        // line 322
         echo "      ";
-        if (((($context["withtemplate"] ?? null) == 2) &&  !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 109))) {
-            // line 110
+        if (((($context["withtemplate"] ?? null) == 2) &&  !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 322))) {
+            // line 323
             echo "         <input type=\"hidden\" name=\"template_name\" value=\"";
             echo twig_escape_filter($this->env, ($context["template_name"] ?? null), "html", null, true);
             echo "\" />
          ";
-            // line 111
+            // line 324
             $context["nametype"] = twig_sprintf(__("Created from the template %s"), ($context["template_name"] ?? null));
-            // line 112
+            // line 325
             echo "      ";
         } elseif ((($context["withtemplate"] ?? null) == 1)) {
-            // line 113
+            // line 326
             echo "         <input type=\"hidden\" name=\"is_template\" value=\"1\" />
       ";
-        } elseif (twig_get_attribute($this->env, $this->source,         // line 114
-($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 114)) {
-            // line 115
+        } elseif (twig_get_attribute($this->env, $this->source,         // line 327
+($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 327)) {
+            // line 328
             echo "         ";
             $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), __("New item"), ($context["nametype"] ?? null));
-            // line 116
+            // line 329
             echo "      ";
         } else {
-            // line 117
+            // line 330
             echo "         ";
             if (((($context["noid"] ?? null) == false) && ($this->extensions['Glpi\Application\View\Extension\SessionExtension']->session("glpiis_ids_visible") || (twig_length_filter($this->env, ($context["nametype"] ?? null)) == 0)))) {
-                // line 118
+                // line 331
                 echo "            ";
-                $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), ($context["nametype"] ?? null), (($__internal_compile_21 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 118)) && is_array($__internal_compile_21) || $__internal_compile_21 instanceof ArrayAccess ? ($__internal_compile_21["id"] ?? null) : null));
-                // line 119
+                $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), ($context["nametype"] ?? null), (($__internal_compile_21 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 331)) && is_array($__internal_compile_21) || $__internal_compile_21 instanceof ArrayAccess ? ($__internal_compile_21["id"] ?? null) : null));
+                // line 332
                 echo "         ";
             }
-            // line 120
+            // line 333
             echo "      ";
         }
-        // line 121
+        // line 334
         echo "
       ";
-        // line 122
+        // line 335
         if (( !array_key_exists("no_header", $context) || (($context["no_header"] ?? null) == false))) {
-            // line 123
+            // line 336
             echo "         <div class=\"card-header main-header d-flex flex-wrap mx-n2 mt-n2 align-items-stretch\">
             ";
-            // line 124
+            // line 337
             if ((($context["withtemplate"] ?? null) == 1)) {
-                // line 125
+                // line 338
                 echo "               <input type=\"text\" class=\"form-control ms-4 mb-2\" placeholder=\"";
                 echo twig_escape_filter($this->env, __("Template name"), "html", null, true);
                 echo "\"
                   name=\"template_name\" id=\"textfield_template_name";
-                // line 126
+                // line 339
                 echo twig_escape_filter($this->env, ($context["rand"] ?? null), "html", null, true);
                 echo "\"
                   value=\"";
-                // line 127
+                // line 340
                 echo twig_escape_filter($this->env, ($context["template_name"] ?? null), "html", null, true);
                 echo "\" />
             ";
             }
-            // line 129
+            // line 342
             echo "            <h3 class=\"card-title d-flex align-items-center ps-4\">
                ";
-            // line 130
-            $context["icon"] = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getIcon", [], "method", false, false, false, 130);
-            // line 131
+            // line 343
+            $context["icon"] = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getIcon", [], "method", false, false, false, 343);
+            // line 344
             echo "               ";
             if ((twig_length_filter($this->env, ($context["icon"] ?? null)) > 0)) {
-                // line 132
+                // line 345
                 echo "                  <div class=\"ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1\">
                      <i class=\"";
-                // line 133
+                // line 346
                 echo twig_escape_filter($this->env, ($context["icon"] ?? null), "html", null, true);
                 echo " fa-2x\"></i>
                   </div>
                ";
             }
-            // line 136
+            // line 349
             echo "               <span>
                ";
-            // line 137
-            if ((twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "id", [], "any", false, false, false, 137) > 0)) {
-                // line 138
+            // line 350
+            if ((twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "id", [], "any", false, false, false, 350) > 0)) {
+                // line 351
                 echo "                  ";
                 echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
                 echo " - ";
@@ -285,27 +504,27 @@ class __TwigTemplate_ba9f483e809077aec3aee58044d18470 extends Template
                 echo " 
                ";
             } else {
-                // line 140
+                // line 353
                 echo "                  ";
                 echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
                 echo "
                ";
             }
-            // line 142
+            // line 355
             echo "               
                </span>
                
                ";
-            // line 145
+            // line 358
             if (($context["header_toolbar"] ?? null)) {
-                // line 146
+                // line 359
                 echo "                  <div class=\"d-inline-block toolbar ms-2\">
                      ";
-                // line 147
+                // line 360
                 $context['_parent'] = $context;
                 $context['_seq'] = twig_ensure_traversable(($context["header_toolbar"] ?? null));
                 foreach ($context['_seq'] as $context["_key"] => $context["raw_element"]) {
-                    // line 148
+                    // line 361
                     echo "                        ";
                     echo $context["raw_element"];
                     echo "
@@ -314,38 +533,38 @@ class __TwigTemplate_ba9f483e809077aec3aee58044d18470 extends Template
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['raw_element'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 150
+                // line 363
                 echo "                  </div>
                ";
             }
-            // line 152
+            // line 365
             echo "            </h3>
             
             ";
-            // line 154
+            // line 367
             $context["single_actions_ms_auto"] = true;
-            // line 155
+            // line 368
             echo "            
            
             ";
-            // line 157
+            // line 370
             echo twig_include($this->env, $context, "components/form/single-action.html.twig");
             echo "
          </div>
       ";
         }
-        // line 160
+        // line 373
         echo "
       ";
-        // line 161
+        // line 374
         echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\PluginExtension']->callPluginHook(twig_constant("Glpi\\Plugin\\Hooks::PRE_ITEM_FORM"), ["item" => ($context["item"] ?? null), "options" => ($context["params"] ?? null)]), "html", null, true);
         echo "
 
       ";
-        // line 164
+        // line 377
         echo "      ";
-        if ((twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, ($context["app"] ?? null), "request", [], "any", false, false, false, 164), "request", [0 => "in_modal"], "method", false, false, false, 164) == true)) {
-            // line 165
+        if ((twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, ($context["app"] ?? null), "request", [], "any", false, false, false, 377), "request", [0 => "in_modal"], "method", false, false, false, 377) == true)) {
+            // line 378
             echo "      
       <input type=\"hidden\" name=\"_no_message_link\" value=\"1\" />
       ";
@@ -364,7 +583,7 @@ class __TwigTemplate_ba9f483e809077aec3aee58044d18470 extends Template
 
     public function getDebugInfo()
     {
-        return array (  349 => 165,  346 => 164,  341 => 161,  338 => 160,  332 => 157,  328 => 155,  326 => 154,  322 => 152,  318 => 150,  309 => 148,  305 => 147,  302 => 146,  300 => 145,  295 => 142,  289 => 140,  281 => 138,  279 => 137,  276 => 136,  270 => 133,  267 => 132,  264 => 131,  262 => 130,  259 => 129,  254 => 127,  250 => 126,  245 => 125,  243 => 124,  240 => 123,  238 => 122,  235 => 121,  232 => 120,  229 => 119,  226 => 118,  223 => 117,  220 => 116,  217 => 115,  215 => 114,  212 => 113,  209 => 112,  207 => 111,  202 => 110,  199 => 109,  197 => 108,  194 => 107,  188 => 104,  182 => 103,  178 => 101,  174 => 99,  166 => 94,  159 => 90,  150 => 84,  140 => 77,  136 => 76,  125 => 68,  121 => 66,  118 => 65,  116 => 64,  110 => 61,  106 => 60,  102 => 59,  95 => 58,  93 => 57,  89 => 55,  86 => 54,  84 => 53,  81 => 52,  78 => 51,  75 => 50,  72 => 49,  69 => 48,  66 => 47,  64 => 46,  62 => 45,  60 => 44,  58 => 43,  56 => 42,  54 => 41,  52 => 40,  50 => 39,  48 => 38,  46 => 37,  44 => 36,  42 => 35,  40 => 34,  37 => 33,);
+        return array (  568 => 378,  565 => 377,  560 => 374,  557 => 373,  551 => 370,  547 => 368,  545 => 367,  541 => 365,  537 => 363,  528 => 361,  524 => 360,  521 => 359,  519 => 358,  514 => 355,  508 => 353,  500 => 351,  498 => 350,  495 => 349,  489 => 346,  486 => 345,  483 => 344,  481 => 343,  478 => 342,  473 => 340,  469 => 339,  464 => 338,  462 => 337,  459 => 336,  457 => 335,  454 => 334,  451 => 333,  448 => 332,  445 => 331,  442 => 330,  439 => 329,  436 => 328,  434 => 327,  431 => 326,  428 => 325,  426 => 324,  421 => 323,  418 => 322,  416 => 321,  413 => 320,  407 => 317,  401 => 316,  397 => 314,  393 => 312,  175 => 97,  171 => 96,  167 => 95,  159 => 90,  150 => 84,  140 => 77,  136 => 76,  125 => 68,  121 => 66,  118 => 65,  116 => 64,  110 => 61,  106 => 60,  102 => 59,  95 => 58,  93 => 57,  89 => 55,  86 => 54,  84 => 53,  81 => 52,  78 => 51,  75 => 50,  72 => 49,  69 => 48,  66 => 47,  64 => 46,  62 => 45,  60 => 44,  58 => 43,  56 => 42,  54 => 41,  52 => 40,  50 => 39,  48 => 38,  46 => 37,  44 => 36,  42 => 35,  40 => 34,  37 => 33,);
     }
 
     public function getSourceContext()

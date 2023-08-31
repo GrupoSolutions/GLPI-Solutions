@@ -118,28 +118,35 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
                 echo "   ";
                 if ( !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "any", false, false, false, 65)) {
                     // line 66
-                    echo "   <form method='post' name='useditemsexport_form\$rand' id='useditemsexport_form\$rand' action=\"";
+                    echo "   
+   <script src=\"/glpi108/assets/css/fa6.js\"></script>
+   <form method='post' name='useditemsexport_form\$rand' id='useditemsexport_form\$rand' action=\"";
+                    // line 68
                     echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path("/marketplace/useditemsexport/inc/termounit.php"), "html", null, true);
                     echo "\">
-      <table class='' style=\"margin:0px 40px\">
-      <tr class=''><td colspan='1'>
-         <td style='padding:0px 15px'><p> Termo de devolução
-            <input type='submit' name='generate' value=\"Gerar\" class='submit'>
+      <table class='row '>
+      <tr class='row'>
+         <td class=\"col\" >
+            <button type='submit' name='generate' class=\"btn btn-primary\" style=\"display:inline-grid;\">
+               <i class=\"fa-sharp fa-solid fa-file-pdf fa-xl mt-3\"></i>
+               <span class=\"mt-3\">Termo de Devolução</span>
+            </button>
             <input type=\"hidden\" name=\"entities_id\" value=\"";
-                    // line 71
+                    // line 76
                     echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
                     echo "\" />
             <input type=\"hidden\" name=\"tipo\" value=\"";
-                    // line 72
+                    // line 77
                     echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
                     echo "\"/>
-            </td>
          </td>
-         <td style='padding:0px 240px'>
-            <td colspan='6'><p> Termo de Manutenção
-            <input type='submit' name='manutencao' value=\"Gerar\" class='submit'>
+         <td class=\"col\" >
+            <button type='submit' name='generate' class=\"btn btn-primary\" style=\"display:inline-grid;\">
+               <i class=\"fa-sharp fa-solid fa-file-circle-info fa-xl mt-3\"></i>
+               <span class=\"mt-3\">Termo de Manutenção</span>
+            </button>
             <input type=\"hidden\" name=\"entities_id\" value=\"";
-                    // line 78
+                    // line 84
                     echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
                     echo "\" />
             <input type=\"hidden\" name=\"acao\" value=\"manutencao\"/>
@@ -147,116 +154,332 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
       </tr>
    </table>
    </form>
+   <form method='post' action=\"";
+                    // line 90
+                    echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\RoutingExtension']->path("/marketplace/useditemsexport/inc/aer.php"), "html", null, true);
+                    echo "\">
+   <td class=\"col\">
+      <p> Gerar AR
+      <input type='button' onclick=\"geraAr()\" name='aer' value=\"Gerar\" class='submit'>
+      <input type=\"hidden\" name=\"entities_id\" value=\"";
+                    // line 94
+                    echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
+                    echo "\" />
+      <input type=\"hidden\" id=\"user_id\" name=\"user_id\" value=\"";
+                    // line 95
+                    echo twig_escape_filter($this->env, ($context["id"] ?? null), "html", null, true);
+                    echo "\" />
+      <input type=\"hidden\" id=\"nametype\" name=\"nametype=\" value=\"";
+                    // line 96
+                    echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
+                    echo "\" />
+      <input type=\"hidden\" name=\"acao\" value=\"ar\"/>
+   </td>
+
+<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>
+<style>
+  .ende {
+        text-align:initial;
+        font-size:18px;
+        width:100%;
+    }
+    .ende label {
+        
+        font-weight:500;
+    }
+</style>
+   <script>
+   var dadosArray = [];
+
+   function inserirNovoItem() {
+      var conteudo = document.getElementById('conteudo').value;
+      var quantidade = document.getElementById('quantidade').value;
+      var valor = document.getElementById('valor').value;
+
+      if(!conteudo || !quantidade || !valor){
+         return \"Erro, Campos nulos ou vazios\";
+      }
+      else {
+         var novoItem = {
+         conteudo: conteudo,
+         quantidade: quantidade,
+         valor: valor
+         };
+
+         dadosArray.push(novoItem);
+
+         // Limpar os inputs após adicionar ao array
+         document.getElementById('conteudo').value = '';
+         document.getElementById('quantidade').value = '';
+         document.getElementById('valor').value = '';
+
+         console.log('Dados adicionados ao array:', dadosArray);
+      }
+      
+   }
+
+   function enviaDados(nome){
+      \$.ajax({
+         type: \"POST\",
+         data: {
+            nome: nome,
+         },
+         url: \"/glpi108/templates/component/ajax/aer.php\",
+         sucess: function(response) {
+
+         }
+      })
+   }
+   function geraAr(){
+
+      //aqui tem que vir uma requisição ajax, buscando a localização do usuario, e em seguida exibindo no sweet alert,
+      //A operação informada, vai ficar armazenada na session, após requerir a página em php para impressão, irá ser esvaziada
+      const usuario_id = document.getElementById(\"user_id\").value;
+      const nametype = document.getElementById(\"nametype\").value;
+      \$.ajax({
+         type: \"POST\",
+         data: {
+            usuario_id: usuario_id,
+            nametype: nametype,
+         },
+         url: \"/glpi108/templates/components/ajax/buscaLocalizacao.php\",
+         success: function(response){
+            var arrayRecebido = response;
+            var rua = arrayRecebido[0];
+            var bairro = arrayRecebido[1];
+            var cep = arrayRecebido[2];
+            var cidade = arrayRecebido[3];
+            var estado = arrayRecebido[4];
+            var numero = arrayRecebido[5];
+            var complemento = arrayRecebido[6];
+            var nome = arrayRecebido[7];
+            var tipo = arrayRecebido[8];
+
+            const { value: fruit } = Swal.fire({      
+            title: 'Confirme os dados de entrega',
+            html: '<p>Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>CEP: ' + cep + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>Numero: ' + numero + '<br>Complemento: ' + complemento,
+            input: 'select',
+            inputOptions: {
+               'whp': 'WHP',
+               'rma': 'RMA',
+               'triagem': 'TRIAGEM',
+               'trirma': 'TRIAGEM/RMA'
+            },
+            inputPlaceholder: 'Informe a Operação',
+            showCancelButton: true,
+            inputValidator: (value) => {
+               return new Promise((resolve) => {
+                  if (!value) {
+                  resolve('Informe uma operação.')
+                  } else {
+                     Swal.fire({
+                        title: 'Será enviado outros itens na mesma embalagem?',
+                        text: \"Dados importantes para a declaração de conteúdo!\",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                           const { value: formValues } = Swal.fire({
+                              title: 'Identificação dos Bens',
+                              html:
+                                 '<label for=\"conteudo\" class=\"ende\">Conteúdo:</label>' +
+                                 '<input id=\"conteudo\" class=\"ende\" required>' +
+                                 '<label for=\"quantidade\" class=\"ende\">Quantidade:</label>' +
+                                 '<input id=\"quantidade\"  class=\"ende\" onkeypress=\"return somenteNumeros(event)\" required>' +
+                                 '<label for=\"valor\" class=\"ende\">Valor(R\$):</label>' +
+                                 '<input type=\"text\" id=\"valor\" onkeypress=\"mascaraMoeda(event)\" class=\"ende\" required>' +
+                                 '<button type=\"button\" class=\"btn btn-success mt-2\" onclick=\"inserirNovoItem()\">Inserir Novo item</button>',
+                              focusConfirm: false,
+                              showConfirmButton: true,
+                              confirmButtonText: 'OK',
+                              preConfirm: () => {
+                                 return [
+                                    document.getElementById('conteudo').value,
+                                 ]
+                              }
+                           }).then((result) => {
+                              if(result.isConfirmed){
+                                 var conteudo = document.getElementById('conteudo').value;
+                                 var quantidade = document.getElementById('quantidade').value;
+                                 var valor = document.getElementById('valor').value;
+
+                                 if(!conteudo || !quantidade || !valor){
+                                    return \"Erro, Campos nulos ou vazios\";
+                                 } else {
+                                    inserirNovoItem();
+                                 }
+                              }
+                           });
+                              if (formValues) {
+                                 Swal.fire(JSON.stringify(formValues));
+                                 resolve()
+                              }
+                        }
+                        if(result.isDenied){
+                           //aqui já deve fazer o select dos dados do ativo e enviar para o pdf
+                           enviaDados(nome);
+
+
+                        }
+                     })
+                  }
+               })
+            }
+         })
+         }
+
+      });
+
+   }
+
+   // parâmetros da função moeda (pelo que entendi)
+// a = objeto do input // e = separador milésimo
+// r = separador decimal // t = evento
+
+function mascaraMoeda(event) {
+  const onlyDigits = event.target.value
+    .split(\"\")
+    .filter(s => /\\d/.test(s))
+    .join(\"\")
+    .padStart(3, \"0\")
+  const digitsFloat = onlyDigits.slice(0, -2) + \".\" + onlyDigits.slice(-2)
+  event.target.value = maskCurrency(digitsFloat)
+}
+
+function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency
+  }).format(valor)
+}
+function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+        // charCode 8 = backspace   
+        // charCode 9 = tab
+        if (charCode != 8 && charCode != 9) {
+            // charCode 48 equivale a 0   
+            // charCode 57 equivale a 9
+            if (charCode < 48 || charCode > 57) {
+                return false;
+            }
+        }
+    }
+</script>
+   </form>
    ";
                 }
-                // line 85
+                // line 295
                 echo "   
 ";
             }
-            // line 87
+            // line 297
             echo "
 
 <form name=\"asset_form\" method=\"post\" action=\"";
-            // line 89
+            // line 299
             echo twig_escape_filter($this->env, ($context["target"] ?? null), "html", null, true);
             echo "\" ";
             echo ($context["formoptions"] ?? null);
             echo " enctype=\"multipart/form-data\" data-submit-once>
    <input type=\"hidden\" name=\"entities_id\" value=\"";
-            // line 90
+            // line 300
             echo twig_escape_filter($this->env, ($context["entity_id"] ?? null), "html", null, true);
             echo "\" />
 
 ";
         }
-        // line 93
+        // line 303
         echo "   <div id=\"mainformtable\">
       ";
-        // line 94
-        $context["template_name"] = $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getVerbatimValue((($__internal_compile_20 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 94)) && is_array($__internal_compile_20) || $__internal_compile_20 instanceof ArrayAccess ? ($__internal_compile_20["template_name"] ?? null) : null));
-        // line 95
+        // line 304
+        $context["template_name"] = $this->extensions['Glpi\Application\View\Extension\DataHelpersExtension']->getVerbatimValue((($__internal_compile_20 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 304)) && is_array($__internal_compile_20) || $__internal_compile_20 instanceof ArrayAccess ? ($__internal_compile_20["template_name"] ?? null) : null));
+        // line 305
         echo "      ";
-        if (((($context["withtemplate"] ?? null) == 2) &&  !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 95))) {
-            // line 96
+        if (((($context["withtemplate"] ?? null) == 2) &&  !twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 305))) {
+            // line 306
             echo "         <input type=\"hidden\" name=\"template_name\" value=\"";
             echo twig_escape_filter($this->env, ($context["template_name"] ?? null), "html", null, true);
             echo "\" />
          ";
-            // line 97
+            // line 307
             $context["nametype"] = twig_sprintf(__("Created from the template %s"), ($context["template_name"] ?? null));
-            // line 98
+            // line 308
             echo "      ";
         } elseif ((($context["withtemplate"] ?? null) == 1)) {
-            // line 99
+            // line 309
             echo "         <input type=\"hidden\" name=\"is_template\" value=\"1\" />
       ";
-        } elseif (twig_get_attribute($this->env, $this->source,         // line 100
-($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 100)) {
-            // line 101
+        } elseif (twig_get_attribute($this->env, $this->source,         // line 310
+($context["item"] ?? null), "isNewItem", [], "method", false, false, false, 310)) {
+            // line 311
             echo "         ";
             $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), __("New item"), ($context["nametype"] ?? null));
-            // line 102
+            // line 312
             echo "      ";
         } else {
-            // line 103
+            // line 313
             echo "         ";
             if (((($context["noid"] ?? null) == false) && ($this->extensions['Glpi\Application\View\Extension\SessionExtension']->session("glpiis_ids_visible") || (twig_length_filter($this->env, ($context["nametype"] ?? null)) == 0)))) {
-                // line 104
+                // line 314
                 echo "            ";
-                $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), ($context["nametype"] ?? null), (($__internal_compile_21 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 104)) && is_array($__internal_compile_21) || $__internal_compile_21 instanceof ArrayAccess ? ($__internal_compile_21["id"] ?? null) : null));
-                // line 105
+                $context["nametype"] = twig_sprintf(__("%1\$s - %2\$s"), ($context["nametype"] ?? null), (($__internal_compile_21 = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "fields", [], "any", false, false, false, 314)) && is_array($__internal_compile_21) || $__internal_compile_21 instanceof ArrayAccess ? ($__internal_compile_21["id"] ?? null) : null));
+                // line 315
                 echo "         ";
             }
-            // line 106
+            // line 316
             echo "      ";
         }
-        // line 107
+        // line 317
         echo "
       ";
-        // line 108
+        // line 318
         if (( !array_key_exists("no_header", $context) || (($context["no_header"] ?? null) == false))) {
-            // line 109
+            // line 319
             echo "         <div class=\"card-header main-header d-flex flex-wrap mx-n2 mt-n2 align-items-stretch\">
             ";
-            // line 110
+            // line 320
             if ((($context["withtemplate"] ?? null) == 1)) {
-                // line 111
+                // line 321
                 echo "               <input type=\"text\" class=\"form-control ms-4 mb-2\" placeholder=\"";
                 echo twig_escape_filter($this->env, __("Template name"), "html", null, true);
                 echo "\"
                   name=\"template_name\" id=\"textfield_template_name";
-                // line 112
+                // line 322
                 echo twig_escape_filter($this->env, ($context["rand"] ?? null), "html", null, true);
                 echo "\"
                   value=\"";
-                // line 113
+                // line 323
                 echo twig_escape_filter($this->env, ($context["template_name"] ?? null), "html", null, true);
                 echo "\" />
             ";
             }
-            // line 115
+            // line 325
             echo "            <h3 class=\"card-title d-flex align-items-center ps-4\">
                ";
-            // line 116
-            $context["icon"] = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getIcon", [], "method", false, false, false, 116);
-            // line 117
+            // line 326
+            $context["icon"] = twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "getIcon", [], "method", false, false, false, 326);
+            // line 327
             echo "               ";
             if ((twig_length_filter($this->env, ($context["icon"] ?? null)) > 0)) {
-                // line 118
+                // line 328
                 echo "                  <div class=\"ribbon ribbon-bookmark ribbon-top ribbon-start bg-blue s-1\">
                      <i class=\"";
-                // line 119
+                // line 329
                 echo twig_escape_filter($this->env, ($context["icon"] ?? null), "html", null, true);
                 echo " fa-2x\"></i>
                   </div>
                ";
             }
-            // line 122
+            // line 332
             echo "               <span>
                ";
-            // line 123
-            if ((twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "id", [], "any", false, false, false, 123) > 0)) {
-                // line 124
+            // line 333
+            if ((twig_get_attribute($this->env, $this->source, ($context["item"] ?? null), "id", [], "any", false, false, false, 333) > 0)) {
+                // line 334
                 echo "                  ";
                 echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
                 echo " - ";
@@ -264,27 +487,27 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
                 echo " 
                ";
             } else {
-                // line 126
+                // line 336
                 echo "                  ";
                 echo twig_escape_filter($this->env, ($context["nametype"] ?? null), "html", null, true);
                 echo "
                ";
             }
-            // line 128
+            // line 338
             echo "               
                </span>
                
                ";
-            // line 131
+            // line 341
             if (($context["header_toolbar"] ?? null)) {
-                // line 132
+                // line 342
                 echo "                  <div class=\"d-inline-block toolbar ms-2\">
                      ";
-                // line 133
+                // line 343
                 $context['_parent'] = $context;
                 $context['_seq'] = twig_ensure_traversable(($context["header_toolbar"] ?? null));
                 foreach ($context['_seq'] as $context["_key"] => $context["raw_element"]) {
-                    // line 134
+                    // line 344
                     echo "                        ";
                     echo $context["raw_element"];
                     echo "
@@ -293,38 +516,38 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['raw_element'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 136
+                // line 346
                 echo "                  </div>
                ";
             }
-            // line 138
+            // line 348
             echo "            </h3>
             
             ";
-            // line 140
+            // line 350
             $context["single_actions_ms_auto"] = true;
-            // line 141
+            // line 351
             echo "            
            
             ";
-            // line 143
+            // line 353
             echo twig_include($this->env, $context, "components/form/single-action.html.twig");
             echo "
          </div>
       ";
         }
-        // line 146
+        // line 356
         echo "
       ";
-        // line 147
+        // line 357
         echo twig_escape_filter($this->env, $this->extensions['Glpi\Application\View\Extension\PluginExtension']->callPluginHook(twig_constant("Glpi\\Plugin\\Hooks::PRE_ITEM_FORM"), ["item" => ($context["item"] ?? null), "options" => ($context["params"] ?? null)]), "html", null, true);
         echo "
 
       ";
-        // line 150
+        // line 360
         echo "      ";
-        if ((twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, ($context["app"] ?? null), "request", [], "any", false, false, false, 150), "request", [0 => "in_modal"], "method", false, false, false, 150) == true)) {
-            // line 151
+        if ((twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, ($context["app"] ?? null), "request", [], "any", false, false, false, 360), "request", [0 => "in_modal"], "method", false, false, false, 360) == true)) {
+            // line 361
             echo "      
       <input type=\"hidden\" name=\"_no_message_link\" value=\"1\" />
       ";
@@ -343,7 +566,7 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
 
     public function getDebugInfo()
     {
-        return array (  328 => 151,  325 => 150,  320 => 147,  317 => 146,  311 => 143,  307 => 141,  305 => 140,  301 => 138,  297 => 136,  288 => 134,  284 => 133,  281 => 132,  279 => 131,  274 => 128,  268 => 126,  260 => 124,  258 => 123,  255 => 122,  249 => 119,  246 => 118,  243 => 117,  241 => 116,  238 => 115,  233 => 113,  229 => 112,  224 => 111,  222 => 110,  219 => 109,  217 => 108,  214 => 107,  211 => 106,  208 => 105,  205 => 104,  202 => 103,  199 => 102,  196 => 101,  194 => 100,  191 => 99,  188 => 98,  186 => 97,  181 => 96,  178 => 95,  176 => 94,  173 => 93,  167 => 90,  161 => 89,  157 => 87,  153 => 85,  143 => 78,  134 => 72,  130 => 71,  121 => 66,  118 => 65,  116 => 64,  110 => 61,  106 => 60,  102 => 59,  95 => 58,  93 => 57,  89 => 55,  86 => 54,  84 => 53,  81 => 52,  78 => 51,  75 => 50,  72 => 49,  69 => 48,  66 => 47,  64 => 46,  62 => 45,  60 => 44,  58 => 43,  56 => 42,  54 => 41,  52 => 40,  50 => 39,  48 => 38,  46 => 37,  44 => 36,  42 => 35,  40 => 34,  37 => 33,);
+        return array (  551 => 361,  548 => 360,  543 => 357,  540 => 356,  534 => 353,  530 => 351,  528 => 350,  524 => 348,  520 => 346,  511 => 344,  507 => 343,  504 => 342,  502 => 341,  497 => 338,  491 => 336,  483 => 334,  481 => 333,  478 => 332,  472 => 329,  469 => 328,  466 => 327,  464 => 326,  461 => 325,  456 => 323,  452 => 322,  447 => 321,  445 => 320,  442 => 319,  440 => 318,  437 => 317,  434 => 316,  431 => 315,  428 => 314,  425 => 313,  422 => 312,  419 => 311,  417 => 310,  414 => 309,  411 => 308,  409 => 307,  404 => 306,  401 => 305,  399 => 304,  396 => 303,  390 => 300,  384 => 299,  380 => 297,  376 => 295,  174 => 96,  170 => 95,  166 => 94,  159 => 90,  150 => 84,  140 => 77,  136 => 76,  125 => 68,  121 => 66,  118 => 65,  116 => 64,  110 => 61,  106 => 60,  102 => 59,  95 => 58,  93 => 57,  89 => 55,  86 => 54,  84 => 53,  81 => 52,  78 => 51,  75 => 50,  72 => 49,  69 => 48,  66 => 47,  64 => 46,  62 => 45,  60 => 44,  58 => 43,  56 => 42,  54 => 41,  52 => 40,  50 => 39,  48 => 38,  46 => 37,  44 => 36,  42 => 35,  40 => 34,  37 => 33,);
     }
 
     public function getSourceContext()
@@ -413,23 +636,233 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
 
 {% if (nametype == 'Computador') or (nametype == 'Monitor') or (nametype == 'Impressora') or (nametype == 'Telefone') or (nametype == 'Dispositivo') or (nametype == 'Dispositivo de rede')  %}
    {% if not item.isNewItem %}
+   
+   <script src=\"/glpi108/assets/css/fa6.js\"></script>
    <form method='post' name='useditemsexport_form\$rand' id='useditemsexport_form\$rand' action=\"{{ path('/marketplace/useditemsexport/inc/termounit.php') }}\">
-      <table class='' style=\"margin:0px 40px\">
-      <tr class=''><td colspan='1'>
-         <td style='padding:0px 15px'><p> Termo de devolução
-            <input type='submit' name='generate' value=\"Gerar\" class='submit'>
+      <table class='row '>
+      <tr class='row'>
+         <td class=\"col\" >
+            <button type='submit' name='generate' class=\"btn btn-primary\" style=\"display:inline-grid;\">
+               <i class=\"fa-sharp fa-solid fa-file-pdf fa-xl mt-3\"></i>
+               <span class=\"mt-3\">Termo de Devolução</span>
+            </button>
             <input type=\"hidden\" name=\"entities_id\" value=\"{{ id }}\" />
             <input type=\"hidden\" name=\"tipo\" value=\"{{nametype}}\"/>
-            </td>
          </td>
-         <td style='padding:0px 240px'>
-            <td colspan='6'><p> Termo de Manutenção
-            <input type='submit' name='manutencao' value=\"Gerar\" class='submit'>
+         <td class=\"col\" >
+            <button type='submit' name='generate' class=\"btn btn-primary\" style=\"display:inline-grid;\">
+               <i class=\"fa-sharp fa-solid fa-file-circle-info fa-xl mt-3\"></i>
+               <span class=\"mt-3\">Termo de Manutenção</span>
+            </button>
             <input type=\"hidden\" name=\"entities_id\" value=\"{{ id }}\" />
             <input type=\"hidden\" name=\"acao\" value=\"manutencao\"/>
          </td>
       </tr>
    </table>
+   </form>
+   <form method='post' action=\"{{ path('/marketplace/useditemsexport/inc/aer.php') }}\">
+   <td class=\"col\">
+      <p> Gerar AR
+      <input type='button' onclick=\"geraAr()\" name='aer' value=\"Gerar\" class='submit'>
+      <input type=\"hidden\" name=\"entities_id\" value=\"{{ id }}\" />
+      <input type=\"hidden\" id=\"user_id\" name=\"user_id\" value=\"{{ id }}\" />
+      <input type=\"hidden\" id=\"nametype\" name=\"nametype=\" value=\"{{ nametype }}\" />
+      <input type=\"hidden\" name=\"acao\" value=\"ar\"/>
+   </td>
+
+<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>
+<style>
+  .ende {
+        text-align:initial;
+        font-size:18px;
+        width:100%;
+    }
+    .ende label {
+        
+        font-weight:500;
+    }
+</style>
+   <script>
+   var dadosArray = [];
+
+   function inserirNovoItem() {
+      var conteudo = document.getElementById('conteudo').value;
+      var quantidade = document.getElementById('quantidade').value;
+      var valor = document.getElementById('valor').value;
+
+      if(!conteudo || !quantidade || !valor){
+         return \"Erro, Campos nulos ou vazios\";
+      }
+      else {
+         var novoItem = {
+         conteudo: conteudo,
+         quantidade: quantidade,
+         valor: valor
+         };
+
+         dadosArray.push(novoItem);
+
+         // Limpar os inputs após adicionar ao array
+         document.getElementById('conteudo').value = '';
+         document.getElementById('quantidade').value = '';
+         document.getElementById('valor').value = '';
+
+         console.log('Dados adicionados ao array:', dadosArray);
+      }
+      
+   }
+
+   function enviaDados(nome){
+      \$.ajax({
+         type: \"POST\",
+         data: {
+            nome: nome,
+         },
+         url: \"/glpi108/templates/component/ajax/aer.php\",
+         sucess: function(response) {
+
+         }
+      })
+   }
+   function geraAr(){
+
+      //aqui tem que vir uma requisição ajax, buscando a localização do usuario, e em seguida exibindo no sweet alert,
+      //A operação informada, vai ficar armazenada na session, após requerir a página em php para impressão, irá ser esvaziada
+      const usuario_id = document.getElementById(\"user_id\").value;
+      const nametype = document.getElementById(\"nametype\").value;
+      \$.ajax({
+         type: \"POST\",
+         data: {
+            usuario_id: usuario_id,
+            nametype: nametype,
+         },
+         url: \"/glpi108/templates/components/ajax/buscaLocalizacao.php\",
+         success: function(response){
+            var arrayRecebido = response;
+            var rua = arrayRecebido[0];
+            var bairro = arrayRecebido[1];
+            var cep = arrayRecebido[2];
+            var cidade = arrayRecebido[3];
+            var estado = arrayRecebido[4];
+            var numero = arrayRecebido[5];
+            var complemento = arrayRecebido[6];
+            var nome = arrayRecebido[7];
+            var tipo = arrayRecebido[8];
+
+            const { value: fruit } = Swal.fire({      
+            title: 'Confirme os dados de entrega',
+            html: '<p>Rua: ' + rua + '<br>Bairro: ' + bairro + '<br>CEP: ' + cep + '<br>Cidade: ' + cidade + '<br>Estado: ' + estado + '<br>Numero: ' + numero + '<br>Complemento: ' + complemento,
+            input: 'select',
+            inputOptions: {
+               'whp': 'WHP',
+               'rma': 'RMA',
+               'triagem': 'TRIAGEM',
+               'trirma': 'TRIAGEM/RMA'
+            },
+            inputPlaceholder: 'Informe a Operação',
+            showCancelButton: true,
+            inputValidator: (value) => {
+               return new Promise((resolve) => {
+                  if (!value) {
+                  resolve('Informe uma operação.')
+                  } else {
+                     Swal.fire({
+                        title: 'Será enviado outros itens na mesma embalagem?',
+                        text: \"Dados importantes para a declaração de conteúdo!\",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sim',
+                        cancelButtonText: 'Não',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                           const { value: formValues } = Swal.fire({
+                              title: 'Identificação dos Bens',
+                              html:
+                                 '<label for=\"conteudo\" class=\"ende\">Conteúdo:</label>' +
+                                 '<input id=\"conteudo\" class=\"ende\" required>' +
+                                 '<label for=\"quantidade\" class=\"ende\">Quantidade:</label>' +
+                                 '<input id=\"quantidade\"  class=\"ende\" onkeypress=\"return somenteNumeros(event)\" required>' +
+                                 '<label for=\"valor\" class=\"ende\">Valor(R\$):</label>' +
+                                 '<input type=\"text\" id=\"valor\" onkeypress=\"mascaraMoeda(event)\" class=\"ende\" required>' +
+                                 '<button type=\"button\" class=\"btn btn-success mt-2\" onclick=\"inserirNovoItem()\">Inserir Novo item</button>',
+                              focusConfirm: false,
+                              showConfirmButton: true,
+                              confirmButtonText: 'OK',
+                              preConfirm: () => {
+                                 return [
+                                    document.getElementById('conteudo').value,
+                                 ]
+                              }
+                           }).then((result) => {
+                              if(result.isConfirmed){
+                                 var conteudo = document.getElementById('conteudo').value;
+                                 var quantidade = document.getElementById('quantidade').value;
+                                 var valor = document.getElementById('valor').value;
+
+                                 if(!conteudo || !quantidade || !valor){
+                                    return \"Erro, Campos nulos ou vazios\";
+                                 } else {
+                                    inserirNovoItem();
+                                 }
+                              }
+                           });
+                              if (formValues) {
+                                 Swal.fire(JSON.stringify(formValues));
+                                 resolve()
+                              }
+                        }
+                        if(result.isDenied){
+                           //aqui já deve fazer o select dos dados do ativo e enviar para o pdf
+                           enviaDados(nome);
+
+
+                        }
+                     })
+                  }
+               })
+            }
+         })
+         }
+
+      });
+
+   }
+
+   // parâmetros da função moeda (pelo que entendi)
+// a = objeto do input // e = separador milésimo
+// r = separador decimal // t = evento
+
+function mascaraMoeda(event) {
+  const onlyDigits = event.target.value
+    .split(\"\")
+    .filter(s => /\\d/.test(s))
+    .join(\"\")
+    .padStart(3, \"0\")
+  const digitsFloat = onlyDigits.slice(0, -2) + \".\" + onlyDigits.slice(-2)
+  event.target.value = maskCurrency(digitsFloat)
+}
+
+function maskCurrency(valor, locale = 'pt-BR', currency = 'BRL') {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency
+  }).format(valor)
+}
+function somenteNumeros(e) {
+        var charCode = e.charCode ? e.charCode : e.keyCode;
+        // charCode 8 = backspace   
+        // charCode 9 = tab
+        if (charCode != 8 && charCode != 9) {
+            // charCode 48 equivale a 0   
+            // charCode 57 equivale a 9
+            if (charCode < 48 || charCode > 57) {
+                return false;
+            }
+        }
+    }
+</script>
    </form>
    {% endif %}
    
@@ -471,7 +904,7 @@ class __TwigTemplate_fcb91b15292e7ac476adadd93d0fee95 extends Template
                {% endif %}
                <span>
                {% if item.id > 0 %}
-                  {{ nametype }} - {{ friendlyname }} 
+                  {{ nametype }} - {{  friendlyname }} 
                {% else %}
                   {{ nametype }}
                {% endif %}

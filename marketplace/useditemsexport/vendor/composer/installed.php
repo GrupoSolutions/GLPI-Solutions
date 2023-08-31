@@ -28,6 +28,15 @@
             'reference' => '55ffa6566813d3c40d621892713ef63614820c79',
             'dev_requirement' => true,
         ),
+        'pdfcrowd/pdfcrowd' => array(
+            'pretty_version' => '5.14.0',
+            'version' => '5.14.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../pdfcrowd/pdfcrowd',
+            'aliases' => array(),
+            'reference' => 'abe5be81a9998886e75304c5c1418a29438647c3',
+            'dev_requirement' => false,
+        ),
         'picqer/php-barcode-generator' => array(
             'pretty_version' => 'v2.3.3',
             'version' => '2.3.3.0',

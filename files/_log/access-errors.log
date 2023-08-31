@@ -336,4 +336,7 @@ CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=9092023-08
 CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=9092023-08-11 10:13:40 [2@GS003021]
 CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=8952023-08-11 10:14:44 [2@GS003021]
 CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=8952023-08-11 10:37:01 [2@GS003021]
-CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=895
+CSRF check failed for User ID: 2 at /glpi108/front/ticket.form.php?id=8952023-08-24 16:15:46 [@GS003021]
+CSRF check failed for User ID:  at /glpi108/front/login.php2023-08-25 09:44:07 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi108/ajax/getDropdownValue.php2023-08-26 18:24:38 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi108/front/location.form.php

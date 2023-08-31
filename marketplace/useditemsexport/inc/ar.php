@@ -54,15 +54,13 @@
         <div class="destinatario pb-2 ">
             <h6>DESTINATÁRIO</h6>
             <div><img src="correios.png" width="50"/></div>
-            <p class="ml-2">NOME COLABORADOR<br>Rua Maria Quintela 260B<br>BAIRRO<br>00000-00     Estado-UF</p>
+            <p class="ml-2"><?php echo $nome; ?><br><?php echo $rua;echo " N°$numero";  ?><br><?php echo $bairro; ?><br><?php echo $cep; ?>     <?php echo $estado; ?>-<?php echo $cidade; ?></p>
             <div class="pl-1">
             <?php
-                $cep = '74480395';
-                include "../vendor/autoload.php";
-                $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
-                echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
-
-            ?>
+                    include "../vendor/autoload.php";
+                    $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
+                    echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
+                ?>
             </div>
         </div>
             <p class="ml-2"><strong>Remetente:</strong> GRUPO SOLUTIONS<br>Rua Geraldo Flausino Gomes<br>N°78, 9 ANDAR CONJ 94<br>Cidade Monções<br><strong>04575-060</strong> São Paulo - SP</p> 
@@ -92,14 +90,12 @@
             <div class="destinatario pb-2 ">
                 <h6>DESTINATÁRIO</h6>
                 <div><img src="correios.png" width="50"/></div>
-                <p class="ml-2">NOME COLABORADOR<br>Rua Maria Quintela 260B<br>BAIRRO<br>00000-00     Estado-UF</p>
+                <p class="ml-2"><?php echo $nome; ?><br><?php echo $rua;echo " N°$numero"; ?><br><?php echo $bairro; ?><br><?php echo $cep; ?>     <?php echo $estado; ?>-<?php echo $cidade; ?></p>
                 <div class="pl-1">
                 <?php
-                    $cep = '74480395';
                     include "../vendor/autoload.php";
                     $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
                     echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
-
                 ?>
                 </div>
             </div>
@@ -126,11 +122,11 @@
                             <tbody><tr>
                             <td valign="top" class="style24">
                                 <span class="style34">DESTINATÁRIO</span><span class="style33"><br>
-                                NOME
-                                <br> RUA SARGENTO DELFINO FRANCISCO REZENDE 123 <br>
-                                    JARDIM MARINGÁ 							
+                                <?php echo $nome;?>
+                                <br> <?php echo $rua;echo " N°$numero";?> <br>
+                                    <?php echo $bairro ?>						
                                 <br>
-                                04814-090 - SÃO PAULO - SP
+                                04575-060 - SÃO PAULO - SP
                             </span> </td>
                             </tr>
                             <p></p><p></p>
@@ -143,8 +139,8 @@
                             <td align="left" valign="bottom">
                                     <span class="style37">ENDEREÇO PARA DEVOLUÇÃO DO AR </span><br>
                                     <span class="style39">GRUPO SOLUTIONS<br>
-                                        RUA SARGENTO DELFINO FRANCISCO REZENDE 123<br>
-                                        JARDIM MARINGÁ 
+                                        RUA GERALDO FLAUSINO GOMES, N°78, 9°ANDAR, CONJ.94 <br>
+                                        CIDADE MONÇÕES
                                         <br>
                                     04814-090 - SÃO PAULO - SP
                             </span> </td>
@@ -230,26 +226,26 @@
               <div class="bloco tabela">
                 REMETENTE
                 <div class="celula">
-                  NOME:
+                  NOME: 
                   <span class="texto">
-                    Fulano de Tal
+                  Grupo Solutions
                   </span>
                 </div>
                 <div class="celula">
                   ENDEREÇO:
                   <span class="texto">
-                    Av. Um, 123, Jardim Dois
+                  Rua Geraldo Flausino Gomes N°78
                   </span>
                 </div>
                 <div class="celula texto">
-                  Apto. 4, próximo ao Super Cinco
+                  9 Andar, Conj. 94
                 </div>
                 <div class="row">
                   <div class="col-9">
                     <div class="celula">
                       CIDADE:
                       <span class="texto">
-                        Sete Lagoas
+                        São Paulo
                       </span>
                     </div>
                   </div>
@@ -257,7 +253,7 @@
                     <div class="celula">
                       UF:
                       <span class="texto">
-                        MG
+                        SP
                       </span>
                     </div>
                   </div>
@@ -267,7 +263,7 @@
                     <div class="celula">
                       CEP:
                       <span class="texto">
-                        35700-000
+                        04575-060
                       </span>
                     </div>
                   </div>
@@ -275,7 +271,7 @@
                     <div class="celula">
                       CPF/CNPJ:
                       <span class="texto">
-                        12.334.567/890
+                        
                       </span>
                     </div>
                   </div>
@@ -289,24 +285,24 @@
                 <div class="celula">
                   NOME:
                   <span class="texto">
-                    Ciclano de Tal
+                    <?php echo $nome; ?>
                   </span>
                 </div>
                 <div class="celula">
                   ENDEREÇO:
                   <span class="texto">
-                    Av. Mil, 1223, Jardim Dois Mil
+                    <?php echo $rua;echo " N°$numero";?>
                   </span>
                 </div>
                 <div class="celula texto">
-                  &nbsp;
+                  <?php if($complemento){ echo $complemento;} else { echo "&nbsp";} ?>
                 </div>
                 <div class="row">
                   <div class="col-9">
                     <div class="celula">
                       CIDADE:
                       <span class="texto">
-                        Belo Horizonte
+                        <?php echo $estado; ?>
                       </span>
                     </div>
                   </div>
@@ -314,7 +310,7 @@
                     <div class="celula">
                       UF:
                       <span class="texto">
-                        MG
+                        <?php echo $cidade; ?>
                       </span>
                     </div>
                   </div>
@@ -324,7 +320,7 @@
                     <div class="celula">
                       CEP:
                       <span class="texto">
-                        30000-000
+                        <?php echo $cep; ?>
                       </span>
                     </div>
                   </div>
@@ -332,7 +328,6 @@
                     <div class="celula">
                       CPF/CNPJ:
                       <span class="texto">
-                        02.334.567/890
                       </span>
                     </div>
                   </div>
@@ -344,7 +339,7 @@
           <div class="row linha">
             <div class="col-12">
               <div class="bloco tabela">
-                I D E N T I F I C A Ç Ã O &nbsp;&nbsp;D O S &nbsp;&nbsp;B E N S
+                IDENTIFICAÇÃO&nbsp;&nbsp;DOS&nbsp;&nbsp;BENS
                 <div class="row texto-centro">
                   <div class="col-1">
                     <div class="celula">
@@ -377,68 +372,47 @@
                       </div>
                       <div class="col-7">
                         <div class="celula texto">
-                          Produto 1
+                          <?php echo mb_strtoupper($nametype);?>
                         </div>
                       </div>
                       <div class="col-2">
-                        <div class="celula texto">
+                        <div class="celula texto qtd">
                           1
                         </div>
                       </div>
                       <div class="col-2">
                         <div class="celula texto">
-                          R$
-                          R$&nbsp;10,50
-                        </div>
+                          R$&nbsp;<span class="vlr"><?php echo number_format($valor, 2, ',', '.');?></span></div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-1">
-                        <div class="celula texto">
-                          2
+                    <?php 
+                    if(isset($items)){
+                      foreach($items as $id => $item){
+                        $numeros = preg_replace("/[^0-9,\\.]/", "", $item['valor']);
+                        echo ' <div class="row">
+                        <div class="col-1">
+                          <div class="celula texto">
+                            '. $id + 2 .'
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-7">
-                        <div class="celula texto">
-                          Produto 2
+                        <div class="col-7">
+                          <div class="celula texto">
+                            '. mb_strtoupper($item['conteudo']) .'
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto">
-                          2
+                        <div class="col-2">
+                          <div class="celula texto qtd">
+                          '. $item['quantidade'] .'
+                          </div>
                         </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto">
-                          R$
-                          R$&nbsp;20,75
+                        <div class="col-2">
+                          <div class="celula texto">R$ <span class="vlr">'. $numeros .'</span>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-1">
-                        <div class="celula texto">
-                          3
-                        </div>
-                      </div>
-                      <div class="col-7">
-                        <div class="celula texto">
-                          Produto 3
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto">
-                          3
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto">
-                          R$
-                          R$&nbsp;100,00
-                        </div>
-                      </div>
-                    </div>
-
+                      </div>';
+                      }
+                    }  
+                ?>
                 <div class="row texto-direita">
                   <div class="col-8">
                     <div class="celula cinza">
@@ -447,12 +421,12 @@
                   </div>
                   <div class="col-2">
                     <div class="celula">
-                      6
+                      <span id="qtdTotal"></span>
                     </div>
                   </div>
                   <div class="col-2">
-                    <div class="celula">
-                      R$ R$&nbsp;352,00
+                    <div class="celula" id="vlrTotal">
+                      R$
                     </div>
                   </div>
                 </div>
@@ -475,7 +449,7 @@
           <div class="row linha">
             <div class="col-md-12">
               <div class="bloco">
-                D E C L A R A Ç Ã O
+                DECLARAÇÃO
                 <div class="celula celula-unica">
                   <div class="texto" style="padding: 18px 6px; font-size: 15px">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -580,4 +554,41 @@
     
     </div>
 </body>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      //Esta parte efetuará a soma dos valores dos produtos declarados
+      const elementosVlr = document.querySelectorAll('.vlr');
+      // Inicializa a variável para armazenar o total
+      let vlrTotal = 0;
+
+      // Itera sobre os elementos e pega os valores das classes "vlr"
+      elementosVlr.forEach(elemento => {
+          const valorComVirgula = elemento.innerText; // Valor com vírgula, ex: "1.540,00"
+          const valorSemPontos = valorComVirgula.replace(/\./g, ''); // Removendo pontos
+          const valorNumero = parseFloat(valorSemPontos.replace(',', '.')); // Convertendo para número
+
+          vlrTotal += valorNumero;
+      });
+
+      const elementoVlrTotal = document.getElementById('vlrTotal');
+
+      const vlrTotalFormatado = vlrTotal.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      elementoVlrTotal.innerHTML = vlrTotalFormatado;
+
+      // Já esta parte, efetuará um processo semelhante do processo acima, porém com a quantidade.
+      const elementosQtd = document.querySelectorAll('.qtd');
+      let qtdTotal = 0;
+      elementosQtd.forEach(eleQtd => {
+        const qtd = parseInt(eleQtd.innerText);
+        qtdTotal += qtd;
+      });
+      const elementoQtdTotal = document.getElementById('qtdTotal');
+      elementoQtdTotal.innerHTML = qtdTotal;
+    });
+    </script>
 </html>

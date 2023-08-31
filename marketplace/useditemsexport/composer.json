@@ -1,6 +1,7 @@
 {
     "require": {
         "php": ">=7.4",
+        "pdfcrowd/pdfcrowd": "^5.14",
         "picqer/php-barcode-generator": "^2.3"
     },
     "require-dev": {
