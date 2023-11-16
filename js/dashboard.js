@@ -268,6 +268,9 @@ class GLPIDashboard {
             var is_private;
             $.each(button.closest('.display-rights-form').serializeArray(), function() {
                 var current_val = this.value.split('-');
+                if (current_val.length !== 2) {
+                    return;
+                }
                 var right_name  = current_val[0];
                 var value       = current_val[1];
                 if (!(right_name in form_data)) {
@@ -844,7 +847,6 @@ class GLPIDashboard {
                 var count        = $(this);
                 var precision    = count.data('precision');
                 var number       = count.children('.number');
-                var suffix       = count.children('.suffix').text();
                 var targetNumber = number.text();
 
                 // Some custom formats may contain text in the number field, no animation in this case
@@ -856,10 +858,10 @@ class GLPIDashboard {
                     duration: 800,
                     easing: 'swing',
                     step: function () {
-                        number.text(this.Counter.toFixed(precision))+suffix;
+                        number.text(this.Counter.toFixed(precision));
                     },
                     complete: function () {
-                        number.text(targetNumber)+suffix;
+                        number.text(targetNumber);
                     }
                 });
             });

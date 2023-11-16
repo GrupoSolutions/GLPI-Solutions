@@ -43,22 +43,11 @@ $con      = new Consumable();
 $constype = new ConsumableItem();
 
 if (isset($_POST["add_several"])) {
-    $usuario_insercao = $_SESSION['glpifriendlyname'];
-
     $constype->check($_POST["consumableitems_id"], UPDATE);
 
     for ($i = 0; $i < $_POST["to_add"]; $i++) {
         unset($con->fields["id"]);
-        $id = $con->add($_POST);
-        require('../src/db_config.php');
-
-        $data_nf = $_POST['data_nf'];
-        $valor_insumo = $_POST['valor_insumo'];
-        $numero_nf = $_POST['numero_nf'];
-        $comentario = $_POST['comentario'];
-
-        $sqlInsereValor = "UPDATE glpi_consumables SET data_nf = '$data_nf', valor_insumo = '$valor_insumo', numero_nf = '$numero_nf', usuario_insercao = '$usuario_insercao', comentario = '$comentario' WHERE id = $id" ;
-        mysqli_query($sqlcon, $sqlInsereValor);
+        $con->add($_POST);
     }
     Event::log(
         $_POST["consumableitems_id"],
@@ -69,7 +58,7 @@ if (isset($_POST["add_several"])) {
         sprintf(__('%s adds consumables'), $_SESSION["glpiname"])
     );
 
-   Html::back();
+    Html::back();
 } else {
     Html::back();
 }

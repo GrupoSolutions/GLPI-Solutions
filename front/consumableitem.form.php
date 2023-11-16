@@ -46,7 +46,6 @@ if (!isset($_GET["id"])) {
 $constype = new ConsumableItem();
 
 if (isset($_POST["add"])) {
-    
     $constype->check(-1, CREATE, $_POST);
 
     if ($newID = $constype->add($_POST)) {
@@ -63,7 +62,6 @@ if (isset($_POST["add"])) {
     }
     Html::back();
 } else if (isset($_POST["delete"])) {
-    
     $constype->check($_POST["id"], DELETE);
 
     if ($constype->delete($_POST)) {
@@ -90,7 +88,7 @@ if (isset($_POST["add"])) {
             sprintf(__('%s restores an item'), $_SESSION["glpiname"])
         );
     }
-    //$constype->redirectToList();
+    $constype->redirectToList();
 } else if (isset($_POST["purge"])) {
     $constype->check($_POST["id"], PURGE);
 

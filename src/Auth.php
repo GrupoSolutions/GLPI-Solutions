@@ -64,6 +64,12 @@ class Auth extends CommonGLPI
      */
     public $user_found = false;
 
+    /**
+     * Indicated if an error occurs during connection to the user LDAP.
+     * @var boolean
+     */
+    public $user_ldap_error = false;
+
     /** @var resource|boolean LDAP connection descriptor */
     public $ldap_connection;
     /** @var bool Store user LDAP dn */
@@ -230,17 +236,20 @@ class Auth extends CommonGLPI
      * Find a user in a LDAP and return is BaseDN
      * Based on GRR auth system
      *
-     * @param string $ldap_method ldap_method array to use
-     * @param string $login       User Login
-     * @param string $password    User Password
+     * @param string    $ldap_method ldap_method array to use
+     * @param string    $login       User Login
+     * @param string    $password    User Password
+     * @param bool|null $error       Boolean flag that will be set to `true` if a LDAP error occurs during connection
      *
      * @return string basedn of the user / false if not founded
      */
-    public function connection_ldap($ldap_method, $login, $password)
+    public function connection_ldap($ldap_method, $login, $password, ?bool &$error = null)
     {
+        $error = false;
 
        // we prevent some delay...
         if (empty($ldap_method['host'])) {
+            $error = true;
             return false;
         }
 
@@ -258,7 +267,7 @@ class Auth extends CommonGLPI
                 $params['fields']['sync_field'] = $ldap_method['sync_field'];
             }
             try {
-                $infos = AuthLDAP::searchUserDn($this->ldap_connection, [
+                $info = AuthLDAP::searchUserDn($this->ldap_connection, [
                     'basedn'            => $ldap_method['basedn'],
                     'login_field'       => $ldap_method['login_field'],
                     'search_parameters' => $params,
@@ -271,19 +280,30 @@ class Auth extends CommonGLPI
                 ]);
             } catch (\Throwable $e) {
                 ErrorHandler::getInstance()->handleException($e, true);
-                $this->addToError(__('Unable to connect to the LDAP directory'));
+                $info = false;
+            }
+
+            $ldap_errno = ldap_errno($this->ldap_connection);
+            if ($info === false) {
+                if ($ldap_errno > 0 && $ldap_errno !== 32) {
+                    $this->addToError(__('Unable to connect to the LDAP directory'));
+                    $error = true;
+                } else {
+                    // 32 = LDAP_NO_SUCH_OBJECT => This should not be considered as a connection error, as it just means that user was not found.
+                    $this->addToError(__('Incorrect username or password'));
+                }
                 return false;
             }
 
-            $dn = $infos['dn'];
+            $dn = $info['dn'];
             $this->user_found = $dn != '';
 
             $bind_result = $this->user_found ? @ldap_bind($this->ldap_connection, $dn, $password) : false;
 
             if ($this->user_found && $bind_result !== false) {
                 //Hook to implement to restrict access by checking the ldap directory
-                if (Plugin::doHookFunction(Hooks::RESTRICT_LDAP_AUTH, $infos)) {
-                    return $infos;
+                if (Plugin::doHookFunction(Hooks::RESTRICT_LDAP_AUTH, $info)) {
+                    return $info;
                 }
                 $this->addToError(__('User not authorized to connect in GLPI'));
                 //Use is present by has no right to connect because of a plugin
@@ -295,8 +315,9 @@ class Auth extends CommonGLPI
                 return false;
             }
         } else {
-            $this->addToError(__('Unable to connect to the LDAP directory'));
             //Directory is not available
+            $this->addToError(__('Unable to connect to the LDAP directory'));
+            $error = true;
             return false;
         }
     }
@@ -499,8 +520,14 @@ class Auth extends CommonGLPI
                     return false;
                 }
 
-                if (version_compare(phpCAS::getVersion(), '1.6.0', '<')) {
-                    // Prior to version 1.6.0, 5th argument was `$changeSessionID`.
+                // Adapt phpCAS::client() signature.
+                // A new signature has been introduced in 1.6.0 version of the official package.
+                // This new signature has been backported in the `1.3.6-1` version of the debian package,
+                // so we have to check for method argument names too.
+                $has_service_base_url_arg = version_compare(phpCAS::getVersion(), '1.6.0', '>=')
+                    || ((new ReflectionMethod(phpCAS::class, 'client'))->getParameters()[4]->getName() ?? null) === 'service_base_url';
+                if (!$has_service_base_url_arg) {
+                    // Prior to version 1.6.0, `$service_base_url` argument was not present, and 5th argument was `$changeSessionID`.
                     phpCAS::client(
                         constant($CFG_GLPI["cas_version"]),
                         $CFG_GLPI["cas_host"],
@@ -509,7 +536,8 @@ class Auth extends CommonGLPI
                         false
                     );
                 } else {
-                    // Starting from version 1.6.0, 5th argument is `$service_base_url`.
+                    // Starting from version 1.6.0, `$service_base_url` argument was added at 5th position, and `$changeSessionID`
+                    // was moved at 6th position.
                     phpCAS::client(
                         constant($CFG_GLPI["cas_version"]),
                         $CFG_GLPI["cas_host"],
@@ -927,7 +955,8 @@ class Auth extends CommonGLPI
                                 $login_password,
                                 $this->user->fields["auths_id"]
                             );
-                            if ($this->ldap_connection !== false && (!$this->auth_succeded && !$this->user_found)) {
+                            if ($this->user_ldap_error === false && !$this->auth_succeded && !$this->user_found) {
+                                 // Mark user as deleted, unless an error occured during connection to user LDAP server.
                                  $search_params = [
                                      'name'     => addslashes($login_name),
                                      'authtype' => $this::LDAP
@@ -1483,7 +1512,7 @@ class Auth extends CommonGLPI
                             'name' => 'force_ldap_resynch'
                         ]);
 
-                        if (strlen($authldap->fields['sync_field']) > 0) {
+                        if (strlen($authldap->fields['sync_field'] ?? "") > 0) {
                             echo Html::submit("<i class='fas fa-broom'></i><span>" . __s('Clean LDAP fields and force synchronisation') . "</span>", [
                                 'name' => 'clean_ldap_fields'
                             ]);
@@ -1525,7 +1554,10 @@ class Auth extends CommonGLPI
      */
     public static function isValidLogin($login)
     {
-        return $login !== null && preg_match("/^[[:alnum:]'@.\-_ ]+$/iu", $login);
+        return $login !== null && (
+            preg_match("/^[[:alnum:]'@.\-_ ]+$/iu", $login)
+            || filter_var($login, FILTER_VALIDATE_EMAIL) != false
+        );
     }
 
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)

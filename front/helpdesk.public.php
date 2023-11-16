@@ -83,7 +83,7 @@ if (
         ])
     ) {
         Html::redirect($CFG_GLPI['root_doc'] . "/front/ticket.php");
-    } else if (Session::haveRight('reservation', ReservationItem::RESERVEANITEM)) {
+    } else if (Session::haveRightsOr('reservation', [READ, ReservationItem::RESERVEANITEM])) {
         Html::redirect($CFG_GLPI['root_doc'] . "/front/reservationitem.php");
     } else if (Session::haveRight('knowbase', KnowbaseItem::READFAQ)) {
         Html::redirect($CFG_GLPI['root_doc'] . "/front/helpdesk.faq.php");
@@ -98,10 +98,7 @@ if (isset($_GET['create_ticket'])) {
     $ticket->showFormHelpdesk(Session::getLoginUserID());
 } else {
     Html::helpHeader(__('Home'));
-    include_once("../src/ToastNotificacao.php");
-        $user_id = Session::getLoginUserID();
-        $novoChamado = buscarNovosChamados($user_id);
-        $unresolvedChamado = buscarRespostaChamados($user_id);
+
     $password_alert = "";
     $user = new User();
     $user->getFromDB(Session::getLoginUserID());
@@ -133,9 +130,9 @@ if (isset($_GET['create_ticket'])) {
     $kb_recent     = "";
     $kb_lastupdate = "";
     if (Session::haveRight('knowbase', KnowbaseItem::READFAQ)) {
-        $kb_popular    = KnowbaseItem::showRecentPopular("popular");
-        $kb_recent     = KnowbaseItem::showRecentPopular("recent");
-        $kb_lastupdate = KnowbaseItem::showRecentPopular("lastupdate");
+        $kb_popular    = KnowbaseItem::showRecentPopular("popular", false);
+        $kb_recent     = KnowbaseItem::showRecentPopular("recent", false);
+        $kb_lastupdate = KnowbaseItem::showRecentPopular("lastupdate", false);
     }
 
     Html::requireJs('masonry');
@@ -148,8 +145,6 @@ if (isset($_GET['create_ticket'])) {
         'kb_popular'     => $kb_popular,
         'kb_recent'      => $kb_recent,
         'kb_lastupdate'  => $kb_lastupdate,
-        'novo_chamado'=> $novoChamado,
-        'sem_resposta'=> $unresolvedChamado,
     ]);
 }
 

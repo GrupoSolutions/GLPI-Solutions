@@ -1151,6 +1151,12 @@ class Document extends CommonDBTM
      **/
     public function moveUploadedDocument(array &$input, $filename)
     {
+        if (str_contains($filename, '/') || str_contains($filename, '\\')) {
+            // Filename is not supposed to contains directory separators.
+            trigger_error(sprintf('Moving file `%s` is forbidden for security reasons.', $filename), E_USER_WARNING);
+            return false;
+        }
+
         $prefix = '';
         if (isset($input['_prefix_filename'])) {
             $prefix = array_shift($input['_prefix_filename']);
@@ -1263,6 +1269,12 @@ class Document extends CommonDBTM
      **/
     public static function moveDocument(array &$input, $filename)
     {
+        if (str_contains($filename, '/') || str_contains($filename, '\\')) {
+            // Filename is not supposed to contains directory separators.
+            trigger_error(sprintf('Moving file `%s` is forbidden for security reasons.', $filename), E_USER_WARNING);
+            return false;
+        }
+
         $prefix = '';
         if (isset($input['_prefix_filename'])) {
             $prefix = array_shift($input['_prefix_filename']);
@@ -1337,24 +1349,13 @@ class Document extends CommonDBTM
        // Local file : try to detect mime type
         $input['mime'] = Toolbox::getMime($fullpath);
 
-        if (
-            is_writable(GLPI_TMP_DIR)
-            && is_writable($fullpath)
-        ) { // Move if allowed
-            if (self::renameForce($fullpath, GLPI_DOC_DIR . "/" . $new_path)) {
-                Session::addMessageAfterRedirect(__('Document move succeeded.'));
-            } else {
-                Session::addMessageAfterRedirect(__('File move failed.'), false, ERROR);
-                return false;
-            }
-        } else { // Copy (will overwrite dest file is present)
-            if (copy($fullpath, GLPI_DOC_DIR . "/" . $new_path)) {
-                Session::addMessageAfterRedirect(__('Document copy succeeded.'));
-            } else {
-                Session::addMessageAfterRedirect(__('File move failed'), false, ERROR);
-                @unlink($fullpath);
-                return false;
-            }
+        // Copy (will overwrite dest file if present)
+        if (copy($fullpath, GLPI_DOC_DIR . "/" . $new_path)) {
+            Session::addMessageAfterRedirect(__('Document copy succeeded.'));
+        } else {
+            Session::addMessageAfterRedirect(__('File move failed'), false, ERROR);
+            @unlink($fullpath);
+            return false;
         }
 
        // For display

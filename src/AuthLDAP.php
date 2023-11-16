@@ -487,8 +487,8 @@ class AuthLDAP extends CommonDBTM
             echo "</td></tr>";
 
             echo "<tr class='tab_bg_1'><td><label for='use_bind'>";
-            echo __('Use Bind (for non-anonymous binds)') . "</label>&nbsp;";
-            Html::showToolTip(__("Allow to use RootDN and Password for non-anonymous binds."));
+            echo __('Use bind') . "</label>&nbsp;";
+            Html::showToolTip(__("Indicates whether a simple bind operation should be used during connection to LDAP server. Disabling this behaviour can be required when LDAPS bind is used."));
             echo "</td>";
             echo "<td colspan='3'>";
             $rand_use_bind = mt_rand();
@@ -2837,7 +2837,7 @@ class AuthLDAP extends CommonDBTM
     ) {
         global $DB;
 
-        $params      = Toolbox::stripslashes_deep($params);
+        $params      = Sanitizer::unsanitize($params);
         $config_ldap = new self();
         $res         = $config_ldap->getFromDB($ldap_server);
         $input = [];
@@ -2894,16 +2894,16 @@ class AuthLDAP extends CommonDBTM
                             $ds,
                             $config_ldap->fields,
                             $user_dn,
-                            addslashes($login),
+                            Sanitizer::sanitize($login),
                             ($action == self::ACTION_IMPORT)
                         )
                     ) {
                         //Get the ID by sync field (Used to check if restoration is needed)
                         $searched_user = new User();
                         $user_found = false;
-                        if ($login === null || !($user_found = $searched_user->getFromDBbySyncField($DB->escape($login)))) {
+                        if ($login === null || !($user_found = $searched_user->getFromDBbySyncField(Sanitizer::sanitize($login)))) {
                          //In case user id has changed : get id by dn (Used to check if restoration is needed)
-                            $user_found = $searched_user->getFromDBbyDn($DB->escape($user_dn));
+                            $user_found = $searched_user->getFromDBbyDn(Sanitizer::sanitize($user_dn));
                         }
                         if ($user_found && $searched_user->fields['is_deleted_ldap'] && $searched_user->fields['user_dn']) {
                             User::manageRestoredUserInLdap($searched_user->fields['id']);
@@ -3043,15 +3043,16 @@ class AuthLDAP extends CommonDBTM
     /**
      * Connect to a LDAP server
      *
-     * @param string  $host          LDAP host to connect
-     * @param string  $port          port to use
-     * @param string  $login         login to use (default '')
-     * @param string  $password      password to use (default '')
-     * @param boolean $use_tls       use a TLS connection? (false by default)
-     * @param integer $deref_options deref options used
-     * @param string  $tls_certfile  TLS CERT file name within config directory (default '')
-     * @param string  $tls_keyfile   TLS KEY file name within config directory (default '')
-     * @param boolean $use_bind      do we need to do an ldap_bind? (true by default)
+     * @param string  $host                 LDAP host to connect
+     * @param string  $port                 port to use
+     * @param string  $login                login to use (default '')
+     * @param string  $password             password to use (default '')
+     * @param boolean $use_tls              use a TLS connection? (false by default)
+     * @param integer $deref_options        deref options used
+     * @param string  $tls_certfile         TLS CERT file name within config directory (default '')
+     * @param string  $tls_keyfile          TLS KEY file name within config directory (default '')
+     * @param boolean $use_bind             do we need to do an ldap_bind? (true by default)
+     * @param bool    $silent_bind_errors   Indicates whether bind errors must be silented
      *
      * @return resource|false|\LDAP\Connection link to the LDAP server : false if connection failed
      */
@@ -3065,7 +3066,8 @@ class AuthLDAP extends CommonDBTM
         $tls_certfile = "",
         $tls_keyfile = "",
         $use_bind = true,
-        $timeout = 0
+        $timeout = 0,
+        bool $silent_bind_errors = false
     ) {
 
         $ds = @ldap_connect($host, intval($port));
@@ -3076,7 +3078,8 @@ class AuthLDAP extends CommonDBTM
                     "Unable to connect to LDAP server %s:%s",
                     $host,
                     $port
-                )
+                ),
+                E_USER_WARNING
             );
             return false;
         }
@@ -3087,12 +3090,6 @@ class AuthLDAP extends CommonDBTM
             LDAP_OPT_DEREF            => $deref_options,
             LDAP_OPT_NETWORK_TIMEOUT  => $timeout
         ];
-        if (!empty($tls_certfile) && file_exists($tls_certfile)) {
-            $ldap_options[LDAP_OPT_X_TLS_CERTFILE] = $tls_certfile;
-        }
-        if (!empty($tls_keyfile) && file_exists($tls_keyfile)) {
-            $ldap_options[LDAP_OPT_X_TLS_KEYFILE] = $tls_keyfile;
-        }
 
         foreach ($ldap_options as $option => $value) {
             if (!@ldap_set_option($ds, $option, $value)) {
@@ -3108,6 +3105,20 @@ class AuthLDAP extends CommonDBTM
                     E_USER_WARNING
                 );
             }
+        }
+        if (
+            !empty($tls_certfile)
+            && file_exists($tls_certfile)
+            && !@ldap_set_option(null, LDAP_OPT_X_TLS_CERTFILE, $tls_certfile)
+        ) {
+            trigger_error("Unable to set LDAP option `LDAP_OPT_X_TLS_CERTFILE`", E_USER_WARNING);
+        }
+        if (
+            !empty($tls_keyfile)
+            && file_exists($tls_keyfile)
+            && !@ldap_set_option(null, LDAP_OPT_X_TLS_KEYFILE, $tls_keyfile)
+        ) {
+            trigger_error("Unable to set LDAP option `LDAP_OPT_X_TLS_KEYFILE`", E_USER_WARNING);
         }
 
         if ($use_tls) {
@@ -3128,7 +3139,7 @@ class AuthLDAP extends CommonDBTM
         }
 
         if (!$use_bind) {
-            return true;
+            return $ds;
         }
 
         if ($login != '') {
@@ -3139,18 +3150,20 @@ class AuthLDAP extends CommonDBTM
             $b = @ldap_bind($ds);
         }
         if ($b === false) {
-            trigger_error(
-                static::buildError(
-                    $ds,
-                    sprintf(
-                        "Unable to bind to LDAP server `%s:%s` %s",
-                        $host,
-                        $port,
-                        ($login != '' ? "with RDN `$login`" : 'anonymously')
-                    )
-                ),
-                E_USER_WARNING
-            );
+            if ($silent_bind_errors === false) {
+                trigger_error(
+                    static::buildError(
+                        $ds,
+                        sprintf(
+                            "Unable to bind to LDAP server `%s:%s` %s",
+                            $host,
+                            $port,
+                            ($login != '' ? "with RDN `$login`" : 'anonymously')
+                        )
+                    ),
+                    E_USER_WARNING
+                );
+            }
             return false;
         }
 
@@ -3186,10 +3199,11 @@ class AuthLDAP extends CommonDBTM
             $ldap_method['timeout']
         );
 
-       // Test with login and password of the user if exists
+        // Test with login and password of the user if exists
         if (
             !$ds
             && !empty($login)
+            && (bool) $ldap_method['use_bind']
         ) {
             $ds = self::connectToServer(
                 $ldap_method['host'],
@@ -3201,7 +3215,8 @@ class AuthLDAP extends CommonDBTM
                 $ldap_method['tls_certfile'] ?? '',
                 $ldap_method['tls_keyfile'] ?? '',
                 $ldap_method['use_bind'],
-                $ldap_method['timeout']
+                $ldap_method['timeout'],
+                true // silent bind error when trying to bind with user login/password
             );
         }
 
@@ -3228,6 +3243,7 @@ class AuthLDAP extends CommonDBTM
                 if (
                     !$ds
                     && !empty($login)
+                    && (bool) $ldap_method['use_bind']
                 ) {
                      $ds = self::connectToServer(
                          $replicate["host"],
@@ -3239,7 +3255,8 @@ class AuthLDAP extends CommonDBTM
                          $ldap_method['tls_certfile'] ?? '',
                          $ldap_method['tls_keyfile'] ?? '',
                          $ldap_method['use_bind'],
-                         $ldap_method['timeout']
+                         $ldap_method['timeout'],
+                         true // silent bind error when trying to bind with user login/password
                      );
                 }
                 if ($ds) {
@@ -3328,27 +3345,29 @@ class AuthLDAP extends CommonDBTM
     /**
      * Authentify a user by checking a specific directory
      *
-     * @param object $auth        identification object
-     * @param string $login       user login
-     * @param string $password    user password
-     * @param array  $ldap_method ldap_method array to use
-     * @param string $user_dn     user LDAP DN if present
+     * @param Auth      $auth        identification object
+     * @param string    $login       user login
+     * @param string    $password    user password
+     * @param array     $ldap_method ldap_method array to use
+     * @param string    $user_dn     user LDAP DN if present
+     * @param bool|null $error       Boolean flag that will be set to `true` if a LDAP error occurs during connection
      *
      * @return object identification object
      */
-    public static function ldapAuth($auth, $login, $password, $ldap_method, $user_dn)
+    public static function ldapAuth($auth, $login, $password, $ldap_method, $user_dn, ?bool &$error = null)
     {
 
-        $oldlevel = error_reporting(0);
+        $auth->auth_succeded = false;
+        $auth->extauth       = 1;
 
-        $infos  = $auth->connection_ldap($ldap_method, $login, $password);
+        $infos  = $auth->connection_ldap($ldap_method, $login, $password, $error);
+
+        if ($infos === false) {
+            return $auth;
+        }
+
         $user_dn = $infos['dn'];
         $user_sync = (isset($infos['sync_field']) ? $infos['sync_field'] : null);
-
-        error_reporting($oldlevel);
-
-        $auth->auth_succeded            = false;
-        $auth->extauth                  = 1;
 
         if ($user_dn) {
             $auth->auth_succeded            = true;
@@ -3387,7 +3406,7 @@ class AuthLDAP extends CommonDBTM
     /**
      * Try to authentify a user by checking all the directories
      *
-     * @param object  $auth     identification object
+     * @param Auth    $auth     identification object
      * @param string  $login    user login
      * @param string  $password user password
      * @param integer $auths_id auths_id already used for the user (default 0)
@@ -3435,7 +3454,14 @@ class AuthLDAP extends CommonDBTM
 
             foreach ($ldap_methods as $ldap_method) {
                 if ($ldap_method['is_active']) {
-                    $auth = self::ldapAuth($auth, $login, $password, $ldap_method, $user_dn);
+                    $error = false;
+                    $auth = self::ldapAuth($auth, $login, $password, $ldap_method, $user_dn, $error);
+
+                    if ($error === true && in_array($ldap_method['id'], $known_servers_id)) {
+                        // Remember that an error occurs on the server on which we expect user to be find.
+                        // This will prevent user to be considered as deleted from the LDAP server.
+                        $auth->user_ldap_error = true;
+                    }
 
                     if ($auth->user_found) {
                         $user_found = true;
@@ -3583,7 +3609,7 @@ class AuthLDAP extends CommonDBTM
             Toolbox::deprecated('Use of $clean = false is deprecated');
         }
 
-        $result = @ldap_read($ds, $dn, $condition, $attrs);
+        $result = @ldap_read($ds, Sanitizer::unsanitize($dn), $condition, $attrs);
         if ($result === false) {
             // 32 = LDAP_NO_SUCH_OBJECT => This error can be silented as it just means that search produces no result.
             if (ldap_errno($ds) !== 32) {

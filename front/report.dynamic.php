@@ -40,6 +40,15 @@ if (!isset($_GET['item_type']) || !is_string($_GET['item_type']) || !is_a($_GET[
 }
 
 $itemtype = $_GET['item_type'];
+if ($itemtype === 'AllAssets') {
+    Session::checkCentralAccess();
+} else {
+    Session::checkValidSessionId();
+    $item = new $itemtype();
+    if (!$item->canView()) {
+        Html::displayRightError();
+    }
+}
 
 if (isset($_GET["display_type"])) {
     if ($_GET["display_type"] < 0) {

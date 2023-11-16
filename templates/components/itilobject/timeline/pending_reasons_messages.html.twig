@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -54,7 +54,7 @@
 
          {% set resolve = pending_reason_item_parent.getAutoResolvedate() %}
          {% if resolve %}
-            <i class="fas fa-stop ms-2" title="{{ __("Automatic resolution scheduled on %s")|format(call("Html::convDate", [next_bump])) }}"
+            <i class="fas fa-stop ms-2" title="{{ __("Automatic resolution scheduled on %s")|format(call("Html::convDate", [resolve])) }}"
                data-bs-toggle="tooltip"></i>
          {% endif %}
       {% endif %}

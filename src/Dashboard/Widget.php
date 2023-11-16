@@ -296,21 +296,6 @@ class Widget
         $href = strlen($p['url'])
          ? "href='{$p['url']}'"
          : "";
-        if($p['label'] == 'Chamados novos'){
-            $href = strlen($p['url'])
-            ? "href='/front/ticket.php?status=novo'"
-            : "";
-        } else if($p['label'] == 'Chamados atribuídos'){
-            $href = strlen($p['url']) ? "href='/front/ticket.php?status=ematendimento'" : "";
-        } else if($p['label'] == 'Chamados fechados'){
-            $href = strlen($p['url']) ? "href='/front/ticket.php?status=fechados'" : "";
-        } else {
-            //$href= strlen($p['url']) ? "" : "";
-$href = strlen($p['url'])
-         ? "href='{$p['url']}'"
-         : "";
-
-        }
 
         $label = $p['label'];
         $html = <<<HTML

@@ -36,8 +36,8 @@
 // Ensure current directory when run from crontab
 chdir(__DIR__);
 
+$SECURITY_STRATEGY = 'no_check'; // in GLPI mode, cronjob can also be triggered from public pages
 
-define('DO_NOT_CHECK_HTTP_REFERER', 1);
 include('../inc/includes.php');
 
 if (!is_writable(GLPI_LOCK_DIR)) {

@@ -33,6 +33,9 @@
  * ---------------------------------------------------------------------
  */
 
+use Glpi\Application\ErrorHandler;
+use Glpi\Event;
+use Glpi\Mail\SMTP\OauthConfig;
 use Glpi\Toolbox\Sanitizer;
 
 include('../inc/includes.php');
@@ -49,6 +52,33 @@ if (isset($_POST["test_smtp_send"])) {
     }
     $config = new Config();
     $config->update($_POST);
+    Event::log(0, "system", 3, "setup", sprintf(
+        __('%1$s edited the emails notifications configuration'),
+        $_SESSION["glpiname"] ?? __("Unknown"),
+    ));
+
+    $redirect_to_smtp_oauth = $_SESSION['redirect_to_smtp_oauth'] ?? false;
+    unset($_SESSION['redirect_to_smtp_oauth']);
+    if ($redirect_to_smtp_oauth) {
+        $provider = OauthConfig::getInstance()->getSmtpOauthProvider();
+
+        if ($provider !== null) {
+            try {
+                $auth_url = $provider->getAuthorizationUrl();
+            } catch (\Throwable $e) {
+                ErrorHandler::getInstance()->handleException($e, true);
+                Session::addMessageAfterRedirect(
+                    sprintf(_x('oauth', 'Authorization failed with error: %s'), $e->getMessage()),
+                    false,
+                    ERROR
+                );
+                Html::back();
+            }
+            $_SESSION['smtp_oauth2_state'] = $provider->getState();
+            Html::redirect($auth_url);
+        }
+    }
+
     Html::back();
 }
 

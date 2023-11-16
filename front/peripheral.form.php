@@ -50,14 +50,7 @@ $peripheral = new Peripheral();
 
 if (isset($_POST["add"])) {
     $peripheral->check(-1, CREATE, $_POST);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
-    
     if ($newID = $peripheral->add($_POST)) {
         Event::log(
             $newID,
@@ -112,13 +105,7 @@ if (isset($_POST["add"])) {
     $peripheral->redirectToList();
 } else if (isset($_POST["update"])) {
     $peripheral->check($_POST["id"], UPDATE);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
     $peripheral->update($_POST);
     Event::log(
         $_POST["id"],

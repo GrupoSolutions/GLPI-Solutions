@@ -50,7 +50,7 @@ switch ($action) {
             $_POST['itemtype']::dropdown(['name'                => $_POST['dom_name'],
                 'rand'                => $_POST['dom_rand'],
                 'display_emptychoice' => true,
-                'display_dc_position' => true,
+                'display_dc_position' => in_array($_POST['itemtype'], $CFG_GLPI['rackable_types']),
                 'width'               => '100%',
             ]);
         }
@@ -66,6 +66,7 @@ switch ($action) {
                     'itemtype'           => $_GET['itemtype'],
                     'items_id'           => $_GET['items_id']
                 ],
+                'used'         => (int)$_GET['items_id'] > 0 ? Socket::getSocketAlreadyLinked($_GET['itemtype'], (int)$_GET['items_id']) : [],
                 'displaywith'  => ['itemtype', 'items_id', 'networkports_id'],
             ]);
         }
@@ -76,7 +77,8 @@ switch ($action) {
              'display_emptychoice' => true,
              'condition'           => ['items_id' => $_GET['items_id'],
                  'itemtype' => $_GET['itemtype']
-             ]
+             ],
+             'comments' => false
          ]);
         break;
 

@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -44,27 +44,11 @@
    <table class="table table-hover">
       <thead>
          <tr>
-         {% set insumo = "text" %}
-         {% for entry in logs %}
-            {% if entry['field'] == 'Insumo' %}
-               {% set insumo = "true" %}
-            {% endif %}
-           {% endfor %}
-         {% if insumo == "true" %}
-            <th> * </th>
-            <th>{{ _n('Date', 'Dates', 1) }}</th>
-            <th>{{ 'User'|itemtype_name }}</th>
-            <th>Quantidade</th>
-            <th>{{ _x('name', 'Update') }}</th>
-         {% else %}
-
             <th>{{ __('ID') }}</th>
             <th>{{ _n('Date', 'Dates', 1) }}</th>
             <th>{{ 'User'|itemtype_name }}</th>
             <th>{{ _n('Field', 'Fields', 1) }}</th>
             <th>{{ _x('name', 'Update') }}</th>
-         {% endif %}
-       
             <th>
                <span class="float-end log-toolbar mb-0">
                   <button class="btn btn-sm show_log_filters {{ filters|length > 0 ? 'btn-secondary active' : 'btn-outline-secondary' }}">
@@ -98,7 +82,7 @@
                ) }}
             </td>
             <td>
-               <select name="filters[users_names][]" class="form-select logs-filter-select-mulitple" multiple>
+               <select name="filters[users_names][]" class="form-select logs-filter-select-multiple" multiple>
                   {% for value, username in user_names %}
                      <option value="{{ value|verbatim_value }}" {{ filters['users_names'] is defined and value in filters['users_names'] ? 'selected' : '' }}>
                         {{ username|verbatim_value }}
@@ -107,7 +91,7 @@
                </select>
             </td>
             <td>
-               <select name="filters[affected_fields][]" class="form-select logs-filter-select-mulitple" multiple>
+               <select name="filters[affected_fields][]" class="form-select logs-filter-select-multiple" multiple>
                   {% for value, field in affected_fields %}
                      <option value="{{ value }}" {{ filters['affected_fields'] is defined and value in filters['affected_fields'] ? 'selected' : '' }}>
                         {{ field }}
@@ -116,7 +100,7 @@
                </select>
             </td>
             <td colspan="2">
-               <select name="filters[linked_actions][]" class="form-select logs-filter-select-mulitple" multiple>
+               <select name="filters[linked_actions][]" class="form-select logs-filter-select-multiple" multiple>
                   {% for value, action in linked_actions %}
                      <option value="{{ value }}" {{ filters['linked_actions'] is defined and value in filters['linked_actions'] ? 'selected' : '' }}>
                         {{ action }}
@@ -132,33 +116,14 @@
       {% if filtered_number < 1 %}
          <tr><td colspan="6">{{ __('No historical matching your filters') }}</td></tr>
       {% else %}
-         
          {% for entry in logs %}
-            
-            {% if entry['field'] == 'Insumo' %}
-               {% set insumo = "true" %}
-            {% else %}
-            <br>
             <tr>
-               <td> * </td>
+               <td>{{ entry['id'] }}</td>
                <td>{{ entry['date_mod'] }}</td>
                <td>{{ entry['user_name']|verbatim_value }}</td>
                <td>{{ entry['field']|verbatim_value }}</td>
                <td colspan="2" style="width: 60%">{{ entry['change']|raw }}</td>
             </tr>
-            {% endif %}
-         
-         {% endfor %}
-         {% for s in reqs %}
-            {% if insumo == "true" %}
-               <tr>
-                  <td> * </td>
-                  <td> {{ s['date_mod'] }} </td>
-                  <td> {{s['user']}} </td>
-                  <td> {{ s['items_id']}} </td>
-                  <td colspan="2" style="width: 60%">Adcionou insumos</td>
-               </tr>
-            {% endif %}
          {% endfor %}
       {% endif %}
       </tbody>
@@ -175,6 +140,6 @@
 
 <script type="text/javascript">
 $(function() {
-   $('.logs-filter-select-mulitple').select2();
+   $('.logs-filter-select-multiple').select2();
 });
 </script>

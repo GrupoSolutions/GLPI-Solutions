@@ -887,7 +887,7 @@ class CommonDBTM extends CommonGLPI
                 foreach ($fields as $field) {
                     if (is_array($field)) {
                         // Relation based on 'itemtype'/'items_id' (polymorphic relationship)
-                        if ($itemtype instanceof IPAddress && in_array('mainitemtype', $field) && in_array('mainitems_id', $field)) {
+                        if (is_a($itemtype, IPAddress::class, true) && in_array('mainitemtype', $field) && in_array('mainitems_id', $field)) {
                             // glpi_ipaddresses relationship that does not respect naming conventions
                             $itemtype_field = 'mainitemtype';
                             $items_id_field = 'mainitems_id';
@@ -3011,8 +3011,9 @@ class CommonDBTM extends CommonGLPI
             if (!$this->can($ID, $right, $input)) {
                // Gestion timeout session
                 Session::redirectIfNotLoggedIn();
-                $right_name = Session::getRightNameForError($right);
+                /** @var class-string<CommonDBTM> $itemtype */
                 $itemtype = static::getType();
+                $right_name = Session::getRightNameForError($itemtype::$rightname, $right);
                 $info = "User failed a can* method check for right $right ($right_name) on item Type: $itemtype ID: $ID";
                 Html::displayRightError($info);
             }
@@ -3059,7 +3060,9 @@ class CommonDBTM extends CommonGLPI
         if (!$this->canGlobal($right)) {
            // Gestion timeout session
             Session::redirectIfNotLoggedIn();
-            $right_name = Session::getRightNameForError($right);
+            /** @var class-string<CommonDBTM> $itemtype */
+            $itemtype = static::getType();
+            $right_name = Session::getRightNameForError($itemtype::$rightname, $right);
             $itemtype = static::getType();
             $info = "User failed a global can* method check for right $right ($right_name) on item Type: $itemtype";
             Html::displayRightError($info);
@@ -3772,6 +3775,8 @@ class CommonDBTM extends CommonGLPI
         $options[$type] = [];
 
         foreach ($this->rawSearchOptions() as $opt) {
+            // FIXME In GLPI 10.1, trigger a warning on invalid datatype (see `tests\units\Search::testSearchOptionsDatatype()`)
+
             $missingFields = [];
             if (!isset($opt['id'])) {
                 $missingFields[] = 'id';
@@ -3794,6 +3799,13 @@ class CommonDBTM extends CommonGLPI
 
             $optid = $opt['id'];
             unset($opt['id']);
+
+            if (isset($options[$type][$optid])) {
+                $message = "Duplicate key $optid ({$options[$type][$optid]['name']}/{$opt['name']}) in " .
+                  get_class($this) . " searchOptions!";
+
+                trigger_error($message, E_USER_WARNING);
+            }
 
             foreach ($opt as $k => $v) {
                 $options[$type][$optid][$k] = $v;
@@ -3885,6 +3897,8 @@ class CommonDBTM extends CommonGLPI
         }
 
         foreach ($classname::$method_name($itemtype) as $opt) {
+            // FIXME In GLPI 10.1, trigger a warning on invalid datatype (see `tests\units\Search::testSearchOptionsDatatype()`)
+
             if (!isset($opt['id'])) {
                 throw new \Exception(get_called_class() . ': invalid search option! ' . print_r($opt, true));
             }
@@ -5484,6 +5498,11 @@ class CommonDBTM extends CommonGLPI
                 $is_recursive = $input['is_recursive'];
             } else if (isset($input['_job']->fields['is_recursive'])) {
                 $is_recursive = $input['_job']->fields['is_recursive'];
+            } else if ($this instanceof CommonDBVisible) {
+                // CommonDBVisible visibility restriction is unpredictable as
+                // it may change over time, and can be related to dynamic profiles assignation.
+                // Related documents have to be available on all entities.
+                $is_recursive = 1;
             }
 
            // Check for duplicate and availability (e.g. file deleted in _files)

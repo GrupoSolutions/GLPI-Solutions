@@ -43,13 +43,13 @@ use Glpi\Toolbox\Sanitizer;
 class DBmysql
 {
    //! Database Host - string or Array of string (round robin)
-    public $dbhost             = "localhost";
+    public $dbhost             = "";
    //! Database User
-    public $dbuser             = "glpi";
+    public $dbuser             = "";
    //! Database Password
-    public $dbpassword         = '16oL97%2Al2L%5E%5E6GZ%25dKdKNvm%26gW06%23j6%40q6zDC3d%40';
+    public $dbpassword         = "";
    //! Default Database
-    public $dbdefault          = "glpi";
+    public $dbdefault          = "";
 
     /**
      * The database handler
@@ -245,7 +245,7 @@ class DBmysql
         }
 
         $hostport = explode(":", $host);
-        if (!count($hostport) < 1) {
+        if (count($hostport) < 2) {
            // Host
             $this->dbh->real_connect($host, $this->dbuser, rawurldecode($this->dbpassword), $this->dbdefault);
         } else if (intval($hostport[1]) > 0) {
@@ -1666,6 +1666,74 @@ class DBmysql
     }
 
     /**
+     * Drops a table
+     *
+     * @param string $name   Table name
+     * @param bool   $exists Add IF EXISTS clause
+     *
+     * @return bool|mysqli_result
+     */
+    public function dropTable(string $name, bool $exists = false)
+    {
+        $res = $this->query(
+            $this->buildDrop(
+                $name,
+                'TABLE',
+                $exists
+            )
+        );
+        return $res;
+    }
+
+    /**
+     * Drops a view
+     *
+     * @param string $name   View name
+     * @param bool   $exists Add IF EXISTS clause
+     *
+     * @return bool|mysqli_result
+     */
+    public function dropView(string $name, bool $exists = false)
+    {
+        $res = $this->query(
+            $this->buildDrop(
+                $name,
+                'VIEW',
+                $exists
+            )
+        );
+        return $res;
+    }
+
+    /**
+     * Builds a DROP query
+     *
+     * @param string $name   Name to drop
+     * @param string $type   Type to drop
+     * @param bool   $exists Add IF EXISTS clause
+     *
+     * @return string
+     */
+    public function buildDrop(string $name, string $type, bool $exists = false): string
+    {
+        $known_types = [
+            'TABLE',
+            'VIEW'
+        ];
+        if (!in_array($type, $known_types)) {
+            throw new \InvalidArgumentException('Unknown type to drop: ' . $type);
+        }
+
+        $name = $this::quoteName($name);
+        $query = "DROP $type";
+        if ($exists) {
+            $query .= ' IF EXISTS';
+        }
+        $query .= " $name";
+        return $query;
+    }
+
+    /**
      * Get database raw version
      *
      * @return string
@@ -1995,7 +2063,7 @@ class DBmysql
     public function executeStatement(mysqli_stmt $stmt): void
     {
         if (!$stmt->execute()) {
-            trigger_error($stmt->error, E_USER_ERROR);
+            throw new \RuntimeException($stmt->error);
         }
     }
 

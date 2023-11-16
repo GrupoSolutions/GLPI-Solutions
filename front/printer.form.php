@@ -49,13 +49,7 @@ if (!isset($_GET["withtemplate"])) {
 $print = new Printer();
 if (isset($_POST["add"])) {
     $print->check(-1, CREATE, $_POST);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
     if ($newID = $print->add($_POST)) {
         Event::log(
             $newID,
@@ -110,13 +104,7 @@ if (isset($_POST["add"])) {
     $print->redirectToList();
 } else if (isset($_POST["update"])) {
     $print->check($_POST["id"], UPDATE);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
     $print->update($_POST);
     Event::log(
         $_POST["id"],

@@ -38,12 +38,19 @@
  **/
 class Group extends CommonTreeDropdown
 {
+    use Glpi\Features\Clonable;
+
     public $dohistory       = true;
 
     public static $rightname       = 'group';
 
     protected $usenotepad  = true;
 
+
+    public function getCloneRelations(): array
+    {
+        return [];
+    }
 
     public static function getTypeName($nb = 0)
     {
@@ -740,10 +747,13 @@ class Group extends CommonTreeDropdown
                     'SELECT' => 'id',
                     'FROM'   => $item->getTable(),
                     'WHERE'  => $restrict[$itemtype],
-                    'ORDER'  => 'name',
                     'LIMIT'  => $max,
                     'START'  => $start
                 ];
+
+                if ($item->isField('name')) {
+                    $request['ORDER'] = 'name';
+                };
 
                 if ($itemtype == 'Consumable') {
                     $request['SELECT'] = 'glpi_consumableitems.id';

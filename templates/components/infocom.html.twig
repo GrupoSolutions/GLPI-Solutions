@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -125,6 +125,19 @@
                         }
                      ) }}
 
+                     {% if has_itemtype_right('Budget', constant('READ')) %}
+                        {{ fields.dropdownField(
+                           'Budget',
+                           'budgets_id',
+                           infocom.fields['budgets_id'],
+                           'Budget'|itemtype_name,
+                           {
+                              'entity'  : item.fields['entities_id'],
+                              'comments': 1,
+                              'disabled': disabled
+                           }
+                        ) }}
+                     {% endif %}
 
                      {{ fields.textField(
                         'order_number',
@@ -133,6 +146,13 @@
                         {'disabled': disabled}
                      ) }}
 
+                     {{ fields.autoNameField(
+                        'immo_number',
+                        infocom,
+                        __('Immobilization number'),
+                        withtemplate,
+                        {'disabled': disabled, 'value': infocom.fields['immo_number']}
+                     ) }}
 
                      {{ fields.textField(
                         'bill',
@@ -141,7 +161,12 @@
                         {'disabled': disabled}
                      ) }}
 
-                     
+                     {{ fields.textField(
+                        'delivery_number',
+                        infocom.fields['delivery_number'],
+                        __('Delivery form'),
+                        {'disabled': disabled}
+                     ) }}
 
                      {{ fields.numberField(
                         'value',
@@ -153,8 +178,91 @@
                         }
                      ) }}
 
-                  
-               
+                     {{ fields.numberField(
+                        'warranty_value',
+                        infocom.fields['warranty_value'],
+                        __('Warranty extension value'),
+                        {
+                            'disabled': disabled,
+                            'step': 'any',
+                        }
+                     ) }}
+
+
+                     {% set amort = infocom.Amort(
+                           infocom.fields['sink_type'],
+                           infocom.fields['value'],
+                           infocom.fields['sink_time'],
+                           infocom.fields['sink_coeff'],
+                           infocom.fields['buy_date'],
+                           infocom.fields['use_date'],
+                           config('date_tax'),
+                           'n'
+                         ) %}
+                     {{ fields.readOnlyField(
+                        '',
+                        amort|formatted_number,
+                        __('Account net value'),
+                     ) }}
+
+                     {% if withtemplate == 2 or disabled == true %}
+                        {% set sink_type_field = infocom.getAmortTypeName(infocom.fields['sink_type']) %}
+                     {% else %}
+                        {% set sink_type_field = infocom.dropdownAmortType('sink_type', infocom.fields['sink_type'], false) %}
+                     {% endif %}
+
+                     {{ fields.field(
+                        '',
+                        sink_type_field,
+                        __('Amortization type'),
+                     ) }}
+
+                     {{ fields.dropdownNumberField(
+                        'sink_time',
+                        infocom.fields['sink_time'],
+                        __('Amortization duration'),
+                        {
+                           'max'      : 15,
+                           'unit'     : 'year',
+                           'disabled' : disabled
+                        }
+                     ) }}
+
+                     {{ fields.numberField(
+                        'sink_coeff',
+                        infocom.fields['sink_coeff'],
+                        __('Amortization coefficient'),
+                        {'disabled': disabled}
+                     ) }}
+
+                     {% if item.getType() not in infocom.getExcludedTypes()|merge(['Cartridge', 'Consumable', 'SoftwareLicense'])  %}
+                        {% set ticket_tco_value = infocom.showTco(item.fields['ticket_tco'], infocom.fields['value']) %}
+                        {{ fields.readOnlyField(
+                           'ticket_tco',
+                           ticket_tco_value,
+                           __('TCO (value + tracking cost)'),
+                           {'disabled': disabled}
+                        ) }}
+
+                        {% set ticket_tco2_value = infocom.showTco(item.fields['ticket_tco'], infocom.fields['value'], infocom.fields['buy_date']) %}
+                        {{ fields.readOnlyField(
+                           'ticket_tco',
+                           ticket_tco2_value,
+                           __('Monthly TCO'),
+                           {'disabled': disabled}
+                        ) }}
+                     {% endif %}
+
+
+                     {{ fields.dropdownField(
+                        'BusinessCriticity',
+                        'businesscriticities_id',
+                        infocom.fields['businesscriticities_id'],
+                        _n('Business criticity', 'Business criticities', 1),
+                        {
+                           'disabled': disabled
+                        }
+                     ) }}
 
                      {{ fields.textareaField(
                         'comment',

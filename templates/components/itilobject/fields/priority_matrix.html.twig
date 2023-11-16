@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -62,6 +62,17 @@
    }) %}
 {% endif %}
 
+{{ fields.field(
+   'impact',
+   item.dropdownImpact({
+      'value': item.fields['impact'],
+      'width': '100%',
+      'display': false,
+      'rand': rand,
+   }|merge(impact_options)),
+   __('Impact'),
+   field_options
+) }}
 
 {% set priority_options = field_options|merge({
    'disabled': (not canpriority),
@@ -73,6 +84,17 @@
    }) %}
 {% endif %}
 
+{{ fields.field(
+   'priority',
+   item.dropdownPriority({
+      'value': item.fields['priority'],
+      'width': '100%',
+      'display': false,
+      'rand': rand,
+   }|merge(field_options|merge(priority_options))),
+   __('Priority'),
+   field_options
+) }}
 
 <script type="text/javascript">
 $(function() {
@@ -81,9 +103,14 @@ $(function() {
          url: "{{ path('/ajax/priority.php') }}",
          datatype: 'json',
          data: {
-            'urgency': $('#dropdown_urgency{{ rand }}').select2('data')[0].id ?? 0,
+            'urgency': $('#dropdown_urgency{{ rand }}').select2('data') ? $('#dropdown_urgency{{ rand }}').select2('data')[0].id : 0,
+            'impact':  $('#dropdown_impact{{ rand }}').select2('data') ? $('#dropdown_impact{{ rand }}').select2('data')[0].id : 0,
+            '_predefined_fields':  $('input[name="_predefined_fields"]').val(),
             'getJson': true,
          }
+      }).done(function(data) {
+         $('#dropdown_priority{{ rand }}').val(data.priority);
+         $('#dropdown_priority{{ rand }}').trigger('change');
       });
    })
 });

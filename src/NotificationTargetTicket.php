@@ -67,7 +67,7 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
             if (empty($perso_tag)) {
                  $perso_tag = 'GLPI';
             }
-            return "";
+            return sprintf("[$perso_tag #%07d] ", $this->obj->getField('id'));
         }
         return parent::getSubjectPrefix();
     }
@@ -78,6 +78,15 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
     public function getContentHeader()
     {
 
+        if (
+            $this->getMode() == \Notification_NotificationTemplate::MODE_MAIL
+            && MailCollector::countActiveCollectors()
+            && $this->allowResponse()
+        ) {
+            return self::HEADERTAG . ' ' . __('To answer by email, write above this line') . ' ' .
+                self::HEADERTAG;
+        }
+
         return '';
     }
 
@@ -87,6 +96,16 @@ class NotificationTargetTicket extends NotificationTargetCommonITILObject
      **/
     public function getContentFooter()
     {
+
+        if (
+            $this->getMode() == \Notification_NotificationTemplate::MODE_MAIL
+            && MailCollector::countActiveCollectors()
+            && $this->allowResponse()
+        ) {
+            return self::FOOTERTAG . ' ' . __('To answer by email, write under this line') . ' ' .
+                self::FOOTERTAG;
+        }
+
         return '';
     }
 

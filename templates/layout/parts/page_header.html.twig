@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -54,7 +54,7 @@
             </button>
 
             <a href="{{ index_path() }}" accesskey="1" title="{{ __('Home') }}"
-               class="navbar-brand navbar-brand-autodark solutions">
+               class="navbar-brand">
                <span class="glpi-logo"></span>
             </a>
 
@@ -80,7 +80,7 @@
 
 
                   <p class="text-start">
-                     <button class="btn btn-sm btn-ghost-secondary mb-2 reduce-menu d-none d-md-block menu">
+                     <button class="btn btn-sm btn-ghost-secondary  {{ is_debug_active ? 'mb-4' : 'mb-2' }} reduce-menu d-none d-md-block">
                         <span class="menu-label">{{ __('Collapse menu') }}</span>
                      </button>
                   </p>
@@ -95,16 +95,19 @@
             {% if user_pref('page_layout') == 'vertical' %}
                {{ include('layout/parts/breadcrumbs.html.twig') }}
 
-               <div class="ms-lg-auto d-none d-lg-block flex-grow-1 flex-lg-grow-0">
-                  {{ include('layout/parts/global_search_form.html.twig') }}
-               </div>
+               {% if config('allow_search_global') %}
+                  <div class="ms-lg-auto d-none d-lg-block flex-grow-1 flex-lg-grow-0">
+                     {{ include('layout/parts/global_search_form.html.twig') }}
+                  </div>
+               {% endif %}
+
             {% elseif user_pref('page_layout') == 'horizontal' %}
                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
                   <span class="navbar-toggler-icon"></span>
                </button>
 
                <a href="{{ index_path() }}" accesskey="1" title="{{ __('Home') }}"
-                  class="navbar-brand navbar-brand-autodark">
+                  class="navbar-brand">
                   <span class="glpi-logo"></span>
                </a>
 
@@ -130,9 +133,11 @@
       <div class="navbar navbar-expand-md navbar-light secondary-bar sticky-md-top shadow-sm">
          <div class="container-fluid justify-content-start">
             {{ include('layout/parts/breadcrumbs.html.twig') }}
-            <div class="ms-md-auto d-none d-md-block flex-grow-1 flex-md-grow-0">
-               {{ include('layout/parts/global_search_form.html.twig') }}
-            </div>
+            {% if config('allow_search_global') %}
+               <div class="ms-md-auto d-none d-md-block flex-grow-1 flex-md-grow-0">
+                  {{ include('layout/parts/global_search_form.html.twig') }}
+               </div>
+            {% endif %}
          </div>
       </div>
       {% endif %}
@@ -140,65 +145,3 @@
       <div class="page-wrapper mb-0">
          <div class="page-body container-fluid">
             <main role="main" id="page" class="legacy">
-            <div class="toasters" style="z-index:2000; position:fixed; right:0; bottom:0;">
-{% for i in novo_chamado %}
-   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
-      
-   
-      <div class="toast-header">
-      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
-         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
-         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-         <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ i }}">
-
-         #{{ i }} - Novo Chamado 
-         </a>
-      </div>
-      <audio id="myAudsio" src="../sound/sound_c.ogg"></a>
-      
-   </div>
-{% endfor %}
-{% for j in sem_resposta %}
-   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
-      
-   
-      <div class="toast-header">
-      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
-         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
-         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      
-      <div class="toast-body">
-      <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ j }}">
-         #{{ j }} - Aguardando Resposta
-      </a>
-      </div>
-     
-
-      <a style="display:none;" id="audio" onclick="play()" src="../sound/sound_c.ogg"></a>
-
-   </div>
-{% endfor %}
-</div>
-<script type="text/javascript">
-
-$(function() {
-  var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-  var toastList = toastElList.map(function(toastEl) {
-    return new bootstrap.Toast(toastEl);
-  })
-  console.log(toastList);
-  toastList.forEach(toast => toast.show());
-  if(toastList.length > 0){
-   var sound = new Howl({
-   src: ['../sound/sound_c.ogg']
-   });
-   sound.play(); 
-  }
-  
-})
-
-</script>
-

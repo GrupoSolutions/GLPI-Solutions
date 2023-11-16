@@ -46,18 +46,11 @@ if (!isset($_GET["id"])) {
 if (!isset($_GET["withtemplate"])) {
     $_GET["withtemplate"] = "";
 }
+
 $computer = new Computer();
 //Add a new computer
 if (isset($_POST["add"])) {
     $computer->check(-1, CREATE, $_POST);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
-
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
-    
     if ($newID = $computer->add($_POST)) {
         Event::log(
             $newID,
@@ -118,14 +111,6 @@ if (isset($_POST["add"])) {
    //update a computer
 } else if (isset($_POST["update"])) {
     $computer->check($_POST['id'], UPDATE);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
-
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
-    
     $computer->update($_POST);
     Event::log(
         $_POST["id"],

@@ -50,13 +50,7 @@ $passive_equip = new PassiveDCEquipment();
 
 if (isset($_POST["add"])) {
     $passive_equip->check(-1, CREATE, $_POST);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
     if ($newID = $passive_equip->add($_POST)) {
         Event::log(
             $newID,
@@ -111,13 +105,7 @@ if (isset($_POST["add"])) {
     $passive_equip->redirectToList();
 } else if (isset($_POST["update"])) {
     $passive_equip->check($_POST["id"], UPDATE);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
     $passive_equip->update($_POST);
     Event::log(
         $_POST["id"],

@@ -50,14 +50,8 @@ $monitor = new Monitor();
 
 if (isset($_POST["add"])) {
     $monitor->check(-1, CREATE, $_POST);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
-        if ($newID = $monitor->add($_POST)) {
+    if ($newID = $monitor->add($_POST)) {
         Event::log(
             $newID,
             "monitors",
@@ -111,16 +105,7 @@ if (isset($_POST["add"])) {
     $monitor->redirectToList();
 } else if (isset($_POST["update"])) {
     $monitor->check($_POST["id"], UPDATE);
-    $nameUpper = $_POST['name'];
-    $commentUpper = $_POST['comment'];
-    $serialUpper = $_POST['serial'];
-    $operaofield = $_POST['operaofield'];
 
-    $_POST['name'] = mb_strtoupper($nameUpper);
-    $_POST['comment'] = mb_strtoupper($commentUpper);
-    $_POST['serial'] = mb_strtoupper($serialUpper);
-    $_POST['operaofield'] = mb_strtoupper($operaofield);
-    
     $monitor->update($_POST);
     Event::log(
         $_POST["id"],

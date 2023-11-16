@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -32,10 +32,11 @@
  #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
+
 {% if canupdate %}
    {% set status_field %}
       {{ item.dropdownStatus({
-         'value': status,
+         'value': item.input['status']|default(item.fields['status']),
          'value_calculation': item.fields['status'],
          'showtype': 'allowed',
          'width': '100%',
@@ -52,7 +53,6 @@
    {% set status_field %}
       {{ item.getStatusIcon(item.fields['status'])|raw }}
       {{ item.getStatus(item.fields['status']) }}
-      
 
       {% if item.canReopen() %}
          <a href="{{ item.getLinkURL() }}&amp;_openfollowup=1"

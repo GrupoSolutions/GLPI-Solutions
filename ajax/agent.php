@@ -42,16 +42,15 @@ Html::header_nocache();
 
 Session::checkLoginUser();
 
-
 if (isset($_POST['action']) && isset($_POST['id'])) {
     $agent = new Agent();
-    if (!$agent->getFromDB($_POST['id'])) {
+    if (!$agent->getFromDB($_POST['id']) || !$agent->canView()) {
         Response::sendError(404, 'Unable to load agent #' . $_POST['id']);
         return;
     }
     $answer = [];
 
-    session_write_close();
+    Session::writeClose();
     switch ($_POST['action']) {
         case Agent::ACTION_INVENTORY:
             $answer = $agent->requestInventory();

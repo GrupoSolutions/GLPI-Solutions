@@ -445,7 +445,7 @@ class NetworkPort extends InventoryAsset
             foreach ($data as $key => $values) {
                 foreach ($db_vlans as $keydb => $valuesdb) {
                     if (
-                        $values->name ?? '' == $valuesdb['name']
+                        ($values->name ?? '') == $valuesdb['name']
                         && ($values->tag ?? 0) == $valuesdb['tag']
                         && ($values->tagged ?? 0) == $valuesdb['tagged']
                     ) {
@@ -471,7 +471,7 @@ class NetworkPort extends InventoryAsset
             $db_vlans[$row['name'] . '|' . $row['tag']] = $row['id'];
         }
 
-       //add new vlans
+        //add new vlans
         foreach ($data as $vlan_data) {
             $vlan_key = ($vlan_data->name ?? '') . '|' . $vlan_data->tag;
             $exists = isset($db_vlans[$vlan_key]);
@@ -493,7 +493,7 @@ class NetworkPort extends InventoryAsset
                         $reference
                     );
                     if (!$this->vlan_stmt = $DB->prepare($insert_query)) {
-                           trigger_error("Error preparing query $insert_query", E_USER_ERROR);
+                        throw new \RuntimeException(sprintf('Error preparing query `%s`.', $insert_query));
                     }
                 }
 
@@ -523,7 +523,7 @@ class NetworkPort extends InventoryAsset
                     $reference
                 );
                 if (!$this->pvlan_stmt = $DB->prepare($insert_query)) {
-                     trigger_error("Error preparing query $insert_query", E_USER_ERROR);
+                    throw new \RuntimeException(sprintf('Error preparing query `%s`.', $insert_query));
                 }
             }
 

@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -46,10 +46,12 @@
 {% block timeline_card %}
    {% if form_mode == 'view' %}
       <div class="read-only-content">
-         {{ entry_i['content']|enhanced_html({
-            'user_mentions': true,
-            'images_gallery': true
-         }) }}
+         <div class= "rich_text_container">
+            {{ entry_i['content']|enhanced_html({
+               'user_mentions': true,
+               'images_gallery': true
+            }) }}
+         </div>
 
          <div class="timeline-badges">
             {% if entry_i['solutiontypes_id'] %}
@@ -95,7 +97,7 @@
                </div>
             {% endif %}
 
-            <div class="row">
+            <div class="row mx-n3 mx-xxl-auto">
                <div class="col-12 col-xl-7 col-xxl-8">
                   {% set content = subitem.fields['content'] %}
                   {% if kb_id_toload > 0 %}
@@ -113,6 +115,7 @@
                         'enable_richtext': true,
                         'enable_fileupload': true,
                         'enable_mentions': true,
+                        'entities_id': item.fields['entities_id'],
                         'rand': rand,
                         'disabled': disabled,
                      }
@@ -155,6 +158,7 @@
                               'icon_label': true,
                               'on_change': 'solutiontemplate_update' ~ rand ~ '(this.value)',
                               'rand': rand,
+                              'entity': item.fields['entities_id'],
                               'disabled': disabled,
                            }
                         ) }}
@@ -168,12 +172,13 @@
                      {{ fields.dropdownField(
                         'SolutionType',
                         'solutiontypes_id',
-                        subitem.fields['solutiontypes_id'],
+                        subitem.fields['solutiontypes_id'] ?? 0,
                         sol_type_lbl,
                         {
                            'full_width': true,
                            'icon_label': true,
                            'rand': rand,
+                           'entity': item.fields['entities_id'],
                            'disabled': disabled,
                         }
                      ) }}
@@ -185,12 +190,13 @@
                         {% endset %}
                         {{ fields.sliderField(
                            'kb_linked_id',
-                           kb_id_toload,
+                           1,
                            link_kb_lbl,
                            {
                               'full_width': true,
                               'icon_label': true,
                               'rand': rand,
+                              'yes_value': kb_id_toload,
                            }
                         ) }}
                      {% endif %}
@@ -249,15 +255,17 @@
                }
             }).done(function (data) {
                // set textarea content
-               if (tasktinymce = tinymce.get("content_{{ rand }}")) {
-                  tasktinymce.setContent(data.content);
-               }
+               setRichTextEditorContent("content_{{ rand }}", data.content);
 
                // set type
                var solutiontypes_id = isNaN(parseInt(data.solutiontypes_id))
                   ? 0
                   : parseInt(data.solutiontypes_id);
-               $("#dropdown_solutiontypes_id{{ rand }}").trigger("setValue", solutiontypes_id);
+
+               //need to create new DOM option, because SELECT is remotely-sourced (AJAX)
+               //see : https://select2.org/programmatic-control/add-select-clear-items#preselecting-options-in-an-remotely-sourced-ajax-select2
+               var newOption = new Option(data.solutiontypes_name, solutiontypes_id, true, true);
+               $("#dropdown_solutiontypes_id{{ rand }}").append(newOption).trigger('change');
             });
          }
       </script>

@@ -35,6 +35,7 @@
 
 namespace Glpi\Dashboard;
 
+use Config;
 use DateInterval;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
@@ -249,8 +250,6 @@ HTML;
             $this->cell_margin = 3;
         }
 
-        $embed_str     = self::$embed ? "true" : "false";
-        $token_str     = $token !== null ? "'{$token}'" : "null";
         $embed_class   = self::$embed ? "embed" : "";
         $mini_class    = $mini ? "mini" : "";
 
@@ -277,11 +276,9 @@ HTML;
 
         // prepare all available cards
         $cards = $this->getAllDasboardCards();
-        $cards_json = json_encode($cards);
 
        // prepare all available widgets
         $all_widgets = Widget::getAllTypes();
-        $all_widgets_json = json_encode($all_widgets);
 
        // prepare labels
         $embed_label      = __("Share or embed this dashboard");
@@ -404,33 +401,34 @@ HTML;
 
         if ($mini) {
             $html = "<div class='card mb-4 d-none d-md-block dashboard-card'>
-            <div class='card-body p-3'>
+            <div class='card-body p-2'>
                $html
             </div>
          </div>";
         }
 
         $ajax_cards = GLPI_AJAX_DASHBOARD;
-        $cache_key  = sha1($_SESSION['glpiactiveentities_string '] ?? "");
+        $cache_key  = sha1($_SESSION['glpiactiveentities_string'] ?? "");
 
+        $js_params = json_encode([
+            'current'       => $this->current,
+            'cols'          => $this->grid_cols,
+            'rows'          => $this->grid_rows,
+            'cell_margin'   => $this->cell_margin,
+            'rand'          => $rand,
+            'ajax_cards'    => $ajax_cards,
+            'all_cards'     => $cards,
+            'all_widgets'   => $all_widgets,
+            'context'       => $this->context,
+            'cache_key'     => $cache_key,
+            'embed'         => self::$embed,
+            'token'         => $token,
+            'entities_id'   => $_SESSION['glpiactive_entity'],
+            'is_recursive'  => $_SESSION['glpiactive_entity_recursive'] ? 1 : 0
+        ]);
         $js = <<<JAVASCRIPT
       $(function () {
-         new GLPIDashboard({
-            current:     '{$this->current}',
-            cols:        {$this->grid_cols},
-            rows:        {$this->grid_rows},
-            cell_margin: {$this->cell_margin},
-            rand:        '{$rand}',
-            ajax_cards:  {$ajax_cards},
-            all_cards:   {$cards_json},
-            all_widgets: {$all_widgets_json},
-            context:     "{$this->context}",
-            cache_key:   "{$cache_key}",
-            embed:       {$embed_str},
-            token:       {$token_str},
-            entities_id: {$_SESSION['glpiactive_entity']},
-            is_recursive:{$_SESSION['glpiactive_entity_recursive']},
-         })
+         new GLPIDashboard({$js_params})
       });
 JAVASCRIPT;
         $js = Html::scriptBlock($js);
@@ -1078,12 +1076,16 @@ HTML;
      *
      * @return string
      */
-    public static function getAllDashboardCardsCacheKey(): string
+    public static function getAllDashboardCardsCacheKey(?string $language = null): string
     {
+        if ($language === null) {
+            $language = Session::getLanguage() ?? '';
+        }
+
         return sprintf(
             'getAllDashboardCards_%s_%s',
             sha1(json_encode(Filter::getRegisteredFilterClasses())),
-            Session::getLanguage() ?? ''
+            $language
         );
     }
 
@@ -1441,6 +1443,8 @@ HTML;
      */
     public static function getDefaultDashboardForMenu(string $menu = "", bool $strict = false): string
     {
+        global $CFG_GLPI;
+
         $grid = new self();
 
         if (!$strict) {
@@ -1450,6 +1454,7 @@ HTML;
             }
         }
 
+        // Try loading default from user preferences
         $config_key = 'default_dashboard_' . $menu;
         $default    = $_SESSION["glpi$config_key"] ?? "";
         if (strlen($default)) {
@@ -1460,7 +1465,17 @@ HTML;
             }
         }
 
-       // if default not found, return first dashboards
+        // Try loading default from config
+        $default = $CFG_GLPI[$config_key] ?? "";
+        if (strlen($default)) {
+            $dasboard = new Dashboard($default);
+
+            if ($dasboard->load() && $dasboard->canViewCurrent()) {
+                return $default;
+            }
+        }
+
+        // if default not found, return first dashboard
         if (!$strict) {
             self::loadAllDashboards();
             $first_dashboard = array_shift(self::$all_dashboards);

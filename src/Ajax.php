@@ -317,23 +317,9 @@ JAVASCRIPT;
                 $navlinkp       = "";
                 $nav_width      = "";
             }
-            $uri = $_SERVER['REQUEST_URI'];
 
-            if(strpos($uri, 'central.php') !== false){
-                echo "<div class='d-flex card-tabs $flex_container $orientation'>";
-            } else {
-?>
-
-
-<?php
-}
-            
-            if(strpos($uri, 'central.php') !== false){
-                echo "<ul class='nav nav-tabs flex-row d-none d-md-flex' id='$tabdiv_id' $nav_width role='tablist'>";
-            } else {
-                echo "<ul class='nav nav-tabs flex-row' id='$tabdiv_id' $nav_width role='tablist'>";
-            }
-
+            echo "<div class='d-flex card-tabs $flex_container $orientation'>";
+            echo "<ul class='nav nav-tabs $flex_tab' id='$tabdiv_id' $nav_width role='tablist'>";
             $html_tabs = "";
             $html_sele = "";
             $i = 0;
@@ -370,12 +356,11 @@ JAVASCRIPT;
             }
             echo  "</div>"; // .tab-content
             echo "</div>"; // .container-fluid
-            echo "</div>";
             $js = "
          var loadTabContents = function (tablink, force_reload = false) {
+            const href_url_params = new URLSearchParams($(tablink).prop('href'));
             var url = tablink.attr('href');
             var target = tablink.attr('data-bs-target');
-            var index = tablink.closest('.nav-item').index();
 
             const updateCurrentTab = () => {
                 $.get(
@@ -383,7 +368,7 @@ JAVASCRIPT;
                   {
                      itemtype: '" . addslashes($type) . "',
                      id: '$ID',
-                     tab: index,
+                     tab_key: href_url_params.get('_glpi_tab'),
                      withtemplate: " . (int)($_GET['withtemplate'] ?? 0) . "
                   }
                );

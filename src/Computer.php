@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -74,7 +74,8 @@ class Computer extends CommonDBTM
             Computer_Item::class,
             Notepad::class,
             KnowbaseItem_Item::class,
-            Item_RemoteManagement::class
+            Item_RemoteManagement::class,
+            ComputerAntivirus::class
         ];
     }
 
@@ -101,15 +102,32 @@ class Computer extends CommonDBTM
 
         $ong = [];
         $this->addDefaultFormTab($ong)
+         ->addImpactTab($ong, $options)
          ->addStandardTab('Item_OperatingSystem', $ong, $options)
          ->addStandardTab('Item_Devices', $ong, $options)
+         ->addStandardTab('Item_Disk', $ong, $options)
+         ->addStandardTab('Item_SoftwareVersion', $ong, $options)
          ->addStandardTab('Computer_Item', $ong, $options)
+         ->addStandardTab('NetworkPort', $ong, $options)
+         ->addStandardTab(Socket::class, $ong, $options)
          ->addStandardTab('Item_RemoteManagement', $ong, $options)
          ->addStandardTab('Infocom', $ong, $options)
          ->addStandardTab('Contract_Item', $ong, $options)
          ->addStandardTab('Document_Item', $ong, $options)
+         ->addStandardTab('ComputerVirtualMachine', $ong, $options)
+         ->addStandardTab('ComputerAntivirus', $ong, $options)
+         ->addStandardTab('KnowbaseItem_Item', $ong, $options)
+         ->addStandardTab('Ticket', $ong, $options)
+         ->addStandardTab('Item_Problem', $ong, $options)
+         ->addStandardTab('Change_Item', $ong, $options)
+         ->addStandardTab('ManualLink', $ong, $options)
+         ->addStandardTab('Certificate_Item', $ong, $options)
          ->addStandardTab('Lock', $ong, $options)
          ->addStandardTab('Notepad', $ong, $options)
+         ->addStandardTab('Reservation', $ong, $options)
+         ->addStandardTab('Domain_Item', $ong, $options)
+         ->addStandardTab('Appliance_Item', $ong, $options)
+         ->addStandardTab('DatabaseInstance', $ong, $options)
          ->addStandardTab('RuleMatchedLog', $ong, $options)
          ->addStandardTab('Log', $ong, $options);
 
@@ -179,8 +197,9 @@ class Computer extends CommonDBTM
 
         if (count($changes)) {
             $update_done = false;
+            $is_input_dynamic = (bool) ($this->input['is_dynamic'] ?? false);
 
-           // Propagates the changes to linked items
+            // Propagates the changes to linked items
             foreach ($CFG_GLPI['directconnect_types'] as $type) {
                 $items_result = $DB->request(
                     [
@@ -198,8 +217,13 @@ class Computer extends CommonDBTM
                      $tID = $data['items_id'];
                      $item->getFromDB($tID);
                     if (!$item->getField('is_global')) {
-                        $changes['id'] = $item->getField('id');
-                        if ($item->update($changes)) {
+                        $item_input = $changes;
+                        $item_input['id'] = $item->getID();
+                        //propage is_dynamic value if needed to prevent locked fields
+                        if ((bool) ($item->fields['is_dynamic'] ?? false) && $is_input_dynamic) {
+                            $item_input['is_dynamic'] = 1;
+                        }
+                        if ($item->update($item_input)) {
                             $update_done = true;
                         }
                     }
@@ -228,10 +252,15 @@ class Computer extends CommonDBTM
                         ]
                     );
                     foreach ($devices_result as $data) {
-                           $tID = $data['id'];
-                           $item->getFromDB($tID);
-                           $changes['id'] = $item->getField('id');
-                        if ($item->update($changes)) {
+                        $tID = $data['id'];
+                        $item->getFromDB($tID);
+                        $item_input = $changes;
+                        $item_input['id'] = $item->getID();
+                        //propage is_dynamic value if needed to prevent locked fields
+                        if ((bool) ($item->fields['is_dynamic'] ?? false) && $is_input_dynamic) {
+                            $item_input['is_dynamic'] = 1;
+                        }
+                        if ($item->update($item_input)) {
                             $update_done = true;
                         }
                     }
@@ -286,21 +315,10 @@ class Computer extends CommonDBTM
 
         $this->deleteChildrenAndRelationsFromDb(
             [
-                Certificate_Item::class,
                 Computer_Item::class,
-                Item_SoftwareLicense::class,
-                Item_SoftwareVersion::class,
                 ComputerAntivirus::class,
                 ComputerVirtualMachine::class,
-                Item_Disk::class,
-                Item_Project::class,
             ]
-        );
-
-        Item_Devices::cleanItemDeviceDBOnItemDelete(
-            $this->getType(),
-            $this->fields['id'],
-            (!empty($this->input['keep_devices']))
         );
     }
 
@@ -430,6 +448,14 @@ class Computer extends CommonDBTM
             'table'              => $this->getTable(),
             'field'              => 'last_inventory_update',
             'name'               => __('Last inventory date'),
+            'datatype'           => 'datetime',
+        ];
+
+        $tab[] = [
+            'id'                 => '10',
+            'table'              => $this->getTable(),
+            'field'              => 'last_boot',
+            'name'               => __('Last boot date'),
             'datatype'           => 'datetime',
         ];
 
@@ -573,7 +599,7 @@ class Computer extends CommonDBTM
 
         $tab = array_merge($tab, Rack::rawSearchOptionsToAdd(get_class($this)));
 
-        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd(get_class($this)));
+        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd());
 
         $tab = array_merge($tab, Agent::rawSearchOptionsToAdd());
 

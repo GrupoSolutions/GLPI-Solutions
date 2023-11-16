@@ -237,7 +237,7 @@ class NotificationTarget extends CommonDBChild
         if (empty($perso_tag)) {
             $perso_tag = "GLPI";
         }
-        return "";
+        return "[$perso_tag] ";
     }
 
     /**

@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -73,64 +73,3 @@
 {{ include('components/masonry_grid.html.twig', {
    'grid_items': grid_items,
 }, with_context = false) }}
-        <div class="toasters" style="z-index:2000; position:fixed; right:0; bottom:0;">
-{% for i in novo_chamado %}
-   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
-      
-   
-      <div class="toast-header">
-      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
-         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
-         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-         <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ i }}">
-
-         #{{ i }} - Novo Chamado 
-         </a>
-      </div>
-      <audio id="myAudsio" src="../sound/sound_c.ogg"></a>
-      
-   </div>
-{% endfor %}
-{% for j in sem_resposta %}
-   <div class="toast animate__animated animate__tada animate__delay-2s animate__slow" style="padding: 5px 15px;" role="alert" aria-live="assertive" aria-atomic="true">
-      
-   
-      <div class="toast-header">
-      <img src="http://cdn.onlinewebfonts.com/svg/img_423551.png" style="filter: invert(100%)" width="18"/>
-         <strong class="me-auto" style="margin-left:10px;">HelpDesk</strong>
-         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      
-      <div class="toast-body">
-      <a class="toast-text" href="http://localhost/glpi/front/ticket.form.php?id={{ j }}">
-         #{{ j }} - Aguardando Resposta
-      </a>
-      </div>
-     
-
-      <a style="display:none;" id="audio" onclick="play()" src="../sound/sound_c.ogg"></a>
-
-   </div>
-{% endfor %}
-</div>
-<script type="text/javascript">
-
-$(function() {
-  var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-  var toastList = toastElList.map(function(toastEl) {
-    return new bootstrap.Toast(toastEl);
-  })
-  console.log(toastList);
-  toastList.forEach(toast => toast.show());
-  if(toastList.length > 0){
-   var sound = new Howl({
-   src: ['../sound/sound_c.ogg']
-   });
-   sound.play(); 
-  }
-  
-})
-
-</script>

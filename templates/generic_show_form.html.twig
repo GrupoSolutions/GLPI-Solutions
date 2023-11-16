@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -33,13 +33,14 @@
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
 
+{% set no_header = no_header|default(not item.isNewItem() and not _get._in_modal|default(false)) %}
 {% set bg = '' %}
 {% if item.isDeleted() %}
    {% set bg = 'asset-deleted' %}
 {% endif %}
 
 <div class="asset {{ bg }}">
-   {{ include('components/form/header.html.twig') }}
+   {{ include('components/form/header.html.twig', {'in_twig': true}) }}
 
    {% set rand = random() %}
    {% set params  = params ?? [] %}
@@ -61,17 +62,31 @@
                         {{ fields.autoNameField(
                            'name',
                            item,
-                           (item_type == 'Contact' ? __('Patrimônio') : __('Patrimônio')),
+                           (item_type == 'Contact' ? __('Surname') : __('Name')),
                            withtemplate,
-                           field_options|merge({
-                              required:true,
-                              upper:true,
-                           })
+                           field_options
                         ) }}
-                     
                      {% endif %}
 
-                     
+                     {% if item.isField('firstname') %}
+                        {{ fields.autoNameField(
+                           'firstname',
+                           item,
+                           __('First name'),
+                           withtemplate,
+                           field_options
+                        ) }}
+                     {% endif %}
+
+                     {% if item.isField('template_name') and withtemplate == 1 and no_header %}
+                        {{ fields.autoNameField(
+                           'template_name',
+                           item,
+                           __('Template name'),
+                           0,
+                           field_options
+                        ) }}
+                     {% endif %}
 
                      {% if item.isField('is_active') %}
                         {% if withtemplate is not empty or withtemplate == 1 %}
@@ -91,14 +106,13 @@
                            __('Status'),
                            field_options|merge({
                               'entity': item.fields['entities_id'],
-                              'condition': condition,
-                              'required':true,
+                              'condition': condition
                            })
                         ) }}
                      {% endif %}
 
                      {% set fk = item.getForeignKeyField() %}
-                     {% if item.isField(fk) %}
+                     {% if item.isField(fk) and item_type != 'Software' %}
                         {{ fields.dropdownField(
                            item_type,
                            fk,
@@ -147,7 +161,6 @@
                            'Location'|itemtype_name,
                            field_options|merge({
                               'entity': item.fields['entities_id'],
-                              'required':true
                            })
                         ) }}
                      {% endif %}
@@ -160,9 +173,7 @@
                             [
                                 'Computer', 'NetworkEquipment', 'Printer', 'Peripheral', 'Phone'
                             ],
-                            field_options|merge({
-                              required:true
-                           })
+                            field_options
                         ) }}
                      {% endif %}
 
@@ -177,10 +188,8 @@
                            type_itemtype,
                            type_fk,
                            item.fields[type_fk],
-                           _n('Type', 'Types', 1),
-                           field_options|merge({
-                              required:true
-                           })
+                           type_itemtype|itemtype_name,
+                           field_options
                         ) }}
                      {% endif %}
 
@@ -196,7 +205,7 @@
                         ) }}
                      {% endif %}
 
-                    {# {% if item.isField('registration_number') %}
+                     {% if item.isField('registration_number') %}
                         {{ fields.autoNameField(
                            'registration_number',
                            item,
@@ -204,7 +213,7 @@
                            withtemplate,
                            field_options
                         ) }}
-                     {% endif %} #}
+                     {% endif %}
 
                      {% if item.isField('phone') %}
                         {{ fields.autoNameField(
@@ -272,9 +281,7 @@
                            item,
                            _n('Email', 'Emails', 1),
                            withtemplate,
-                           field_options|merge({
-                              required:true
-                           })
+                           field_options
                         ) }}
                      {% endif %}
 
@@ -290,14 +297,13 @@
                            withtemplate,
                            field_options
                         ) }}
-                        
                      {% endif %}
 
                      {% if item.isField('town') %}
                         {{ fields.autoNameField(
                            'town',
                            item,
-                           'Cidadezinha',
+                           __('City'),
                            withtemplate,
                            field_options
                         ) }}
@@ -338,13 +344,19 @@
                         {% if item_type == 'Certificate' %}
                            {{ fields.dateField('date_expiration', item.fields['date_expiration'], __('Expiration date'), {
                               'helper': __('Empty for infinite'),
-                              'checkIsExpired': true
-                           }) }}
+                              'checkIsExpired': false,
+                              'expiration_class' : params.expiration_class
+                           }|merge(field_options)) }}
+                        {% elseif item_type == 'ComputerAntivirus' %}
+                           {{ fields.dateField('date_expiration', item.fields['date_expiration'], __('Expiration date'), {
+                              'helper': __('Empty for infinite'),
+                              'checkIsExpired': true,
+                           }|merge(field_options)) }}
                         {% else %}
                            {{ fields.datetimeField('date_expiration', item.fields['date_expiration'], __('Expiration date'), {
                               'helper': __('Empty for infinite'),
                               'checkIsExpired': true
-                           }) }}
+                           }|merge(field_options)) }}
                         {% endif %}
                      {% endif %}
 
@@ -357,7 +369,7 @@
                         ) }}
                      {% endif %}
 
-                    {# {% if item.isField('users_id_tech') %}
+                     {% if item.isField('users_id_tech') %}
                         {{ fields.dropdownField(
                            'User',
                            'users_id_tech',
@@ -368,7 +380,7 @@
                               'right': 'own_ticket',
                            })
                         ) }}
-                     {% endif %} #}     
+                     {% endif %}
 
                      {% if item.isField('manufacturers_id') %}
                         {{ fields.dropdownField(
@@ -376,14 +388,11 @@
                            'manufacturers_id',
                            item.fields['manufacturers_id'],
                            (item_type starts with 'Software' ? __('Publisher') : 'Manufacturer'|itemtype_name),
-                           field_options|merge({
-                              required:true,
-                              
-                           })
+                           field_options
                         ) }}
                      {% endif %}
 
-                     {#{% if item.isField('groups_id_tech') %}
+                     {% if item.isField('groups_id_tech') %}
                         {{ fields.dropdownField(
                            'Group',
                            'groups_id_tech',
@@ -394,7 +403,7 @@
                               'condition': {'is_assign': 1},
                            })
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
                      {% set model_itemtype = item.getModelClass() %}
                      {% set model_fk = item.getModelForeignKeyField() %}
@@ -404,44 +413,40 @@
                            model_fk,
                            item.fields[model_fk],
                            _n('Model', 'Models', 1),
-                           field_options|merge({
-                              required:true
-                           })
+                           field_options
                         ) }}
                      {% endif %}
 
-                     {#{% if item_type != 'SoftwareLicense' and item.isField('contact_num') %}
-                        TODO Drop unused 'contact_num' field in Software License schema? 
+                     {% if item_type != 'SoftwareLicense' and item.isField('contact_num') %}
+                        {# TODO Drop unused 'contact_num' field in Software License schema? #}
                         {{ fields.textField(
                            'contact_num',
                            item.fields['contact_num'],
                            __('Alternate username number'),
                            field_options
                         ) }}
-                     {% endif %} #}
+                     {% endif %}
 
                      {% if item.isField('serial') %}
                         {{ fields.textField(
                            'serial',
                            item.fields['serial'],
                            __('Serial number'),
-                           field_options|merge({
-                              required:true
-                           })
+                           field_options
                         ) }}
                      {% endif %}
 
-                     {#{% if item_type != 'SoftwareLicense' and item.isField('contact') %}
-                        {# TODO Drop unused 'contact' field in Software License schema?
+                     {% if item_type != 'SoftwareLicense' and item.isField('contact') %}
+                        {# TODO Drop unused 'contact' field in Software License schema? #}
                         {{ fields.textField(
                            'contact',
                            item.fields['contact'],
                            __('Alternate username'),
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
-                     {#{% if item.isField('otherserial') %}
+                     {% if item.isField('otherserial') %}
                         {{ fields.autoNameField(
                            'otherserial',
                            item,
@@ -449,9 +454,21 @@
                            withtemplate,
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
-                   
+                     {% if item.isField('sysdescr') %}
+                        {{ fields.textareaField('sysdescr', item.fields['sysdescr'], __('Sysdescr')) }}
+                     {% endif %}
+
+                     {% if item.isField('snmpcredentials_id') %}
+                        {{ fields.dropdownField(
+                           'SNMPCredential',
+                           'snmpcredentials_id',
+                           item.fields['snmpcredentials_id'],
+                           'SNMPCredential'|itemtype_name,
+                           field_options
+                        ) }}
+                     {% endif %}
 
                      {% if item.isField('users_id') %}
                         {{ fields.dropdownField(
@@ -466,7 +483,34 @@
                         ) }}
                      {% endif %}
 
-                     
+                     {% if item.isField('is_global') %}
+                        {% set management_restrict = 0 %}
+                        {% if item_type == 'Monitor' %}
+                           {% set management_restrict = config('monitors_management_restrict') %}
+                        {% elseif item_type == 'Peripheral' %}
+                           {% set management_restrict = config('peripherals_management_restrict') %}
+                        {% elseif item_type == 'Phone' %}
+                           {% set management_restrict = config('phones_management_restrict') %}
+                        {% elseif item_type == 'Printer' %}
+                           {% set management_restrict = config('printers_management_restrict') %}
+                        {% else %}
+                           {% set management_restrict = 0 %}
+                        {% endif %}
+                        {% set dd_globalswitch %}
+                           {% do call('Dropdown::showGlobalSwitch', [item.fields['id'], {
+                              'withtemplate': withtemplate,
+                              'value': item.fields['is_global'],
+                              'management_restrict': management_restrict,
+                              'target': target,
+                              'width': '100%',
+                           }]) %}
+                        {% endset %}
+                        {{ fields.htmlField(
+                           'is_global',
+                           dd_globalswitch,
+                           __('Management type'),
+                        ) }}
+                     {% endif %}
 
                      {% if item.isField('size') %}
                         {{ fields.numberField(
@@ -475,12 +519,12 @@
                            __('Size'),
                            field_options|merge({
                               'min': 0,
-                              'step': 1
+                              'step': 0.01
                            }),
                         ) }}
                      {% endif %}
 
-                     {#{% if item.isField('networks_id') %}
+                     {% if item.isField('networks_id') %}
                         {{ fields.dropdownField(
                            'Network',
                            'networks_id',
@@ -488,9 +532,9 @@
                            _n('Network', 'Networks', 1),
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
-                     {#{% if item.isField('groups_id') %}
+                     {% if item.isField('groups_id') %}
                         {{ fields.dropdownField(
                            'Group',
                            'groups_id',
@@ -501,18 +545,18 @@
                               'condition': {'is_itemgroup': 1},
                            })
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
-                     {#{% if item.isField('uuid') %}
+                     {% if item.isField('uuid') %}
                         {{ fields.textField(
                            'uuid',
                            item.fields['uuid'],
                            __('UUID'),
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
-                     {#{% if item.isField('version') %}
+                     {% if item.isField('version') %}
                         {{ fields.autoNameField(
                            'version',
                            item,
@@ -520,7 +564,7 @@
                            withtemplate,
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
                      {% if item.isField('comment') %}
                         {{ fields.textareaField(
@@ -531,6 +575,14 @@
                         ) }}
                      {% endif %}
 
+                     {% if item.isField('ram') %}
+                        {{ fields.numberField(
+                           'ram',
+                           item.fields['ram'],
+                           __('%1$s (%2$s)')|format(_n('Memory', 'Memories', 1), __('Mio')),
+                           field_options
+                        ) }}
+                     {% endif %}
 
                      {% if item.isField('alarm_threshold') %}
                         {% set dd_alarm_treshold %}
@@ -559,6 +611,14 @@
                         ) }}
                      {% endif %}
 
+                     {% if item.isField('brand') %}
+                        {{ fields.textField(
+                           'brand',
+                           item.fields['brand'],
+                           __('Brand'),
+                           field_options
+                        ) }}
+                     {% endif %}
 
                      {% if item.isField('begin_date') %}
                         {{ fields.dateField(
@@ -569,7 +629,7 @@
                         ) }}
                      {% endif %}
 
-                     {#{% if item.isField('autoupdatesystems_id') %}
+                     {% if item.isField('autoupdatesystems_id') %}
                         {{ fields.dropdownField(
                            'AutoUpdateSystem',
                            'autoupdatesystems_id',
@@ -577,7 +637,7 @@
                            'AutoUpdateSystem'|itemtype_name,
                            field_options
                         ) }}
-                     {% endif %}#}
+                     {% endif %}
 
                      {% if item.isField('pictures') %}
                         {{ fields.fileField('pictures', null, _n('Picture', 'Pictures', get_plural_number()), {
@@ -593,6 +653,11 @@
                             __('Active'),
                             field_options
                         ) }}
+                     {% endif %}
+
+                     {# display last_boot data only if item is dynamic and have field #}
+                     {% if item.isField('last_boot') and item.isField('is_dynamic') and item.fields['is_dynamic'] %}
+                        {{ fields.htmlField('last_boot', item.fields['last_boot']|formatted_datetime(true), __('Last boot date')) }}
                      {% endif %}
 
                      {% block more_fields %}
