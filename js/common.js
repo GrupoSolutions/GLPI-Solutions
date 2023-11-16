@@ -898,22 +898,22 @@ var templateItilStatus = function(option) {
     var classes = "";
     switch (parseInt(status)) {
         case 1 :
-            classes = 'new fa-solid fa-circle';
+            classes = 'new fas fa-circle';
             break;
         case 2 :
-            classes = 'assigned fa-solid fa-circle-notch fa-spin';
+            classes = 'assigned far fa-circle';
             break;
         case 3 :
-            classes = 'planned fa-light fa-regular fa-hourglass-half';
+            classes = 'planned far fa-calendar';
             break;
         case 4 :
-            classes = 'waiting fa-light fa-hourglass-half';
+            classes = 'waiting fas fa-circle';
             break;
         case 5 :
-            classes = 'solved fa-solid fa-circle-check';
+            classes = 'solved far fa-circle';
             break;
         case 6 :
-            classes = 'closed fa-solid fa-circle-x';
+            classes = 'closed fas fa-circle';
             break;
         case 7:
             classes = 'accepted fas fa-check-circle';

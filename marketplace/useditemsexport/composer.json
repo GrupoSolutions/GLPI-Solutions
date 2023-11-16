@@ -1,8 +1,6 @@
 {
     "require": {
-        "php": ">=7.4",
-        "pdfcrowd/pdfcrowd": "^5.14",
-        "picqer/php-barcode-generator": "^2.3"
+        "php": ">=7.4"
     },
     "require-dev": {
         "glpi-project/tools": "^0.4"

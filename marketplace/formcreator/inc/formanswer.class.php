@@ -741,7 +741,29 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       echo Html::hidden('id', ['value' => $this->getID()]);
       echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]);
 
-      echo '</div>';
+      echo '</div>';?>
+
+      <script>
+         
+         function verificarEObterOperacao() {
+         // Inicializa a variável operação
+         var operacao = '';
+         // Verifica se um elemento com a classe 'form_field' existe e tem um valor
+         var elementos = document.querySelectorAll('[title="RMA"], [title="TRIAGEM"], [title="WHP"]').length;
+         console.log(elementos);
+         if(elementos == 0){
+            const formField = document.querySelector('.form_field');
+            operacao = formField.innerText;
+         } else {
+            var elementos = document.querySelectorAll('[title="RMA"], [title="TRIAGEM"], [title="WHP"]')[0].innerText;
+            operacao = elementos
+         }
+         console.log(operacao);
+         return operacao;
+         // Retorna a operação
+         }
+      </script>
+      <?php
       echo '<script type="text/javascript">
                function plugin_formcreator_checkComment(field) {
                   if ($("textarea[name=comment]").val() == "") {
@@ -749,6 +771,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      return false;
                   }
                }
+              
 
                document.getElementById("myBtn").addEventListener("click", function(event) {
                   event.preventDefault(); // Impede a submissão padrão do formulário
@@ -761,10 +784,14 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                   });
                 });
                 
+
                 function confirmacao(callback) {
                   const idF = document.getElementById("formID").value;
                   const validatorID = document.getElementById("validatorID").value;
 
+               
+                  let oop = verificarEObterOperacao();
+                  
                   const {value: tipoEntrega} = Swal.fire({
                      title: "Informe o tipo de entrega",
                      input: "select",
@@ -778,6 +805,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      showCancelButton: true,
                      confirmButtonColor: "#3085d6",
                      cancelButtonColor: "#d33",
+                     cancelButtonText: "Cancelar",
                      confirmButtonText: "Aprovar Solicitação"
                   }).then((result) => {
                     if (result.isConfirmed) {
@@ -786,10 +814,11 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      formData.append("idF", idF);
                      formData.append("entrega", result.value);
                      formData.append("validator", validatorID);
+                     formData.append("operacao", oop);
                      // Adicione mais campos, se necessário.
              
                      // Use a função fetch para enviar a requisição POST para o arquivo PHP
-                     fetch("/glpi108/marketplace/formcreator/ajax/enviaEntrega.php", {
+                     fetch("../ajax/enviaEntrega.php", {
                          method: "POST",
                          body: formData
                      })
@@ -825,7 +854,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                // modal.style.display = "none";
                // }
             </script>';
-
       echo '</td></tr>';
 
       $this->showFormButtons($options);
@@ -1052,7 +1080,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       }
       
       require_once('../../../src/db_config.php');
-      $GLOBALS['sqlcon'] = $sqlcon;
       
       //Busca as perguntas e respostas do formulario
       $sql = "SELECT RESPOSTA.id as id, IF(name = 'Tamanho', 'BOTA DE SEGURANÇA', PERGUNTAS.name) AS CONSUMIVEL, RESPOSTA.answer as RESPOSTA FROM glpi_plugin_formcreator_answers RESPOSTA LEFT JOIN  glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' AND PERGUNTAS.name != 'Tipo de Vestimenta' AND PERGUNTAS.name != 'Informe qual projeto você participa'";
@@ -1061,20 +1088,43 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $arrPedidos = [];
       $ids = [];
       //Busca o id do requerente
-      $buscaIDRequerente = "SELECT requester_id as REQUERENTE FROM glpi_plugin_formcreator_formanswers WHERE id = '{$formID}'";
+      $buscaIDRequerente = "SELECT requester_id as REQUERENTE, entrega FROM glpi_plugin_formcreator_formanswers WHERE id = '{$formID}'";
       $retornaIDRequerente = mysqli_query($sqlcon, $buscaIDRequerente);
 
       $_SESSION['validaPedido'] = [$formID, $validatorID];
-   
       if($retornaIDRequerente){
          while($req = mysqli_fetch_row($retornaIDRequerente)){
             $idRequerente = $req['0'];
+            $entrega = $req['1'];
          }
+      }
+      $sqlBuscaLocation = "SELECT locations_id FROM glpi_users WHERE id = $idRequerente";
+      $resBuscaLocation = mysqli_query($sqlcon, $sqlBuscaLocation);
+      if($resBuscaLocation){
+         while($req = mysqli_fetch_row($resBuscaLocation)){
+            $idLocation = $req["0"];
+         }
+      }
+
+      $sqlBuscaEndereco = "SELECT address, bairro, postcode, town, state, building FROM glpi_locations where id = $idLocation";
+      $buscaEndereco = mysqli_query($sqlcon, $sqlBuscaEndereco);
+      if($buscaEndereco){
+            while($endereco = mysqli_fetch_array($buscaEndereco)){
+               $address = $endereco[0];
+               $bairro = $endereco[1]; 
+               $cep = $endereco[2];   
+               $uf = $endereco[3];
+               $estado = $endereco[4];
+               $numero = $endereco[5];
+            }
+
       }
       //Percorre o array do retorno sql das perguntas e respostas
       if($solicitacaoRetorno){
          while($row = mysqli_fetch_array($solicitacaoRetorno)){
+
             $quantidade = $row['RESPOSTA'];
+            
    
             if($quantidade != 'TRIAGEM' || $quantidade != 'WHIRLPOOL' || $quantidade != 'RMA'){
    
@@ -1092,13 +1142,29 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                         }
                      }
                      $data = date("Y-m-d H:i:s");
-                     $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado')";
+
+                     $sqlBuscaOperacao = "SELECT
+                     RESPOSTA.answer as RESPOSTA 
+                     FROM glpi_plugin_formcreator_answers RESPOSTA
+                     LEFT JOIN glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id 
+                     WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' 
+                     AND PERGUNTAS.name != 'Tipo de Vestimenta' 
+                     AND PERGUNTAS.name = 'Informe qual projeto você participa'";
+                     $retornaOperacao = mysqli_query($sqlcon, $sqlBuscaOperacao);
+                     if($retornaOperacao){
+                        while($r = mysqli_fetch_array($retornaOperacao)){
+                           $operacao = $r[0];
+                        }
+                     }
+
+                     $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id, projeto, endereco, bairro, cep, cidade, estado, tipo_entrega) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado', '$operacao', '$address', '$entrega', '$cep', '$uf', '$estado', '$entrega')";
                      if($insert = mysqli_query($sqlcon, $sqlINSERT)){
                         echo '<script>"Inserido no banco" . $row["CONSUMIVEL"])</script>';
                      } else{
                         echo'<script>alert("ERRO: " . $sqlINSERT . "<br>" . mysqli_error($sqlcon))</script>';
                      }
-                    
+                     //$insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', cidade = '{$uf}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+
                   }
                   else{
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . ", favor contatar o suporte!'); history.go(-1);</script>";
@@ -1107,7 +1173,19 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      return false;
                   }
                } else{
-
+                  $sqlBuscaOperacao = "SELECT
+                  RESPOSTA.answer as RESPOSTA 
+                  FROM glpi_plugin_formcreator_answers RESPOSTA
+                  LEFT JOIN glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id 
+                  WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' 
+                  AND PERGUNTAS.name != 'Tipo de Vestimenta' 
+                  AND PERGUNTAS.name = 'Informe qual projeto você participa'";
+                  $retornaOperacao = mysqli_query($sqlcon, $sqlBuscaOperacao);
+                  if($retornaOperacao){
+                     while($r = mysqli_fetch_array($retornaOperacao)){
+                        $operacao = $r[0];
+                     }
+                  }
                   $buscaIDInsumo = "SELECT id, consumableitemtypes_id FROM glpi_consumableitems WHERE glpi_consumableitems.name != 'Informe qual projeto você participa' and glpi_consumableitems.name = '{$consumivel}'";
                   $retornaIDInsumo = mysqli_query($sqlcon, $buscaIDInsumo);
                   $numR= mysqli_num_rows($retornaIDInsumo);
@@ -1120,8 +1198,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                         }
                      }
                      $data = date("Y-m-d H:i:s");
+                     
                      if($quantidade > 0){
-                        $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '{$quantidade}', '{$data}', '$idChamado')";
+                        $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id, projeto, endereco, bairro, cep, cidade, estado, tipo_entrega) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado', '$operacao', '$address', '$bairro', '$cep', '$uf', '$estado', '$entrega')";
                      } else{
                         echo "ERRO AO INSERIR ITEM";
                      }
@@ -1141,8 +1220,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . " , favor contatar o suporte!'); history.go(-1);;</script>";
                      require_once("../inc/erroNomenclatura.php");
                      return false;
-                  }
-                   /** @var CommonDBTM $target */
+                  }           /** @var CommonDBTM $target */
                  
                }
               
@@ -1338,6 +1416,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     
                     
       /** @var PluginFormcreatorAbstractField $field */
+      $formId = $this->input[PluginFormcreatorForm::getForeignKeyField()];
+
       foreach ($this->getQuestionFields($formId) as $questionId => $field) {
          $field->moveUploads();
          $answer = new PluginFormcreatorAnswer();

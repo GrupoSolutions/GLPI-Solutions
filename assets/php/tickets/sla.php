@@ -25,8 +25,8 @@ function calcularSLA(DateTime $dataInicial, DateTime $dataFinal) {
                         $intervaloFim = $intervalo[1];
                     }
                 } 
-
-                if($dataAtual->format('H') >= $intervaloInicio && $dataAtual->format('H') < $intervaloFim){
+                $firstHour = $dataFinal->diff($dataAtual)->h;
+                if($dataAtual->format('H') >= $intervaloInicio && $dataAtual->format('H') < $intervaloFim && $firstHour > 1){
                     $slaMinutos += 60; // Adiciona 60 minutos (1 hora) ao SLA
                 } 
             }
@@ -37,12 +37,10 @@ function calcularSLA(DateTime $dataInicial, DateTime $dataFinal) {
     if($dataAtual) {
         $minutosRestantes = $dataFinal->diff($dataInicial)->i;
         $slaMinutos += $minutosRestantes;
-        // Calcula as horas e minutos a partir do total de minutos
         $horas = floor($slaMinutos / 60);
         $minutos = $slaMinutos % 60;
     }
     
-
     return [$horas, $minutos, $slaMinutos];
 }
 

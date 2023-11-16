@@ -13,7 +13,7 @@ if($operacao){
 
 <div style="display: flow-root;">
 <div onclick="showDiv()" class="btnRelatorio"><a class='btn button-primary button-relatorio'>Relatório de Solicitações</a></div>
-<form id="relatorio_soli" method="post" action="/glpi/src/Relatorios.php">
+<form id="relatorio_soli" method="post" action="/src/Relatorios.php">
     <div style="margin-top:15px;display:none;" id="relatorio_solicitacao">
         <div>
             <div style="float:left;">
@@ -43,8 +43,9 @@ if($operacao){
 </div>
 
 
-<div style="margin-top:5px;" class="btnRelatorio"><a href='/glpi/src/RelatorioPorStatus.php' class='btn button-primary button-relatorio'>Relatório de Ativos por Status</a></div>
-<div style="margin-top:5px;" class="btnRelatorio"><a href='/glpi/src/RelatorioGlobal.php' class='btn button-primary button-relatorio'>Relatório de Ativos Global</a></div>
+<div style="margin-top:5px;" class="btnRelatorio"><a href='/src/RelatorioPorStatus.php' class='btn button-primary button-relatorio'>Relatório de Ativos por Status</a></div>
+<div style="margin-top:5px;" class="btnRelatorio"><a href='/src/RelatorioGlobal.php' class='btn button-primary button-relatorio'>Relatório de Ativos Global</a></div>
+<div style="margin-top:5px;" class="btnRelatorio"><a href='/src/RelatorioFinanceiroInsumo.php' class='btn button-primary button-relatorio'>Relatório Financeiro de Insumos</a></div>
 
 <div style="margin-top:5px;">
 <div style="margin-top:5px;" onclick="showFinanceiro()" class="btnRelatorio"><a class='btn button-primary button-relatorio'>Relatório Financeiro de Ativos</a></div>
@@ -102,7 +103,7 @@ if($operacao){
 
 <div style="display: flow-root;margin-top:5px;">
 <div onclick="showBaixa()" class="btnRelatorio"><a class='btn button-primary button-relatorio'>Relatório de Baixa de Consumíveis</a></div>
-<form id="baixa_relatorio" method="post" action="/glpi/src/RelatorioBaixa.php">
+<form id="baixa_relatorio" method="post" action="/src/RelatorioBaixa.php">
     <div style="margin-top:15px;display:none;" id="relatorio_baixa">
         <div>
             <div style="float:left;">

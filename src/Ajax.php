@@ -317,9 +317,23 @@ JAVASCRIPT;
                 $navlinkp       = "";
                 $nav_width      = "";
             }
+            $uri = $_SERVER['REQUEST_URI'];
 
-            echo "<div class='d-flex card-tabs $flex_container $orientation'>";
-            echo "<ul class='nav nav-tabs $flex_tab' id='$tabdiv_id' $nav_width role='tablist'>";
+            if(strpos($uri, 'central.php') !== false){
+                echo "<div class='d-flex card-tabs $flex_container $orientation'>";
+            } else {
+?>
+
+
+<?php
+}
+            
+            if(strpos($uri, 'central.php') !== false){
+                echo "<ul class='nav nav-tabs flex-row d-none d-md-flex' id='$tabdiv_id' $nav_width role='tablist'>";
+            } else {
+                echo "<ul class='nav nav-tabs flex-row' id='$tabdiv_id' $nav_width role='tablist'>";
+            }
+
             $html_tabs = "";
             $html_sele = "";
             $i = 0;
@@ -356,6 +370,7 @@ JAVASCRIPT;
             }
             echo  "</div>"; // .tab-content
             echo "</div>"; // .container-fluid
+            echo "</div>";
             $js = "
          var loadTabContents = function (tablink, force_reload = false) {
             var url = tablink.attr('href');

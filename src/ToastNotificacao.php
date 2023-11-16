@@ -1,10 +1,8 @@
 <?php
-$sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
+require('db_config.php');// ALTERAR AO SUBIR PARA PROD
 
-$GLOBALS['sqlcon'] = $sqlcon;
 $ticket = [];
-
-    $sqlTicket = "SELECT users_id_recipient FROM glpi_tickets WHERE id = 216";
+    $sqlTicket = "SELECT users_id_recipient FROM glpi_tickets";
     $recipient = mysqli_query($sqlcon, $sqlTicket);
     $arr = [];
     $recip = 0;
@@ -15,7 +13,6 @@ $ticket = [];
         }
     }
 function atribuirChamado($user_id, $ticket_id){
-    $sqlcon = $GLOBALS['sqlcon'];
     $sqlVerificacao = "SELECT * FROM glpi_tickets_users WHERE tickets_id = {$ticket_id} and users_id = {$user_id}";
     $executa_query = mysqli_query($sqlcon, $sqlVerificacao);
     $conta_linhas = mysqli_num_rows($executa_query);
@@ -52,7 +49,7 @@ function atribuirChamado($user_id, $ticket_id){
 }
 
 function buscarNovosChamados($user_id){
-   $sqlcon = $GLOBALS['sqlcon'];
+require('db_config.php');
     $notificacoes = [];
     $newTickets = [];
     $sqlNotificacoes = "SELECT c.id, c.items_id, c.notificationtemplates_id as tipoChamado, c.recipient, c.is_deleted, u.id as ticketID, u.status, u.users_id_lastupdater as lastUpdater FROM glpi_queuednotifications c INNER JOIN glpi_tickets u on (c.items_id = u.id) WHERE c.recipient = {$user_id} ";
@@ -73,8 +70,6 @@ function buscarNovosChamados($user_id){
             array_push($newTickets, $notificacao['ticketID']);
         }
     }
-    
-
    return $newTickets;
 }
 function buscarRespostaChamados($user_id){
@@ -87,6 +82,7 @@ function buscarRespostaChamados($user_id){
     
     if($retorno) {
         while($row = mysqli_fetch_array($retorno)){
+	print_r($row);
             array_push($notificacoes, $row);
         }
     }
@@ -100,6 +96,7 @@ function buscarRespostaChamados($user_id){
             array_push($unresolvedTickets, $notificacao['ticketID']);
         }
     }
+
     return $unresolvedTickets;
 }
 

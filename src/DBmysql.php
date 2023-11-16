@@ -43,13 +43,13 @@ use Glpi\Toolbox\Sanitizer;
 class DBmysql
 {
    //! Database Host - string or Array of string (round robin)
-    public $dbhost             = "";
+    public $dbhost             = "localhost";
    //! Database User
-    public $dbuser             = "";
+    public $dbuser             = "glpi";
    //! Database Password
-    public $dbpassword         = "";
+    public $dbpassword         = '16oL97%2Al2L%5E%5E6GZ%25dKdKNvm%26gW06%23j6%40q6zDC3d%40';
    //! Default Database
-    public $dbdefault          = "";
+    public $dbdefault          = "glpi";
 
     /**
      * The database handler
@@ -245,7 +245,7 @@ class DBmysql
         }
 
         $hostport = explode(":", $host);
-        if (count($hostport) < 2) {
+        if (!count($hostport) < 1) {
            // Host
             $this->dbh->real_connect($host, $this->dbuser, rawurldecode($this->dbpassword), $this->dbdefault);
         } else if (intval($hostport[1]) > 0) {

@@ -29,7 +29,7 @@
 <body>
 <div class="container">
     <div class="row mt-5">
-        <div class="ml-4 col AR">
+        <div class="ml-4 col-6 AR">
             
         <div class="borda">
             <div class="textoA">
@@ -39,9 +39,9 @@
         </div>
         <div class="dadosRecebedor">
             <p>Recebedor:</p>
-            <span>_____________________________________</span>
+            <span>_______________________</span>
             <p>Assinatura:</p>
-            <span>______________</span>
+            <span>_______________________</span><br>
             <p>Documento:</p>
             <span>_______________</span>
         </div>
@@ -58,49 +58,14 @@
             <div class="pl-1">
             <?php
                     include "../vendor/autoload.php";
-                    $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
+                    $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
                     echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
                 ?>
             </div>
         </div>
             <p class="ml-2"><strong>Remetente:</strong> GRUPO SOLUTIONS<br>Rua Geraldo Flausino Gomes<br>N°78, 9 ANDAR CONJ 94<br>Cidade Monções<br><strong>04575-060</strong> São Paulo - SP</p> 
         </div>
-        <div class="ml-5 col AR">
-                
-            <div class="borda">
-                <div class="textoA">
-                    <p>USO EXCLUSIVO DOS CORREIOS</p>
-                    <p>Cole aqui a etiqueta com o código identificador da encomenda</p>
-                </div>  
-            </div>
-            <div class="dadosRecebedor">
-                <p>Recebedor:</p>
-                <span>_____________________________________</span>
-                <p>Assinatura:</p>
-                <span>______________</span>
-                <p>Documento:</p>
-                <span>_______________</span>
-            </div>
-        
-            <div class="entregaVizinho">
-                <p style="margin: inherit;">ENTREGA NO VIZINHO AUTORIZADA?</p>
-                <span class="ml-2">Entrega no vizinho não autorizada</span>
-            </div>
-
-            <div class="destinatario pb-2 ">
-                <h6>DESTINATÁRIO</h6>
-                <div><img src="correios.png" width="50"/></div>
-                <p class="ml-2"><?php echo $nome; ?><br><?php echo $rua;echo " N°$numero"; ?><br><?php echo $bairro; ?><br><?php echo $cep; ?>     <?php echo $estado; ?>-<?php echo $cidade; ?></p>
-                <div class="pl-1">
-                <?php
-                    include "../vendor/autoload.php";
-                    $generator = new Picqer\Barcode\BarcodeGEneratorHTML();
-                    echo $generator->getBarcode($cep,$generator::TYPE_CODE_128_A, 2, 50);
-                ?>
-                </div>
-            </div>
-            <p class="ml-2"><strong>Remetente:</strong> GRUPO SOLUTIONS<br>Rua Geraldo Flausino Gomes<br>N°78, 9 ANDAR CONJ 94<br>Cidade Monções<br><strong>04575-060</strong> São Paulo - SP</p>
-        </div>
+       
     </div>
     <div class="row mt-5">
     <table border="0" cellspacing="0" class="BordaTodas" style="width:100%" >
@@ -362,29 +327,6 @@
                     </div>
                   </div>
                 </div>
-
-                
-                    <div class="row">
-                      <div class="col-1">
-                        <div class="celula texto">
-                          1
-                        </div>
-                      </div>
-                      <div class="col-7">
-                        <div class="celula texto">
-                          <?php echo mb_strtoupper($nametype);?>
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto qtd">
-                          1
-                        </div>
-                      </div>
-                      <div class="col-2">
-                        <div class="celula texto">
-                          R$&nbsp;<span class="vlr"><?php echo number_format($valor, 2, ',', '.');?></span></div>
-                      </div>
-                    </div>
                     <?php 
                     if(isset($items)){
                       foreach($items as $id => $item){
@@ -392,7 +334,7 @@
                         echo ' <div class="row">
                         <div class="col-1">
                           <div class="celula texto">
-                            '. $id + 2 .'
+                            '. $id + 1 .'
                           </div>
                         </div>
                         <div class="col-7">
@@ -438,7 +380,7 @@
                   </div>
                   <div class="col-4">
                     <div class="celula">
-                      8,120
+                      <?php echo $peso; ?>
                     </div>
                   </div>
                 </div>
@@ -503,56 +445,7 @@
 
 <div style="page-break-after: always"></div>
 </div>
-<div class="romaneio mt-5 bordaBaixo">
-    <div class="row" class="">
-        <div class="col" style="text-align:center;">
-            <img src="sedex.png" class="mt-2" width="150"/>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col bordCimaBaixo">
-            <span><strong>EMPRESA: SERVICE SOLUTIONS SOLUCOES EM CONTACT CENTER LTDA - ME</span><span class="ml-5">CONTRATO: 9912361195</strong></span></span>
-        </div>
-    </div>
-    <div class="row mb-5">
-        <div class="col">
-            <table class="romane">
-                <tr class="bordaT">
-                    <td class="">DATA</td>
-                    <td class="BordaEsq">DE</td>
-                    <td class="BordaEsq">PARA</td>
-                    <td class="BordaEsq">CEP</td>
-                    <td class="BordaEsq">CC</td>
-                    <td class="BordaEsq">QUANT</td>
-                    <td class="BordaEsq">SERVICOS ADICIONAIS</td>
-                </tr>
-                <tr>
-                    <td class="bordCimaBaixo font-weight-normal">08/08/2023</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">Service</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">Colaborador da Silva</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">01234-567</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">RMA</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">1</td>
-                    <td class="BordaEsq bordCimaBaixo font-weight-normal">AR</td>
-                </tr>
-                <tr>
-                    <td colspan="9" class="mr-3 bordCimaBaixo" style="text-align:right">TOTAL EMBALAGENS: 1</td>
-                </tr>   
-            </table>
-            <table class="romane" style="border-bottom: 3px solid #000">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>NOME LEGÍVEL: USUARIO COLABORADOR</td>
-                    <td></td>
-                    <td></td>
-                    <td>ASSINATURA: _________________________________</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    
-    </div>
+
 </body>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

@@ -1,78 +1,20 @@
 
 <?php
 
+
     if(isset($_POST)){
         $id = $_POST['user_id'];
-        $nametype = $_POST['nametype'];
+        $peso = $_POST['peso'];
+        $operacao = $_POST['operacao'];
 
         if(isset($_POST['itens'])){
             $items = $_POST['itens'];
         }
-    switch($nametype){
-        case 'Computador':
-            $tb_item = 'glpi_computers';
-            $tb_type = 'glpi_computertypes';
-            $idType = 'item.computertypes_id';
-            $type = 'Computer';
-            break;
-        case 'Telefone':
-            $tb_item = 'glpi_phones';
-            $tb_type = 'glpi_phonetypes';
-            $idType = 'item.phonetypes_id';
-            $type = 'Phone';
-            break;
-        case 'Monitor':
-            $tb_item = 'glpi_monitors';
-            $tb_type = 'glpi_monitortypes';
-            $idType = 'item.monitortypes_id';
-            $type = 'Monitor';
-            break;
-        case 'Impressora':
-            $tb_item = 'glpi_printers';
-            $tb_type = 'glpi_printertypes';
-            $idType = 'item.printertypes_id';
-            $type = 'Printer';
-            break;
-        case 'Dispositivo':
-            $tb_item = 'glpi_peripherals';
-            $tb_type = 'glpi_peripheraltypes';
-            $idType = 'item.peripheraltypes_id';
-            $type = 'Peripheral';
-            break;
-        
-    }
+  
     require("../../../src/db_config.php");
-    $sqlBuscaTipo = "SELECT c.name FROM $tb_item as item LEFT JOIN $tb_type AS c ON $idType = c.id WHERE item.id = $id";
-    $sqlResultTipo = mysqli_query($sqlcon, $sqlBuscaTipo);
-    if($sqlResultTipo){
-        while($usu = mysqli_fetch_array($sqlResultTipo)){
-            $tipo = $usu[0];
-        }
-    }
-    
-    $sqlBuscaValor = "SELECT value FROM glpi_infocoms where items_id = $id and itemtype = '$type'";
-    $sqlResultValor = mysqli_query($sqlcon, $sqlBuscaValor);
-    if($sqlResultValor) {
-        while($val = mysqli_fetch_array($sqlResultValor)){
-            $valor = $val[0];
-        }
-    }
-
-
-    // Esta query busca o id do usuário que está como propietario do Ativo.
-    $sqlBuscaItem = "SELECT users_id from $tb_item WHERE id = $id";
-    $sqlResult = mysqli_query($sqlcon, $sqlBuscaItem);
-    
-    if($sqlResult) {
-        while($usu = mysqli_fetch_array($sqlResult)){
-            $usuario = $usu[0];
-        }
-    } else {
-        return "ERRO AO LOCALIZAR ID DA LOCALIZAÇÃO";
-    }
     
     // Esta query busca o nome e a localização do usuário que receberá o produto
-    $sqlBuscaNome = "SELECT name, locations_id from glpi_users WHERE id = $usuario";
+    $sqlBuscaNome = "SELECT name, locations_id from glpi_users WHERE id = $id";
     $nomeResult = mysqli_query($sqlcon, $sqlBuscaNome);
     if($nomeResult) {
         while($name = mysqli_fetch_array($nomeResult)){
@@ -80,7 +22,7 @@
             $location_id = $name[1];
         }
     } else {
-        return "ERRO AO LOCALIZAR NOME/LOCALIZACAO DO USUARIO";
+        return  "<script>console.warn('ERRO AO LOCALIZAR NOME/LOCALIZACAO DO USUARIO')</script>";
     }
     
     
@@ -98,10 +40,20 @@
             $numero = $loc[5];
             $complemento = $loc[6];
         }
-        $arrLoc = [$rua, $bairro, $cep, $cidade, $estado, $numero, $complemento, $nome, $tipo];
+        $arrLoc = [$rua, $bairro, $cep, $cidade, $estado, $numero, $complemento, $nome];
     } else {
-        return "ERRO, LOCALIZAÇÃO NÃO ENCONTRADA";
+        "<script>console.warn('ERRO, LOCALIZAÇÃO NÃO ENCONTRADA')</script>";
     }
+    if(isset($items)){
+        foreach($items as $item) {
+	    $valorDec = floatval(substr($item['valor'], 4));
+            $sqlInsereItem = "INSERT INTO tb_envio_correio (rua, bairro, cep, cidade, estado, numero, complemento, nome, data_envio, operacao, valor_declarado, conteudo, quantidade)
+            VALUES ('$rua', '$bairro', '$cep', '$cidade', '$estado', '$numero', '$complemento', '$nome', now(), '$operacao', '{$valorDec}', '{$item['conteudo']}', '{$item['quantidade']}')";
+            $insertItem = mysqli_query($sqlcon, $sqlInsereItem);
+
+        }
+    } 
+
 
     require('ar.php');
     echo "<script>window.print();</script>";

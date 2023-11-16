@@ -29,7 +29,7 @@
  #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
-<script src='/glpi108/assets/css/fa6.js' crossorigin='anonymous'></script>;
+<script src='/assets/css/fa6.js' crossorigin='anonymous'></script>;
 <style>
 	{% set widthPercent = 100 / options.columns %}
 	{% for i in range(1, options.columns ) %}
@@ -301,7 +301,7 @@
         // Adicione mais campos, se necessário.
 
         // Use a função fetch para enviar a requisição POST para o arquivo PHP
-        fetch('/glpi108/marketplace/formcreator/ajax/enviaEndereco.php', {
+        fetch('/marketplace/formcreator/ajax/enviaEndereco.php', {
             method: 'POST',
             body: formData
         })
@@ -328,7 +328,7 @@
     //Buscar na tabela de usuarios o id da localização e em seguida os campos de endereço do usuário, e printará no sweetalert para confirmação ou correção.
     function atualizaEnd(){
         substituirPorItalico();
-        fetch('/glpi108/marketplace/formcreator/ajax/buscaEndereco.php?id=' + {{ idSolicitante}})
+        fetch('/marketplace/formcreator/ajax/buscaEndereco.php?id=' + {{ idSolicitante}})
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -398,7 +398,7 @@
                                         'Solicitação enviada',
                                         'success'
                                     );
-                                    window.location.href = "/glpi108/";
+                                    window.location.href = "/";
                                 }
                             }
                             })
@@ -409,7 +409,7 @@
                                 'Solicitação enviada',
                                 'success'
                             );
-                            window.location.href = "/glpi108/";
+                            window.location.href = "/";
                         }
                 })
             })

@@ -4485,7 +4485,7 @@ abstract class CommonITILObject extends CommonDBTM
      */
     public static function getStatusClass($status)
     {
-        echo "<script src='../assets/css/fa6.js' crossorigin='anonymous'></script>";
+        //if($status){echo "<script src='../assets/css/fa6.js' crossorigin='anonymous'></script>";}
         $class = null;
         $solid = true;
 

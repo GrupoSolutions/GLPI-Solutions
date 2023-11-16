@@ -58,7 +58,7 @@ abstract class CommonDCModelDropdown extends CommonDropdown
         global $DB;
 
         $fields = parent::getAdditionalFields();
-
+        
         if ($DB->fieldExists($this->getTable(), 'weight')) {
             $fields[] = [
                 'name'   => 'weight',
@@ -189,7 +189,6 @@ abstract class CommonDCModelDropdown extends CommonDropdown
                 'datatype' => 'bool'
             ];
         }
-
         return $options;
     }
 

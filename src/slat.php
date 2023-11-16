@@ -41,11 +41,11 @@ switch($status){
         break;
     case "3":
         $stt = '<i class="itilstatus fa-light fa-hourglass-half planned me-1" title="" data-bs-toggle="tooltip" data-bs-original-title="3" aria-label="3"></i>';
-        $sttDesc = "Planejado";
+        $sttDesc = "Aguardando Terceiros";
         break;
     case "4":
         $stt = '<i class="itilstatus fa-light fa-hourglass-half waiting me-1" title="" data-bs-toggle="tooltip" data-bs-original-title="Aguardando terceiros" aria-label="Aguardando terceiros"></i>';
-        $sttDesc = "Aguardando Terceiros";
+        $sttDesc = "Aguardando Usuário";
         break;
     case "5":
         $stt = '<i class="itilstatus fa-solid fa-circle-check solved me-1" title="" data-bs-toggle="tooltip" data-bs-original-title="Solucionado" aria-label="Solucionado"></i>';
@@ -58,22 +58,20 @@ switch($status){
 }
 require ('../assets/php/tickets/sla.php');
 $dataFinal = new DateTime();
-if(!$dataFim){
-    echo "<script>alert('Erro! Categoria sem SLA configurado corretamente');</script>";
-}
 if(isset($dataFim)){
     $dataMax = new DateTime($dataFim);
+} else {
+    $dataMax = new DateTime();
 }
-$dataMax = new DateTime();
 $dataInicial = new DateTime($dataInicio);
 if($dataSolucao) {
     $dataSolucionada = new DateTime($dataSolucao);
 }
 
 list($horas, $minutos, $slaMinutos) = calcularSLA($dataInicial, $dataFinal);
+
 $tempoPausado = calculaPausa($ID);
 $valorTotal = $slaMinutos - $tempoPausado;
-
 list($h,$m,$totalSLA) = calcularSLA($dataInicial, $dataMax);
 
 $horas = floor($valorTotal / 60);
@@ -82,6 +80,7 @@ $percentSLA = ($valorTotal / $totalSLA) * 100;
 $percentBadge = $percentSLA;
 
 $maxHorasSLA = buscaSLATotal($ID);
+
 if($percentSLA > 100){ // Aqui é pra não estrapolar no input do jQuery
     $percentBadge = 100;
 }
@@ -103,7 +102,7 @@ $observadores = buscaObservador($ID);
 list($depart, $categ) = buscaDepartamento($ID);
 ?>
 <style media="screen">
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,300);
 .mt-100{
   margin-top: 200px;
 }
@@ -132,7 +131,9 @@ list($depart, $categ) = buscaDepartamento($ID);
 #sla {
     background: var(--tblr-body-bg);
 }
-.card-body  {
+.cardBody  {
+    padding:10px;
+    line-height: normal;
     background: var(--tblr-body-bg);
 }
 .knob {
@@ -140,7 +141,6 @@ list($depart, $categ) = buscaDepartamento($ID);
 }
 .knob {
     width: 39px !important;
-    margin-left: -43px !important;
 }
 .slaSBadge {
     font-size: 12px;
@@ -150,7 +150,7 @@ list($depart, $categ) = buscaDepartamento($ID);
   
 <div class="row d-flex justify-content-center">
     <div class="card mb-3 " id="sla" style="width: 18rem;">
-        <div class="card-body">
+        <div class="cardBody">
             <h5 class="card-title">Status do SLA</h5>
             
             <div class="row">
@@ -162,7 +162,7 @@ list($depart, $categ) = buscaDepartamento($ID);
                 </div>
                 <div class="col">
                     <div class="progres">
-                        <input type="text" class="knob" value="<?php echo round($percentBadge); ?>" data-min="0" data-max="100" data-width="380" data-displayInput="true" data-format="%" data-readOnly="true" data-fgColor="<?php echo $avisoSLA ?>"> 
+                        <input type="text" class="knob" value="<?php echo round($percentBadge); ?>" data-min="0" data-max="100" data-width="380" data-displayInput="true" data-format="%" data-readOnly="true" data-bgColor="#c9c7c7" data-fgColor="<?php echo $avisoSLA ?>"> 
                     </div>
                 </div>
             
@@ -170,7 +170,7 @@ list($depart, $categ) = buscaDepartamento($ID);
         </div>
     </div>
     <div class="card mb-3 mr-3" id="sla" style="width: 18rem; margin-left: 10px;">
-        <div class="card-body" style="width:;">
+        <div class="cardBody" style="width:;">
             <h5 class="card-title">Status do Chamado </h5>
             
             <div class="row">
@@ -206,7 +206,7 @@ list($depart, $categ) = buscaDepartamento($ID);
         </div>
     </div>
     <div class="card mb-3 mr-3" id="sla" style="width: 18rem; margin-left: 10px;">
-        <div class="card-body" style="width:;">
+        <div class="cardBody" style="width:;">
             <h5 class="card-title">Informações do Chamado</h5>
             
             <div class="row">
@@ -242,15 +242,14 @@ list($depart, $categ) = buscaDepartamento($ID);
 <script>
     $(document).ready(function() {
         $(".knob").knob({
-            'width':50,
-            'height':50,
+            'width':60,
+            'height':60,
             'dis':true,
             'stopper':false,
-            'thickness': .052,
+            'thickness': .152,
             'format' : function (value) {
                 return value + '%';
             }
         });
     });
 </script>
-

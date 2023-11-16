@@ -12,7 +12,7 @@ $arrPedidos = buscarPedidos();
   <head>
     
     <!-- Add custom stylesheet here -->
-    <link rel="stylesheet" href="/glpi/assets/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="../../../assets/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="../../../assets/css/Semantic/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
@@ -147,7 +147,7 @@ $arrPedidos = buscarPedidos();
               language: {
                   url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json',
               },
-              pageLength: 25,
+              pageLength: 10,
           });
 
       });
@@ -157,7 +157,7 @@ $arrPedidos = buscarPedidos();
           var employee_id = $(this).attr("id"); 
            
             $.ajax({  
-                url:"../../../assets/php/select.php",  
+                url:"../../../assets/php/Select.php",  
                 method:"post",  
                 data:{employee_id:employee_id, qtd:qtd, },  
                 success:function(data){  
@@ -174,7 +174,7 @@ $arrPedidos = buscarPedidos();
           var employe_id = $(this).attr("id"); 
            
             $.ajax({  
-                url:"../../../assets/php/recusa.php",  
+                url:"../../../assets/php/Recusa.php",  
                 method:"post",  
                 data:{employe_id:employe_id, qtd:qtd, },  
                 success:function(data){  

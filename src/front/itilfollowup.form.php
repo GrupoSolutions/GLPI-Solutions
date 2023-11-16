@@ -51,6 +51,8 @@ $track = new $_POST['itemtype']();
 
 
 if (isset($_POST["add"])) {
+    
+
     $fup->check(-1, CREATE, $_POST);
     //Aqui vou ter que chamar o src da conexão com o banco, verificar o id do ticket, e ver se é novo e se quem está respondendo é diferente de quem fez a solicitação
     //Daí entao atribuo o status do chamado para em atendimento.
@@ -113,8 +115,8 @@ if (isset($_POST["add"])) {
         //TRANS: %s is the user login
         sprintf(__('%s updates a followup'), $_SESSION["glpiname"])
     );
-    $redirect = $track->getFormURLWithID($fup->getField('items_id'));
-    $handled = true;
+    //$redirect = $track->getFormURLWithID($fup->getField('items_id'));
+    //$handled = true;
 } else if (isset($_POST["purge"])) {
     $fup->check($_POST['id'], PURGE);
     $fup->delete($_POST, 1);

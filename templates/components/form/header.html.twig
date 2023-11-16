@@ -63,9 +63,9 @@
 
 {% if (nametype == 'Computador') or (nametype == 'Monitor') or (nametype == 'Impressora') or (nametype == 'Telefone') or (nametype == 'Dispositivo') or (nametype == 'Dispositivo de rede')  %}
    {% if not item.isNewItem %}
-   
-   <script src="/glpi108/assets/css/fa6.js"></script>
-   <form method='post' name='useditemsexport_form$rand' id='useditemsexport_form$rand' action="{{ path('/marketplace/useditemsexport/inc/termounit.php') }}">
+   {{ dump(params) }}
+   <script src="/assets/css/fa6.js"></script>
+   <form method='post' name='useditemsexport_form$rand' style="float:left;" id='useditemsexport_form$rand' action="{{ path('/marketplace/useditemsexport/inc/termounit.php') }}">
       <table class='row '>
       <tr class='row'>
          <td class="col" >
@@ -87,10 +87,16 @@
       </tr>
    </table>
    </form>
-   <form method='post' id="frmEtq" action="{{ path('/marketplace/useditemsexport/inc/aer.php') }}">
+    {% for items in item %}
+            <li>{{ items }}</li>
+        {% endfor %}
+   {# <form method='post' id="frmEtq" style="float:left;" action="{{ path('/marketplace/useditemsexport/inc/aer.php') }}">
       <td class="col">
-         <p> Gerar AR
-         <input type='button' onclick="geraAr()" name='aer' value="Gerar" class='submit'>
+      
+         <button type='button' onclick="geraAr()" name='aer' style="width:180.94px;height:69px;display:inline-grid;margin-top:1px;margin-left:32px;" value="Gerar" class='btn btn-primary submit'>
+            <i class="fa-solid fa-memo-circle-check fa-xl mt-3"></i>
+            <span class="mt-3">Gerar AR</span>
+         </button>
          <div id="itensContainer">
             <input type="hidden" name="entities_id" value="{{ id }}" />
             <input type="hidden" id="user_id" name="user_id" value="{{ id }}" />
@@ -100,7 +106,15 @@
          </div>
       </td>
    </form>
-
+   <form method="POST" id="frmRom"  action="{{ path('/marketplace/useditemsexport/inc/rom.php') }}">
+      <td class="col">
+         <button type='button' onclick="geraRomaneio()" name='aer'  style="width:180.94px;height:69px;display:inline-grid;margin-top:1px;margin-left:32px;" value="Gerar" class='btn btn-primary submit'>
+            <i class="fa-solid fa-sharp fa-file-lines fa-xl mt-3"></i>
+            <span class="mt-3">Gerar Romaneio</span>
+         </button>
+            <input type="hidden" id="usa_id" name="user_id" value="{{ session('glpiname') }}" />
+   </form>
+#}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
   .ende {
@@ -112,6 +126,9 @@
         
         font-weight:500;
     }
+    .mr-2 {
+      margin-right:10px;
+    }
 </style>
    <script>
    var dadosArray = [];
@@ -120,13 +137,16 @@
       
       if(!conteudo.value || !quantidade.value || !valor.value){
          console.warn("Erro, Campos nulos ou vazios");
+        
          return "erro";
       }
+      
       else {
+        
          var novoItem = {
             conteudo: conteudo.value,
             quantidade: quantidade.value,
-            valor: valor.value
+            valor: valor.value,
          };
          dadosArray.push(novoItem);
 
@@ -134,10 +154,9 @@
          document.getElementById('conteudo').value = '';
          document.getElementById('quantidade').value = '';
          document.getElementById('valor').value = '';
-
       
          var itensContainer = document.getElementById("itensContainer");
-
+         console.log(itensContainer);
          // Preencha os campos de entrada ocultos com os valores dos arrays
          dadosArray.forEach(function(itemc, index) {
             var inputNome = document.createElement("input");
@@ -154,11 +173,13 @@
             inputValor.type = "hidden";
             inputValor.name = "itens[" + index + "][valor]";
             inputValor.value = itemc.valor;
-            
+
+           
             itensContainer.appendChild(inputNome);
             itensContainer.appendChild(inputQuantidade);
             itensContainer.appendChild(inputValor);
          });
+
       }
       
    }
@@ -174,7 +195,7 @@
             usuario_id: usuario_id,
             nametype: nametype,
          },
-         url: "/glpi108/templates/components/ajax/buscaLocalizacao.php",
+         url: "/templates/components/ajax/buscaLocalizacao.php",
          success: function(response){
             var arrayRecebido = response;
             var rua = arrayRecebido[0];
@@ -204,6 +225,14 @@
                   if (!value) {
                   resolve('Informe uma operação.')
                   } else {
+                     var operacao = value;
+                     var inputOP = document.createElement("input");
+                     inputOP.type = "hidden";
+                     inputOP.name = "operacao";
+                     inputOP.value = operacao;
+
+                     let frmetq = document.getElementById("frmEtq");
+                     frmetq.appendChild(inputOP);
                      Swal.fire({
                         title: 'Será enviado outros itens na mesma embalagem?',
                         text: "Dados importantes para a declaração de conteúdo!",
@@ -222,7 +251,7 @@
                                  '<input id="conteudo" class="ende" required>' +
                                  '<label for="quantidade" class="ende">Quantidade:</label>' +
                                  '<input id="quantidade"  class="ende" onkeypress="return somenteNumeros(event)" required>' +
-                                 '<label for="valor" class="ende">Valor(R$):</label>' +
+                                 '<label for="valor" class="ende">Valor Total(R$):</label>' +
                                  '<input type="text" id="valor" oninput="formatarValor(this)" class="ende" required>' +
                                  '<button type="button" class="btn btn-success mt-2" onclick="inserirNovoItem()">Adicionar mais um item</button>',
                               focusConfirm: false,
@@ -246,17 +275,19 @@
                               //Aqui ele deve verificar se há algum item preenchido antes de efetuar o envio para a página de impressão
                               if(result.isConfirmed){
                                if(!conteudo.value || !quantidade.value || !valor.value){
-                                    imprimirAR();
+                                    verificaPeso();
+                                    //imprimirAR();
                                  } else {
                                        inserirNovoItem();
-                                       imprimirAR();
+                                       verificaPeso();
+                                       //imprimirAR();
                                  }
                               
                               }
                            });
                         } else {
-                           //Aqui deve mandar os unicos dados para busca do ativo, sem o array.
-                           imprimirAR();
+                           verificaPeso();
+
                         }
                      })
                   }
@@ -272,9 +303,32 @@
    // parâmetros da função moeda (pelo que entendi)
 // a = objeto do input // e = separador milésimo
 // r = separador decimal // t = evento
-function imprimirAR(){
+function imprimirAR(peso){
+   var inputHidden = document.createElement("input");
+   inputHidden.type = "hidden";
+   inputHidden.name = "peso";
+   inputHidden.value = peso;
+
    let frmEtq = document.getElementById("frmEtq");
+   frmEtq.appendChild(inputHidden);
+
    frmEtq.submit();
+}
+function verificaPeso(){
+   const { value: formValues } = Swal.fire({
+   title: 'Informe o peso do produto',
+   html:
+      '<label for="peso" class="ende">Peso total da embalagem (KG):</label>' +
+      '<input type="number" class="ende" id="peso" name="peso" step="0.01" placeholder="Informe o peso em KG" required>',
+   focusConfirm: false,
+   }).then((result) => {
+      var peso = document.getElementById('peso').value;
+
+      if(result.isConfirmed){
+      //Aqui deve mandar os unicos dados para busca do ativo, sem o array.
+         imprimirAR(peso);
+      }
+   });
 }
 function formatarValor(input) {
    const valorEntrada = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
@@ -288,17 +342,170 @@ function formatarValor(input) {
    });
 }
 function somenteNumeros(e) {
-        var charCode = e.charCode ? e.charCode : e.keyCode;
-        // charCode 8 = backspace   
-        // charCode 9 = tab
-        if (charCode != 8 && charCode != 9) {
-            // charCode 48 equivale a 0   
-            // charCode 57 equivale a 9
-            if (charCode < 48 || charCode > 57) {
-                return false;
+   var charCode = e.charCode ? e.charCode : e.keyCode;
+   // charCode 8 = backspace   
+   // charCode 9 = tab
+   if (charCode != 8 && charCode != 9) {
+      // charCode 48 equivale a 0   
+      // charCode 57 equivale a 9
+      if (charCode < 48 || charCode > 57) {
+            return false;
+      }
+   }
+}
+function geraRomaneio(){
+   
+   Swal.fire({
+      icon: 'question', 
+      title: 'Informe o tipo de envio',
+      input: 'select',
+      inputOptions: {
+         sedex: 'Sedex',
+         pac: 'PAC'
+      },
+      inputPlaceholder: 'Selecione um tipo de envio',
+      showCancelButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showCancelButton: false,
+      inputValidator: (value) => {
+         return new Promise((resolve) => {
+            console.log(value);
+            if (value == '') {
+               resolve('Você deve informar um tipo de envio.')
+            } else {
+               resolve();
+               Swal.fire({
+      title: '<strong>Gerar Romaneio</strong>',
+      html:
+         '<form method="POST" id="gerarRomaneio" action="/templates/components/ajax/geraRomaneio.php"><div id="campos"><div><label for="data_inicial" class="lblRelatorios mr-2">Data Inicial:</label><input type="date" id="data_inicial" name="data_inicial" required></div>'+
+         '<div><label class="lblRelatorios" for="data_final" style="margin-right:20px;" >Data Final:</label><input type="date" id="data_final" name="data_final" required> <br><label class="lblRelatorios" style="margin-right:24px" for="status">Operação: </label><select style="width:180px;" name="operacao" id="operacao">'+
+         '<option value="todas">Todas</option><option value="rma">RMA</option><option value="triagem">Triagem</option><option value="trirma">Triagem/RMA</option><option value="whp">WHP</option></select>'+
+         '<br><span onclick="buscaRomaneio()" class="btn btn-success" style="margin-top:15px;"><i class="fa-solid fa-magnifying-glass" style="margin-right:5px;"></i> Buscar</span></div></div>'+
+         '<table class="table table-stripped"><tbody id="resultadoSelect"></tbody></table><input type="hidden" name="tipoEnvio" id="tipoEnvio"/><input type="hidden" name="usuLogado" id="usuLogado"/></form>',
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText:
+         '<i class="fa fa-thumbs-up"></i> Gerar',
+      confirmButtonAriaLabel: 'Thumbs up, great!',
+      cancelButtonText:
+         '<i class="fa fa-thumbs-down"></i> Cancelar',
+      cancelButtonAriaLabel: 'Thumbs down'
+   }).then((result) => {
+      console.log(buscaRomaneio());
+         if (result.isConfirmed) {
+            const data_inicio = document.getElementById('data_inicial').value;
+            const data_final = document.getElementById('data_final').value;
+            const tipoEnvio = document.getElementById('tipoEnvio').value = value;
+            const usuarioLogado = document.getElementById('usa_id').value;
+            const usuLogado = document.getElementById('usuLogado').value = usuarioLogado;
+
+            if(data_inicio && data_final){
+               // Crie um array para armazenar os valores dos inputs marcados 
+               var valoresMarcados = [];
+               // Use o seletor jQuery para encontrar os inputs marcados dentro das células da tabela
+               $("#resultadoSelect td input:checked").each(function() {
+                  // Obtenha o valor do input marcado e adicione-o ao array
+                  var valor = $(this).val();
+                  valoresMarcados.push(valor);
+               });
+
+               if(valoresMarcados.length > 0){
+                  var form = document.getElementById("gerarRomaneio");
+                  form.submit();
+               } else {
+                  Swal.fire('Oops...', 'Você precisa selecionar no minimo uma opção.', 'warning');
+                  return false;
+               }
+            } else {
+               Swal.fire('Oops...', 'Você precisa informar um periodo entre datas.', 'warning');
+               return false;;
             }
-        }
+         } 
+   });
+            }
+         })
+      }
+
+   });
+   
+}
+
+
+function buscaRomaneio(){
+   const data_inicio = document.getElementById('data_inicial').value;
+   const data_final = document.getElementById('data_final').value;
+   const operacao = document.getElementById('operacao').value;
+   if(data_inicio && data_final) {
+         
+      if(data_inicio > data_final){
+         Swal.fire(
+            'Erro!',
+            'Informe um período de datas válido.',
+            'error'
+         )
+         return false;
+      } else{
+
+            var dados = {
+               data_inicio: data_inicio,
+               data_fim: data_final,
+               operacao: operacao
+            }
+            console.log(dados);
+            //Aqui entra uma chamada ajax que vai buscar os usuários que entram no periodo do romaneio
+            $(document).ready(function () {
+               $.ajax({
+                  url: '/templates/components/ajax/buscaRomanieos.php',
+                  type: 'POST',
+                  data: dados,
+                  dataType: 'json',
+                  success: function (data) {
+                     var campos = document.getElementById("campos");
+                     campos.style.display = "none";
+                     // Limpe o select atual
+                     $('#resultadoSelect').empty();
+                     console.log("Dados:");
+                     console.log(data);
+                     console.log("Fim");
+
+   
+                     var checkboxesDiv = document.getElementById("resultadoSelect");
+                     data.forEach(function (checkbox) {
+                        var tr = document.createElement("tr");
+                        var td = document.createElement("td");
+                        var td1 = document.createElement("td");
+                        
+                        var label = document.createElement("label");
+                        label.innerHTML = checkbox[1].toUpperCase() + ' - ' + checkbox[3];
+
+                        var input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.name = "id[]";
+                        input.value = checkbox;
+                        //label.appendChild(input);
+                        td1.appendChild(input);
+                        td.appendChild(label);
+                        tr.appendChild(td1);
+                        tr.appendChild(td);
+                        checkboxesDiv.appendChild(tr);
+                     });
+                     return data;
+                  },
+                  error: function(err){
+                    Swal.fire(
+                     'Erro!',
+                     'Não foram encontrados registros para o período especificado.',
+                     'error',
+                    );
+                    return false;
+                  },
+               });
+            });
     }
+   }
+}
 </script>
    </form>
    {% endif %}
@@ -306,12 +513,12 @@ function somenteNumeros(e) {
 {% endif %}
 
 
-<form name="asset_form" method="post" action="{{ target }}" {{ formoptions|raw }} enctype="multipart/form-data" data-submit-once>
+<form name="asset_form" method="post" action="{{ target }}" {{ formoptions|raw }} enctype="multipart/form-data" style="display:inline-grid;" data-submit-once>
    <input type="hidden" name="entities_id" value="{{ entity_id }}" />
 
 {% endif %}
-   <div id="mainformtable">
-      {% set template_name = item.fields['template_name']|verbatim_value %}
+      	<div id="mainformtable" style="display:inline-grid;">      
+{% set template_name = item.fields['template_name']|verbatim_value %}
       {% if withtemplate == 2 and not item.isNewItem() %}
          <input type="hidden" name="template_name" value="{{ template_name }}" />
          {% set nametype = __('Created from the template %s')|format(template_name) %}

@@ -61,7 +61,7 @@ if(isset($_SESSION['chamadoCriado']) && $_SESSION['chamadoCriado'] > 0) {
    <script>
          Swal.fire({
          title: "Chamado Criado!",
-         html: "<p>Número do Chamado: #" + <?php echo $numeroChamado;?> + "<br><a href='//glpi108/front/ticket.form.php?id=<?php echo $numeroChamado;?>'>Ir para o Chamado</a></p>",
+         html: "<p>Número do Chamado: #" + <?php echo $numeroChamado;?> + "<br><a href='/front/ticket.form.php?id=<?php echo $numeroChamado;?>'>Ir para o Chamado</a></p>",
          icon: "success"
          });
    </script>

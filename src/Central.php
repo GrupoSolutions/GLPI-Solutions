@@ -510,11 +510,6 @@ class Central extends CommonGLPI
              * This condition is here only to prevent having this message displayed after installation of plugins that
              * may not have yet handle the switch to unsigned keys.
              */
-            if (($signed_keys_col_count = $DB->getSignedKeysColumns(true)->count()) > 0) {
-                $messages['warnings'][] = sprintf(__('%d primary or foreign keys columns are using signed integers.'), $signed_keys_col_count)
-                . ' '
-                . sprintf(__('Run the "%1$s" command to migrate them.'), 'php bin/console migration:unsigned_keys');
-            }
         }
 
         $safe_doc_root_requirement = new SafeDocumentRoot();

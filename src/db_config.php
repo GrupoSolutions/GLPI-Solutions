@@ -1,13 +1,9 @@
 <?php
   $dbhost = 'localhost';
-  $dbuser = 'root';
-  $dbpassword = '';
-  $dbdefault = 'base_104';
+  $dbuser = 'glpi';
+  $dbpassword = '16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@';
+  $dbdefault = 'glpi';
   $dbport = '3306';
-
   $sqlcon = mysqli_connect($dbhost, $dbuser, $dbpassword, $dbdefault, $dbport); 
 
-  if($sqlcon->connect_error){
-    die("Falha na conexão com o banco de dados: " . $sqlcon->connect_error);
-  }
 ?>

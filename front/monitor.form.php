@@ -57,9 +57,7 @@ if (isset($_POST["add"])) {
     $_POST['name'] = mb_strtoupper($nameUpper);
     $_POST['comment'] = mb_strtoupper($commentUpper);
     $_POST['serial'] = mb_strtoupper($serialUpper);
-    print_r($_POST);
-    return false;
-    if ($newID = $monitor->add($_POST)) {
+        if ($newID = $monitor->add($_POST)) {
         Event::log(
             $newID,
             "monitors",

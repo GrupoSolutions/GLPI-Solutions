@@ -49,8 +49,6 @@ $date_fields = [
     'due_date',
     'time_to_own'
 ];
-//Kunai do minato pra eu poder voltar aqui depois
- print_r($_POST['status']);
 foreach ($date_fields as $date_field) {
    //handle not clean dates...
     if (
@@ -82,6 +80,29 @@ if (isset($_POST["add"])) {
     if (!$track::canUpdate()) {
         Html::displayRightError();
     }
+    
+    //print_r($_POST);
+    //Kunai do minato pra eu poder voltar aqui depois
+    $status_id = $_POST['status'];
+    $ticket_id = $_POST['id'];
+    $now =  date("Y-m-d H:i:s");
+
+    require_once("../src/db_config.php");
+
+    //Verifica se o status é igual a fechado ou solucionado e se o enviado 
+    if($status_id = 3){
+        $SQL = "SELECT * FROM tickets_pause WHERE data_final IS NULL AND tickets_id = '{$ticket_id}'";
+        $resultSQL = mysqli_query($sqlcon, $SQL);
+        if($resultSQL) {
+            while($idPause = mysqli_fetch_array($resultSQL)){
+                $updateSQL = "UPDATE tickets_pause SET data_final = '{$now}' WHERE id = '{$idPause['id']}'";
+                $executaUPDT = mysqli_query($sqlcon, $updateSQL);
+             }
+             $sqlInserePausa = "INSERT INTO tickets_pause(tickets_id, data_inicio) VALUES('{$ticket_id}', '{$now}')";
+             $executaPausa = mysqli_query($sqlcon, $sqlInserePausa);
+        } 
+    }
+
     $track->update($_POST);
 
     if (isset($_POST['kb_linked_id'])) {

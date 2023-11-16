@@ -37,7 +37,7 @@ if(isset($_POST)){
         $execSolicitacao = mysqli_query($sqlcon, $atualizaSolicitacao);
         if($execBaixa == 1 && $execSolicitacao == 1){
             $_SESSION['moviAprovada'] = true;
-            header('Location: http://localhost/glpi/marketplace/consumables/front/wizard.form.php?action=consumablevalidation');
+            header('Location: https://ativo.gruposolutions.com.br/marketplace/consumables/front/wizard.form.php?action=consumablevalidation');
             exit();
         }
     }

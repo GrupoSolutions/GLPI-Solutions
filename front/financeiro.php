@@ -81,7 +81,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_computerativooperacaos` ON (`glpi_computers`.`id` = `glpi_plugin_fields_computerativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_computerativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA' " . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
         $resultado_computador = mysqli_query($sqlcon, $query);
         $computador_qtd = mysqli_num_rows($resultado_computador);
@@ -135,7 +135,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_monitorativooperacaos` ON (`glpi_monitors`.`id` = `glpi_plugin_fields_monitorativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_monitorativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA' " . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
         $buscaMonitor = mysqli_query($sqlcon, $query);
         if($buscaMonitor) {
@@ -171,7 +171,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_printerativooperacaos` ON (`glpi_printers`.`id` = `glpi_plugin_fields_printerativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_printerativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA'" . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
         $buscaImpressora = mysqli_query($sqlcon, $query);
         if($buscaImpressora) {
@@ -207,7 +207,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_phoneativooperacaos` ON (`glpi_phones`.`id` = `glpi_plugin_fields_phoneativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_phoneativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA'" . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
        
         $buscaTelefone = mysqli_query($sqlcon, $query);
@@ -245,7 +245,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_peripheralativooperacaos` ON (`glpi_peripherals`.`id` = `glpi_plugin_fields_peripheralativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_peripheralativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA' " . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
         $buscaDispositivos = mysqli_query($sqlcon, $query);
         if($buscaDispositivos) {
@@ -280,7 +280,7 @@ foreach($arrBusca as $tipoBusca){
         LEFT JOIN `glpi_plugin_fields_passivedcequipmentativooperacaos` ON (`glpi_passivedcequipments`.`id` = `glpi_plugin_fields_passivedcequipmentativooperacaos`.`items_id`)
         LEFT JOIN `glpi_plugin_fields_operaofielddropdowns` ON ( `glpi_plugin_fields_passivedcequipmentativooperacaos`.`plugin_fields_operaofielddropdowns_id` = `glpi_plugin_fields_operaofielddropdowns`.`id`)
         WHERE 
-            glpi_infocoms.value != '0' AND glpi_states.name != 'SUCATA'" . $buscarOP;
+            glpi_infocoms.value != '0' " . $buscarOP;
 
         $buscaDispositivosPassivos = mysqli_query($sqlcon, $query);
         if($buscaDispositivosPassivos) {
@@ -293,8 +293,8 @@ foreach($arrBusca as $tipoBusca){
 }
 $arrFinal = array_merge($arrComputador, $arrMonitor, $arrImpressora, $arrTelefones, $arrDispositivos, $arrDispositivosPassivos);
 ?>
-<link rel="stylesheet" href="/glpi/assets/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="/glpi/assets/font-awesome-4.7.0/css/fontawesome.css">
+<link rel="stylesheet" href="../assets/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="../assets/font-awesome-4.7.0/css/fontawesome.css">
 <button class="btn btn-success"><a href="ExportaXLSX.php"><i class="fa-solid fa-file-excel fa-xl" style="color: #116917;"></i>  <span> Exportar(XLSX)</span></a></button><br><br>
 
 <table id="example" class="table" style="width:100%">

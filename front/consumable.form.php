@@ -50,7 +50,7 @@ if (isset($_POST["add_several"])) {
     for ($i = 0; $i < $_POST["to_add"]; $i++) {
         unset($con->fields["id"]);
         $id = $con->add($_POST);
-        $sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
+        require('../src/db_config.php');
 
         $data_nf = $_POST['data_nf'];
         $valor_insumo = $_POST['valor_insumo'];

@@ -3767,7 +3767,7 @@ JAVASCRIPT;
         $tab = [self::INCOMING => _x('status', 'New'),
             self::ASSIGNED => _x('status', 'Em Atendimento'),
             self::PLANNED  => _x('status', 'Aguardando Terceiros'),
-            self::WAITING  => __('Aguardando Resposta'),
+            self::WAITING  => __('Aguardando Usuário'),
             self::SOLVED   => _x('status', 'Solved'),
             self::CLOSED   => _x('status', 'Closed')
         ];
