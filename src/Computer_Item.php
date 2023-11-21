@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -190,6 +190,8 @@ class Computer_Item extends CommonDBRelation
             $computer = new Computer();
             $computer->getFromDB($this->fields['computers_id']);
 
+            $is_mainitem_dynamic = (bool) ($computer->fields['is_dynamic'] ?? false);
+
            //Get device fields
             if ($device = getItemForItemtype($this->fields['itemtype'])) {
                 if ($device->getFromDB($this->fields['items_id'])) {
@@ -226,6 +228,10 @@ class Computer_Item extends CommonDBRelation
                         }
 
                         if (count($updates)) {
+                            //propage is_dynamic value if needed to prevent locked fields
+                            if ((bool) ($device->fields['is_dynamic'] ?? false) && $is_mainitem_dynamic) {
+                                $updates['is_dynamic'] = 1;
+                            }
                             $updates['id'] = $this->fields['items_id'];
                             $device->update($updates);
                         }

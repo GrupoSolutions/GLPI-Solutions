@@ -1,7 +1,7 @@
 <?php require_once(__DIR__ . '\ticketcontroller.php');
  ?>
 <head>
-    <link rel="stylesheet" href="/glpi/assets/css/ticket/ticket.css">
+    <link rel="stylesheet" href="/assets/css/ticket/ticket.css">
 </head>
 <div class="container-fluid ticketFrm">
     <div class="frmChamado">

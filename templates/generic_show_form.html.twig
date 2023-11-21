@@ -196,16 +196,6 @@
                         ) }}
                      {% endif %}
 
-                    {# {% if item.isField('registration_number') %}
-                        {{ fields.autoNameField(
-                           'registration_number',
-                           item,
-                           (item_type starts with 'User' ? _x('user', 'Administrative number') : _x('infocom', 'Administrative number')),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %} #}
-
                      {% if item.isField('phone') %}
                         {{ fields.autoNameField(
                            'phone',
@@ -216,55 +206,6 @@
                         ) }}
                      {% endif %}
 
-                     {% if item.isField('phone2') %}
-                        {{ fields.autoNameField(
-                           'phone2',
-                           item,
-                           __('Phone 2'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('phonenumber') %}
-                        {{ fields.autoNameField(
-                           'phonenumber',
-                           item,
-                           'Phone'|itemtype_name,
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('mobile') %}
-                        {{ fields.autoNameField(
-                           'mobile',
-                           item,
-                           __('Mobile phone'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('fax') %}
-                        {{ fields.autoNameField(
-                           'fax',
-                           item,
-                           __('Fax'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('website') %}
-                        {{ fields.autoNameField(
-                           'website',
-                           item,
-                           __('Website'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
 
                      {% if item.isField('email') %}
                         {{ fields.autoNameField(
@@ -288,7 +229,10 @@
                            item,
                            __('Postal code'),
                            withtemplate,
-                           field_options
+                           field_options|merge({
+                              required:true,
+                              
+                           })
                         ) }}
                         
                      {% endif %}
@@ -299,7 +243,10 @@
                            item,
                            'Cidadezinha',
                            withtemplate,
-                           field_options
+                           field_options|merge({
+                              required:true,
+                              
+                           })
                         ) }}
                      {% endif %}
 
@@ -356,19 +303,7 @@
                            field_options
                         ) }}
                      {% endif %}
-
-                    {# {% if item.isField('users_id_tech') %}
-                        {{ fields.dropdownField(
-                           'User',
-                           'users_id_tech',
-                           item.fields['users_id_tech'],
-                           __('Technician in charge of the hardware'),
-                           field_options|merge({
-                              'entity': item.fields['entities_id'],
-                              'right': 'own_ticket',
-                           })
-                        ) }}
-                     {% endif %} #}     
+   
 
                      {% if item.isField('manufacturers_id') %}
                         {{ fields.dropdownField(
@@ -383,19 +318,7 @@
                         ) }}
                      {% endif %}
 
-                     {#{% if item.isField('groups_id_tech') %}
-                        {{ fields.dropdownField(
-                           'Group',
-                           'groups_id_tech',
-                           item.fields['groups_id_tech'],
-                           __('Group in charge of the hardware'),
-                           field_options|merge({
-                              'entity': item.fields['entities_id'],
-                              'condition': {'is_assign': 1},
-                           })
-                        ) }}
-                     {% endif %}#}
-
+                 
                      {% set model_itemtype = item.getModelClass() %}
                      {% set model_fk = item.getModelForeignKeyField() %}
                      {% if item.isField(model_fk) %}
@@ -410,16 +333,6 @@
                         ) }}
                      {% endif %}
 
-                     {#{% if item_type != 'SoftwareLicense' and item.isField('contact_num') %}
-                        TODO Drop unused 'contact_num' field in Software License schema? 
-                        {{ fields.textField(
-                           'contact_num',
-                           item.fields['contact_num'],
-                           __('Alternate username number'),
-                           field_options
-                        ) }}
-                     {% endif %} #}
-
                      {% if item.isField('serial') %}
                         {{ fields.textField(
                            'serial',
@@ -431,27 +344,6 @@
                         ) }}
                      {% endif %}
 
-                     {#{% if item_type != 'SoftwareLicense' and item.isField('contact') %}
-                        {# TODO Drop unused 'contact' field in Software License schema?
-                        {{ fields.textField(
-                           'contact',
-                           item.fields['contact'],
-                           __('Alternate username'),
-                           field_options
-                        ) }}
-                     {% endif %}#}
-
-                     {#{% if item.isField('otherserial') %}
-                        {{ fields.autoNameField(
-                           'otherserial',
-                           item,
-                           __('Inventory number'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}#}
-
-                   
 
                      {% if item.isField('users_id') %}
                         {{ fields.dropdownField(
@@ -480,48 +372,7 @@
                         ) }}
                      {% endif %}
 
-                     {#{% if item.isField('networks_id') %}
-                        {{ fields.dropdownField(
-                           'Network',
-                           'networks_id',
-                           item.fields['networks_id'],
-                           _n('Network', 'Networks', 1),
-                           field_options
-                        ) }}
-                     {% endif %}#}
-
-                     {#{% if item.isField('groups_id') %}
-                        {{ fields.dropdownField(
-                           'Group',
-                           'groups_id',
-                           item.fields['groups_id'],
-                           'Group'|itemtype_name,
-                           field_options|merge({
-                              'entity': item.fields['entities_id'],
-                              'condition': {'is_itemgroup': 1},
-                           })
-                        ) }}
-                     {% endif %}#}
-
-                     {#{% if item.isField('uuid') %}
-                        {{ fields.textField(
-                           'uuid',
-                           item.fields['uuid'],
-                           __('UUID'),
-                           field_options
-                        ) }}
-                     {% endif %}#}
-
-                     {#{% if item.isField('version') %}
-                        {{ fields.autoNameField(
-                           'version',
-                           item,
-                           _n('Version', 'Versions', 1),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}#}
-
+                    
                      {% if item.isField('comment') %}
                         {{ fields.textareaField(
                            'comment',
@@ -568,16 +419,6 @@
                             field_options
                         ) }}
                      {% endif %}
-
-                     {#{% if item.isField('autoupdatesystems_id') %}
-                        {{ fields.dropdownField(
-                           'AutoUpdateSystem',
-                           'autoupdatesystems_id',
-                           item.fields['autoupdatesystems_id'],
-                           'AutoUpdateSystem'|itemtype_name,
-                           field_options
-                        ) }}
-                     {% endif %}#}
 
                      {% if item.isField('pictures') %}
                         {{ fields.fileField('pictures', null, _n('Picture', 'Pictures', get_plural_number()), {

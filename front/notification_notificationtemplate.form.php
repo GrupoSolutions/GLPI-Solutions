@@ -69,9 +69,9 @@ if (isset($_POST["add"])) {
     }
 
     $menus = ["config", "notification", "notifications_notificationtemplates"];
-    // Notification_NotificationTemplate::displayFullPageForItem(
-    //     $_GET['id'],
-    //     $menus,
-    //     $params
-    // );
+    Notification_NotificationTemplate::displayFullPageForItem(
+        $_GET['id'],
+        $menus,
+        $params
+    );
 }

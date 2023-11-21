@@ -39,7 +39,9 @@ use Html;
 use Toolbox;
 use Session;
 use DBUtils;
+use Document;
 use Dropdown;
+use CommonDBTM;
 use CommonITILActor;
 use CommonITILObject;
 use CommonTreeDropdown;
@@ -56,16 +58,19 @@ use Search;
 use SLA;
 use SLM;
 use OLA;
+use QueryExpression;
 use QuerySubQuery;
-use QueryUnion;
 use GlpiPlugin\Formcreator\Exception\ComparisonException;
 use Glpi\Application\View\TemplateRenderer;
+use Plugin;
+
 class DropdownField extends PluginFormcreatorAbstractField
 {
-
    const ENTITY_RESTRICT_USER = 1;
    const ENTITY_RESTRICT_FORM = 2;
    const ENTITY_RESTRICT_BOTH = 3;
+
+   protected static $noEntityRrestrict = [Entity::class, Document::class];
 
    public function getEnumEntityRestriction() {
       return [
@@ -94,10 +99,14 @@ class DropdownField extends PluginFormcreatorAbstractField
       $this->question->fields['_entity_restrict'] = $decodedValues['entity_restrict'] ?? self::ENTITY_RESTRICT_FORM;
       $this->question->fields['_is_tree'] = '0';
       $this->question->fields['_is_entity_restrict'] = '0';
+      if (isset($this->question->fields['itemtype']) && is_subclass_of($this->question->fields['itemtype'], CommonDBTM::class)) {
+         if (!in_array($this->question->fields['itemtype'], self::$noEntityRrestrict)) {
+            $item = new $this->question->fields['itemtype'];
+            $this->question->fields['_is_entity_restrict'] = $item->isEntityAssign() ? '1' : '0';
+         }
+      }
       if (isset($this->question->fields['itemtype']) && is_subclass_of($this->question->fields['itemtype'], CommonTreeDropdown::class)) {
          $this->question->fields['_is_tree'] = '1';
-         $item = new $this->question->fields['itemtype'];
-         $this->question->fields['_is_entity_restrict'] = $item->isEntityAssign() ? '1' : '0';
       }
       $this->question->fields['default_values'] = Html::entities_deep($this->question->fields['default_values']);
       $this->deserializeValue($this->question->fields['default_values']);
@@ -136,6 +145,10 @@ class DropdownField extends PluginFormcreatorAbstractField
          JSON_OBJECT_AS_ARRAY
       );
 
+      if (in_array($itemtype, self::$noEntityRrestrict)) {
+         unset($dparams['entity']);
+      }
+
       switch ($itemtype) {
          case SLA::class:
          case OLA::class:
@@ -145,16 +158,11 @@ class DropdownField extends PluginFormcreatorAbstractField
             }
             break;
 
-         case Entity::class:
-         case Document::class:
-            unset($dparams['entity']);
-            break;
-
          case User::class:
             $dparams['right'] = 'all';
             $currentEntity = Session::getActiveEntity();
             $ancestorEntities = getAncestorsOf(Entity::getTable(), $currentEntity);
-            $decodedValues['entity_restrict'] = $decodedValues['entity_restrict'] ?? 2;
+            $decodedValues['entity_restrict'] = $decodedValues['entity_restrict'] ?? self::ENTITY_RESTRICT_FORM;
             switch ($decodedValues['entity_restrict']) {
                case self::ENTITY_RESTRICT_FORM:
                   $currentEntity = $form->fields['entities_id'];
@@ -222,9 +230,11 @@ class DropdownField extends PluginFormcreatorAbstractField
             $currentUser = Session::getLoginUserID();
             if (!Session::haveRight(Ticket::$rightname, Ticket::READMY) && !Session::haveRight(Ticket::$rightname, Ticket::READGROUP)) {
                // No right to view any ticket, then force the dropdown to be empty
-               $dparams_cond_crit['OR'] = new \QueryExpression('0=1');
+               $dparams_cond_crit['OR'] = new QueryExpression('0=1');
                break;
             }
+            $tickets_filter = ['users_id_recipient' => $currentUser];
+
             if (Session::haveRight(Ticket::$rightname, Ticket::READMY)) {
                $requestersObserversQuery = new QuerySubQuery([
                   'SELECT' => 'tickets_id',
@@ -234,31 +244,23 @@ class DropdownField extends PluginFormcreatorAbstractField
                      'type' => [CommonITILActor::REQUESTER, CommonITILActor::OBSERVER]
                   ],
                ]);
-               $dparams_cond_crit['OR'] = [
+               $tickets_filter[] = [
                   'id' => $requestersObserversQuery,
-                  'users_id_recipient' => $currentUser,
                ];
             }
-            if (Session::haveRight(Ticket::$rightname, Ticket::READGROUP)) {
+
+            if (Session::haveRight(Ticket::$rightname, Ticket::READGROUP) && count($_SESSION['glpigroups']) > '0') {
                $requestersObserversGroupsQuery = new QuerySubQuery([
                   'SELECT' => 'tickets_id',
                   'FROM' => Group_Ticket::getTable(),
                   'WHERE' => [
+                     'type' => [CommonITILActor::REQUESTER, CommonITILActor::OBSERVER],
                      'groups_id' => $_SESSION['glpigroups'],
-                     'type' => [CommonITILActor::REQUESTER, CommonITILActor::OBSERVER]
                   ],
                ]);
-               if (!isset($dparams_cond_crit['OR']['id'])) {
-                  $dparams_cond_crit['OR'] = [
-                     'id' => $requestersObserversGroupsQuery,
-                  ];
-               } else {
-                  $dparams_cond_crit['OR']['id'] = new QueryUnion([
-                     $dparams_cond_crit['OR']['id'],
-                     $requestersObserversGroupsQuery,
-                  ]);
-               }
+               $tickets_filter[] = ['id' => $requestersObserversGroupsQuery];
             }
+            $dparams_cond_crit['OR'] = $tickets_filter;
             break;
 
          default:
@@ -304,14 +306,15 @@ class DropdownField extends PluginFormcreatorAbstractField
       // Set specific root if defined (CommonTreeDropdown)
       $baseLevel = 0;
       if (isset($decodedValues['show_tree_root'])
-         && (int) $decodedValues['show_tree_root'] > 0
+         && ((int) $decodedValues['show_tree_root'] > 0
+           || $itemtype == Entity::class && (int) $decodedValues['show_tree_root'] > -1)
       ) {
          $sons = (new DBUtils)->getSonsOf(
             $itemtype::getTable(),
             $decodedValues['show_tree_root']
          );
          $decodedValues['selectable_tree_root'] = $decodedValues['selectable_tree_root'] ?? '1';
-         if (!isset($decodedValues['selectable_tree_root']) || $decodedValues['selectable_tree_root'] == '0') {
+         if ($decodedValues['selectable_tree_root'] == '0') {
             unset($sons[$decodedValues['show_tree_root']]);
          }
 
@@ -328,7 +331,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       if (isset($decodedValues['show_tree_depth'])
          && $decodedValues['show_tree_depth'] > 0
       ) {
-         $dparams_cond_crit['level'] = ['<=', $decodedValues['show_tree_depth'] + $baseLevel];
+         $dparams_cond_crit[$itemtype::getTableField('level')] = ['<=', $decodedValues['show_tree_depth'] + $baseLevel];
       }
 
       $dparams['condition'] = $dparams_cond_crit;
@@ -337,20 +340,11 @@ class DropdownField extends PluginFormcreatorAbstractField
       if ($itemtype != Entity::class) {
          $dparams['display_emptychoice'] = ($this->question->fields['show_empty'] !== '0');
       } else {
-         if ($this->question->fields['show_empty'] !== '0') {
+         if ($this->question->fields['show_empty'] != '0') {
             $dparams['toadd'] = [
                -1 => Dropdown::EMPTY_VALUE,
             ];
          }
-      }
-
-      $emptyItem = new $itemtype();
-      $emptyItem->getEmpty();
-      if (isset($emptyItem->fields['serial'])) {
-         $dparams['displaywith'][] = 'serial';
-      }
-      if (isset($emptyItem->fields['otherserial'])) {
-         $dparams['displaywith'][] = 'otherserial';
       }
 
       return $dparams;
@@ -362,11 +356,21 @@ class DropdownField extends PluginFormcreatorAbstractField
          $item = new $itemtype();
          $value = '';
          if ($item->getFromDB($this->value)) {
-            $column = 'name';
+            $value = $item->fields['name'];
             if ($item instanceof CommonTreeDropdown) {
-               $column = 'completename';
+               $value = $item->fields['completename'];
+            } else {
+               /** @var CommonDBTM $item */
+               switch ($item->getType()) {
+                  case User::class:
+                     $value = (new DbUtils())->getUserName($item->getID());
+                     break;
+                  case Document::class:
+                     /** @var Document $item */
+                     $value = $item->getDownloadLink($this->form_answer);
+                     break;
+               }
             }
-            $value = $item->fields[$column];
          }
 
          return $value;
@@ -415,7 +419,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       $DbUtil = new DbUtils();
       $itemtype = $this->getSubItemtype();
       if ($itemtype == User::class) {
-         $value = $DbUtil->getUserName($this->value);
+         $value = $DbUtil->getUserName($this->value, 0, true);
       } else {
          $value = Dropdown::getDropdownName($DbUtil->getTableForItemType($itemtype), $this->value);
       }
@@ -426,7 +430,12 @@ class DropdownField extends PluginFormcreatorAbstractField
    }
 
    public function getDocumentsForTarget(): array {
-      return [];
+      $itemtype = $this->getSubItemtype();
+      if ($itemtype !== Document::class) {
+         return [];
+      }
+
+      return [$this->value]; // Array of a single document ID
    }
 
    public static function getName(): string {
@@ -439,7 +448,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       $dropdown = new $itemtype();
       if ($this->isRequired() && $dropdown->isNewId($this->value)) {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );
@@ -461,7 +470,7 @@ class DropdownField extends PluginFormcreatorAbstractField
 
       if (!$isValid) {
          Session::addMessageAfterRedirect(
-            __('Invalid value for ', 'formcreator') . ' ' . $this->getLabel(),
+            __('Invalid value for ', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );
@@ -593,7 +602,7 @@ class DropdownField extends PluginFormcreatorAbstractField
    }
 
    public function equals($value): bool {
-      $value = html_entity_decode($value);
+      $value = html_entity_decode($value ?? '');
       $itemtype = $this->question->fields['itemtype'];
       $dropdown = new $itemtype();
       if ($dropdown->isNewId($this->value)) {
@@ -615,7 +624,7 @@ class DropdownField extends PluginFormcreatorAbstractField
    }
 
    public function greaterThan($value): bool {
-      $value = html_entity_decode($value);
+      $value = html_entity_decode($value ?? '');
       $itemtype = $this->question->fields['itemtype'];
       $dropdown = new $itemtype();
       if (!$dropdown->getFromDB($this->value)) {
@@ -634,7 +643,7 @@ class DropdownField extends PluginFormcreatorAbstractField
    }
 
    public function regex($value): bool {
-      $value = html_entity_decode($value);
+      $value = html_entity_decode($value ?? '');
       $itemtype = $this->question->fields['itemtype'];
       $dropdown = new $itemtype();
       if (!$dropdown->getFromDB($this->value)) {
@@ -709,27 +718,23 @@ class DropdownField extends PluginFormcreatorAbstractField
       // $questionID = $question->fields['id'];
       $questionID = $this->getQuestion()->getID();
 
-      // We need english locale to search searchOptions by name
-      $oldLocale = $TRANSLATE->getLocale();
-      $TRANSLATE->setLocale("en_GB");
-
       // Load target item from DB
-      // $itemtype = $question->getField('values');
       $itemtype = $this->question->fields['itemtype'];
-
-      // Itemtype is stored in plaintext for GlpiselectField and in
-      // json for DropdownField
-      $json = json_decode($itemtype);
-
-      if ($json) {
-         $itemtype = $json->itemtype;
-      }
 
       // Safe check
       if (empty($itemtype) || !class_exists($itemtype)) {
          return $content;
       }
 
+      // We need english locale to search searchOptions by name
+      $oldLocale = $TRANSLATE->getLocale();
+      $TRANSLATE->setLocale("en_GB");
+      $_SESSION['glpilanguage'] = "en_GB";
+      if ($plug = isPluginItemType($itemtype)) {
+         Plugin::loadLang(strtolower($plug['plugin']), "en_GB");
+      }
+
+      /** @var CommonDBTM $item  */
       $item = new $itemtype;
       $item->getFromDB($answer);
 
@@ -744,6 +749,12 @@ class DropdownField extends PluginFormcreatorAbstractField
          // Convert Property_Name to Property Name
          $property = str_replace("_", " ", $property);
          $searchOption = $item->getSearchOptionByField("name", $property);
+         if (count($searchOption) == 0) {
+            trigger_error("No search option found for $property", E_USER_WARNING);
+            $TRANSLATE->setLocale($oldLocale);
+            $_SESSION['glpilanguage'] = $oldLocale;
+            return $content;
+         }
 
          // Execute search
          $data = Search::prepareDatasForSearch(get_class($item), [
@@ -785,6 +796,11 @@ class DropdownField extends PluginFormcreatorAbstractField
       }
       // Put the old locales on succes or if an expection was thrown
       $TRANSLATE->setLocale($oldLocale);
+      $_SESSION['glpilanguage'] = $oldLocale;
+      if ($plug = isPluginItemType($itemtype)) {
+         Plugin::loadLang(strtolower($plug['plugin']), $oldLocale);
+      }
+
       return $content;
    }
 
@@ -848,7 +864,7 @@ class DropdownField extends PluginFormcreatorAbstractField
       switch ($restrictionPolicy) {
          case self::ENTITY_RESTRICT_FORM:
             $form = PluginFormcreatorForm::getByItem($this->getQuestion());
-            $formEntities = [$form->fields['entities_id']];
+            $formEntities = [$form->fields['entities_id'] => $form->fields['entities_id']];
             if ($form->fields['is_recursive']) {
                $formEntities = $formEntities + (new DBUtils())->getSonsof(Entity::getTable(), $form->fields['entities_id']);
             }
@@ -857,7 +873,7 @@ class DropdownField extends PluginFormcreatorAbstractField
 
          case self::ENTITY_RESTRICT_BOTH:
             $form = PluginFormcreatorForm::getByItem($this->getQuestion());
-            $formEntities = [$form->fields['entities_id']];
+            $formEntities = [$form->fields['entities_id'] => $form->fields['entities_id']];
             if ($form->fields['is_recursive']) {
                $formEntities = $formEntities + (new DBUtils())->getSonsof(Entity::getTable(), $form->fields['entities_id']);
             }

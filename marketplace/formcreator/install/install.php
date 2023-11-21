@@ -79,6 +79,10 @@ class PluginFormcreatorInstall {
       '2.12.5' => '2.13',
       '2.13'   => '2.13.1',
       '2.13.1' => '2.13.3',
+      '2.13.3' => '2.13.4',
+      '2.13.4' => '2.13.5',
+      '2.13.5' => '2.13.6',
+      '2.13.6' => '2.13.7',
    ];
 
    protected bool $resyncIssues = false;
@@ -140,8 +144,15 @@ class PluginFormcreatorInstall {
          }
       }
 
-      // Check schema of tables before upgrading
+      $this->migration = $migration;
       $oldVersion = Config::getConfigurationValue('formcreator', 'previous_version');
+      // Force fix of signed columns to reduce upgrade errors frequency
+      // This assumes that all modified columns exist in the database
+      if (version_compare($oldVersion, '2.13.0') >= 0) {
+         $this->migrateFkToUnsignedInt();
+      }
+
+      // Check schema of tables before upgrading
       if (!isset($args['skip-db-check'])) {
          if ($oldVersion !== null) {
             $checkResult = true;
@@ -156,27 +167,26 @@ class PluginFormcreatorInstall {
                   false
                );
             }
-            if (!$checkResult) {
-               $message = sprintf(
-                  __('The database schema is not consistent with the installed Formcreator %s. To see the logs run the command %s', 'formcreator'),
-                  $oldVersion,
-                  'bin/console glpi:plugin:install formcreator -f'
-               );
-               if (!isCommandLine()) {
-                  Session::addMessageAfterRedirect($message, false, ERROR);
-               } else {
-                  echo $message . PHP_EOL;
-                  echo sprintf(
-                     __('To ignore the inconsistencies and upgrade anyway run %s', 'formcreator'),
-                     'bin/console glpi:plugin:install formcreator -f -p skip-db-check'
-                  ) . PHP_EOL;
-               }
-               return false;
-            }
+            // if (!$checkResult) {
+            //    $message = sprintf(
+            //       __('The database schema is not consistent with the previous version of Formcreator %s. To see the logs run the command %s', 'formcreator'),
+            //       $oldVersion,
+            //       'bin/console glpi:plugin:install formcreator -f'
+            //    );
+            //    if (!isCommandLine()) {
+            //       Session::addMessageAfterRedirect($message, false, ERROR);
+            //    } else {
+            //       echo $message . PHP_EOL;
+            //       echo sprintf(
+            //          __('To ignore the inconsistencies and upgrade anyway run %s', 'formcreator'),
+            //          'bin/console glpi:plugin:install formcreator -f -p skip-db-check'
+            //       ) . PHP_EOL;
+            //    }
+            //    return false;
+            // }
          }
       }
 
-      $this->migration = $migration;
       if (isset($args['force-upgrade']) && $args['force-upgrade'] === true) {
          // Might return false
          $fromSchemaVersion = array_search(PLUGIN_FORMCREATOR_SCHEMA_VERSION, $this->upgradeSteps);
@@ -237,7 +247,7 @@ class PluginFormcreatorInstall {
       );
       if (!$checkResult) {
          $message = sprintf(
-            __('The database schema is not consistent with the installed Formcreator %s. To see the logs enable the plugin and run the command %s', 'formcreator'),
+            __('The database schema is not consistent with the current version of Formcreator %s. To see the logs enable the plugin and run the command %s', 'formcreator'),
             PLUGIN_FORMCREATOR_VERSION,
             'bin/console glpi:database:check_schema_integrity -p formcreator'
          );
@@ -700,7 +710,7 @@ class PluginFormcreatorInstall {
          ],
       ]]);
 
-      $this->adRightsToMiniDashboard($dashboard->fields['id']);
+      $this->addRightsToMiniDashboard($dashboard->fields['id']);
    }
 
    protected function createMiniDashboardBigNumbers() {
@@ -771,10 +781,10 @@ class PluginFormcreatorInstall {
          $x += ($w + $s);
       }
 
-      $this->adRightsToMiniDashboard($dashboard->fields['id']);
+      $this->addRightsToMiniDashboard($dashboard->fields['id']);
    }
 
-   protected function adRightsToMiniDashboard(int $dashboardId) {
+   protected function addRightsToMiniDashboard(int $dashboardId) {
       // Give rights to all self service profiles
       $profile = new Profile();
       $helpdeskProfiles = $profile->find([
@@ -870,5 +880,152 @@ class PluginFormcreatorInstall {
       }
 
       return true;
+   }
+
+   /**
+    * Upgrade columns containing foreign keys to unsigned int
+    * picked from upgrade to 2.13.0, duplicated here to reduce upgrade errors
+    * when checking the DB schema.
+    *
+    * @return void
+    */
+   protected function migrateFkToUnsignedInt() {
+      global $DB;
+
+      $table = 'glpi_plugin_formcreator_formanswers';
+      if ($DB->fieldExists($table, 'requester_id')) {
+         $DB->queryOrDie("UPDATE `$table` SET `requester_id` = 0 WHERE `requester_id` IS NULL");
+      }
+
+      $table = 'glpi_plugin_formcreator_targetchanges';
+      if ($DB->fieldExists($table, 'due_date_question')) {
+         $DB->queryOrDie("UPDATE `$table` SET `due_date_question` = 0 WHERE `due_date_question` IS NULL");
+      }
+      if ($DB->fieldExists($table, 'destination_entity_value')) {
+         $DB->queryOrDie("UPDATE `$table` SET `destination_entity_value` = 0 WHERE `destination_entity_value` IS NULL");
+      }
+      $table = 'glpi_plugin_formcreator_targettickets';
+      if ($DB->fieldExists($table, 'due_date_question')) {
+         $DB->queryOrDie("UPDATE `$table` SET `due_date_question` = 0 WHERE `due_date_question` IS NULL");
+      }
+      if ($DB->fieldExists($table, 'destination_entity_value')) {
+         $DB->queryOrDie("UPDATE `$table` SET `destination_entity_value` = 0 WHERE `destination_entity_value` IS NULL");
+      }
+      $table = 'glpi_plugin_formcreator_targets_actors';
+      if ($DB->fieldExists($table, 'actor_value')) {
+         $DB->queryOrDie("UPDATE `$table` SET `actor_value` = 0 WHERE `actor_value` IS NULL");
+      }
+
+      $tables = [
+         'glpi_plugin_formcreator_answers' => [
+            'plugin_formcreator_formanswers_id',
+            'plugin_formcreator_questions_id',
+         ],
+         'glpi_plugin_formcreator_formanswers' => [
+            'plugin_formcreator_forms_id',
+            'requester_id',
+            'users_id_validator',
+            'groups_id_validator',
+         ],
+         'glpi_plugin_formcreator_forms_languages' => [
+            'plugin_formcreator_forms_id',
+         ],
+         'glpi_plugin_formcreator_forms_profiles' => [
+            'plugin_formcreator_forms_id',
+            'profiles_id',
+         ],
+         'glpi_plugin_formcreator_forms_validators' => [
+            'plugin_formcreator_forms_id',
+            'items_id',
+         ],
+         'glpi_plugin_formcreator_issues' => [
+            'users_id_recipient',
+            'plugin_formcreator_categories_id',
+         ],
+         'glpi_plugin_formcreator_questions' => [
+            'plugin_formcreator_sections_id',
+         ],
+         'glpi_plugin_formcreator_questiondependencies' => [
+            'plugin_formcreator_questions_id',
+            'plugin_formcreator_questions_id_2',
+         ],
+         'glpi_plugin_formcreator_sections' => [
+            'plugin_formcreator_forms_id',
+         ],
+         'glpi_plugin_formcreator_targetchanges' => [
+            'due_date_question',
+            'urgency_question',
+            'destination_entity_value',
+            'category_question',
+            'sla_question_tto',
+            'sla_question_ttr',
+            'ola_question_tto',
+            'ola_question_ttr',
+         ],
+         'glpi_plugin_formcreator_targettickets' => [
+            'type_question',
+            'due_date_question',
+            'urgency_question',
+            'destination_entity_value',
+            'category_question',
+            'associate_question',
+            'location_question',
+            'sla_question_tto',
+            'sla_question_ttr',
+            'ola_question_tto',
+            'ola_question_ttr',
+         ],
+         'glpi_plugin_formcreator_targets_actors' => [
+            'items_id',
+            'actor_value',
+         ],
+         'glpi_plugin_formcreator_questionregexes' => [
+            'plugin_formcreator_questions_id',
+         ],
+         'glpi_plugin_formcreator_questionranges' => [
+            'plugin_formcreator_questions_id',
+         ],
+      ];
+
+      foreach ($tables as $table => $fields) {
+         if (!$DB->tableExists($table)) {
+            continue;
+         }
+         foreach ($fields as $field) {
+            $type = 'INT ' . DBConnection::getDefaultPrimaryKeySignOption() . ' NOT NULL';
+            if ($field == 'id') {
+               $type .= '  AUTO_INCREMENT';
+            } else {
+               $type .= ' DEFAULT 0';
+            }
+            if (!$DB->fieldExists($table, $field)) {
+               continue;
+            }
+            $this->migration->changeField($table, $field, $field, $type);
+         }
+      }
+
+      $table = 'glpi_plugin_formcreator_entityconfigs';
+      if ($DB->tableExists($table)) {
+         $rows = $DB->request([
+            'COUNT' => 'c',
+            'FROM' => $table,
+            'WHERE' => ['id' => 0]
+         ]);
+         $count = $rows !== null ?$rows->current()['c'] : null;
+         if ($count !== null) {
+            if ($count == 1) {
+               $rows = $DB->request([
+                  'SELECT' => ['MAX' => 'id AS max_id'],
+                  'FROM' => $table,
+               ]);
+               $newId = (int) ($rows->current()['max_id'] + 1);
+               $DB->query("UPDATE `$table` SET `id`='$newId' WHERE `id` = 0");
+            }
+         }
+         $this->migration->changeField($table, 'id', 'id', 'int ' . DBConnection::getDefaultPrimaryKeySignOption() . ' not null auto_increment');
+      }
+
+      $this->migration->executeMigration();
    }
 }

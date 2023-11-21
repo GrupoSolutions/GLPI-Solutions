@@ -5,33 +5,34 @@
 # 
 # Translators:
 # Daniel Bonet <canosis@gmail.com>, 2021
-# Nuria Costa <nuria.costa@uvic.cat>, 2022
+# Nuria Costa <nuria.costa@uvic.cat>, 2023
+# Thierry Bugier <tbugier@teclib.com>, 2023
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 14:38+0200\n"
+"POT-Creation-Date: 2023-11-13 14:56+0100\n"
 "PO-Revision-Date: 2021-08-30 07:22+0000\n"
-"Last-Translator: Nuria Costa <nuria.costa@uvic.cat>, 2022\n"
-"Language-Team: Catalan (Spain) (https://www.transifex.com/teclib/teams/28042/ca_ES/)\n"
+"Last-Translator: Thierry Bugier <tbugier@teclib.com>, 2023\n"
+"Language-Team: Catalan (Spain) (https://app.transifex.com/teclib/teams/28042/ca_ES/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ca_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ajax/question_update.php:36 ajax/section_update.php:37
+#: ajax/question_update.php:38 ajax/section_update.php:37
 msgid "Bad request"
 msgstr "Mala petició"
 
-#: ajax/question_update.php:45 ajax/question_move.php:45
+#: ajax/question_update.php:47 ajax/question_move.php:45
 #: ajax/question_delete.php:42 ajax/question_toggle_required.php:49
 msgid "Question not found"
 msgstr "Pregunta no trobada"
 
-#: ajax/question_update.php:51 ajax/question_duplicate.php:49
+#: ajax/question_update.php:53 ajax/question_duplicate.php:49
 #: ajax/question_move.php:50 ajax/section_add.php:38
 #: ajax/section_delete.php:50 ajax/section_move.php:55
 #: ajax/section_duplicate.php:50 ajax/question_delete.php:49
@@ -51,7 +52,7 @@ msgstr "No s'han pogut moure algunes preguntes"
 msgid "Could not add the section"
 msgstr "No s'ha pogut afegir a la secció"
 
-#: ajax/commontree.php:55 entrée standard:109 standard:92
+#: ajax/commontree.php:55 entrée standard:128 standard:100
 msgid "Subtree root"
 msgstr "Subtree root"
 
@@ -59,7 +60,7 @@ msgstr "Subtree root"
 msgid "Selectable"
 msgstr "Seleccionable"
 
-#: ajax/commontree.php:74 entrée standard:118 standard:101
+#: ajax/commontree.php:74 entrée standard:137 standard:109
 msgid "Limit subtree depth"
 msgstr "Límit de profunditat del subtree"
 
@@ -67,9 +68,8 @@ msgstr "Límit de profunditat del subtree"
 msgid "No limit"
 msgstr "Sense límit"
 
-#: ajax/homepage_link.php:36 inc/formlist.class.php:46
-#: inc/entityconfig.class.php:82 inc/form.class.php:111 inc/form.class.php:569
-#: inc/form.class.php:1951
+#: ajax/homepage_link.php:36 inc/formlist.class.php:46 inc/form.class.php:111
+#: entrée standard:47
 msgid "Form"
 msgid_plural "Forms"
 msgstr[0] "Formulari"
@@ -108,13 +108,14 @@ msgstr "No s'ha pogut duplicar la secció"
 msgid "Could not update the section"
 msgstr "No s'ha pogut actualitzar la secció"
 
-#: front/knowbaseitem.php:41 front/knowbaseitem.php:43 front/wizard.php:44
-#: front/wizard.php:46 front/wizardfeeds.php:49 front/wizardfeeds.php:51
-#: front/issue.php:43 front/issue.php:46 front/formanswer.php:44
-#: front/reservation.php:46 front/reservation.php:48
+#: front/knowbaseitem.php:42 front/knowbaseitem.php:47
+#: front/wizardreminders.php:49 front/wizardreminders.php:51
+#: front/wizard.php:45 front/wizard.php:50 front/wizardfeeds.php:49
+#: front/wizardfeeds.php:51 front/issue.php:44 front/issue.php:50
+#: front/formanswer.php:46 front/reservation.php:46 front/reservation.php:48
 #: front/knowbaseitem.form.php:48 front/knowbaseitem.form.php:50
 #: front/reservationitem.php:42 front/reservationitem.php:44
-#: front/formanswer.form.php:75 front/reservation.form.php:46
+#: front/formanswer.form.php:74 front/reservation.form.php:46
 #: front/reservation.form.php:48
 msgid "Service catalog"
 msgstr "Catàleg de serveis"
@@ -134,9 +135,8 @@ msgid "Bad request while deleting an actor."
 msgstr "Sol·licitud incorrecta eliminant un actor."
 
 #: front/targetticket.form.php:95 front/targetchange.form.php:81
-#: front/formanswer.php:47 front/targetproblem.form.php:81
-#: front/formanswer.form.php:78 front/form.php:44 inc/common.class.php:689
-#: inc/common.class.php:696
+#: front/formanswer.php:49 front/targetproblem.form.php:81 front/form.php:44
+#: inc/common.class.php:692 inc/common.class.php:699
 msgid "Form Creator"
 msgstr "Creador de formularis"
 
@@ -146,12 +146,12 @@ msgstr "Creador de formularis"
 msgid "%1$s = %2$s"
 msgstr "%1$s = %2$s"
 
-#: front/formlist.php:45 front/formlist.php:48 inc/common.class.php:686
+#: front/formlist.php:46 front/formlist.php:52 inc/common.class.php:686
 msgid "Form list"
 msgstr "Llista de formularis"
 
-#: front/formdisplay.php:90 inc/formanswer.class.php:889
-#: inc/formanswer.class.php:1120 inc/formanswer.class.php:1170
+#: front/formdisplay.php:90 inc/formanswer.class.php:1015
+#: inc/formanswer.class.php:1248 inc/formanswer.class.php:1298
 msgid "The form has been successfully saved!"
 msgstr "S'ha guardat el formulari correctament!"
 
@@ -166,13 +166,13 @@ msgstr "%1$s purga la reserva de l'element %2$s"
 msgid "%1$s adds the reservation %2$s for item %3$s"
 msgstr "%1$s afegeix la reserva %2$s per a l'element %3$s"
 
-#: inc/knowbase.class.php:60 inc/form.class.php:646
+#: inc/knowbase.class.php:60 inc/form.class.php:658
 msgid "Category"
 msgid_plural "Categories"
 msgstr[0] "Categoria"
 msgstr[1] "Categories"
 
-#: inc/knowbase.class.php:62 inc/form.class.php:649
+#: inc/knowbase.class.php:62 inc/form.class.php:661 entrée standard:39
 msgid "See all"
 msgstr "Veure-ho tot"
 
@@ -180,11 +180,11 @@ msgstr "Veure-ho tot"
 msgid "Please, describe your need here"
 msgstr "Si us plau, descriu què necessites aquí"
 
-#: inc/field/textareafield.class.php:183
+#: inc/field/textareafield.class.php:176
 msgid "Textarea"
 msgstr "Textarea"
 
-#: inc/field/textareafield.class.php:242 inc/field/dropdownfield.class.php:440
+#: inc/field/textareafield.class.php:239 inc/field/dropdownfield.class.php:451
 #: inc/field/ldapselectfield.class.php:114 inc/field/textfield.class.php:125
 #: inc/field/urgencyfield.class.php:165 inc/field/tagfield.class.php:163
 #: inc/field/timefield.class.php:113 inc/field/fieldsfield.class.php:488
@@ -192,41 +192,41 @@ msgstr "Textarea"
 msgid "A required field is empty:"
 msgstr "Un camp obligatori està buit:"
 
-#: inc/field/textareafield.class.php:260 inc/field/textfield.class.php:178
-#: inc/field/integerfield.class.php:112 inc/field/floatfield.class.php:193
+#: inc/field/textareafield.class.php:257 inc/field/textfield.class.php:178
+#: inc/field/integerfield.class.php:82 inc/field/floatfield.class.php:197
 #: inc/conditionnabletrait.class.php:70
 msgid "The regular expression is invalid"
 msgstr "Expressió regular no vàlida"
 
-#: inc/field/dropdownfield.class.php:73 inc/filter/entityfilter.class.php:48
+#: inc/field/dropdownfield.class.php:79 inc/filter/entityfilter.class.php:48
 msgid "User and form"
 msgstr "Usuari i formulari"
 
-#: inc/field/dropdownfield.class.php:431 entrée standard:38
+#: inc/field/dropdownfield.class.php:442 entrée standard:38
 msgid "Dropdown"
 msgid_plural "Dropdowns"
 msgstr[0] "Desplegable"
 msgstr[1] "Desplegables"
 
-#: inc/field/dropdownfield.class.php:462
+#: inc/field/dropdownfield.class.php:473
 msgid "Invalid value for "
 msgstr "Valor no vàlid per"
 
-#: inc/field/dropdownfield.class.php:474
+#: inc/field/dropdownfield.class.php:485
 #, php-format
 msgid "The itemtype field is required: %s"
 msgstr "El camp \"Tipus d'element\" és obligatori: %s"
 
-#: inc/field/dropdownfield.class.php:490
+#: inc/field/dropdownfield.class.php:501
 #, php-format
 msgid "Invalid dropdown type: %s"
 msgstr "El tipus de desplegable no és vàlid: %s"
 
-#: inc/field/dropdownfield.class.php:821 entrée standard:143 standard:126
+#: inc/field/dropdownfield.class.php:839 entrée standard:162 standard:134
 msgid "Entity restriction"
 msgstr "Restricció d'entitat"
 
-#: inc/field/dropdownfield.class.php:830
+#: inc/field/dropdownfield.class.php:848
 msgid ""
 "To respect the GLPI entity system, \"Form\" should be selected. Others "
 "settings will break the entity restrictions"
@@ -246,8 +246,11 @@ msgstr "Directori LDAP no defnint!"
 msgid "LDAP directory not found!"
 msgstr "Directori LDAP no trobat!"
 
-#: inc/field/textfield.class.php:146 inc/field/integerfield.class.php:71
-#: inc/field/floatfield.class.php:155
+#: inc/field/ldapselectfield.class.php:154
+msgid "LDAP attribute is required!"
+msgstr ""
+
+#: inc/field/textfield.class.php:146 inc/field/floatfield.class.php:156
 #, php-format
 msgid "Specific format does not match: %s"
 msgstr "El format específic no coincideix: %s"
@@ -266,52 +269,53 @@ msgstr "El text és massa llarg (màxim %d caràcters): %s"
 msgid "Text"
 msgstr "Text"
 
-#: inc/field/textfield.class.php:212 inc/field/floatfield.class.php:234
+#: inc/field/textfield.class.php:217 inc/field/floatfield.class.php:238
 #: inc/questionregex.class.php:62 entrée standard:42
 msgid "Regular expression"
 msgstr "Expressió regular"
 
-#: inc/field/textfield.class.php:217 inc/field/floatfield.class.php:239
+#: inc/field/textfield.class.php:222 inc/field/floatfield.class.php:243
 msgid "Range"
 msgstr "Interval"
 
-#: inc/field/textfield.class.php:223 inc/field/floatfield.class.php:245
+#: inc/field/textfield.class.php:228 inc/field/floatfield.class.php:249
 msgid "Additional validation"
 msgstr "Validació addicional"
 
-#: inc/field/radiosfield.class.php:109
+#: inc/field/radiosfield.class.php:108
 msgid "Radios"
 msgstr "Radios"
 
-#: inc/field/radiosfield.class.php:115 inc/field/glpiselectfield.class.php:93
-#: inc/field/fieldsfield.class.php:512 inc/field/checkboxesfield.class.php:229
-msgid "The field value is required:"
-msgstr "El camp Valor és obligatori"
+#: inc/field/radiosfield.class.php:116 inc/field/checkboxesfield.class.php:256
+msgid "The field value is required."
+msgstr ""
 
-#: inc/field/radiosfield.class.php:193 inc/field/selectfield.class.php:104
-#: inc/field/datetimefield.class.php:118 inc/field/actorfield.class.php:257
-#: inc/field/checkboxesfield.class.php:175 inc/field/floatfield.class.php:124
-#: inc/field/datefield.class.php:115
+#: inc/field/radiosfield.class.php:127
+msgid "Only one default value is allowed."
+msgstr ""
+
+#: inc/field/radiosfield.class.php:138
+msgid "The default value is not in the list of available values."
+msgstr ""
+
+#: inc/field/radiosfield.class.php:215 inc/field/selectfield.class.php:105
+#: inc/field/datetimefield.class.php:119 inc/field/actorfield.class.php:257
+#: inc/field/checkboxesfield.class.php:190 inc/field/floatfield.class.php:124
 #, php-format
 msgid "A required field is empty: %s"
 msgstr "Un camp obligatori està buit: %s"
 
-#: inc/field/integerfield.class.php:59
+#: inc/field/radiosfield.class.php:234 inc/field/selectfield.class.php:123
+#, php-format
+msgid "This value %1$s is not allowed: %2$s"
+msgstr ""
+
+#: inc/field/integerfield.class.php:60
 #, php-format
 msgid "This is not an integer: %s"
 msgstr "Això no és un enter: %s"
 
-#: inc/field/integerfield.class.php:85 inc/field/floatfield.class.php:166
-#, php-format
-msgid "The following number must be greater than %d: %s"
-msgstr "El número %s ha de ser més gran que %d"
-
-#: inc/field/integerfield.class.php:91 inc/field/floatfield.class.php:172
-#, php-format
-msgid "The following number must be lower than %d: %s"
-msgstr "El número %s ha de ser més petit que %d"
-
-#: inc/field/integerfield.class.php:101
+#: inc/field/integerfield.class.php:71
 msgid "Integer"
 msgstr "Enter"
 
@@ -325,7 +329,7 @@ msgid_plural "IP addresses"
 msgstr[0] "Adreça IP"
 msgstr[1] "Adreces IP"
 
-#: inc/field/urgencyfield.class.php:85 inc/abstractitiltarget.class.php:994
+#: inc/field/urgencyfield.class.php:85 inc/abstractitiltarget.class.php:1023
 msgid "Urgency"
 msgstr "Urgència"
 
@@ -364,11 +368,15 @@ msgid_plural "Tags"
 msgstr[0] "Etiquetes"
 msgstr[1] "Etiquetes"
 
-#: inc/field/glpiselectfield.class.php:78 entrée standard:38
+#: inc/field/glpiselectfield.class.php:83 entrée standard:38
 msgid "GLPI object"
 msgid_plural "GLPI objects"
 msgstr[0] "Objecte GLPI"
 msgstr[1] "Objectes GLPI"
+
+#: inc/field/glpiselectfield.class.php:100 inc/field/fieldsfield.class.php:512
+msgid "The field value is required:"
+msgstr "El camp Valor és obligatori"
 
 #: inc/field/hostnamefield.class.php:115
 msgid "Hostname"
@@ -391,11 +399,11 @@ msgid_plural "Emails"
 msgstr[0] "Email"
 msgstr[1] "Emails"
 
-#: inc/field/selectfield.class.php:97
+#: inc/field/selectfield.class.php:98
 msgid "Select"
 msgstr "Select"
 
-#: inc/field/datetimefield.class.php:139
+#: inc/field/datetimefield.class.php:140
 msgid "Date & time"
 msgstr "Data i hora"
 
@@ -415,25 +423,25 @@ msgstr "Valor invàlid: %s"
 msgid "User not found or invalid email address: %s"
 msgstr "No s'ha trobat l'usuari o l'adreça electrònica no és corrrecte: %s"
 
-#: inc/field/filefield.class.php:105
+#: inc/field/filefield.class.php:123
 msgid "No attached document"
 msgstr "No hi ha cap document adjunt"
 
-#: inc/field/filefield.class.php:114 inc/field/filefield.class.php:252
-#: inc/field/filefield.class.php:259
+#: inc/field/filefield.class.php:132 inc/field/filefield.class.php:268
+#: inc/field/filefield.class.php:275
 msgid "Attached document"
 msgstr "Document adjunt"
 
-#: inc/field/filefield.class.php:157
+#: inc/field/filefield.class.php:174
 #, php-format
 msgid "A required file is missing: %s"
 msgstr "Falta un fitxer necessari: %s"
 
-#: inc/field/filefield.class.php:174
+#: inc/field/filefield.class.php:191
 msgid "File"
 msgstr "Arxiu"
 
-#: inc/field/multiselectfield.class.php:86
+#: inc/field/multiselectfield.class.php:89
 msgid "Multiselect"
 msgstr "Multiselect"
 
@@ -445,7 +453,7 @@ msgstr "Alerta: el connector de camps addicionals està desactivat o falta"
 msgid "Block"
 msgstr "Bloc"
 
-#: inc/field/fieldsfield.class.php:171 inc/targetticket.class.php:339
+#: inc/field/fieldsfield.class.php:171 inc/targetticket.class.php:341
 msgid "Field"
 msgstr "Camps"
 
@@ -467,32 +475,46 @@ msgid "Some URL fields contains invalid links"
 msgstr "Alguns camps d'URL contenen enllaços no vàlids"
 
 #: inc/field/fieldsfield.class.php:565
-msgid "Additionnal fields"
+msgid "Additional fields"
 msgstr "Camps addicionals"
 
-#: inc/field/checkboxesfield.class.php:117
+#: inc/field/checkboxesfield.class.php:132
 msgid "Checkboxes"
 msgstr "Checkboxes"
 
-#: inc/field/checkboxesfield.class.php:211
+#: inc/field/checkboxesfield.class.php:208
 #, php-format
-msgid "The following question needs at least %d answers"
-msgstr "La següent pregunta necessita un mínim de %d respostes"
+msgid "Empty values are not allowed: %s"
+msgstr ""
 
-#: inc/field/checkboxesfield.class.php:217
+#: inc/field/checkboxesfield.class.php:216
 #, php-format
-msgid "The following question does not accept more than %d answers"
-msgstr "La segünet pregunta no accepta més de %d respostes"
+msgid "This value %1$s is not alowed: %2$s"
+msgstr ""
 
-#: inc/field/checkboxesfield.class.php:289
+#: inc/field/checkboxesfield.class.php:236
+#, php-format
+msgid "The following question needs at least %d answers: %s"
+msgstr ""
+
+#: inc/field/checkboxesfield.class.php:242
+#, php-format
+msgid "The following question does not accept more than %d answers: %s"
+msgstr ""
+
+#: inc/field/checkboxesfield.class.php:270
+msgid "The default values are not in the list of available values."
+msgstr ""
+
+#: inc/field/checkboxesfield.class.php:325
 msgid "Range min"
 msgstr "Interval mínim"
 
-#: inc/field/checkboxesfield.class.php:290
+#: inc/field/checkboxesfield.class.php:326
 msgid "Range max"
 msgstr "Interval màxim"
 
-#: inc/field/requesttypefield.class.php:86 inc/targetticket.class.php:1099
+#: inc/field/requesttypefield.class.php:86 inc/targetticket.class.php:1108
 msgid "Request type"
 msgstr "Tipus de petició"
 
@@ -501,11 +523,21 @@ msgstr "Tipus de petició"
 msgid "This is not a number: %s"
 msgstr "Això no és un número: %s"
 
-#: inc/field/floatfield.class.php:182
+#: inc/field/floatfield.class.php:170
+#, php-format
+msgid "The following number must be greater than %d: %s"
+msgstr "El número %s ha de ser més gran que %d"
+
+#: inc/field/floatfield.class.php:176
+#, php-format
+msgid "The following number must be lower than %d: %s"
+msgstr "El número %s ha de ser més petit que %d"
+
+#: inc/field/floatfield.class.php:186
 msgid "Float"
 msgstr "Float"
 
-#: inc/field/datefield.class.php:136
+#: inc/field/datefield.class.php:66
 msgid "Date"
 msgstr "Data"
 
@@ -554,31 +586,31 @@ msgstr "Ocult llevat que"
 msgid "Displayed unless"
 msgstr "Mostra llevat que"
 
-#: inc/condition.class.php:179 inc/target_actor.class.php:215
-#: inc/form_language.class.php:540 inc/form_validator.class.php:379
-#: inc/targetproblem.class.php:540 inc/questionrange.class.php:196
-#: inc/form.class.php:1844 inc/targetchange.class.php:303
-#: inc/section.class.php:379 inc/restrictedformcriteria.class.php:200
-#: inc/question.class.php:828 inc/questionparameter/range.class.php:202
+#: inc/condition.class.php:173 inc/target_actor.class.php:234
+#: inc/form_language.class.php:568 inc/form_validator.class.php:379
+#: inc/targetproblem.class.php:541 inc/questionrange.class.php:196
+#: inc/form.class.php:1925 inc/targetchange.class.php:304
+#: inc/section.class.php:395 inc/restrictedformcriteria.class.php:200
+#: inc/question.class.php:848 inc/questionparameter/range.class.php:202
 #: inc/questionregex.class.php:185 inc/questiondependency.class.php:196
-#: inc/item_targetticket.class.php:154 inc/targetticket.class.php:1408
+#: inc/item_targetticket.class.php:154 inc/targetticket.class.php:1418
 #, php-format
 msgid "Failed to add or update the %1$s %2$s"
 msgstr "No s'ha pogut afegir o actualitzar %1$s%2$s"
 
-#: inc/condition.class.php:201 inc/target_actor.class.php:236
-#: inc/form_language.class.php:556 inc/form_validator.class.php:403
-#: inc/targetproblem.class.php:375 inc/questionrange.class.php:131
-#: inc/form.class.php:1535 inc/targetchange.class.php:148
-#: inc/section.class.php:404 inc/restrictedformcriteria.class.php:226
-#: inc/question.class.php:877 inc/questionparameter/range.class.php:137
+#: inc/condition.class.php:195 inc/target_actor.class.php:255
+#: inc/form_language.class.php:584 inc/form_validator.class.php:403
+#: inc/targetproblem.class.php:376 inc/questionrange.class.php:131
+#: inc/form.class.php:1611 inc/targetchange.class.php:149
+#: inc/section.class.php:420 inc/restrictedformcriteria.class.php:226
+#: inc/question.class.php:897 inc/questionparameter/range.class.php:137
 #: inc/questionregex.class.php:120 inc/questiondependency.class.php:211
-#: inc/item_targetticket.class.php:64 inc/targetticket.class.php:1447
+#: inc/item_targetticket.class.php:64 inc/targetticket.class.php:1457
 #, php-format
 msgid "Cannot export an empty object: %s"
 msgstr "No es pot exportar un objecte buit: %s"
 
-#: inc/condition.class.php:269
+#: inc/condition.class.php:263
 msgid "Conditions"
 msgstr "Condicions"
 
@@ -601,115 +633,133 @@ msgid "Update issue data from tickets and form answers"
 msgstr ""
 "Problema d'actualització de dades de tiquets i respostes del formulari"
 
-#: inc/issue.class.php:392
+#: inc/issue.class.php:379
 msgid "Satisfaction survey expired"
 msgstr "L'enquesta de satisfacció ha caducat"
 
-#: inc/issue.class.php:521 inc/form_language.class.php:213
-#: inc/form.class.php:156 inc/form.class.php:2148 entrée standard:52
-#: standard:49 standard:57 standard:38 standard:39
+#: inc/issue.class.php:527 inc/form_language.class.php:232
+#: inc/form.class.php:156 inc/form.class.php:2226 entrée standard:52
+#: standard:49 standard:57 standard:38 standard:39 standard:46
 msgid "Name"
 msgstr "Nom"
 
-#: inc/issue.class.php:534 inc/formanswer.class.php:199
-#: inc/formanswer.class.php:273 inc/targetproblem.class.php:623
-#: inc/form.class.php:147 inc/targetchange.class.php:334
+#: inc/issue.class.php:539 inc/formanswer.class.php:241
+#: inc/formanswer.class.php:314 inc/targetproblem.class.php:624
+#: inc/form.class.php:147 inc/targetchange.class.php:335
 #: inc/section.class.php:95 inc/question.class.php:156
-#: inc/targetticket.class.php:178
+#: inc/targetticket.class.php:180 entrée standard:45
 msgid "ID"
 msgstr "ID"
 
-#: inc/issue.class.php:543 inc/form.class.php:503 inc/form.class.php:2157
-#: entrée standard:65
+#: inc/issue.class.php:548 inc/form.class.php:503 inc/form.class.php:2235
+#: entrée standard:111 standard:65
 msgid "Type"
 msgid_plural "Types"
 msgstr[0] "Tipus"
 msgstr[1] "Tipus"
 
-#: inc/issue.class.php:556 inc/formanswer.class.php:260
+#: inc/issue.class.php:561 inc/formanswer.class.php:301
 msgid "Status"
 msgstr "Estat"
 
-#: inc/issue.class.php:568
+#: inc/issue.class.php:573
 msgid "Opening date"
 msgstr "Data d'obertura"
 
-#: inc/issue.class.php:577
+#: inc/issue.class.php:582
 msgid "Last update"
 msgstr "Última actualització"
 
-#: inc/issue.class.php:586 inc/abstracttarget.class.php:518
+#: inc/issue.class.php:591 inc/abstracttarget.class.php:520
 msgid "Entity"
 msgid_plural "Entities"
 msgstr[0] "Entitat"
 msgstr[1] "Entitats"
 
-#: inc/issue.class.php:596 inc/notificationtargetformanswer.class.php:79
-#: inc/target_actor.class.php:83 inc/formanswer.class.php:219
-#: inc/formanswer.class.php:618 inc/abstractitiltarget.class.php:1724
+#: inc/issue.class.php:601 inc/notificationtargetformanswer.class.php:76
+#: inc/notificationtargetformanswer.class.php:96
+#: inc/target_actor.class.php:101 inc/formanswer.class.php:260
+#: inc/formanswer.class.php:718 inc/abstractitiltarget.class.php:1753 entrée
+#: standard:48
 msgid "Requester"
 msgid_plural "Requesters"
 msgstr[0] "Sol·licitant"
 msgstr[1] "Sol·licitants"
 
-#: inc/issue.class.php:614 inc/formanswer.class.php:229
+#: inc/issue.class.php:619 inc/formanswer.class.php:270
 msgid "Form approver"
 msgstr "Usuari que aprova la sol·licitud"
 
-#: inc/issue.class.php:630 inc/formanswer.class.php:544
-#: inc/formanswer.class.php:551 inc/formanswer.class.php:633
-#: inc/form_language.class.php:227
+#: inc/issue.class.php:643 inc/formanswer.class.php:644
+#: inc/formanswer.class.php:651 inc/formanswer.class.php:733
+#: inc/form_language.class.php:246
 msgid "Comment"
 msgstr "Comentari"
 
-#: inc/issue.class.php:642
+#: inc/issue.class.php:655
 msgid "Ticket approver"
 msgstr "Qui aprova tiquets"
 
-#: inc/issue.class.php:676
+#: inc/issue.class.php:728
 msgid "Technician"
 msgstr "Tècnic/a"
 
-#: inc/issue.class.php:708
+#: inc/issue.class.php:759
 msgid "Technician group"
 msgstr "Grup tècnic"
 
-#: inc/issue.class.php:741 inc/formanswer.class.php:249
+#: inc/issue.class.php:795 inc/formanswer.class.php:290
 msgid "Form approver group"
 msgstr "Grup que aprova la sol·licitud"
 
-#: inc/issue.class.php:853
+#: inc/issue.class.php:817
+msgid "Ticket approver group"
+msgstr ""
+
+#: inc/issue.class.php:857
+msgid "Ticket requester"
+msgstr ""
+
+#: inc/issue.class.php:904
+msgid "Ticket observer"
+msgstr ""
+
+#: inc/issue.class.php:952
+msgid "Ticket technician"
+msgstr ""
+
+#: inc/issue.class.php:1099
 #, php-format
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
-#: inc/issue.class.php:1115 inc/filter/itilcategoryfilter.class.php:56
-#: hook.php:629
+#: inc/issue.class.php:1357 inc/filter/itilcategoryfilter.class.php:56
+#: hook.php:703
 msgid "All"
 msgstr "Tot"
 
-#: inc/issue.class.php:1121 hook.php:630
+#: inc/issue.class.php:1363 hook.php:704
 msgid "New"
 msgstr "Nou"
 
-#: inc/issue.class.php:1127 hook.php:631
+#: inc/issue.class.php:1369 hook.php:705
 msgid "Assigned"
 msgstr "Assignat"
 
-#: inc/issue.class.php:1133 inc/formanswer.class.php:76
-#: inc/form_validator.class.php:69 hook.php:632
+#: inc/issue.class.php:1375 inc/formanswer.class.php:78
+#: inc/form_validator.class.php:69 hook.php:706
 msgid "Waiting"
 msgstr "Esperant"
 
-#: inc/issue.class.php:1139 hook.php:633
+#: inc/issue.class.php:1381 hook.php:707
 msgid "To validate"
 msgstr "Per validar"
 
-#: inc/issue.class.php:1145 hook.php:634
+#: inc/issue.class.php:1387 hook.php:708
 msgid "Solved"
 msgstr "Resolt"
 
-#: inc/issue.class.php:1151 hook.php:635
+#: inc/issue.class.php:1393 hook.php:709
 msgid "Closed"
 msgstr "Tancat"
 
@@ -731,226 +781,254 @@ msgstr "Com a fill de"
 msgid "The form as been saved"
 msgstr "S'ha guardat la sol·licitud"
 
-#: inc/notificationtargetformanswer.class.php:44 install/install.php:408
+#: inc/notificationtargetformanswer.class.php:44 install/install.php:419
 msgid "A form need to be validate"
 msgstr "La sol·licitud ha de ser validada"
 
-#: inc/notificationtargetformanswer.class.php:45 install/install.php:414
+#: inc/notificationtargetformanswer.class.php:45 install/install.php:425
 msgid "The form is refused"
 msgstr "Sol·licitud denegada"
 
-#: inc/notificationtargetformanswer.class.php:46 install/install.php:420
+#: inc/notificationtargetformanswer.class.php:46 install/install.php:431
 msgid "The form is accepted"
 msgstr "Sol·licitud acceptada"
 
-#: inc/notificationtargetformanswer.class.php:47 install/install.php:426
+#: inc/notificationtargetformanswer.class.php:47 install/install.php:437
 msgid "The form is deleted"
 msgstr "Sol·licitud eliminada"
 
-#: inc/notificationtargetformanswer.class.php:77
-msgid "Form #"
-msgstr "Formulari #"
+#: inc/notificationtargetformanswer.class.php:74
+msgid "Form ID"
+msgstr ""
 
-#: inc/notificationtargetformanswer.class.php:78
+#: inc/notificationtargetformanswer.class.php:75
+#: inc/notificationtargetformanswer.class.php:95
 msgid "Form name"
 msgstr "Nom del formulari"
 
+#: inc/notificationtargetformanswer.class.php:78
+#: inc/notificationtargetformanswer.class.php:98 inc/formanswer.class.php:281
+#: entrée standard:49
+msgid "Creation date"
+msgstr "Data de creació"
+
+#: inc/notificationtargetformanswer.class.php:79
+#: inc/notificationtargetformanswer.class.php:99
+msgid "Full form answers"
+msgstr "Totes les sol·licituds completes"
+
 #: inc/notificationtargetformanswer.class.php:80
+msgid "Validation comment"
+msgstr ""
+
+#: inc/notificationtargetformanswer.class.php:81
+#: inc/notificationtargetformanswer.class.php:101
+msgid "Validation link"
+msgstr "Enllaç de validació"
+
+#: inc/notificationtargetformanswer.class.php:82
+msgid "Request ID"
+msgstr ""
+
+#: inc/notificationtargetformanswer.class.php:94
+msgid "Form #"
+msgstr "Formulari #"
+
+#: inc/notificationtargetformanswer.class.php:97
 msgctxt "tag"
 msgid "Validator"
 msgstr "Validador"
 
-#: inc/notificationtargetformanswer.class.php:81 inc/formanswer.class.php:240
-msgid "Creation date"
-msgstr "Data de creació"
-
-#: inc/notificationtargetformanswer.class.php:82
-msgid "Full form answers"
-msgstr "Totes les sol·licituds completes"
-
-#: inc/notificationtargetformanswer.class.php:83
+#: inc/notificationtargetformanswer.class.php:100
 msgid "Refused comment"
 msgstr "Comentari denegat"
 
-#: inc/notificationtargetformanswer.class.php:84
-msgid "Validation link"
-msgstr "Enllaç de validació"
-
-#: inc/notificationtargetformanswer.class.php:85
+#: inc/notificationtargetformanswer.class.php:102
 msgid "Request #"
 msgstr "Sol·licitud #"
 
-#: inc/notificationtargetformanswer.class.php:97
+#: inc/notificationtargetformanswer.class.php:114
 msgid "Author"
 msgstr "Autor"
 
-#: inc/notificationtargetformanswer.class.php:98
-#: inc/abstractitiltarget.class.php:1289
+#: inc/notificationtargetformanswer.class.php:115
+#: inc/abstractitiltarget.class.php:1318
 msgid "Approver"
 msgstr "Aprovador"
 
-#: inc/target_actor.class.php:66 inc/abstractitiltarget.class.php:2048
+#: inc/target_actor.class.php:70 inc/abstractitiltarget.class.php:2090
 msgid "Form author"
 msgstr "Autor del formulari"
 
-#: inc/target_actor.class.php:67 inc/abstractitiltarget.class.php:2051
+#: inc/target_actor.class.php:71 inc/abstractitiltarget.class.php:2093
 msgid "Form validator"
 msgstr "Validador de la sol·licitud"
 
-#: inc/target_actor.class.php:68
+#: inc/target_actor.class.php:72
 msgid "Specific person"
 msgstr "Persona específica"
 
-#: inc/target_actor.class.php:69 inc/abstractitiltarget.class.php:2061
+#: inc/target_actor.class.php:73 inc/abstractitiltarget.class.php:2103
 msgid "Person from the question"
 msgstr "Persona d'una pregunta"
 
-#: inc/target_actor.class.php:70
+#: inc/target_actor.class.php:74
 msgid "Specific group"
 msgstr "Grup específic"
 
-#: inc/target_actor.class.php:71 inc/abstractitiltarget.class.php:2072
+#: inc/target_actor.class.php:75 inc/abstractitiltarget.class.php:2114
 msgid "Group from the question"
 msgstr "Grup de la pregunta"
 
-#: inc/target_actor.class.php:72
+#: inc/target_actor.class.php:76
 msgid "Group from an object"
 msgstr "Grup d'un objecte"
 
-#: inc/target_actor.class.php:73
+#: inc/target_actor.class.php:77
 msgid "Tech group from an object"
 msgstr "Grup tècnic d'un objecte"
 
-#: inc/target_actor.class.php:74
+#: inc/target_actor.class.php:78
 msgid "Specific supplier"
 msgstr "Proveïdor específic"
 
-#: inc/target_actor.class.php:75 inc/abstractitiltarget.class.php:2101
+#: inc/target_actor.class.php:79 inc/abstractitiltarget.class.php:2143
 msgid "Supplier from the question"
 msgstr "Proveïdor d'una pregunta"
 
-#: inc/target_actor.class.php:76 inc/abstractitiltarget.class.php:2090
+#: inc/target_actor.class.php:80 inc/abstractitiltarget.class.php:2132
 msgid "Actors from the question"
 msgstr "Actors de la pregunta"
 
-#: inc/target_actor.class.php:77 inc/abstractitiltarget.class.php:2105
+#: inc/target_actor.class.php:81 inc/abstractitiltarget.class.php:2147
 msgid "Form author's supervisor"
 msgstr "Supervisor de l'autor del formulari"
 
-#: inc/target_actor.class.php:84
+#: inc/target_actor.class.php:102
 msgid "Observer"
 msgstr "Observador"
 
-#: inc/target_actor.class.php:85 inc/abstractitiltarget.class.php:1738
+#: inc/target_actor.class.php:103 inc/abstractitiltarget.class.php:1767
 msgid "Assigned to"
 msgstr "Assignat a"
 
-#: inc/target_actor.class.php:91
+#: inc/target_actor.class.php:109
 msgid "Target actor"
 msgid_plural "Target actors"
 msgstr[0] "Actor objectiu"
 msgstr[1] "Actors objectiu"
 
-#: inc/target_actor.class.php:97 inc/target_actor.class.php:113
-#: inc/target_actor.class.php:122
+#: inc/target_actor.class.php:115 inc/target_actor.class.php:131
+#: inc/target_actor.class.php:140
 msgid "Bad request while adding an actor."
 msgstr "Sol·licitud incorrecta afegint un actor."
 
-#: inc/target_actor.class.php:179
+#: inc/target_actor.class.php:199
 #, php-format
 msgid "Failed to find a user: %1$s"
 msgstr "No s'ha pogut trobar l'usuari: %1$s"
 
-#: inc/target_actor.class.php:188
+#: inc/target_actor.class.php:208
 #, php-format
 msgid "Failed to find a group: %1$s"
 msgstr "No s'ha pogut trobar el grup: %1$s"
 
-#: inc/target_actor.class.php:197
+#: inc/target_actor.class.php:217
 #, php-format
 msgid "Failed to find a supplier: %1$s"
 msgstr "No s'ha pogut trobar el proveïdor: %1$s"
 
-#: inc/formanswer.class.php:77 inc/form_validator.class.php:71
+#: inc/formanswer.class.php:79 inc/form_validator.class.php:71
 msgid "Refused"
 msgstr "Rebutjat"
 
-#: inc/formanswer.class.php:78 inc/form_validator.class.php:70
+#: inc/formanswer.class.php:80 inc/form_validator.class.php:70
 msgid "Accepted"
 msgstr "Acceptat"
 
-#: inc/formanswer.class.php:184
+#: inc/formanswer.class.php:226
 msgid "Form answer"
 msgid_plural "Form answers"
 msgstr[0] "Resposta del formulari"
 msgstr[1] "Respostes del formulari"
 
-#: inc/formanswer.class.php:529
+#: inc/formanswer.class.php:629
 msgid "Print this form"
 msgstr "Imprimeix el formulari"
 
-#: inc/formanswer.class.php:554
+#: inc/formanswer.class.php:654
 msgid "Form accepted by validator."
 msgstr "Sol·licitud acceptada pel validador."
 
-#: inc/formanswer.class.php:556
+#: inc/formanswer.class.php:656
 msgid "Form successfully saved."
 msgstr "Sol·licitud guardada correctament."
 
-#: inc/formanswer.class.php:626 inc/formaccesstype.class.php:122
+#: inc/formanswer.class.php:726 inc/formaccesstype.class.php:126
 msgid "Save"
 msgstr "Desa"
 
-#: inc/formanswer.class.php:638
+#: inc/formanswer.class.php:738
 msgid "Required if refused"
 msgstr "Es requereix si es va denegar"
 
-#: inc/formanswer.class.php:644
+#: inc/formanswer.class.php:744
 msgid "Refuse"
 msgstr "Denega"
 
-#: inc/formanswer.class.php:652
+#: inc/formanswer.class.php:752
 msgid "Edit answers"
 msgstr "Edita respostes"
 
-#: inc/formanswer.class.php:658
+#: inc/formanswer.class.php:758
 msgid "Cancel edition"
 msgstr "Cancel·la l'edició"
 
-#: inc/formanswer.class.php:665
+#: inc/formanswer.class.php:765
 msgid "Accept"
 msgstr "Acceptat"
 
-#: inc/formanswer.class.php:688
+#: inc/formanswer.class.php:788
 msgid "Refused comment is required!"
 msgstr "Cal un comentari de denegació!"
 
-#: inc/formanswer.class.php:762
+#: inc/formanswer.class.php:833 inc/formanswer.class.php:850
+msgid ""
+"An internal error occured when verifying your answers. Please report it to "
+"your administrator."
+msgstr ""
+
+#: inc/formanswer.class.php:882
 msgid "You are not the validator of these answers"
 msgstr "No ets el validador d'aquestes respostes"
 
-#: inc/formanswer.class.php:895
+#: inc/formanswer.class.php:1021
 #, php-format
 msgid "Item sucessfully added: %1$s (%2$s: %3$s)"
 msgstr ""
 
-#: inc/formanswer.class.php:977 inc/formanswer.class.php:979
+#: inc/formanswer.class.php:1104 inc/formanswer.class.php:1106
 msgid "Form data"
 msgstr "Dades de la sol·licitud"
 
-#: inc/formanswer.class.php:1105 inc/formanswer.class.php:1157
+#: inc/formanswer.class.php:1233 inc/formanswer.class.php:1285
 msgid "Cannot generate targets!"
 msgstr "No es poden generar objectius!"
 
-#: inc/formanswer.class.php:1281
+#: inc/formanswer.class.php:1434
+#, php-format
+msgid "Answer is invalid in %1$s"
+msgstr ""
+
+#: inc/formanswer.class.php:1462
 msgid "No turing test set"
 msgstr "No hi ha conjunt de proves de turing"
 
-#: inc/formanswer.class.php:1286
+#: inc/formanswer.class.php:1468
 msgid "You failed the Turing test"
 msgstr "Has fallat el test de Turing"
 
-#: inc/formanswer.class.php:1326
+#: inc/formanswer.class.php:1492
 msgid "You must select validator!"
 msgstr "Cal que seleccionis un/a validador/a!"
 
@@ -962,15 +1040,19 @@ msgstr "No pots eliminar aquest problema. Potser es té en compte."
 msgid "Failed to delete this issue. An internal error occured."
 msgstr "No s'ha pogut eliminar aquest problema. S'ha produït un error intern."
 
-#: inc/common.class.php:780
+#: inc/common.class.php:783
 msgid "Seek assistance"
 msgstr "Obre un tiquet"
 
-#: inc/common.class.php:785
+#: inc/common.class.php:789 inc/common.class.php:793
 msgid "My requests for assistance"
 msgstr "Els meus tiquets"
 
-#: inc/common.class.php:815
+#: inc/common.class.php:829
+msgid "Consult reminders"
+msgstr ""
+
+#: inc/common.class.php:849
 msgid "Consult feeds"
 msgstr "Consultar feeds"
 
@@ -980,19 +1062,19 @@ msgid_plural "Access types"
 msgstr[0] "Tipus d'accés"
 msgstr[1] "Tipus d'accés"
 
-#: inc/formaccesstype.class.php:78
+#: inc/formaccesstype.class.php:79
 msgid "Link to the form"
 msgstr "Enllaç al formulari"
 
-#: inc/formaccesstype.class.php:91
+#: inc/formaccesstype.class.php:92
 msgid "Please activate the form to view the link"
 msgstr "Activeu el formulari per veure l'enllaç"
 
-#: inc/formaccesstype.class.php:99
+#: inc/formaccesstype.class.php:100 inc/form.class.php:1505
 msgid "Enable captcha"
 msgstr "Habilitar el captcha"
 
-#: inc/formaccesstype.class.php:109
+#: inc/formaccesstype.class.php:112
 msgid "Restricted to"
 msgstr "Restringit a"
 
@@ -1002,65 +1084,67 @@ msgid_plural "Form languages"
 msgstr[0] "Idioma del formulari"
 msgstr[1] "Idiomes del formulari"
 
-#: inc/form_language.class.php:72
+#: inc/form_language.class.php:81 inc/form_language.class.php:367
 msgid "Translation"
 msgid_plural "Translations"
 msgstr[0] "Traducció"
 msgstr[1] "Traduccions"
 
-#: inc/form_language.class.php:111 inc/form.class.php:1076
-#: inc/form.class.php:1201 inc/abstracttarget.class.php:161
-#: inc/abstractitiltarget.class.php:1544
-msgid "The name cannot be empty!"
-msgstr "No es pot deixar el nom en blanc!"
+#: inc/form_language.class.php:122
+msgid "The name cannot be empty."
+msgstr ""
 
-#: inc/form_language.class.php:119
-msgid "The language must be associated to a form!"
-msgstr "L'idioma s'ha d'associar a un formulari!"
+#: inc/form_language.class.php:130
+msgid "The language must be associated to a form."
+msgstr ""
 
-#: inc/form_language.class.php:249
+#: inc/form_language.class.php:138
+msgid "The specified language is not available."
+msgstr ""
+
+#: inc/form_language.class.php:268
 msgid "Add a translation"
 msgstr "Afegeix una traducció"
 
-#: inc/form_language.class.php:283 js/scripts.js:1156
+#: inc/form_language.class.php:302 js/scripts.js:1171
 msgid "Update a translation"
 msgstr "Actualitza la traducció"
 
-#: inc/form_language.class.php:313 inc/form_language.class.php:315
+#: inc/form_language.class.php:332 inc/form_language.class.php:334
 msgid "New translation"
 msgstr "Nova traducció"
 
-#: inc/form_language.class.php:318
+#: inc/form_language.class.php:337
 msgid "Filter list"
 msgstr "Llista de filtres"
 
-#: inc/form_language.class.php:323 inc/form_language.class.php:413
+#: inc/form_language.class.php:342 inc/form_language.class.php:441
 msgid "No translation found"
 msgstr "No s'ha trobat cap traducció"
 
-#: inc/form_language.class.php:328
+#: inc/form_language.class.php:347
 msgid "Do you want to delete the selected items?"
 msgstr "Vols eliminar els elements seleccionats?"
 
-#: inc/form_language.class.php:337 inc/form_language.class.php:376
-#: inc/form.class.php:527 inc/abstractitiltarget.class.php:1629
+#: inc/form_language.class.php:356 inc/form_language.class.php:404
+#: inc/form.class.php:537 inc/abstractitiltarget.class.php:1658
 msgid "Delete"
 msgstr "Elimina"
 
-#: inc/form_language.class.php:347
+#: inc/form_language.class.php:366
 msgid "Original string"
 msgstr "Text original"
 
-#: inc/form_language.class.php:399
+#: inc/form_language.class.php:427
 msgid "Add a new language"
 msgstr "Afegeix un idioma nou"
 
-#: inc/form_language.class.php:432 inc/form_language.class.php:464
+#: inc/form_language.class.php:460 inc/form_language.class.php:492
 #: inc/form.class.php:192 entrée standard:72
 msgid "Language"
 msgstr "Idioma"
 
-#: inc/form_validator.class.php:68 inc/targetticket.class.php:97
+#: inc/form_validator.class.php:68 inc/targetticket.class.php:99
 #: inc/abstractitiltarget.class.php:178
 msgid "None"
 msgstr "Cap"
@@ -1075,19 +1159,19 @@ msgstr[1] "Validadors"
 msgid "Need validaton?"
 msgstr "Necessita validació?"
 
-#: inc/form_validator.class.php:118 inc/abstractitiltarget.class.php:2042
+#: inc/form_validator.class.php:118 inc/abstractitiltarget.class.php:2522
 msgid "No"
 msgstr "No"
 
-#: inc/form_validator.class.php:295 inc/targetproblem.class.php:146
-#: inc/entityconfig.class.php:411 inc/targetchange.class.php:483
-#: inc/targetticket.class.php:316 inc/targetticket.class.php:351
-#: inc/abstractitiltarget.class.php:2031
+#: inc/form_validator.class.php:295 inc/targetproblem.class.php:147
+#: inc/entityconfig.class.php:435 inc/targetchange.class.php:484
+#: inc/targetticket.class.php:318 inc/targetticket.class.php:353
+#: inc/abstractitiltarget.class.php:2073
 msgctxt "button"
 msgid "Save"
 msgstr "Desa"
 
-#: inc/form_validator.class.php:709 inc/abstractitiltarget.class.php:1269
+#: inc/form_validator.class.php:709 inc/abstractitiltarget.class.php:1298
 msgid "Validation"
 msgstr "Validació"
 
@@ -1095,20 +1179,20 @@ msgstr "Validació"
 msgid "Choose a validator"
 msgstr "Escull un validador"
 
-#: inc/targetproblem.class.php:42 entrée standard:43
+#: inc/targetproblem.class.php:43 entrée standard:43
 msgid "Target problem"
 msgid_plural "Target problems"
 msgstr[0] "Problema d'objectiu"
 msgstr[1] "Problemes de d'objectiu"
 
-#: inc/targetproblem.class.php:108 inc/targetproblem.class.php:578
-#: inc/targetchange.class.php:104 inc/targetchange.class.php:440
-#: inc/targetticket.class.php:133 inc/targetticket.class.php:236
+#: inc/targetproblem.class.php:109 inc/targetproblem.class.php:579
+#: inc/targetchange.class.php:105 inc/targetchange.class.php:441
+#: inc/targetticket.class.php:135 inc/targetticket.class.php:238
 msgid "Properties"
 msgstr "Propietats"
 
-#: inc/targetproblem.class.php:522 inc/targetchange.class.php:285
-#: inc/targetticket.class.php:1390
+#: inc/targetproblem.class.php:523 inc/targetchange.class.php:286
+#: inc/targetticket.class.php:1400
 #, php-format
 msgid ""
 "Failed to add or update the %1$s %2$s: a question is missing and is used in "
@@ -1117,148 +1201,160 @@ msgstr ""
 "No s'ha pogut afegir o actualizar %1$s %2$s: falta una pregunta i s'utilitza"
 " en un paràmetre de l'objectiu"
 
-#: inc/targetproblem.class.php:579 inc/targetchange.class.php:105
-#: inc/targetticket.class.php:134 inc/abstractitiltarget.class.php:1171
+#: inc/targetproblem.class.php:580 inc/targetchange.class.php:106
+#: inc/targetticket.class.php:136 inc/abstractitiltarget.class.php:1200
 msgid "Actors"
 msgstr "Actors"
 
-#: inc/targetproblem.class.php:632 entrée standard:48
+#: inc/targetproblem.class.php:633 entrée standard:48
 msgid "Problem title"
 msgstr "Títol del problema"
 
-#: inc/targetproblem.class.php:642 inc/targetchange.class.php:353
-#: inc/targetticket.class.php:197
+#: inc/targetproblem.class.php:643 inc/targetchange.class.php:354
+#: inc/targetticket.class.php:199
 msgid "Content"
 msgstr "Contingut"
 
-#: inc/targetproblem.class.php:652 inc/targetchange.class.php:363
+#: inc/targetproblem.class.php:653 inc/targetchange.class.php:364
 msgid "Impact"
 msgstr "Impacte"
 
-#: inc/targetproblem.class.php:662 entrée standard:56
+#: inc/targetproblem.class.php:663 entrée standard:56
 msgid "Cause"
 msgstr "Causa"
 
-#: inc/targetproblem.class.php:672 entrée standard:58
+#: inc/targetproblem.class.php:673 entrée standard:58
 msgid "Symptom"
 msgstr "Símptoma"
 
-#: inc/entityconfig.class.php:90 inc/entityconfig.class.php:99
-#: inc/entityconfig.class.php:107 inc/entityconfig.class.php:115
-#: inc/entityconfig.class.php:123 inc/entityconfig.class.php:131
-#: inc/entityconfig.class.php:139 inc/entityconfig.class.php:147
-#: inc/entityconfig.class.php:155
+#: inc/entityconfig.class.php:92 inc/entityconfig.class.php:101
+#: inc/entityconfig.class.php:109 inc/entityconfig.class.php:117
+#: inc/entityconfig.class.php:125 inc/entityconfig.class.php:133
+#: inc/entityconfig.class.php:141 inc/entityconfig.class.php:149
+#: inc/entityconfig.class.php:157
 msgid "Inheritance of the parent entity"
 msgstr "Herència de l'entitat pare"
 
-#: inc/entityconfig.class.php:91
+#: inc/entityconfig.class.php:93
 msgid "GLPi's helpdesk"
 msgstr "GLPI Helpdesk"
 
-#: inc/entityconfig.class.php:92
+#: inc/entityconfig.class.php:94
 msgid "Service catalog simplified"
 msgstr "Catàleg de serveis simplificat"
 
-#: inc/entityconfig.class.php:93
+#: inc/entityconfig.class.php:95
 msgid "Service catalog extended"
 msgstr "Catàleg de servei extès"
 
-#: inc/entityconfig.class.php:100
+#: inc/entityconfig.class.php:102
 msgid "All available forms"
 msgstr "Tots els formularis disponibles"
 
-#: inc/entityconfig.class.php:101
+#: inc/entityconfig.class.php:103
 msgid "Only default forms"
 msgstr "Només els formularis per defecte"
 
-#: inc/entityconfig.class.php:108
+#: inc/entityconfig.class.php:110
 msgid "Popularity sort"
 msgstr "Ordenar per popularitat"
 
-#: inc/entityconfig.class.php:109
+#: inc/entityconfig.class.php:111
 msgid "Alphabetic sort"
 msgstr "Ordenar alfabèticament"
 
-#: inc/entityconfig.class.php:116
+#: inc/entityconfig.class.php:118
 msgid "Merged with Forms"
 msgstr "Fusionat amb formularis"
 
-#: inc/entityconfig.class.php:117
+#: inc/entityconfig.class.php:119
 msgid "Distinct menu entry"
 msgstr "Entrada de menú diferent"
 
-#: inc/entityconfig.class.php:124 inc/entityconfig.class.php:132
-#: inc/entityconfig.class.php:140 inc/entityconfig.class.php:148
+#: inc/entityconfig.class.php:126 inc/entityconfig.class.php:134
+#: inc/entityconfig.class.php:142 inc/entityconfig.class.php:150
 #: inc/form.class.php:285 entrée standard:100
 msgid "Visible"
 msgstr "Visible"
 
-#: inc/entityconfig.class.php:125 inc/entityconfig.class.php:133
-#: inc/entityconfig.class.php:141 inc/entityconfig.class.php:149
+#: inc/entityconfig.class.php:127 inc/entityconfig.class.php:135
+#: inc/entityconfig.class.php:143 inc/entityconfig.class.php:151
 msgid "Hidden"
 msgstr "Ocult"
 
-#: inc/entityconfig.class.php:156
+#: inc/entityconfig.class.php:158
 msgid "Variable height"
 msgstr "Alçada variable"
 
-#: inc/entityconfig.class.php:157
+#: inc/entityconfig.class.php:159
 msgid "Uniform height"
 msgstr "Alçada uniforme"
 
-#: inc/entityconfig.class.php:253
+#: inc/entityconfig.class.php:164
+msgid "Search for assistance"
+msgstr ""
+
+#: inc/entityconfig.class.php:165
+msgid "User's assistance requests"
+msgstr ""
+
+#: inc/entityconfig.class.php:261
 msgid "Helpdesk"
 msgstr "Helpdesk"
 
-#: inc/entityconfig.class.php:261 inc/entityconfig.class.php:425 entrée
+#: inc/entityconfig.class.php:269 inc/entityconfig.class.php:449 entrée
 #: standard:44
 msgid "Helpdesk mode"
 msgstr "Mode Helpdesk"
 
-#: inc/entityconfig.class.php:272
+#: inc/entityconfig.class.php:280 inc/entityconfig.class.php:519
 msgid "Default Form list mode"
 msgstr "Llista de formularis per defecte"
 
-#: inc/entityconfig.class.php:290 inc/entityconfig.class.php:435
+#: inc/entityconfig.class.php:298 inc/entityconfig.class.php:459
 msgid "Sort order"
 msgstr "Ordre de classificació"
 
-#: inc/entityconfig.class.php:306 inc/entityconfig.class.php:445
+#: inc/entityconfig.class.php:314 inc/entityconfig.class.php:469
 msgid "Knowledge base"
 msgstr "Base de coneixements"
 
-#: inc/entityconfig.class.php:321
+#: inc/entityconfig.class.php:329
 msgid "Search"
 msgstr "Cerca"
 
-#: inc/entityconfig.class.php:337
+#: inc/entityconfig.class.php:345 inc/entityconfig.class.php:529
 msgid "Counters dashboard"
 msgstr "Tauler de comptadors"
 
-#: inc/entityconfig.class.php:353
+#: inc/entityconfig.class.php:361
 msgid "Header message"
 msgstr "Missatge de capçalera"
 
-#: inc/entityconfig.class.php:369
+#: inc/entityconfig.class.php:377 inc/entityconfig.class.php:539
 msgid "Search issue"
 msgstr "Problema de cerca"
 
-#: inc/entityconfig.class.php:385
+#: inc/entityconfig.class.php:393 inc/entityconfig.class.php:509
+msgid "Service catalog home page"
+msgstr ""
+
+#: inc/entityconfig.class.php:409 inc/entityconfig.class.php:549
 msgid "Tile design"
 msgstr "Disseny de mosaic"
 
-#: inc/entityconfig.class.php:397 inc/entityconfig.class.php:475
+#: inc/entityconfig.class.php:421 inc/entityconfig.class.php:499
 #: inc/form.class.php:239 entrée standard:84
 msgid "Header"
 msgid_plural "Headers"
 msgstr[0] "Capçalera"
 msgstr[1] "Capçaleres"
 
-#: inc/entityconfig.class.php:455
+#: inc/entityconfig.class.php:479
 msgid "Display search field"
 msgstr "Mostra el camp de cerca"
 
-#: inc/entityconfig.class.php:465
+#: inc/entityconfig.class.php:489
 msgid "Display header"
 msgstr "Mostra la capçalera"
 
@@ -1292,7 +1388,7 @@ msgstr "Accés restringit"
 msgid "Answers waiting for validation"
 msgstr "Respostes pendents de validació"
 
-#: inc/form.class.php:124 inc/form.class.php:1619 inc/form.class.php:1645
+#: inc/form.class.php:124 inc/form.class.php:1695 inc/form.class.php:1721
 msgid "Import forms"
 msgstr "Importar formularis"
 
@@ -1345,7 +1441,7 @@ msgstr "No formulari predeterminat"
 msgid "All languages"
 msgstr "Tots els idiomes"
 
-#: inc/form.class.php:502 inc/form.class.php:561
+#: inc/form.class.php:502 inc/form.class.php:572
 msgid "Target"
 msgid_plural "Targets"
 msgstr[0] "Objectiu"
@@ -1355,141 +1451,151 @@ msgstr[1] "Objectius"
 msgid "Actions"
 msgstr "Accions"
 
-#: inc/form.class.php:544 inc/form.class.php:2145
+#: inc/form.class.php:527 inc/form.class.php:1433
+msgid "Duplicate"
+msgstr "Duplicada"
+
+#: inc/form.class.php:554 inc/form.class.php:2223
 msgid "Add a target"
 msgstr "Afegeix un objectiu"
 
-#: inc/form.class.php:564
+#: inc/form.class.php:575
 msgid "Preview"
 msgstr "Vista prèvia"
 
-#: inc/form.class.php:565
-msgid "properties"
-msgstr "propietats"
+#: inc/form.class.php:576
+msgid "Form answer properties"
+msgstr ""
 
-#: inc/form.class.php:884
+#: inc/form.class.php:900
 msgid "What are you looking for?"
 msgstr "Què vols buscar?"
 
-#: inc/form.class.php:893
+#: inc/form.class.php:909
 #, php-format
 msgid "My %1$d last forms (requester)"
 msgstr "Els meus %1$d últims formularsi (sol·licitant)"
 
-#: inc/form.class.php:920
+#: inc/form.class.php:936
 msgid "No form posted yet"
 msgstr "Formulari no publicat"
 
-#: inc/form.class.php:948
+#: inc/form.class.php:964
 msgid "All my forms (requester)"
 msgstr "Totes les meves sol·licituds (sol·licitant)"
 
-#: inc/form.class.php:961
+#: inc/form.class.php:977
 #, php-format
 msgid "My %1$d last forms (validator)"
 msgstr "Els meus %1$d últims formularis (validador)"
 
-#: inc/form.class.php:988
+#: inc/form.class.php:1007
 msgid "No form waiting for validation"
 msgstr "No hi ha sol·licituds pendents de validació"
 
-#: inc/form.class.php:1016
+#: inc/form.class.php:1035
 msgid "All my forms (validator)"
 msgstr "Totes les meves sol·licituds (validador)"
 
-#: inc/form.class.php:1212
+#: inc/form.class.php:1095 inc/form.class.php:1229
+#: inc/abstracttarget.class.php:162 inc/abstractitiltarget.class.php:1573
+msgid "The name cannot be empty!"
+msgstr "No es pot deixar el nom en blanc!"
+
+#: inc/form.class.php:1240
 msgid "Cannot use empty name for form answers. Keeping the previous value."
 msgstr ""
 "No es pot utilitzar un nom buit per a les respostes del formulari. Guardar "
 "el valor anterior."
 
-#: inc/form.class.php:1307
+#: inc/form.class.php:1342
 #, php-format
 msgid "The question %s is not compatible with public forms"
 msgstr "La pregunta %s no és compatible amb els formularis públics."
 
-#: inc/form.class.php:1387
+#: inc/form.class.php:1422
 msgid "Errored duplicate"
 msgstr "Duplicat erroni"
 
-#: inc/form.class.php:1398
-msgid "Duplicate"
-msgstr "Duplicada"
-
-#: inc/form.class.php:1445
+#: inc/form.class.php:1480 inc/form.class.php:1508
 msgctxt "button"
 msgid "Post"
 msgstr "Publicació"
 
-#: inc/form.class.php:1463
+#: inc/form.class.php:1527
 #, php-format
 msgid "Form duplicated: %s"
 msgstr "Sol·licitud duplicada: %s"
 
-#: inc/form.class.php:1474
+#: inc/form.class.php:1538
 #, php-format
 msgid "Form Transfered: %s"
 msgstr "Sol·licitud transferida: %s"
 
-#: inc/form.class.php:1493
+#: inc/form.class.php:1557
 msgid "Back"
 msgstr "Enrere"
 
-#: inc/form.class.php:1592
+#: inc/form.class.php:1568
+#, php-format
+msgid "Form updated: %s"
+msgstr ""
+
+#: inc/form.class.php:1668
 msgid "Upload of JSON files not allowed."
 msgstr "Càrrega de fitxers JSON no permesa."
 
-#: inc/form.class.php:1595
+#: inc/form.class.php:1671
 msgid "You may allow JSON files right now."
 msgstr "Hauries de permetre fitxers JSON ara."
 
-#: inc/form.class.php:1596
+#: inc/form.class.php:1672
 msgctxt "button"
 msgid "Create"
 msgstr "Crea"
 
-#: inc/form.class.php:1599 inc/form.class.php:1610
+#: inc/form.class.php:1675 inc/form.class.php:1686
 msgid "Please contact your GLPI administrator."
 msgstr "Siusplau, contacta amb l'administrador del GLPI."
 
-#: inc/form.class.php:1600 inc/form.class.php:1611
+#: inc/form.class.php:1676 inc/form.class.php:1687
 msgctxt "button"
 msgid "Back"
 msgstr "Enrere"
 
-#: inc/form.class.php:1603
+#: inc/form.class.php:1679
 msgid "Upload of JSON files not enabled."
 msgstr "La càrrega de fitxers JSON no està habilitada."
 
-#: inc/form.class.php:1606 inc/form.class.php:1609
+#: inc/form.class.php:1682 inc/form.class.php:1685
 msgid "You may enable JSON files right now."
 msgstr "Hauries d'habilitar els fitxers JSON ara."
 
-#: inc/form.class.php:1607
+#: inc/form.class.php:1683
 msgctxt "button"
 msgid "Enable"
 msgstr "Habilitat"
 
-#: inc/form.class.php:1654
+#: inc/form.class.php:1730
 msgctxt "button"
 msgid "Send"
 msgstr "Envia"
 
-#: inc/form.class.php:1673
+#: inc/form.class.php:1749
 msgid "Forms import impossible, the file is empty"
 msgstr "Importació de formularis impossible, l'arxiu està buit"
 
-#: inc/form.class.php:1677 inc/form.class.php:1681
+#: inc/form.class.php:1753 inc/form.class.php:1757
 msgid "Forms import impossible, the file seems corrupt"
 msgstr "Importació de formularis impossible, l'arxiu sembla corrupte"
 
-#: inc/form.class.php:1687
+#: inc/form.class.php:1763
 msgid "Forms import impossible, the file was generated with another version"
 msgstr ""
 "Importació de formularis impossible, l'arxiu va ser generat amb una altra "
 "versió"
 
-#: inc/form.class.php:1694
+#: inc/form.class.php:1770
 msgid ""
 "The file does not specifies the schema version. It was probably generated "
 "with a version older than 2.10. Giving up."
@@ -1497,88 +1603,88 @@ msgstr ""
 "El fitxer no especifica la versió de l'esquema. Probablement es va generar "
 "amb una versió anterior a la 2.10. Desistint."
 
-#: inc/form.class.php:1720
+#: inc/form.class.php:1796
 #, php-format
 msgid "Failed to import %s"
 msgstr "No s'ha pogut importar %s"
 
-#: inc/form.class.php:1725
+#: inc/form.class.php:1801
 #, php-format
 msgid "Forms successfully imported from %s"
 msgstr "Formularis importats correctament de %s"
 
-#: inc/form.class.php:1788
+#: inc/form.class.php:1864
 #, php-format
 msgid "The form %1$s already exists and is in an unmodifiable entity."
 msgstr ""
 "El formulari %1$s ja existeix i es troba a una entitat no modificable."
 
-#: inc/form.class.php:1796
+#: inc/form.class.php:1872
 #, php-format
 msgid "You don't have right to update the entity %1$s."
 msgstr "No tens permisos per actualitzar l'entitat %1$s."
 
-#: inc/form.class.php:1806
+#: inc/form.class.php:1882
 #, php-format
 msgid "The entity %1$s is required for the form %2$s."
 msgstr "L'entitat %1$s es necessari pel formulari %2$s."
 
-#: inc/form.class.php:1888
+#: inc/form.class.php:1969
 msgid "Failed to create JSON document type"
 msgstr "Error en la creació de documents tipus JSON."
 
-#: inc/form.class.php:1895
+#: inc/form.class.php:1976
 msgid "JSON document type not found"
 msgstr "Document tipus JSON no trobat."
 
-#: inc/form.class.php:1902
+#: inc/form.class.php:1983
 msgid "Failed to update JSON document type"
 msgstr "Error en actualitzar el document tipus JSON."
 
-#: inc/form.class.php:1922
+#: inc/form.class.php:2003
 msgid "Forms without category"
 msgstr "Formularis sense categoria"
 
-#: inc/form.class.php:1943
+#: inc/form.class.php:2024
 msgid "No form available"
 msgstr "No hi ha formulari disponible"
 
-#: inc/form.class.php:2176 inc/targetticket.class.php:391
-#: inc/abstractitiltarget.class.php:1748 inc/abstractitiltarget.class.php:2031
+#: inc/form.class.php:2254 inc/targetticket.class.php:393
+#: inc/abstractitiltarget.class.php:1777 inc/abstractitiltarget.class.php:2073
 msgid "Add"
 msgstr "Afegeix"
 
-#: inc/form.class.php:2194 inc/form.class.php:2217
+#: inc/form.class.php:2272 inc/form.class.php:2295 inc/form.class.php:2317
 msgid "Unsupported target type."
 msgstr "Tipus d'objectiu no admès."
 
-#: inc/form.class.php:2251
+#: inc/form.class.php:2351
 msgid "plugin_formcreator_load_check"
 msgstr "plugin_formcreator_load_check"
 
-#: inc/targetchange.class.php:43 entrée standard:43
+#: inc/targetchange.class.php:44 entrée standard:43
 msgid "Target change"
 msgid_plural "Target changes"
 msgstr[0] "Canvi d'objectiu"
 msgstr[1] "Canvis d'objectius"
 
-#: inc/targetchange.class.php:343 entrée standard:48
+#: inc/targetchange.class.php:344 entrée standard:48
 msgid "Change title"
 msgstr "Canvia el títol"
 
-#: inc/targetchange.class.php:373 entrée standard:56
+#: inc/targetchange.class.php:374 entrée standard:56
 msgid "Control list"
 msgstr "Llista de control"
 
-#: inc/targetchange.class.php:383 entrée standard:58
+#: inc/targetchange.class.php:384 entrée standard:58
 msgid "Deployment plan"
 msgstr "Pla de desplegament"
 
-#: inc/targetchange.class.php:393 entrée standard:60
+#: inc/targetchange.class.php:394 entrée standard:60
 msgid "Backup plan"
 msgstr "Pla de còpia de seguretat"
 
-#: inc/targetchange.class.php:403
+#: inc/targetchange.class.php:404
 msgid "Check list"
 msgstr "Llista de comprovació"
 
@@ -1588,94 +1694,94 @@ msgid_plural "Sections"
 msgstr[0] "Secció"
 msgstr[1] "Seccions"
 
-#: inc/section.class.php:123 inc/section.class.php:164
-#: inc/question.class.php:312
+#: inc/section.class.php:123 inc/section.class.php:166
+#: inc/question.class.php:318
 msgid "The title is required"
 msgstr "El títol és obligatori"
+
+#: inc/section.class.php:570 inc/question.class.php:203 entrée standard:37
+msgid "Count of conditions"
+msgstr "Recompte de condicions"
 
 #: inc/restrictedformcriteria.class.php:179
 #, php-format
 msgid "Failed to find %1$s %2$s"
 msgstr "No s'ha trobat %1$s %2$s"
 
-#: inc/question.class.php:70 inc/abstractitiltarget.class.php:1082 entrée
+#: inc/question.class.php:70 inc/abstractitiltarget.class.php:1111 entrée
 #: standard:41
 msgid "Question"
 msgid_plural "Questions"
 msgstr[0] "Pregunta"
 msgstr[1] "Preguntes"
 
-#: inc/question.class.php:228 entrée standard:37
-msgid "Count of conditions"
-msgstr "Recompte de condicions"
-
-#: inc/question.class.php:320
+#: inc/question.class.php:326
 msgid "The field type is required"
 msgstr "El camp Tipus és obligatori"
 
-#: inc/question.class.php:327
+#: inc/question.class.php:333
 msgid "The section is required"
 msgstr "Cal una secció"
 
-#: inc/question.class.php:339
+#: inc/question.class.php:345
 #, php-format
 msgid "Field type %1$s is not available for question %2$s."
 msgstr "Els arxius de tipus %1$s no està disponible per la pregunta %2$s."
 
-#: inc/question.class.php:353
+#: inc/question.class.php:358
 msgid "This type of question is not compatible with public forms."
 msgstr "Aquest tipus de pregunta no és compatible amb els formularis públics."
 
-#: inc/question.class.php:362
+#: inc/question.class.php:367
 msgid "This type of question requires parameters"
 msgstr "Aquest tipus de pregunta requereix paràmetres"
 
-#: inc/question.class.php:368
+#: inc/question.class.php:373
 msgid "A parameter is missing for this question type"
 msgstr "Falta un paràmetre per a aquest tipus de pregunta"
 
-#: inc/question.class.php:1178
+#: inc/question.class.php:1202
 msgid "Service levels"
 msgstr "Nivells de servei"
 
-#: inc/question.class.php:1179 inc/abstractitiltarget.class.php:805
+#: inc/question.class.php:1203 inc/abstractitiltarget.class.php:834
 msgid "SLA"
 msgstr "SLA"
 
-#: inc/question.class.php:1180 inc/abstractitiltarget.class.php:878
+#: inc/question.class.php:1204 inc/abstractitiltarget.class.php:907
 msgid "OLA"
 msgstr "OLA"
 
-#: inc/question.class.php:1197 inc/question.class.php:1238
-#: inc/question.class.php:1241
+#: inc/question.class.php:1223 inc/question.class.php:1266
+#: inc/question.class.php:1269
 msgid "Assets"
 msgstr "Actius"
 
-#: inc/question.class.php:1211 hook.php:643 hook.php:660
+#: inc/question.class.php:1237 hook.php:717 hook.php:734
 msgid "Assistance"
 msgstr "Assistència"
 
-#: inc/question.class.php:1217
+#: inc/question.class.php:1243
 msgid "Management"
 msgstr "Gestió"
 
-#: inc/question.class.php:1226
+#: inc/question.class.php:1254
 msgid "Tools"
 msgstr "Eines"
 
-#: inc/question.class.php:1227
+#: inc/question.class.php:1255
 msgid "Notes"
 msgstr "Notes"
 
-#: inc/question.class.php:1228
+#: inc/question.class.php:1256
 msgid "RSS feed"
 msgstr "Canal RSS"
 
-#: inc/question.class.php:1230
+#: inc/question.class.php:1258
 msgid "Administration"
 msgstr "Administració"
 
-#: inc/question.class.php:1238 inc/question.class.php:1241
+#: inc/question.class.php:1266 inc/question.class.php:1269
 msgid "Plugin"
 msgid_plural "Plugins"
 msgstr[0] "Connector"
@@ -1689,77 +1795,103 @@ msgstr "Paràmetre"
 msgid "Field name"
 msgstr "Nom del camp"
 
-#: inc/abstracttarget.class.php:96
+#: inc/abstracttarget.class.php:97
 msgid "Current active entity"
 msgstr "Entitat activa actual"
 
-#: inc/abstracttarget.class.php:97
+#: inc/abstracttarget.class.php:98
 msgid "Default requester user's entity"
 msgstr "Entitat per defecte del sol·licitant"
 
-#: inc/abstracttarget.class.php:98
+#: inc/abstracttarget.class.php:99
 msgid "First dynamic requester user's entity (alphabetical)"
 msgstr "Primera entitat dinàmica del sol·licitant (alfabètic)"
 
-#: inc/abstracttarget.class.php:99
+#: inc/abstracttarget.class.php:100
 msgid "Last dynamic requester user's entity (alphabetical)"
 msgstr "Darrera entitat dinàmica del sol·licitant (alfabètic)"
 
-#: inc/abstracttarget.class.php:100
+#: inc/abstracttarget.class.php:101
 msgid "The form entity"
 msgstr "Entitat del formulari"
 
-#: inc/abstracttarget.class.php:101
+#: inc/abstracttarget.class.php:102
 msgid "Default entity of the validator"
 msgstr "Entitat per defecte del validador"
 
-#: inc/abstracttarget.class.php:102
+#: inc/abstracttarget.class.php:103
 msgid "Specific entity"
 msgstr "Entitat específica"
 
-#: inc/abstracttarget.class.php:103
+#: inc/abstracttarget.class.php:104
 msgid "Default entity of a user type question answer"
 msgstr "Entitat per defecte de la resposta de la pregunta tipus Usuari"
 
-#: inc/abstracttarget.class.php:104
+#: inc/abstracttarget.class.php:105
 msgid "From a GLPI object > Entity type question answer"
 msgstr "Object GLPI > Resporta d'una pregunta de tipus Entitat"
 
-#: inc/abstracttarget.class.php:115
+#: inc/abstracttarget.class.php:116
 msgid "Always generated"
 msgstr "Generat sempre"
 
-#: inc/abstracttarget.class.php:116
+#: inc/abstracttarget.class.php:117
 msgid "Disabled unless"
 msgstr "Desactivat tret que"
 
-#: inc/abstracttarget.class.php:117
+#: inc/abstracttarget.class.php:118
 msgid "Generated unless"
 msgstr "Generat tret que"
 
-#: inc/abstracttarget.class.php:128
+#: inc/abstracttarget.class.php:129
 msgid "A target must be associated to a form."
 msgstr "Un objectiu ha d'estar associat al formulari."
 
-#: inc/abstracttarget.class.php:133
+#: inc/abstracttarget.class.php:134
 msgid "A target must be associated to an existing form."
 msgstr "Un objectiu ha d'estar associat a un formulari existent."
 
-#: inc/abstracttarget.class.php:138
+#: inc/abstracttarget.class.php:139
 msgid "Name is required."
 msgstr "El nom és obligatori."
 
-#: inc/abstracttarget.class.php:503
+#: inc/abstracttarget.class.php:505
 msgid "Destination entity"
 msgstr "Entitat destí"
 
-#: inc/abstracttarget.class.php:519
+#: inc/abstracttarget.class.php:521
 msgid "User type question"
 msgstr "Pregunta de tipus Usuari"
 
-#: inc/abstracttarget.class.php:520
+#: inc/abstracttarget.class.php:522
 msgid "Entity type question"
 msgstr "Pregunta de tipus Entitat"
+
+#: inc/command/cleanticketscommand.class.php:53
+msgid "Searching for invalid items..."
+msgstr ""
+
+#: inc/command/cleanticketscommand.class.php:61
+msgid "Done."
+msgstr ""
+
+#: inc/command/cleanticketscommand.class.php:135
+msgid "Step 1: double encoded < and > signs."
+msgstr ""
+
+#: inc/command/cleanticketscommand.class.php:146
+#: inc/command/cleanticketscommand.class.php:196
+#: inc/command/cleanticketscommand.class.php:260
+msgid "No invalid items found."
+msgstr ""
+
+#: inc/command/cleanticketscommand.class.php:187
+msgid "Step 2: literal BR tag."
+msgstr ""
+
+#: inc/command/cleanticketscommand.class.php:251
+msgid "Step 3: litteral > sign."
+msgstr ""
 
 #: inc/filter/itilcategoryfilter.class.php:52
 #: inc/filter/itilcategoryfilter.class.php:54
@@ -1799,124 +1931,128 @@ msgid_plural "Composite ticket relations"
 msgstr[0] "Relació de tiquets vinculats"
 msgstr[1] "Relacions de tiquets vinculats"
 
-#: inc/targetticket.class.php:55 entrée standard:43
+#: inc/targetticket.class.php:57 entrée standard:43
 msgid "Target ticket"
 msgid_plural "Target tickets"
 msgstr[0] "Objectiu del tiquet"
 msgstr[1] "Objectius del tiquets"
 
-#: inc/targetticket.class.php:98
+#: inc/targetticket.class.php:100
 msgid "Specific asset"
 msgstr "Actiu específic"
 
-#: inc/targetticket.class.php:99 inc/targetticket.class.php:115
+#: inc/targetticket.class.php:101 inc/targetticket.class.php:117
 #: inc/abstractitiltarget.class.php:198 inc/abstractitiltarget.class.php:206
 #: inc/abstractitiltarget.class.php:214 inc/abstractitiltarget.class.php:222
 #: inc/abstractitiltarget.class.php:231
 msgid "Equals to the answer to the question"
 msgstr "Igual que la resposta de la pregunta"
 
-#: inc/targetticket.class.php:100 inc/abstractitiltarget.class.php:223
+#: inc/targetticket.class.php:102 inc/abstractitiltarget.class.php:223
 #: inc/abstractitiltarget.class.php:232
 msgid "Last valid answer"
 msgstr "Última resposta vàlida"
 
-#: inc/targetticket.class.php:106
+#: inc/targetticket.class.php:108
 msgid "Source from template or user default or GLPI default"
 msgstr "Font de la plantilla o per defecte de l'usuari o GLPI per defecte"
 
-#: inc/targetticket.class.php:107
+#: inc/targetticket.class.php:109
 msgid "Formcreator"
 msgstr "Formcreator"
 
-#: inc/targetticket.class.php:113
+#: inc/targetticket.class.php:115
 msgid "Default or from a template"
 msgstr "Per defecte o d'una plantilla"
 
-#: inc/targetticket.class.php:114
+#: inc/targetticket.class.php:116
 msgid "Specific type"
 msgstr "Tipus específic"
 
-#: inc/targetticket.class.php:187 entrée standard:48
+#: inc/targetticket.class.php:189 entrée standard:48
 msgid "Ticket title"
 msgstr "Títol del tiquet"
 
-#: inc/targetticket.class.php:300
+#: inc/targetticket.class.php:302
 msgid "Add validation message as first ticket followup"
 msgstr "Afegeix un missatge de validació al primer seguiment"
 
-#: inc/targetticket.class.php:334
+#: inc/targetticket.class.php:336
 msgid "Add a field"
 msgstr "Afegeix un camp"
 
-#: inc/targetticket.class.php:362
+#: inc/targetticket.class.php:364
 msgid "Managed fields"
 msgstr "Gestionar camps"
 
-#: inc/targetticket.class.php:369
+#: inc/targetticket.class.php:371
 msgid "No managed field"
 msgstr "No hi ha camp gestionat"
 
-#: inc/targetticket.class.php:389
+#: inc/targetticket.class.php:391
 msgid "Link to an other ticket"
 msgstr "Enllaça amb un altre tiquet"
 
-#: inc/targetticket.class.php:398
+#: inc/targetticket.class.php:400
 msgid "An other destination of this form"
 msgstr "Un altre destí d'aquest formulari"
 
-#: inc/targetticket.class.php:399
+#: inc/targetticket.class.php:401
 msgid "An existing ticket"
 msgstr "Tiquet existent"
 
-#: inc/targetticket.class.php:400
+#: inc/targetticket.class.php:402
 msgid "A ticket from an answer to a question"
 msgstr "Tiquet de resposta a una pregunta"
 
-#: inc/targetticket.class.php:481
+#: inc/targetticket.class.php:483
 msgctxt "button"
 msgid "Delete permanently"
 msgstr "Elimina definitivament"
 
-#: inc/targetticket.class.php:722
+#: inc/targetticket.class.php:724
 msgid "Invalid link type"
 msgstr "Tipus d'enllaç no vàlid"
 
-#: inc/targetticket.class.php:742
+#: inc/targetticket.class.php:744
 msgid "Invalid linked item type"
 msgstr "Tipus d'element enllaçat no vàlid"
 
-#: inc/targetticket.class.php:755
+#: inc/targetticket.class.php:757
 msgid "Linked item does not exists"
 msgstr "L'element enllaçat no existeix"
 
-#: inc/targetticket.class.php:768
+#: inc/targetticket.class.php:770
 msgid "Failed to link the item"
 msgstr "No s'ha pogut enllaçar l'element"
 
-#: inc/targetticket.class.php:924 install/install.php:421
+#: inc/targetticket.class.php:939 install/install.php:432
 msgid "Your form has been accepted by the validator"
 msgstr "La teva sol·licitud ha estat acceptada pel validador"
 
-#: inc/targetticket.class.php:1086
+#: inc/targetticket.class.php:1095
 msgid "Request source"
 msgstr "Origen de la sol·licitud"
 
-#: inc/targetticket.class.php:1111
+#: inc/targetticket.class.php:1120
 msgid "Type "
 msgstr "Tipus"
 
-#: inc/targetticket.class.php:1139
+#: inc/targetticket.class.php:1148
 msgid "Associated elements"
 msgstr "Elements associats"
 
-#: inc/targetticket.class.php:1150
+#: inc/targetticket.class.php:1159
 msgid "Item "
 msgstr "Element"
 
 #: inc/translation.class.php:153
 msgid "No more string to translate"
 msgstr "Ni hi ha cadenes per ttraduir"
+
+#: inc/translation.class.php:164
+msgid "Internal error: translatable string not found."
+msgstr ""
 
 #: inc/translation.class.php:216
 msgid "Language not found."
@@ -1926,7 +2062,7 @@ msgstr "Idioma no trobat"
 msgid "Form not found."
 msgstr "Formulari no trobat"
 
-#: inc/translation.class.php:234
+#: inc/translation.class.php:236
 msgid "Failed to add the translation."
 msgstr "No s'ha pogut afegir la traducció."
 
@@ -2014,153 +2150,153 @@ msgstr "Usuari procedent de la resposta d'una pregunta"
 msgid "Group from question answer"
 msgstr "Grup procedent de la resposta d'una pregunta"
 
-#: inc/abstractitiltarget.class.php:740
+#: inc/abstractitiltarget.class.php:769 entrée standard:108
 msgid "Time to resolve"
 msgstr "Temps de resoldre"
 
-#: inc/abstractitiltarget.class.php:793
+#: inc/abstractitiltarget.class.php:822
 msgid "Minute"
 msgid_plural "Minutes"
 msgstr[0] "Minut"
 msgstr[1] "Minuts"
 
-#: inc/abstractitiltarget.class.php:794
+#: inc/abstractitiltarget.class.php:823
 msgid "Hour"
 msgid_plural "Hours"
 msgstr[0] "Hora"
 msgstr[1] "Hores"
 
-#: inc/abstractitiltarget.class.php:795
+#: inc/abstractitiltarget.class.php:824
 msgid "Day"
 msgid_plural "Days"
 msgstr[0] "Dia"
 msgstr[1] "Dies"
 
-#: inc/abstractitiltarget.class.php:796
+#: inc/abstractitiltarget.class.php:825
 msgid "Month"
 msgid_plural "Months"
 msgstr[0] "Mes"
 msgstr[1] "Mesos"
 
-#: inc/abstractitiltarget.class.php:828
+#: inc/abstractitiltarget.class.php:857
 msgid "SLA (TTO/TTR)"
 msgstr "SLA (TTO/TTR)"
 
-#: inc/abstractitiltarget.class.php:829 inc/abstractitiltarget.class.php:902
+#: inc/abstractitiltarget.class.php:858 inc/abstractitiltarget.class.php:931
 msgid "Question (TTO/TTR)"
 msgstr "Pregunta (TTO/TTR)"
 
-#: inc/abstractitiltarget.class.php:901
+#: inc/abstractitiltarget.class.php:930
 msgid "OLA (TTO/TTR)"
 msgstr "OLA (TTO/TTR)"
 
-#: inc/abstractitiltarget.class.php:1005
+#: inc/abstractitiltarget.class.php:1034
 msgid "Urgency "
 msgstr "Urgència"
 
-#: inc/abstractitiltarget.class.php:1035
+#: inc/abstractitiltarget.class.php:1064
 msgid "Ticket tags"
 msgstr "Etiquetes del tiquet"
 
-#: inc/abstractitiltarget.class.php:1083
+#: inc/abstractitiltarget.class.php:1112
 msgid "Tags"
 msgstr "Tags"
 
-#: inc/abstractitiltarget.class.php:1202
+#: inc/abstractitiltarget.class.php:1231
 msgid "Location"
 msgstr "Ubicació"
 
-#: inc/abstractitiltarget.class.php:1214
+#: inc/abstractitiltarget.class.php:1243
 msgid "Location "
 msgstr "Ubicació"
 
-#: inc/abstractitiltarget.class.php:1554
+#: inc/abstractitiltarget.class.php:1583
 msgid "The description cannot be empty!"
 msgstr "Cal que posis una descripció!"
 
-#: inc/abstractitiltarget.class.php:1731
+#: inc/abstractitiltarget.class.php:1760
 msgid "Watcher"
 msgid_plural "Watchers"
 msgstr[0] "Observador"
 msgstr[1] "Observadors"
 
-#: inc/abstractitiltarget.class.php:1750
+#: inc/abstractitiltarget.class.php:1779
 msgid "Cancel"
 msgstr "Cancel·lar"
 
-#: inc/abstractitiltarget.class.php:2025 inc/abstractitiltarget.class.php:2041
-#: inc/abstractitiltarget.class.php:2042
+#: inc/abstractitiltarget.class.php:2067 inc/abstractitiltarget.class.php:2518
+#: inc/abstractitiltarget.class.php:2522
 msgid "Email followup"
 msgstr "Seguiment per correu electrònic"
 
-#: inc/abstractitiltarget.class.php:2038 inc/abstractitiltarget.class.php:2056
+#: inc/abstractitiltarget.class.php:2098 inc/abstractitiltarget.class.php:2506
 msgid "User"
 msgstr "Usuari"
 
-#: inc/abstractitiltarget.class.php:2039 inc/abstractitiltarget.class.php:2067
+#: inc/abstractitiltarget.class.php:2109 inc/abstractitiltarget.class.php:2510
 msgid "Group"
 msgstr "Grup"
 
-#: inc/abstractitiltarget.class.php:2040 inc/abstractitiltarget.class.php:2096
-msgid "Supplier"
-msgstr "Proveïdor"
-
-#: inc/abstractitiltarget.class.php:2041
-msgid "Yes"
-msgstr "Sí"
-
-#: inc/abstractitiltarget.class.php:2078
+#: inc/abstractitiltarget.class.php:2120
 msgid "Group from the object"
 msgstr "Grup de l'objecte"
 
-#: inc/abstractitiltarget.class.php:2084
+#: inc/abstractitiltarget.class.php:2126
 msgid "Tech group from the object"
 msgstr "Grup tècnic de l'objecte"
 
-#: install/install.php:130
+#: inc/abstractitiltarget.class.php:2138 inc/abstractitiltarget.class.php:2514
+msgid "Supplier"
+msgstr "Proveïdor"
+
+#: inc/abstractitiltarget.class.php:2518
+msgid "Yes"
+msgstr "Sí"
+
+#: install/install.php:135
 #, php-format
 msgid "Upgrade tables to innoDB; run %s"
 msgstr ""
 
-#: install/install.php:160
+#: install/install.php:172
 #, php-format
 msgid ""
-"The database schema is not consistent with the installed Formcreator %s. To "
-"see the logs run the command %s"
+"The database schema is not consistent with the previous version of "
+"Formcreator %s. To see the logs run the command %s"
 msgstr ""
 
-#: install/install.php:169
+#: install/install.php:181
 #, php-format
 msgid "To ignore the inconsistencies and upgrade anyway run %s"
 msgstr ""
 
-#: install/install.php:187
+#: install/install.php:198
 msgid ""
 "Upgrade from version older than 2.5.0 is no longer supported. Please upgrade"
 " to GLPI 9.5.7, upgrade Formcreator to version 2.12.5, then upgrade again to"
 " GLPI 10 or later and Formcreator 2.13 or later."
 msgstr ""
 
-#: install/install.php:239
+#: install/install.php:250
 #, php-format
 msgid ""
-"The database schema is not consistent with the installed Formcreator %s. To "
-"see the logs enable the plugin and run the command %s"
+"The database schema is not consistent with the current version of "
+"Formcreator %s. To see the logs enable the plugin and run the command %s"
 msgstr ""
 
-#: install/install.php:250
+#: install/install.php:261
 msgid "The tables of the plugin passed the schema integrity check."
 msgstr ""
 
-#: install/install.php:402
+#: install/install.php:413
 msgid "A form has been created"
 msgstr "S'ha creat el formulari"
 
-#: install/install.php:403
+#: install/install.php:414
 msgid "Your request has been saved"
 msgstr "La teva sol·licitud s'ha guardat"
 
-#: install/install.php:404
+#: install/install.php:415
 msgid ""
 "Hi,\\nYour request from GLPI has been successfully saved with number "
 "##formcreator.request_id## and transmitted to the helpdesk team.\\nYou can "
@@ -2170,11 +2306,11 @@ msgstr ""
 " ##formcreator.request_id## i s'ha tramès a l'equip de suport. \\nPots veure"
 " les seves respostes a l'enllaç : \\n ##formcreator.validation_link##"
 
-#: install/install.php:409
+#: install/install.php:420
 msgid "A form from GLPI need to be validate"
 msgstr "Hi ha una sol·licitud pendent de validació"
 
-#: install/install.php:410
+#: install/install.php:421
 msgid ""
 "Hi,\\nA form from GLPI need to be validate and you have been choosen as the "
 "validator.\\nYou can access it by clicking onto this "
@@ -2184,11 +2320,11 @@ msgstr ""
 "  com a validador. \\ nPots accedir-hi fent clic en aquest enllaç :.\\n "
 "##formcreator.validation_link##"
 
-#: install/install.php:415
+#: install/install.php:426
 msgid "Your form has been refused by the validator"
 msgstr "La teva sol·licitud ha estat denegada pel validador"
 
-#: install/install.php:416
+#: install/install.php:427
 msgid ""
 "Hi,\\nWe are sorry to inform you that your form has been refused by the "
 "validator for the reason "
@@ -2199,7 +2335,7 @@ msgstr ""
 " ##formcreator.validation_comment##.\\n\\nEncara la pot modificar i tornar a"
 " enviar fent clic en aquest enllaç: \\n ##formcreator.validation_link##"
 
-#: install/install.php:422
+#: install/install.php:433
 msgid ""
 "Hi,\\nWe are pleased to inform you that your form has been accepted by the "
 "validator.\\nYour request will be considered soon."
@@ -2207,11 +2343,11 @@ msgstr ""
 "Hola, \\nEns complau informar-te que la seva sol·licitud ha estat acceptada "
 "pel validador. \\nLa sol·licitud serà tramitada en breu."
 
-#: install/install.php:427
+#: install/install.php:438
 msgid "Your form has been deleted by an administrator"
 msgstr "La teva sol·licitud ha estat eliminada per un administrador"
 
-#: install/install.php:428
+#: install/install.php:439
 msgid ""
 "Hi,\\nWe are sorry to inform you that your request cannot be considered and "
 "has been deleted by an administrator."
@@ -2219,61 +2355,66 @@ msgstr ""
 "Hola, \\n Malauradament la teva sol·licitud no pot ser considerada i ha "
 "estat eliminada per un administrador."
 
-#: install/install.php:654
+#: install/install.php:665
 msgid "Formcreator - Sync service catalog issues"
 msgstr "Formcreator - Problemes amb la sincronització del catàleg de serveis"
 
-#: install/install.php:842
+#: install/install.php:853
 msgid "Failed to check the sanity of the tables!"
 msgstr ""
 
-#: install/install.php:856
+#: install/install.php:867
 #, php-format
 msgid "Table schema differs for table \"%s\"."
 msgstr ""
 
-#: install/install.php:859
+#: install/install.php:870
 #, php-format
 msgid "Table \"%s\" is missing."
 msgstr ""
 
-#: install/install.php:862
+#: install/install.php:873
 #, php-format
 msgid "Unknown table \"%s\" has been found in database."
 msgstr ""
 
-#: hook.php:317
+#: hook.php:378
 msgctxt "button"
 msgid "Duplicate"
 msgstr "Duplicada"
 
-#: hook.php:318
+#: hook.php:379
 msgid "Transfer"
 msgstr "Transfereix"
 
-#: hook.php:319
+#: hook.php:380
 msgctxt "button"
 msgid "Export"
 msgstr "Exporta"
 
-#: hook.php:619
+#: hook.php:381
+msgctxt "button"
+msgid "Access rights"
+msgstr ""
+
+#: hook.php:693
 msgid "Cancel my ticket"
 msgstr "Cancel·lar el meu tiquet"
 
-#: hook.php:637
+#: hook.php:711
 msgid "Old"
 msgstr "Antic"
 
-#: hook.php:644
+#: hook.php:718
 #, php-format
 msgid "Number of %s"
 msgstr "Nombre de %s"
 
-#: hook.php:661
+#: hook.php:735
 msgid "Issues summary"
 msgstr "Resum de problemes"
 
-#: hook.php:699
+#: hook.php:780
 msgid ""
 "Formcreator's mini dashboard not usable as default. This Setting has been "
 "ignored."
@@ -2293,40 +2434,45 @@ msgstr "Formulari no trobat."
 msgid "No FAQ item found."
 msgstr "No s'ha trobat l'element a FAQ."
 
-#: js/scripts.js:686
+#: js/scripts.js:688
 msgid "Are you sure you want to delete this question?"
 msgstr "Segur que vols eliminar aquesta pregunta?"
 
-#: js/scripts.js:869
+#: js/scripts.js:877
 msgid "Are you sure you want to delete this section?"
 msgstr "Segur que vols eliminar aquesta secció?"
 
-#: js/scripts.js:1109
+#: js/scripts.js:1118
 msgid "Add translations"
 msgstr "Afegeix traduccions"
 
-#: js/scripts.js:1256 js/scripts.js:1280
+#: js/scripts.js:1257 js/scripts.js:1281
 msgid "An error occured while querying forms"
 msgstr "Error en consultar els formularis"
 
-#: js/scripts.js:1396 entrée standard:139
+#: js/scripts.js:1372 entrée standard:139
 msgid "Send"
 msgstr "Envia"
 
-#: js/scripts.js:1405
+#: js/scripts.js:1381
 msgid "An internal error occurred. Please report it to administrator."
 msgstr ""
 
-#: js/scripts.js:1446
-msgid "Are you sure you want to delete this target:"
-msgstr "Segur que vols eliminar aquest objectiu?"
+#: js/scripts.js:1449
+msgid "Are you sure you want to duplicate this target?"
+msgstr ""
 
-#: entrée standard:43 standard:50 standard:44 standard:49 standard:78
+#: js/scripts.js:1466
+msgid "Are you sure you want to delete this target?"
+msgstr ""
+
+#: entrée standard:43 standard:50 standard:44 standard:82 standard:49
+#: standard:78
 msgid "Required"
 msgstr "Obligatori"
 
 #: entrée standard:57 standard:61 standard:60 standard:59 standard:43
-#: standard:69 standard:52 standard:37
+#: standard:69 standard:52 standard:76
 msgid "Default values"
 msgstr "Valors per defecte"
 
@@ -2356,7 +2502,11 @@ msgstr "Valors"
 msgid "Show ticket categories"
 msgstr "Mostra les categories del tiquet"
 
-#: entrée standard:127 standard:110
+#: entrée standard:109
+msgid "Time to own"
+msgstr "Temps per apropiar"
+
+#: entrée standard:146 standard:118
 msgid "Selectable root"
 msgstr "Arrel seleccionable"
 
@@ -2403,6 +2553,15 @@ msgstr "Afegeix una secció"
 #: entrée standard:55
 msgid "Condition to show the submit button"
 msgstr "Condicions per mostrar el botó d'enviament"
+
+#: entrée standard:33
+msgid "No form answer yet"
+msgstr ""
+
+#: entrée standard:38
+#, php-format
+msgid "%s latest items"
+msgstr ""
 
 #: entrée standard:83
 msgid "Add a question"

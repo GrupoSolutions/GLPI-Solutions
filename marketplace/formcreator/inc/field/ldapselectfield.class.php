@@ -111,7 +111,7 @@ class LdapselectField extends SelectField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '0') {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );
@@ -151,6 +151,7 @@ class LdapselectField extends SelectField
       if (isset($ldap_values['ldap_attribute'])) {
          $ldap_dropdown = RuleRightParameter::getById((int) $ldap_values['ldap_attribute']);
          if (!($ldap_dropdown instanceof RuleRightParameter)) {
+            Session::addMessageAfterRedirect(__('LDAP attribute is required!', 'formcreator'), false, ERROR);
             return [];
          }
       }

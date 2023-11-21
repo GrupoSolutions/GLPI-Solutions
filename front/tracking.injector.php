@@ -33,6 +33,8 @@
  * ---------------------------------------------------------------------
  */
 
+$SECURITY_STRATEGY = 'no_check'; // Anonymous access may be allowed by configuration.
+
 include('../inc/includes.php');
 
 if (
@@ -54,6 +56,8 @@ if (isset($_POST["_type"]) && ($_POST["_type"] == "Helpdesk")) {
     Html::nullHeader(Ticket::getTypeName(Session::getPluralNumber()));
 } else if ($_POST["_from_helpdesk"]) {
     Html::helpHeader(__('Simplified interface'));
+} else {
+    Html::header(__('Simplified interface'), '', $_SESSION["glpiname"], "helpdesk", "tracking");
 }
 
 if (isset($_POST['_actors']) && is_string($_POST['_actors'])) {
@@ -92,7 +96,11 @@ if (isset($_POST['add'])) {
             echo "</div>";
         }
     } else {
-        Html::back();
+        if (isset($_POST["_type"]) && ($_POST["_type"] == "Helpdesk")) {
+            Html::redirect($CFG_GLPI["root_doc"] . "/front/helpdesk.php");
+        } else {
+            Html::redirect($CFG_GLPI["root_doc"] . "/front/helpdesk.public.php?create_ticket=1");
+        }
     }
     Html::nullFooter();
 } else { // reload display form

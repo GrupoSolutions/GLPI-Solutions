@@ -343,7 +343,8 @@ function buildKbCategoryList(tree) {
    if (tree.id != 0) {
       html += '<a href="#" data-parent-category-id="' + tree.parent +'"'
          + ' data-category-id="' + tree.id + '"'
-         + ' onclick="plugin_formcreator.updateKbitemsView(this)">'
+         + ' onclick="plugin_formcreator.updateKbitemsView(this)"'
+         + ' title="' + tree.comment + '">'
          + tree.name
          + '</a>';
    }
@@ -364,7 +365,7 @@ function buildCategoryList(tree) {
       html = '<a href="#" data-parent-category-id="' + tree.parent +'"'
          + ' data-category-id="' + tree.id + '"'
          + ' onclick="plugin_formcreator.updateWizardFormsView(this)"'
-         + 'title="' + tree.name + '">'
+         + ' title="' + tree.comment + '">'
          + tree.name
          + '</a>';
    }
@@ -395,7 +396,7 @@ function buildTiles(list) {
       // Build a HTML tile
       var url = formcreatorRootDoc + '/front/formdisplay.php?id=' + item.id;
       if (item.type != 'form') {
-         url = rootDoc + '/front/knowbaseitem.form.php?id=' + item.id;
+         url = rootDoc + '/front/helpdesk.faq.php?id=' + item.id;
       }
 
       var tiles_design = "";
@@ -780,7 +781,7 @@ var plugin_formcreator = new function() {
          displayAjaxMessageAfterRedirect();
       }).done(function(data) {
          var question = $('.plugin_formcreator_form_design[data-itemtype="PluginFormcreatorForm"] [data-itemtype="PluginFormcreatorQuestion"][data-id="' + questionId + '"]');
-         question.find('[data-field="name"]').text(data['name'])
+         $(question.find('[data-field="name"]')).replaceWith(data['name']);
          that.resetTabs();
       });
 
@@ -845,7 +846,7 @@ var plugin_formcreator = new function() {
             var sectionId = parseInt(sectionKey);
             if (!isNaN(sectionId)) {
                if (sectionToShow[sectionId]) {
-                  $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorSection"][data-id="' + sectionId+ '"]').removeAttr('hidden', '');
+                  $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorSection"][data-id="' + sectionId+ '"]').removeAttr('hidden');
                } else {
                   $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorSection"][data-id="' + sectionId+ '"]').attr('hidden', '');
                }
@@ -857,16 +858,18 @@ var plugin_formcreator = new function() {
             questionId = parseInt(questionKey.replace('formcreator_field_', ''));
             if (!isNaN(questionId)) {
                if (questionToShow[questionKey]) {
-                  $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorQuestion"][data-id="' + questionKey + '"]').removeAttr('hidden', '');
+                  $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorQuestion"][data-id="' + questionKey + '"]').removeAttr('hidden');
                } else {
                   $('#plugin_formcreator_form.plugin_formcreator_form [data-itemtype = "PluginFormcreatorQuestion"][data-id="' + questionKey + '"]').attr('hidden', '');
                }
             }
          }
 
-         $('[name="submit_formcreator"]').toggle(submitButtonToShow == true);
+         $('#plugin_formcreator_form.plugin_formcreator_form button[name="add"]').toggle(submitButtonToShow == true);
       });
    };
+
+   this.showFieldsDebounced = _.debounce(this.showFields, 400, false);
 
    // === SECTIONS ===
 
@@ -1040,7 +1043,7 @@ var plugin_formcreator = new function() {
          displayAjaxMessageAfterRedirect();
       }).done(function (data) {
          var section = $('.plugin_formcreator_form_design[data-itemtype="PluginFormcreatorForm"] [data-itemtype="PluginFormcreatorSection"][data-id="' + sectionId + '"]');
-         section.find('> a [data-field="name"]').text(data['name']);
+         section.find(' > [data-field="name"]').replaceWith(data['name']);
          that.resetTabs();
       }).complete(function () {
          var myModal = form.closest('div.modal');
@@ -1106,6 +1109,7 @@ var plugin_formcreator = new function() {
 
    this.newTranslation = function (formLanguageId) {
       glpi_ajax_dialog({
+         dialogclass: 'modal-xl',
          url: '../ajax/form_language.php',
          params: {
             action: 'newTranslation',
@@ -1131,6 +1135,11 @@ var plugin_formcreator = new function() {
       }).fail(function () {
          displayAjaxMessageAfterRedirect();
       }).done(function () {
+         // Remove unclosed TinyMCE toolbar
+         var tinyToolbar = document.querySelector('.tox-tinymce-aux');
+         if (tinyToolbar) {
+            tinyToolbar.parentNode.removeChild(tinyToolbar);
+         }
          that.showTranslationEditor(form);
       });
    }
@@ -1152,6 +1161,7 @@ var plugin_formcreator = new function() {
       var translationId = $(element.closest('[data-itemtype="PluginFormcreatorTranslation"]')).attr('data-id');
       var modal;
       modal = glpi_ajax_dialog({
+         dialogclass: 'modal-xl',
          url: '../ajax/form_language.php',
          params: {
             action: 'translation',
@@ -1160,6 +1170,12 @@ var plugin_formcreator = new function() {
          },
          title: i18n.textdomain('formcreator').__('Update a translation', 'formcreator'),
          close: function () {
+            // Remove unclosed TinyMCE toolbar
+            var tinyToolbar = document.querySelector('.tox-tinymce-aux');
+            if (tinyToolbar) {
+               tinyToolbar.parentNode.removeChild(tinyToolbar);
+            }
+            // Reload the tab
             reloadTab();
          },
          fail: function () {
@@ -1337,10 +1353,10 @@ var plugin_formcreator = new function() {
       });
    };
 
-   this.submitUserForm = function () {
+   this.submitUserForm = function (event) {
       var form     = document.querySelector('form[role="form"][data-itemtype]');
       var data     = new FormData(form);
-      data.append('submit_formcreator', '');
+      data.append('add', '');
       $.post({
          url: formcreatorRootDoc + '/ajax/formanswer.php',
          processData: false,
@@ -1377,11 +1393,14 @@ var plugin_formcreator = new function() {
             initMessagesAfterRedirectToasts();
          }
       });
+      event.preventDefault();
+      blockFormSubmit($(form), event);
+      return false;
    };
 
    this.submitUserFormByKeyPress = function (event) {
       var keyPressed = event.keyCode || event.which;
-      if (keyPressed === 13 && $('[name="submit_formcreator"]').is(':hidden')) {
+      if (keyPressed === 13 && $('#plugin_formcreator_form.plugin_formcreator_form button[name="add"]').is(':hidden')) {
          event.preventDefault();
          return false;
       }
@@ -1400,6 +1419,18 @@ var plugin_formcreator = new function() {
          return item.name != '_glpi_csrf_token';
       });
    }
+
+   this.showMassiveRestrictions = function (item) {
+      document.querySelector('#plugin_formcreator_restrictions_head').style.display = 'none';
+      document.querySelector('#plugin_formcreator_restrictions').style.display = 'none';
+      document.querySelector('#plugin_formcreator_captcha').style.display = 'none';
+      if (item.value == 2 /* PluginFormcreatorForm::ACCESS_RESTRICTED */) {
+         document.querySelector('#plugin_formcreator_restrictions').style.display = 'block';
+         document.querySelector('#plugin_formcreator_restrictions_head').style.display = 'block';
+      } else if (item.value == 0 /* PluginFormcreatorForm::ACCESS_PUBLIC */) {
+         document.querySelector('#plugin_formcreator_captcha').style.display = 'block';
+      }
+   }
 }
 
 // === TARGETS ===
@@ -1414,8 +1445,25 @@ function plugin_formcreator_addTarget(items_id) {
    });
 }
 
-$(document).on('click', '.formcreator_delete_target', function() {
-   if(confirm(i18n.textdomain('formcreator').__('Are you sure you want to delete this target:', 'formcreator'))) {
+$(document).on('click', '.plugin_formcreator_duplicate_target', function() {
+   if(confirm(i18n.textdomain('formcreator').__('Are you sure you want to duplicate this target?', 'formcreator'))) {
+      $.post({
+        url: formcreatorRootDoc + '/ajax/form_duplicate_target.php',
+        data: {
+            action: 'duplicate_target',
+            itemtype: $(this).data('itemtype'),
+            items_id: $(this).data('items-id'),
+         }
+      }).done(function () {
+         reloadTab();
+      }).fail(function () {
+         displayAjaxMessageAfterRedirect();
+      });
+   }
+});
+
+$(document).on('click', '.plugin_formcreator_delete_target', function() {
+   if(confirm(i18n.textdomain('formcreator').__('Are you sure you want to delete this target?', 'formcreator'))) {
       $.post({
         url: formcreatorRootDoc + '/ajax/form_delete_target.php',
         data: {
@@ -1729,15 +1777,16 @@ function pluginFormcreatorInitializeTextarea(fieldName, rand) {
    var i = 0;
    var e;
    while (e = tinymce.get(i++)) {
-      var field = $('[name="' + fieldName + '"]');
-      var form = field[0].form;
-      if (e.formElement != form) {
+      if ($(e.targetElm).prop('name') != fieldName) {
          continue;
       }
+
+      const field = $('[name="' + fieldName + '"]');
+      const form = field[0].form
       // https://stackoverflow.com/a/63342064
       e.on('input NodeChange', function(e) {
          tinyMCE.triggerSave();
-         plugin_formcreator.showFields($(form));
+         plugin_formcreator.showFieldsDebounced($(form));
       });
       return;
   }

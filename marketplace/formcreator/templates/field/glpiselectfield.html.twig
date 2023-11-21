@@ -62,13 +62,21 @@
     ) }}
 
     {% if item.fields['itemtype'] is defined and item.fields['itemtype'] != '0' %}
+        {% set to_add = {} %}
+        {% if item.fields['itemtype'] == 'Entity' %}
+            {% set default_values = item.fields['default_values'] == '' ? -1 : item.fields['default_values'] %}
+            {% set to_add = {
+                '-1': constant('Dropdown::EMPTY_VALUE'),
+            } %}
+        {% endif %}
         {{ fields.dropdownField(
             item.fields['itemtype'],
             'default_values',
-            item.fields['default_values'],
+            item.fields['_default_values'],
             __('Default values'), {
                 label_class: 'col-xxl-4',
                 input_class: 'col-xxl-8',
+                toadd: to_add,
             }
         ) }}
     {% else %}
@@ -97,7 +105,7 @@
 
         {{ fields.numberField(
             'show_tree_depth',
-            item.fields['_show_tree_depth'],
+            item.fields['_tree_max_depth'],
             __('Limit subtree depth', 'formcreator'), {
                 label_class: 'col-xxl-4',
                 input_class: 'col-xxl-8',

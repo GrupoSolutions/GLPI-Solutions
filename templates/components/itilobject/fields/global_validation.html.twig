@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -58,7 +58,19 @@
             } %}
          {% endif %}
 
-   
+         {{ fields.field(
+            '_add_validation',
+            validation.dropdownValidator({
+               'name': 'users_id_validate',
+               'entity': item.fields['entities_id'],
+               'right': validation_right,
+               'users_id_validate': params['users_id_validate'],
+               'display': false,
+               'disabled': (not canupdate),
+            }|merge(required)),
+            __('Approval request'),
+            field_options
+         ) }}
 
          <input type="hidden" name="_add_validation" value="{{ params['_add_validation'] }}" />
       {% endif %}
@@ -68,9 +80,7 @@
                 'global_validation',
                 call('TicketValidation::getStatus', [item.fields['global_validation'], true]),
                 "CommonITILValidation"|itemtype_name,
-                {
-                    'full_width': true,
-                }
+                field_options
             ) }}
         {% endif %}
    {% endif %}

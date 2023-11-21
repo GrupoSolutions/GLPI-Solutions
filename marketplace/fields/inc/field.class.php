@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Fields. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
- * @copyright Copyright (C) 2013-2022 by Fields plugin team.
+ * @copyright Copyright (C) 2013-2023 by Fields plugin team.
  * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
  * @link      https://github.com/pluginsGLPI/fields
  * -------------------------------------------------------------------------
@@ -35,18 +35,33 @@ class PluginFieldsField extends CommonDBChild
 {
     use Glpi\Features\Clonable;
 
+    /**
+     * Starting index for search options.
+     * @var integer
+     */
+    public const SEARCH_OPTION_STARTING_INDEX = 76665;
+
     public static $itemtype = PluginFieldsContainer::class;
     public static $items_id = 'plugin_fields_containers_id';
 
+
+    public function getForbiddenStandardMassiveAction()
+    {
+        $forbidden   = parent::getForbiddenStandardMassiveAction();
+        $forbidden[] = 'clone';
+        return $forbidden;
+    }
+
+
     /**
-     * Install or update fields
+     * Install or update plugin base data.
      *
      * @param Migration $migration Migration instance
      * @param string    $version   Plugin current version
      *
      * @return boolean
      */
-    public static function install(Migration $migration, $version)
+    public static function installBaseData(Migration $migration, $version)
     {
         global $DB;
 
@@ -63,13 +78,14 @@ class PluginFieldsField extends CommonDBChild
                   `id`                                INT            {$default_key_sign} NOT NULL auto_increment,
                   `name`                              VARCHAR(255)   DEFAULT NULL,
                   `label`                             VARCHAR(255)   DEFAULT NULL,
-                  `type`                              VARCHAR(255)    DEFAULT NULL,
+                  `type`                              VARCHAR(255)   DEFAULT NULL,
                   `plugin_fields_containers_id`       INT            {$default_key_sign} NOT NULL DEFAULT '0',
                   `ranking`                           INT            NOT NULL DEFAULT '0',
-                  `default_value`                     VARCHAR(255)   DEFAULT NULL,
+                  `default_value`                     LONGTEXT       ,
                   `is_active`                         TINYINT        NOT NULL DEFAULT '1',
                   `is_readonly`                       TINYINT        NOT NULL DEFAULT '1',
                   `mandatory`                         TINYINT        NOT NULL DEFAULT '0',
+                  `multiple`                          TINYINT        NOT NULL DEFAULT '0',
                   `allowed_values`                    TEXT           ,
                   PRIMARY KEY                         (`id`),
                   KEY `plugin_fields_containers_id`   (`plugin_fields_containers_id`),
@@ -92,6 +108,9 @@ class PluginFieldsField extends CommonDBChild
         if (!$DB->fieldExists($table, 'mandatory')) {
             $migration->addField($table, 'mandatory', 'bool', ['value' => 0]);
         }
+        if (!$DB->fieldExists($table, 'multiple')) {
+            $migration->addField($table, 'multiple', 'bool', ['value' => 0]);
+        }
 
         //increase the size of column 'type' (25 to 255)
         $migration->changeField($table, 'type', 'type', 'string');
@@ -99,6 +118,9 @@ class PluginFieldsField extends CommonDBChild
         if (!$DB->fieldExists($table, 'allowed_values')) {
             $migration->addField($table, 'allowed_values', 'text');
         }
+
+        // change default_value from varchar to longtext
+        $migration->changeField($table, 'default_value', 'default_value', 'longtext');
 
         $toolbox = new PluginFieldsToolbox();
         $toolbox->fixFieldsNames($migration, ['NOT' => ['type' => 'dropdown']]);
@@ -120,7 +142,89 @@ class PluginFieldsField extends CommonDBChild
             )
         );
 
+        // 1.18.3 Make search options ID stable over time ad constant across profiles
+        if (Config::getConfigurationValue('plugin:fields', 'stable_search_options') !== 'yes') {
+            self::migrateToStableSO($migration);
+            $migration->addConfig(['stable_search_options' => 'yes'], 'plugin:fields');
+        }
+
         return true;
+    }
+
+    /**
+     * Migrate search options ID stored in DB to their new stable ID.
+     *
+     * Prior to 1.18.3, search options ID were built using a simple increment and filtered using current profile rights,
+     * resulting in following behaviours:
+     * - when a container was activated/deactivated/removed, SO ID were potentially changed;
+     * - when a field was removed, SO ID were potentially changed;
+     * - in a sessionless context (e.g. CLI command/crontask), no SO were available;
+     * - when user added a SO in its display preference from a A profile, this SO was sometimes targetting a completely different field on a B profile.
+     * All of these behaviours were resulting in unstable display preferences and saved searches.
+     *
+     * Producing an exact mapping between previous unstable SO ID and new stable SO ID is almost impossible in many cases, due to
+     * previously described behaviours. Basically, we cannot know if the current SO ID in database is still correct
+     * and what were the profile rights when it was generated.
+     *
+     * @param Migration $migration
+     */
+    private static function migrateToStableSO(Migration $migration): void
+    {
+        global $DB;
+
+        // Flatten itemtype list
+        $itemtypes = array_keys(array_merge([], ...array_values(PluginFieldsToolbox::getGlpiItemtypes())));
+
+        foreach ($itemtypes as $itemtype) {
+            // itemtype is stored in a JSON array, so entry is surrounded by double quotes
+            $search_string = json_encode($itemtype);
+            // Backslashes must be doubled in LIKE clause, according to MySQL documentation:
+            // > To search for \, specify it as \\\\; this is because the backslashes are stripped
+            // > once by the parser and again when the pattern match is made,
+            // > leaving a single backslash to be matched against.
+            $search_string = str_replace('\\', '\\\\', $search_string);
+
+            $fields = $DB->request(
+                [
+                    'SELECT'     => [
+                        'glpi_plugin_fields_fields.id',
+                    ],
+                    'FROM'       => 'glpi_plugin_fields_fields',
+                    'INNER JOIN' => [
+                        'glpi_plugin_fields_containers' => [
+                            'FKEY' => [
+                                'glpi_plugin_fields_containers' => 'id',
+                                'glpi_plugin_fields_fields'     => 'plugin_fields_containers_id',
+                                [
+                                    'AND' => [
+                                        'glpi_plugin_fields_containers.is_active' => 1,
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ],
+                    'WHERE' => [
+                        'glpi_plugin_fields_containers.itemtypes' => ['LIKE', '%' . $DB->escape($search_string) . '%'],
+                        ['NOT' => ['glpi_plugin_fields_fields.type' => 'header']],
+                    ],
+                    'ORDERBY'      => [
+                        'glpi_plugin_fields_fields.id',
+                    ],
+                ]
+            );
+
+            $i = PluginFieldsField::SEARCH_OPTION_STARTING_INDEX;
+
+            foreach ($fields as $field_data) {
+                $migration->changeSearchOption(
+                    $itemtype,
+                    $i,
+                    PluginFieldsField::SEARCH_OPTION_STARTING_INDEX + $field_data['id']
+                );
+
+                $i++;
+            }
+        }
     }
 
     public static function uninstall()
@@ -142,6 +246,10 @@ class PluginFieldsField extends CommonDBChild
     {
         //parse name
         $input['name'] = $this->prepareName($input);
+
+        if ($input['multiple'] ?? false) {
+            $input['default_value'] = json_encode($input['default_value'] ?? []);
+        }
 
         //reject adding when field name is too long for mysql
         if (strlen($input['name']) > 64) {
@@ -190,7 +298,13 @@ class PluginFieldsField extends CommonDBChild
             $container_obj->getFromDB($input['plugin_fields_containers_id']);
             foreach (json_decode($container_obj->fields['itemtypes']) as $itemtype) {
                 $classname = PluginFieldsContainer::getClassname($itemtype, $container_obj->fields['name']);
-                $classname::addField($input['name'], $input['type']);
+                $classname::addField(
+                    $input['name'],
+                    $input['type'],
+                    [
+                        'multiple' => (bool)($input['multiple'] ?? false)
+                    ]
+                );
             }
         }
 
@@ -201,17 +315,64 @@ class PluginFieldsField extends CommonDBChild
         return $input;
     }
 
+
+    public function prepareInputForUpdate($input)
+    {
+        if (
+            array_key_exists('default_value', $input)
+            && $this->fields['multiple']
+        ) {
+            $input['default_value'] = json_encode($input['default_value'] ?: []);
+        }
+
+        return $input;
+    }
+
+
+    private function cleanDisplayPreferences($itemtype, $so_id)
+    {
+        $displayPref = new DisplayPreference();
+        $displayPref->deleteByCriteria([
+            "itemtype" => $itemtype,
+            "num" => $so_id
+        ]);
+    }
+
     // phpcs:ignore PSR1.Methods.CamelCapsMethodName
     public function pre_deleteItem()
     {
+        //retrieve search option ID to clean DiplayPreferences
+        $container_obj = new PluginFieldsContainer();
+        $container_obj->getFromDB($this->fields['plugin_fields_containers_id']);
+
+        foreach (json_decode($container_obj->fields['itemtypes']) as $itemtype) {
+            $so = PluginFieldsContainer::getAddSearchOptions($itemtype, $this->fields['plugin_fields_containers_id']);
+            foreach ($so as $so_id => $so_value) {
+                if ($this->fields['type'] == 'glpi_item') {
+                    if (
+                        $so_value['field'] == "items_id_" . $this->fields['name']
+                        || $so_value['field'] == "itemtype_" . $this->fields['name']
+                    ) {
+                        $this->cleanDisplayPreferences($itemtype, $so_id);
+                    }
+                } elseif ($this->fields['type'] == 'dropdown') {
+                    if ($so_value['linkfield'] == "plugin_fields_" . $this->fields['name'] . "dropdowns_id") {
+                        $this->cleanDisplayPreferences($itemtype, $so_id);
+                    }
+                } else {
+                    if ($so_value['field'] == $this->fields['name']) {
+                        $this->cleanDisplayPreferences($itemtype, $so_id);
+                    }
+                }
+            }
+        }
+
         //remove field in container table
         if (
             $this->fields['type'] !== "header"
             && !isset($_SESSION['uninstall_fields'])
             && !isset($_SESSION['delete_container'])
         ) {
-            $container_obj = new PluginFieldsContainer();
-            $container_obj->getFromDB($this->fields['plugin_fields_containers_id']);
             foreach (json_decode($container_obj->fields['itemtypes']) as $itemtype) {
                 $classname = PluginFieldsContainer::getClassname($itemtype, $container_obj->fields['name']);
                 $classname::removeField($this->fields['name'], $this->fields['type']);
@@ -240,11 +401,16 @@ class PluginFieldsField extends CommonDBChild
         $old_container = $this->fields['plugin_fields_containers_id'];
         $old_ranking   = $this->fields['ranking'];
 
-        $query = "UPDATE $table SET
-                ranking = ranking-1
-                WHERE plugin_fields_containers_id = $old_container
-                AND ranking > $old_ranking";
-        $DB->query($query);
+        $DB->update(
+            $table,
+            [
+                'ranking' => new QueryExpression($DB->quoteName('ranking') . ' - 1')
+            ],
+            [
+                'plugin_fields_containers_id' => $old_container,
+                'ranking'                     => ['>', $old_ranking]
+            ]
+        );
 
         return true;
     }
@@ -255,7 +421,7 @@ class PluginFieldsField extends CommonDBChild
      * @param  array $input the field form input
      * @return string  the parsed name
      */
-    public function prepareName($input)
+    public function prepareName($input, bool $prevent_duplicated = true)
     {
         $toolbox = new PluginFieldsToolbox();
 
@@ -284,10 +450,17 @@ class PluginFieldsField extends CommonDBChild
 
         $field      = new self();
         $field_name = $input['name'];
-        $i = 2;
-        while (count($field->find(['name' => $field_name])) > 0) {
-            $field_name = $toolbox->getIncrementedSystemName($input['name'], $i);
-            $i++;
+
+        if ($prevent_duplicated) {
+            $i = 2;
+
+            // If method is call during an update, exclude current field from duplication checks.
+            $extra_condition = ($input['id'] ?? 0) > 0 ? ['NOT' => ['id' => $input['id']]] : [];
+
+            while (count($field->find(['name' => $field_name] + $extra_condition)) > 0) {
+                $field_name = $toolbox->getIncrementedSystemName($input['name'], $i);
+                $i++;
+            }
         }
 
         // if it's too long then use a random postfix
@@ -311,14 +484,18 @@ class PluginFieldsField extends CommonDBChild
     {
         global $DB;
 
-        $sql = "SELECT max(`ranking`) AS `rank`
-              FROM `" . self::getTable() . "`
-              WHERE `plugin_fields_containers_id` = '" .
-                  $this->fields['plugin_fields_containers_id'] . "'";
-        $result = $DB->query($sql);
+        $iterator = $DB->request([
+            'SELECT' => new \QueryExpression(
+                'max(' . $DB->quoteName('ranking') . ') AS ' . $DB->quoteName('rank')
+            ),
+            'FROM'   => self::getTable(),
+            'WHERE'  => [
+                'plugin_fields_containers_id' => $this->fields['plugin_fields_containers_id']
+            ]
+        ]);
 
-        if ($DB->numrows($result) > 0) {
-            $data = $DB->fetchAssoc($result);
+        if (count($iterator) > 0) {
+            $data = $iterator->current();
             return $data["rank"] + 1;
         }
         return 0;
@@ -366,14 +543,14 @@ class PluginFieldsField extends CommonDBChild
         $cID = $container->fields['id'];
 
         // Display existing Fields
-        $query  = "SELECT `id`, `label`
-                FROM `" . $this->getTable() . "`
-                WHERE `plugin_fields_containers_id` = '$cID'
-                ORDER BY `ranking` ASC";
-        $result = $DB->query($query);
+        $iterator = $DB->request([
+            'SELECT' => ['id', 'label'],
+            'FROM' => self::getTable(),
+            'WHERE' => ['plugin_fields_containers_id' => $cID],
+            'ORDER' => 'ranking ASC'
+        ]);
 
         $rand   = mt_rand();
-
         echo "<div id='viewField$cID$rand'></div>";
 
         $ajax_params = [
@@ -395,7 +572,7 @@ class PluginFieldsField extends CommonDBChild
            "<a href='javascript:viewAddField$cID$rand();'>";
         echo __("Add a new field", "fields") . "</a></div><br>";
 
-        if ($DB->numrows($result) == 0) {
+        if (count($iterator) == 0) {
             echo "<table class='tab_cadre_fixe'><tr class='tab_bg_2'>";
             echo "<th class='b'>" . __("No field for this block", "fields") . "</th></tr></table>";
         } else {
@@ -418,7 +595,7 @@ class PluginFieldsField extends CommonDBChild
 
             Session::initNavigateListItems('PluginFieldsField', __('Fields list'));
 
-            while ($data = $DB->fetchArray($result)) {
+            foreach ($iterator as $data) {
                 if ($this->getFromDB($data['id'])) {
                     echo "<tr class='tab_bg_2' style='cursor:pointer'>";
 
@@ -426,7 +603,47 @@ class PluginFieldsField extends CommonDBChild
                     echo "<a href='" . Plugin::getWebDir('fields') . "/front/field.form.php?id={$this->getID()}'>{$this->fields['label']}</a>";
                     echo "</td>";
                     echo "<td>" . $fields_type[$this->fields['type']] . "</td>";
-                    echo "<td>" . $this->fields['default_value'] . "</td>";
+                    echo "<td>" ;
+                    $dropdown_matches = [];
+                    if (
+                        preg_match('/^dropdown-(?<class>.+)$/', $this->fields['type'], $dropdown_matches) === 1
+                        && !empty($this->fields['default_value'])
+                    ) {
+                        $itemtype = $dropdown_matches['class'];
+                        // Itemtype may not exists (for instance for a deactivated plugin)
+                        if (is_a($itemtype, CommonDBTM::class, true)) {
+                            $item = new $itemtype();
+                            if ($this->fields['multiple']) {
+                                $values = json_decode($this->fields['default_value']);
+
+                                $names = [];
+                                foreach ($values as $value) {
+                                    if ($item->getFromDB($value)) {
+                                        $names[] = $item->getName();
+                                    }
+                                }
+
+                                echo implode(', ', $names);
+                            } else {
+                                if ($item->getFromDB($this->fields['default_value'])) {
+                                    echo $item->getName();
+                                }
+                            }
+                        }
+                    } elseif ($this->fields['type'] === 'dropdown' && !empty($this->fields['default_value'])) {
+                        $table = getTableForItemType(PluginFieldsDropdown::getClassname($this->fields['name']));
+                        if ($this->fields['multiple']) {
+                            echo implode(
+                                ', ',
+                                Dropdown::getDropdownArrayNames($table, json_decode($this->fields['default_value']))
+                            );
+                        } else {
+                            echo Dropdown::getDropdownName($table, $this->fields['default_value']);
+                        }
+                    } else {
+                        echo $this->fields['default_value'];
+                    }
+                    echo "</td>";
                     echo "<td align='center'>" . Dropdown::getYesNo($this->fields["mandatory"]) . "</td>";
                     echo "<td align='center'>";
                     echo ($this->isActive())
@@ -457,8 +674,6 @@ class PluginFieldsField extends CommonDBChild
 
     public function showForm($ID, $options = [])
     {
-        global $CFG_GLPI;
-
         $rand = mt_rand();
 
         if (isset($options['parent_id']) && !empty($options['parent_id'])) {
@@ -503,99 +718,42 @@ class PluginFieldsField extends CommonDBChild
         if ($edit) {
             echo self::getTypes(true)[$this->fields['type']];
         } else {
-            // if glpi_item selected display dropdown and hide input default_value
-            echo Html::scriptBlock(<<<JAVASCRIPT
-                var plugin_fields_change_field_type_{$rand} = function(selected_val) {
-                    if (selected_val === 'glpi_item') {
-                        $('#plugin_fields_default_value_label_{$rand}').hide();
-                        $('#plugin_fields_default_value_field_{$rand}').find('[name="default_value"]').val(null).trigger('change');
-                        $('#plugin_fields_default_value_field_{$rand}').hide();
-                        $('#plugin_fields_allowed_values_label_{$rand}').show();
-                        $('#plugin_fields_allowed_values_field_{$rand}').show();
-                    } else {
-                        $('#plugin_fields_default_value_label_{$rand}').show();
-                        $('#plugin_fields_default_value_field_{$rand}').show();
-                        $('#plugin_fields_allowed_values_label_{$rand}').hide();
-                        $('#plugin_fields_allowed_values_field_{$rand}').find('[name="allowed_values\[\]"]').val(null).trigger('change');
-                        $('#plugin_fields_allowed_values_field_{$rand}').hide();
-                    }
-                };
-                $(
-                    function () {
-                        plugin_fields_change_field_type_{$rand}();
-                    }
-                );
-JAVASCRIPT
-            );
-
             Dropdown::showFromArray(
                 'type',
                 self::getTypes(false),
                 [
-                    'value'     => $this->fields['type'],
-                    'on_change' => 'plugin_fields_change_field_type_' . $rand . '(this.value)',
+                    'value' => $this->fields['type'],
+                    'rand'  => $rand,
                 ]
             );
         }
+
         echo "</td>";
         echo "</tr>";
 
-        $style_default = $this->fields['type'] === 'glpi_item' ? 'style="display:none;"' : '';
-        $style_allowed = $this->fields['type'] !== 'glpi_item' ? 'style="display:none;"' : '';
-        echo "<tr>";
-        echo "<td>";
-        echo '<div id="plugin_fields_default_value_label_' . $rand . '" ' . $style_default . '>';
-        echo __("Default values") . " : ";
-        echo '</div>';
-        echo '<div id="plugin_fields_allowed_values_label_' . $rand . '" ' . $style_allowed . '>';
-        echo __('Allowed values', 'fields') . " : ";
-        echo '</div>';
-        echo "</td>";
-        echo "<td colspan='3'>";
-        echo '<div id="plugin_fields_default_value_field_' . $rand . '" ' . $style_default . '>';
-        echo Html::input(
-            'default_value',
+        echo '<tr id="plugin_fields_specific_fields_' . $rand . '" style="line-height: 46px;">';
+        echo '<td>';
+        Ajax::updateItemOnSelectEvent(
+            "dropdown_type$rand",
+            "plugin_fields_specific_fields_$rand",
+            "../ajax/field_specific_fields.php",
             [
-                'value' => $this->fields['default_value'],
+                'id'   => $ID,
+                'type' => '__VALUE__',
+                'rand' => $rand,
             ]
         );
-        if ($this->fields["type"] == "dropdown") {
-            echo '<a href="' . Plugin::getWebDir('fields') . '/front/commondropdown.php?ddtype=' .
-                          $this->fields['name'] . 'dropdown">
-               <img src="' . $CFG_GLPI['root_doc'] . '/pics/options_search.png" class="pointer"
-                    alt="' . __('Configure', 'fields') . '" title="' . __('Configure fields values', 'fields') . '">
-               </a>';
-        }
-        if (in_array($this->fields['type'], ['date', 'datetime'])) {
-            echo "<i class='pointer fa fa-info'
-                  title=\"" . __("You can use 'now' for date and datetime field") . "\"></i>";
-        }
-        echo '</div>';
-        echo '<div id="plugin_fields_allowed_values_field_' . $rand . '" ' . $style_allowed . '>';
-        if (!$edit) {
-            Dropdown::showFromArray('allowed_values', PluginFieldsToolbox::getGlpiItemtypes(), [
-                'display_emptychoice'   => true,
-                'multiple' => true
-            ]);
-        } else {
-            $allowed_itemtypes = !empty($this->fields['allowed_values'])
-            ? json_decode($this->fields['allowed_values'])
-            : [];
-            echo implode(
-                ', ',
-                array_map(
-                    function ($itemtype) {
-                        return is_a($itemtype, CommonDBTM::class, true)
-                        ? $itemtype::getTypeName(Session::getPluralNumber())
-                        : $itemtype;
-                    },
-                    $allowed_itemtypes
-                )
-            );
-        }
-        echo '</div>';
-        echo "</td>";
-        echo "</tr>";
+        Ajax::updateItem(
+            "plugin_fields_specific_fields_$rand",
+            "../ajax/field_specific_fields.php",
+            [
+                'id'   => $ID,
+                'type' => $this->fields['type'] ?? '',
+                'rand' => $rand,
+            ]
+        );
+        echo '</td>';
+        echo '</tr>';
 
         echo "<tr>";
         echo "<td>" . __('Active') . " :</td>";
@@ -620,13 +778,12 @@ JAVASCRIPT
 
     public static function showForTabContainer($c_id, $item)
     {
-        //profile restriction (for reading profile)
-        $profile = new PluginFieldsProfile();
-        $found = $profile->find(['profiles_id' => $_SESSION['glpiactiveprofile']['id'],
-            'plugin_fields_containers_id' => $c_id
-        ]);
-        $first_found = array_shift($found);
-        $canedit = ($first_found['right'] == CREATE);
+        //profile restriction
+        $right = PluginFieldsProfile::getRightOnContainer($_SESSION['glpiactiveprofile']['id'], $c_id);
+        if ($right < READ) {
+            return;
+        }
+        $canedit = $right > READ;
 
         //get fields for this container
         $field_obj = new self();
@@ -661,7 +818,7 @@ JAVASCRIPT
      *
      * @return void
      */
-    public static function showDomContainer($id, $item, $type = "dom", $subtype = "")
+    public static function showDomContainer($id, $item, $type = "dom", $subtype = "", $field_options = [])
     {
 
         if ($id !== false) {
@@ -680,7 +837,7 @@ JAVASCRIPT
 
         echo Html::hidden('_plugin_fields_type', ['value' => $type]);
         echo Html::hidden('_plugin_fields_subtype', ['value' => $subtype]);
-        echo self::prepareHtmlFields($fields, $item);
+        echo self::prepareHtmlFields($fields, $item, true, true, false, $field_options);
     }
 
     /**
@@ -692,8 +849,6 @@ JAVASCRIPT
      */
     public static function showForTab($params)
     {
-        Html::requireJs('tinymce');
-
         $item = $params['item'];
 
         $functions = array_column(debug_backtrace(), 'function');
@@ -712,12 +867,20 @@ JAVASCRIPT
         if ($type != 'domtab') {
             $subtype = "";
         }
+
         //find container (if not exist, do nothing)
         if (isset($_REQUEST['c_id'])) {
             $c_id = $_REQUEST['c_id'];
         } else if (!$c_id = PluginFieldsContainer::findContainer(get_Class($item), $type, $subtype)) {
             return false;
         }
+
+        $right = PluginFieldsProfile::getRightOnContainer($_SESSION['glpiactiveprofile']['id'], $c_id);
+        if ($right < READ) {
+            return;
+        }
+
+        Html::requireJs('tinymce');
 
         //need to check if container is usable on this object entity
         $loc_c = new PluginFieldsContainer();
@@ -756,15 +919,28 @@ JAVASCRIPT
         }
 
         $html_id = 'plugin_fields_container_' . mt_rand();
-        echo "<div id='{$html_id}'>";
+        if (strpos($current_url, "helpdesk.public.php") !== false) {
+            echo "<div id='{$html_id}' class='card-body row mx-0' style='border-top:0'>";
+            echo "<div class='offset-md-1 col-md-8 col-xxl-6'>";
+            $field_options = [
+                'label_class' => 'col-lg-3',
+                'input_class' => 'col-lg-9'
+            ];
+        } else {
+            echo "<div id='{$html_id}'>";
+        }
         $display_condition = new PluginFieldsContainerDisplayCondition();
         if ($display_condition->computeDisplayContainer($item, $c_id)) {
             self::showDomContainer(
                 $c_id,
                 $item,
                 $type,
-                $subtype
+                $subtype,
+                $field_options ?? []
             );
+        }
+        if (strpos($current_url, "helpdesk.public.php") !== false) {
+            echo "</div>";
         }
         echo "</div>";
 
@@ -775,7 +951,16 @@ JAVASCRIPT
             function refreshContainer() {
                 const data = $('#{$html_id}').closest('form').serializeArray().reduce(
                     function(obj, item) {
-                        obj[item.name] = item.value;
+                        var multiple_matches = item.name.match(/^(.+)\[\]$/);
+                        if (multiple_matches) {
+                            var name = multiple_matches[1];
+                            if (!(name in obj)) {
+                                obj[name] = [];
+                            }
+                            obj[name].push(item.value);
+                        } else {
+                            obj[item.name] = item.value;
+                        }
                         return obj;
                     },
                     {}
@@ -810,6 +995,11 @@ JAVASCRIPT
                         'change',
                         'input, select, textarea',
                         function(evt) {
+                            if (evt.target.name == "itilcategories_id") {
+                                // Do not refresh tab container when form is reloaded
+                                // to prevent issues diues to duplicated calls
+                                return;
+                            }
                             if ($(evt.target).closest('#{$html_id}').length > 0) {
                                 return; // Do nothing if element is inside fields container
                             }
@@ -849,7 +1039,8 @@ JAVASCRIPT
         $item,
         $canedit = true,
         $show_table = true,
-        $massiveaction = false
+        $massiveaction = false,
+        $field_options = []
     ) {
 
         if (empty($fields)) {
@@ -857,10 +1048,18 @@ JAVASCRIPT
         }
 
         //get object associated with this fields
-        $tmp = $fields;
-        $first_field = array_shift($tmp);
+        $first_field = reset($fields);
         $container_obj = new PluginFieldsContainer();
-        $container_obj->getFromDB($first_field['plugin_fields_containers_id']);
+        if (!$container_obj->getFromDB($first_field['plugin_fields_containers_id'])) {
+            return false;
+        }
+
+        // check if current profile can edit fields
+        $right = PluginFieldsProfile::getRightOnContainer($_SESSION['glpiactiveprofile']['id'], $container_obj->getID());
+        if ($right < READ) {
+            return;
+        }
+        $canedit = $right > READ;
 
         // Fill status overrides if needed
         if (in_array($item->getType(), PluginFieldsStatusOverride::getStatusItemtypes())) {
@@ -887,29 +1086,9 @@ JAVASCRIPT
             $found_v = array_shift($found_values);
         }
 
-        // find profiles (to check if current profile can edit fields)
-        $fprofile = new PluginFieldsProfile();
-        $found_p = $fprofile->find(
-            [
-                'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
-                'plugin_fields_containers_id' => $first_field['plugin_fields_containers_id'],
-            ]
-        );
-        $first_found_p = array_shift($found_p);
-
         // test status for "CommonITILObject" objects
-        if ($item instanceof CommonITILObject) {
-            $status = $item->fields['status'] ?? null;
-            if (
-                ($status !== null && in_array($status, $item->getClosedStatusArray()))
-                || $first_found_p['right'] != CREATE
-            ) {
-                $canedit = false;
-            }
-        } else {
-            if ($first_found_p['right'] != CREATE) {
-                $canedit = false;
-            }
+        if ($item instanceof CommonITILObject && in_array($item->fields['status'] ?? null, $item->getClosedStatusArray())) {
+            $canedit = false;
         }
 
         //show all fields
@@ -968,23 +1147,37 @@ JAVASCRIPT
 
             if (!$field['is_readonly']) {
                 if ($field['type'] == "dropdown") {
-                    if (
-                        isset($_SESSION['plugin']['fields']['values_sent']["plugin_fields_" .
-                                                                     $field['name'] .
-                                                                     "dropdowns_id"])
-                    ) {
-                        $value = $_SESSION['plugin']['fields']['values_sent']["plugin_fields_" .
-                                                                        $field['name'] .
-                                                                        "dropdowns_id"];
+                    $field_name = sprintf('plugin_fields_%sdropdowns_id', $field['name']);
+                    if (isset($_SESSION['plugin']['fields']['values_sent'][$field_name])) {
+                        $value = $_SESSION['plugin']['fields']['values_sent'][$field_name];
+                    } elseif (isset($item->input[$field_name])) {
+                        // find from $item->input due to ajax refresh container
+                        $value = $item->input[$field_name];
                     }
-                } else if (isset($_SESSION['plugin']['fields']['values_sent'][$field['name']])) {
-                    $value = $_SESSION['plugin']['fields']['values_sent'][$field['name']];
+                } elseif ($field['type'] === 'glpi_item') {
+                    if (isset($_SESSION['plugin']['fields']['values_sent']["itemtype_" . $field['name']])) {
+                        $value['itemtype'] = $_SESSION['plugin']['fields']['values_sent']["itemtype_" . $field['name']];
+                    } elseif (isset($item->input["itemtype_" . $field['name']])) {
+                        $value['itemtype'] = $item->input["itemtype_" . $field['name']] ?? '';
+                    }
+                    if (isset($_SESSION['plugin']['fields']['values_sent']["items_id_" . $field['name']])) {
+                        $value['items_id'] = $_SESSION['plugin']['fields']['values_sent']["items_id_" . $field['name']];
+                    } elseif (isset($item->input["items_id_" . $field['name']])) {
+                        $value['items_id'] = $item->input["items_id_" . $field['name']] ?? '';
+                    }
+                } else {
+                    if (isset($_SESSION['plugin']['fields']['values_sent'][$field['name']])) {
+                        $value = $_SESSION['plugin']['fields']['values_sent'][$field['name']];
+                    } elseif (isset($item->input[$field['name']])) {
+                        // find from $item->input due to ajax refresh container
+                        $value = $item->input[$field['name']];
+                    }
                 }
             }
 
             //get default value
             if ($value === null) {
-                if ($field['type'] === 'dropdown' && $field['default_value'] === '') {
+                if (in_array($field['type'], ['dropdown', 'yesno']) && $field['default_value'] === '') {
                     $value = 0;
                 } else if ($field['default_value'] !== "") {
                     $value = $field['default_value'];
@@ -999,6 +1192,17 @@ JAVASCRIPT
                 }
             }
 
+            if ($field['multiple']) {
+                if (!is_array($value)) {
+                    // Value may be set:
+                    // - either from a default value in DB (it will be a JSON string),
+                    // - either from a previous input (it will be an array).
+                    //
+                    // -> Decode it only if it is not already an array.
+                    $value = json_decode($value);
+                }
+            }
+
             $field['value'] = $value;
         }
 
@@ -1008,6 +1212,7 @@ JAVASCRIPT
             'canedit'        => $canedit,
             'massiveaction'  => $massiveaction,
             'container'      => $container_obj,
+            'field_options'  => $field_options,
         ]);
 
         unset($_SESSION['plugin']['fields']['values_sent']);
@@ -1027,20 +1232,39 @@ JAVASCRIPT
         );
 
         //find field
-        $query = "SELECT fields.plugin_fields_containers_id, fields.is_readonly, fields.default_value
-                FROM glpi_plugin_fields_fields fields
-                LEFT JOIN glpi_plugin_fields_containers containers
-                  ON containers.id = fields.plugin_fields_containers_id
-                  AND containers.itemtypes LIKE '%$itemtype%'
-               WHERE fields.name = '$cleaned_linkfield'";
-        $res = $DB->query($query);
-        if ($DB->numrows($res) == 0) {
+        $iterator = $DB->request([
+            'SELECT' => [
+                'fields.plugin_fields_containers_id',
+                'fields.is_readonly',
+                'fields.multiple',
+                'fields.default_value'
+            ],
+            'FROM' => self::getTable() . ' AS fields',
+            'LEFT JOIN' => [
+                'glpi_plugin_fields_containers AS containers' => [
+                    'FKEY' => [
+                        'containers' => 'id',
+                        'fields' => 'plugin_fields_containers_id',
+                        [
+                            'AND' => [
+                                'containers.itemtypes' => ['LIKE' => "%$itemtype%"]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'WHERE' => [
+                'fields.name' => $cleaned_linkfield
+            ],
+        ]);
+
+        if (count($iterator) !== 1) {
             return false;
         }
 
-        $data = $DB->fetchAssoc($res);
+        $data = $iterator->current();
 
-        //display an hidden post field to store container id
+        //display a hidden post field to store container id
         echo Html::hidden('c_id', ['value' => $data['plugin_fields_containers_id']]);
 
         //prepare array for function prepareHtmlFields
@@ -1050,7 +1274,8 @@ JAVASCRIPT
             'plugin_fields_containers_id' => $data['plugin_fields_containers_id'],
             'name'                        => $cleaned_linkfield,
             'is_readonly'                 => $data['is_readonly'],
-            'default_value'               => $data['default_value']
+            'default_value'               => $data['default_value'],
+            'multiple'                    => $data['multiple']
         ]
         ];
 
@@ -1076,6 +1301,7 @@ JAVASCRIPT
             'header'       => __("Header", "fields"),
             'text'         => __("Text (single line)", "fields"),
             'textarea'     => __("Text (multiples lines)", "fields"),
+            'richtext'     => __("Rich Text", "fields"),
             'number'       => __("Number", "fields"),
             'url'          => __("URL", "fields"),
             'dropdown'     => __("Dropdown", "fields"),

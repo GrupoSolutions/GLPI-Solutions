@@ -160,10 +160,13 @@ abstract class PluginFormcreatorAbstractField implements PluginFormcreatorFieldI
 
    /**
     * Gets the available values for the field
+    * @param array $values values to parse. If null, the values are ised from the instance of the question
     * @return array available values
     */
-   public function getAvailableValues() {
-      $values = json_decode($this->question->fields['values']);
+   public function getAvailableValues(array $values = null): array {
+      if ($values === null) {
+         $values = json_decode($this->question->fields['values']);
+      }
       $tab_values = [];
       foreach ($values as $value) {
          $trimmedValue = trim($value);
@@ -179,13 +182,11 @@ abstract class PluginFormcreatorAbstractField implements PluginFormcreatorFieldI
    }
 
    /**
-    * trim values separated by \r\n
+    * trim and explode values separated by \r\n
     * @param string $value a value or default value
-    * @return string
+    * @return array
     */
-   protected function trimValue($value) {
-      global $DB;
-
+   protected function trimValue($value): array {
       $value = explode('\r\n', $value);
       // input has escpaed single quotes
       $value = Toolbox::stripslashes_deep($value);
@@ -199,7 +200,7 @@ abstract class PluginFormcreatorAbstractField implements PluginFormcreatorFieldI
          $value
       );
 
-      return $DB->escape(json_encode($value, JSON_UNESCAPED_UNICODE));
+      return $value;
    }
 
    public function getFieldTypeName(): string {
@@ -331,5 +332,16 @@ abstract class PluginFormcreatorAbstractField implements PluginFormcreatorFieldI
       }
 
       return $strings;
+   }
+
+   /**
+    * Translates the label of the field into the current language
+    *
+    * @return string
+    */
+   protected function getTtranslatedLabel(): string {
+      $form = PluginFormcreatorForm::getByItem($this->question);
+      $domain = PluginFormcreatorForm::getTranslationDomain($form->getID());
+      return __($this->getLabel(), $domain);
    }
 }

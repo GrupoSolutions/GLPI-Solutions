@@ -1,3 +1,223 @@
+<a name="2.13.8"></a>
+## [2.13.8](https://github.com/pluginsGLPI/formcreator/compare/2.13.7..2.13.8) (2023-111-08)
+
+
+### Bug Fixes
+
+*  restoring ticket may create inconsistency in DB ([3cf3e4ebd](https://github.com/pluginsGLPI/formcreator/commit/3cf3e4ebd))
+* **abstractitiltarget:** itil category from template shall not take precedence ([8f8d9a7c4](https://github.com/pluginsGLPI/formcreator/commit/8f8d9a7c4))
+* **category:** translation feature of dropdowns not handled ([6287f1b34](https://github.com/pluginsGLPI/formcreator/commit/6287f1b34))
+* **dropdownfield:** display of username ([af43a9cf1](https://github.com/pluginsGLPI/formcreator/commit/af43a9cf1))
+* **form:** better theme compatibility, UI enhancement ([9146ea57a](https://github.com/pluginsGLPI/formcreator/commit/9146ea57a))
+* **form:** import access restrictions may ignore uuids ([9d23d4c1e](https://github.com/pluginsGLPI/formcreator/commit/9d23d4c1e))
+* **formanswer:** redirect after submit may lead to unavailable page ([599451af4](https://github.com/pluginsGLPI/formcreator/commit/599451af4))
+* **formanswer:** requester can edit refused answer ([c4f799b2c](https://github.com/pluginsGLPI/formcreator/commit/c4f799b2c))
+* **formanswer:** show spinner when validate ([c59dc72ac](https://github.com/pluginsGLPI/formcreator/commit/c59dc72ac))
+* **formanswer:** status update on ticket change ([079a12063](https://github.com/pluginsGLPI/formcreator/commit/079a12063))
+* **glpiselectfield:** disable anonymization of user for answer resolution ([66bea30e0](https://github.com/pluginsGLPI/formcreator/commit/66bea30e0))
+* **glpiselectfield,dropdownfield:** prevent php warning ([4da93e38e](https://github.com/pluginsGLPI/formcreator/commit/4da93e38e))
+* **install:** ineffective data fix un upgrade to 2.13.7 ([c31134c35](https://github.com/pluginsGLPI/formcreator/commit/c31134c35))
+* **issue:** SQL scaping problem when updating a ticket ([56ddff261](https://github.com/pluginsGLPI/formcreator/commit/56ddff261))
+* **issue:** bad status if ticket has valdiation on creation ([fc0ea0a00](https://github.com/pluginsGLPI/formcreator/commit/fc0ea0a00))
+* **locales:** resolve locales management warnings ([d5db37452](https://github.com/pluginsGLPI/formcreator/commit/d5db37452))
+* **radiosfield,checkboxesfield,glpiselectfield,requesttypefield,urgencyfield:** validate default value before saving ([4815abeda](https://github.com/pluginsGLPI/formcreator/commit/4815abeda))
+* **requesttype:** force english for comparisons ([7b9e94114](https://github.com/pluginsGLPI/formcreator/commit/7b9e94114))
+* **selectfield:** translation breaks validation checks ([28b4781d8](https://github.com/pluginsGLPI/formcreator/commit/28b4781d8))
+* **target_actor:** actors ID not converted when duplicating a form ([c5167c16c](https://github.com/pluginsGLPI/formcreator/commit/c5167c16c))
+* **textareadield:** missing translation for default value ([bda43df77](https://github.com/pluginsGLPI/formcreator/commit/bda43df77))
+
+
+### Features
+
+* **DropdownField:** Load translation for plugin too ([16a1379a8](https://github.com/pluginsGLPI/formcreator/commit/16a1379a8))
+* **DropdownField:** Load translation for plugin too ([6af1766d1](https://github.com/pluginsGLPI/formcreator/commit/6af1766d1))
+* **formanswer:** log any failure when saving a answer ([5d84054af](https://github.com/pluginsGLPI/formcreator/commit/5d84054af))
+* **formanswer:** show item's name in web page title ([c7e81cb9d](https://github.com/pluginsGLPI/formcreator/commit/c7e81cb9d))
+* **glpiselectfield:** attach existing documents to targets ([63999d068](https://github.com/pluginsGLPI/formcreator/commit/63999d068))
+
+
+
+<a name="2.13.7"></a>
+## [2.13.7](https://github.com/pluginsGLPI/formcreator/compare/2.13.6..2.13.7) (2023-07-19)
+
+
+### Bug Fixes
+
+*  Adding READ right for display reservations menu tab ([03e6281e](https://github.com/pluginsGLPI/formcreator/commit/03e6281e))
+*  bad lcoale in en_US ([db9986f1](https://github.com/pluginsGLPI/formcreator/commit/db9986f1))
+*  resize dashboard to match GLPI's core (#3306) ([9272cda3](https://github.com/pluginsGLPI/formcreator/commit/9272cda3))
+*  show FAQ without tabs for self-service ([c5499ad4](https://github.com/pluginsGLPI/formcreator/commit/c5499ad4))
+* **TargetChange:** use RichText instead of plaintext ([8845b888](https://github.com/pluginsGLPI/formcreator/commit/8845b888))
+* **checkboxesfield,radiosfield,selectfield:** add missing error messages ([66585193](https://github.com/pluginsGLPI/formcreator/commit/66585193))
+* **datefield, datetimefield:** comparison against empty string ([be4831c7](https://github.com/pluginsGLPI/formcreator/commit/be4831c7))
+* **dropdownfield:** SQL error for GLPI objects / tickets and some specific rights ([2539e366](https://github.com/pluginsGLPI/formcreator/commit/2539e366))
+* **dropdownfield:** handle specific case with Entity itemtype ([bd25e7d1](https://github.com/pluginsGLPI/formcreator/commit/bd25e7d1))
+* **dropdownfield:** missing entity restriction setting ([54543cb3](https://github.com/pluginsGLPI/formcreator/commit/54543cb3))
+* **dropdownfield:** prevent language switching and log error ([49f8fc07](https://github.com/pluginsGLPI/formcreator/commit/49f8fc07))
+* **fieldsfield:** restore mandatory field as read only ([52a9fc2b](https://github.com/pluginsGLPI/formcreator/commit/52a9fc2b))
+* **form,category:** obey show count on tabs parameter ([f4ebf9e5](https://github.com/pluginsGLPI/formcreator/commit/f4ebf9e5))
+* **form_language:** obey show counter in tab setting ([9dfc3b8d](https://github.com/pluginsGLPI/formcreator/commit/9dfc3b8d))
+* **formanswer:** php warning ([ce078990](https://github.com/pluginsGLPI/formcreator/commit/ce078990))
+* **formanswer:** prevent silent rejection of answers ([d630302d](https://github.com/pluginsGLPI/formcreator/commit/d630302d))
+* **formanswer:** redirect to login if session expired ([eb0acb65](https://github.com/pluginsGLPI/formcreator/commit/eb0acb65))
+* **glpiselectfield:** fix namespace (#3287) ([613e0fad](https://github.com/pluginsGLPI/formcreator/commit/613e0fad))
+* **install:** missing row in sql query, causing PHP warning ([0c47776a](https://github.com/pluginsGLPI/formcreator/commit/0c47776a))
+* **issue:** php warnings when anonymisation enabled ([f6f01d7d](https://github.com/pluginsGLPI/formcreator/commit/f6f01d7d))
+* **issue:** prevent fatal error in tooltip ([3419affc](https://github.com/pluginsGLPI/formcreator/commit/3419affc))
+* **question,section:** duplicate a question or section must duplicate inner conditions ([22597832](https://github.com/pluginsGLPI/formcreator/commit/22597832))
+* **section:** cannot rename section twice ([7bbb9b81](https://github.com/pluginsGLPI/formcreator/commit/7bbb9b81))
+* **section:** condition rule loss after duplicate / import ([883a1227](https://github.com/pluginsGLPI/formcreator/commit/883a1227))
+* **section:** duplicate form may lead to bad question id in condition ([a6f9c41c](https://github.com/pluginsGLPI/formcreator/commit/a6f9c41c))
+* **section:** rename section impacts display of inner questions ([c4277d8c](https://github.com/pluginsGLPI/formcreator/commit/c4277d8c))
+* **selectfield,multiselectfield:** fix possible encoding problem ([8aaec8ac](https://github.com/pluginsGLPI/formcreator/commit/8aaec8ac))
+* **tag:** tag was always deleted ([6201d61d](https://github.com/pluginsGLPI/formcreator/commit/6201d61d))
+* **targetchange,targetproblem:** folow method call signature for fields plugin ([016696ab](https://github.com/pluginsGLPI/formcreator/commit/016696ab))
+* **textfield:** Unescaped HTML when displaying a form answer ([6ce71f95](https://github.com/pluginsGLPI/formcreator/commit/6ce71f95))
+* **textfield:** exception while displaying counters ([0a857d7f](https://github.com/pluginsGLPI/formcreator/commit/0a857d7f))
+* **textfield:** target ticket title need html encoding ([1b71d652](https://github.com/pluginsGLPI/formcreator/commit/1b71d652))
+
+
+
+<a name="2.13.6"></a>
+## [2.13.6](https://github.com/pluginsGLPI/formcreator/compare/2.13.5..2.13.6) (2023-05-26)
+
+
+### Bug Fixes
+
+*  SQL error when inconsistency in DB ([1af78720](https://github.com/pluginsGLPI/formcreator/commit/1af78720)), closes [#3242](https://github.com/pluginsGLPI/formcreator/issues/3242)
+*  confirrmation strings ([8ced5744](https://github.com/pluginsGLPI/formcreator/commit/8ced5744))
+*  translate field label in error messages ([a4bf10a6](https://github.com/pluginsGLPI/formcreator/commit/a4bf10a6))
+* **DropdownField:** fix array key value format ([7729fe20](https://github.com/pluginsGLPI/formcreator/commit/7729fe20))
+* **FormAnswer:** redirect to FormAnswer or to list if needed ([44e4ab6d](https://github.com/pluginsGLPI/formcreator/commit/44e4ab6d))
+* **category:** SQL statement cause MariaDB crash ([fb94035a](https://github.com/pluginsGLPI/formcreator/commit/fb94035a))
+* **checkboxesfield,multiselectfield:** php warning ([342c39e9](https://github.com/pluginsGLPI/formcreator/commit/342c39e9))
+* **condition:** conditions don't work when not sanitized ([f2b0fad5](https://github.com/pluginsGLPI/formcreator/commit/f2b0fad5))
+* **faq:** visibility (#3118) ([252ef204](https://github.com/pluginsGLPI/formcreator/commit/252ef204))
+* **filefield:** rebuild uploads for answer edition ([4f1cdf6e](https://github.com/pluginsGLPI/formcreator/commit/4f1cdf6e))
+* **form:** double post broken ([07b8a1a1](https://github.com/pluginsGLPI/formcreator/commit/07b8a1a1))
+* **form_language:** inverted arguments ([261e5361](https://github.com/pluginsGLPI/formcreator/commit/261e5361))
+* **form_language:** restrict languages to those known by GLPI ([f8dc0803](https://github.com/pluginsGLPI/formcreator/commit/f8dc0803))
+* **formanswer:** catch and report exception to end user ([9dd9777f](https://github.com/pluginsGLPI/formcreator/commit/9dd9777f))
+* **formanswer:** too many escaping ([e518b7de](https://github.com/pluginsGLPI/formcreator/commit/e518b7de)), closes [#3271](https://github.com/pluginsGLPI/formcreator/issues/3271)
+* **formanswer:** translate question label ([61722daf](https://github.com/pluginsGLPI/formcreator/commit/61722daf))
+* **glpiselectfield:** max_tree_depth_not_saved ([462ea695](https://github.com/pluginsGLPI/formcreator/commit/462ea695))
+* **install:** prevent fatal error in migration ([306c2c3f](https://github.com/pluginsGLPI/formcreator/commit/306c2c3f))
+* **item_targetticket:** export of question based composition ([dc8c931a](https://github.com/pluginsGLPI/formcreator/commit/dc8c931a))
+* **radiosfield, selectfield:** allow unset default value ([020bd45b](https://github.com/pluginsGLPI/formcreator/commit/020bd45b))
+* **radiosfield, selectfield:** check default value before save ([d4a2ecb4](https://github.com/pluginsGLPI/formcreator/commit/d4a2ecb4))
+* **section:** condition rule loss after duplicate / import ([7bfe6ca0](https://github.com/pluginsGLPI/formcreator/commit/7bfe6ca0))
+* **selectfield:** show contact field ([11c86b7c](https://github.com/pluginsGLPI/formcreator/commit/11c86b7c))
+* **selectfield,radiosfield:** abusive escaping ([db01a561](https://github.com/pluginsGLPI/formcreator/commit/db01a561))
+* **targetchange,targetproblem:** several fields must use rich text ([cf24aa19](https://github.com/pluginsGLPI/formcreator/commit/cf24aa19))
+* **targetticket:** request source ([c72901c7](https://github.com/pluginsGLPI/formcreator/commit/c72901c7))
+* **targetticket:** request source may be unexpected value ([2fd6cf54](https://github.com/pluginsGLPI/formcreator/commit/2fd6cf54))
+* **targetticket,targetchange,targetproblem:** missing translation of target content ([902efa78](https://github.com/pluginsGLPI/formcreator/commit/902efa78))
+* **textfield:** Unescaped HTML when displaying a form answer ([d4763859](https://github.com/pluginsGLPI/formcreator/commit/d4763859))
+* **translation:** delete rich editor's ghost toolbar ([ba97c842](https://github.com/pluginsGLPI/formcreator/commit/ba97c842))
+* **translation:** dialog width ([0b46dec3](https://github.com/pluginsGLPI/formcreator/commit/0b46dec3))
+* **translation:** typo in localizable tring ([3bb2f3d4](https://github.com/pluginsGLPI/formcreator/commit/3bb2f3d4))
+
+
+### Features
+
+*  reminders ([6ed85cd3](https://github.com/pluginsGLPI/formcreator/commit/6ed85cd3))
+* **abstractitiltarget:** duplicate ([3c093012](https://github.com/pluginsGLPI/formcreator/commit/3c093012))
+* **category:** show category comment in service catalog ([09727147](https://github.com/pluginsGLPI/formcreator/commit/09727147)), closes [#394](https://github.com/pluginsGLPI/formcreator/issues/394)
+* **clean_tickets_command:** Take merged tickets into account ([768cd467](https://github.com/pluginsGLPI/formcreator/commit/768cd467))
+* **form:** edit recursion with massive actions ([7c918d3b](https://github.com/pluginsGLPI/formcreator/commit/7c918d3b))
+* **formaccesstype:** massive action ([53a4285a](https://github.com/pluginsGLPI/formcreator/commit/53a4285a))
+* **glpiselectfield:** PDU in assets section ([bc6a790d](https://github.com/pluginsGLPI/formcreator/commit/bc6a790d))
+* **glpiselectfield:** refactor entity_restriction ([b3fb0804](https://github.com/pluginsGLPI/formcreator/commit/b3fb0804))
+* **install:** stronger upgrade for unsigned columns ([030f93e3](https://github.com/pluginsGLPI/formcreator/commit/030f93e3))
+* **notificationtargetformanswer:** label tags ([f1dc000c](https://github.com/pluginsGLPI/formcreator/commit/f1dc000c)), closes [#1023](https://github.com/pluginsGLPI/formcreator/issues/1023)
+* **section:** update condition count after section edition ([8c04048f](https://github.com/pluginsGLPI/formcreator/commit/8c04048f))
+
+
+<a name="2.13.5"></a>
+## [2.13.5](https://github.com/pluginsGLPI/formcreator/compare/2.13.4..2.13.5) (2023-03-24)
+
+
+### Bug Fixes
+
+*  add missing domain for public forms translation (#3162) ([970f183c6](https://github.com/pluginsGLPI/formcreator/commit/970f183c6))
+*  duplicate key when updating a profile ([1bd6a2ab6](https://github.com/pluginsGLPI/formcreator/commit/1bd6a2ab6))
+*  remote glpi prefix for commands ([651444a27](https://github.com/pluginsGLPI/formcreator/commit/651444a27))
+* **abstractitiltarget:** set priority from urgency and impact (#3178) ([1269edd51](https://github.com/pluginsGLPI/formcreator/commit/1269edd51))
+* **checkboxes:** better display ([f8fe93a63](https://github.com/pluginsGLPI/formcreator/commit/f8fe93a63))
+* **checkboxes:** padding between items ([a62f879ce](https://github.com/pluginsGLPI/formcreator/commit/a62f879ce))
+* **condition:** infinite loop detection ([172d5e8eb](https://github.com/pluginsGLPI/formcreator/commit/172d5e8eb))
+* **dropdownfield:** prevent ambiguous column name ([b54523219](https://github.com/pluginsGLPI/formcreator/commit/b54523219))
+* **form:** remove obsolete translations on update ([3cc58ac7d](https://github.com/pluginsGLPI/formcreator/commit/3cc58ac7d))
+* **form:** rename form answer properties tab ([a3395179d](https://github.com/pluginsGLPI/formcreator/commit/a3395179d))
+* **form_language:** avoid persistent rich editor toolbar when closing modal ([11a8808b5](https://github.com/pluginsGLPI/formcreator/commit/11a8808b5))
+* **form_language:** display problems when translating ([93073e656](https://github.com/pluginsGLPI/formcreator/commit/93073e656))
+* **form_language:** filter out obsolete translations ([b38555c5e](https://github.com/pluginsGLPI/formcreator/commit/b38555c5e))
+* **formanswer:** access restriction ([a9451d982](https://github.com/pluginsGLPI/formcreator/commit/a9451d982))
+* **install:** distinguish error messages for sanity check ([b798bf264](https://github.com/pluginsGLPI/formcreator/commit/b798bf264))
+* **notifications:** missing lang tags ([3cad18562](https://github.com/pluginsGLPI/formcreator/commit/3cad18562))
+* **question:** missing conditions count after update ([ea185beb8](https://github.com/pluginsGLPI/formcreator/commit/ea185beb8))
+* **question:** updating a question returns sanitized label ([936ccd475](https://github.com/pluginsGLPI/formcreator/commit/936ccd475))
+* **radios:** update escaping of valies ([c940e1764](https://github.com/pluginsGLPI/formcreator/commit/c940e1764))
+* **radiosfield:** better display ([fe6c2e8d0](https://github.com/pluginsGLPI/formcreator/commit/fe6c2e8d0))
+* **restrictedformcriteria:** bad key when generating error message ([6cabca1fe](https://github.com/pluginsGLPI/formcreator/commit/6cabca1fe))
+* **targetchange,targetproblem:** harmonize implemetnation with targetticket ([1ba402de0](https://github.com/pluginsGLPI/formcreator/commit/1ba402de0))
+* **targetchange,targetproblem:** missed code refactor ([e24d2fc13](https://github.com/pluginsGLPI/formcreator/commit/e24d2fc13))
+* **targetticket:** wrong property label ([fd3d30973](https://github.com/pluginsGLPI/formcreator/commit/fd3d30973))
+* **textareafield:** target ticket shows HTML when image uploaded ([56fc8d54d](https://github.com/pluginsGLPI/formcreator/commit/56fc8d54d))
+* **translation:** avoid rn when using formatted rich (html) text ([24113a353](https://github.com/pluginsGLPI/formcreator/commit/24113a353))
+
+
+### Features
+
+*  Link documents to form ([690f58d13](https://github.com/pluginsGLPI/formcreator/commit/690f58d13))
+* **form_language:** add items count in tab ([90a579680](https://github.com/pluginsGLPI/formcreator/commit/90a579680))
+* **issue:** more anonymising options (#3160) ([075896bb6](https://github.com/pluginsGLPI/formcreator/commit/075896bb6))
+
+
+<a name="2.13.4"></a>
+## [2.13.4](https://github.com/pluginsGLPI/formcreator/compare/2.13.3..2.13.4) (2023-01-24)
+
+
+### Bug Fixes
+
+*  handle undefined setting for service catalog homepage ([411ae3597](https://github.com/pluginsGLPI/formcreator/commit/411ae3597))
+*  typo in french locale ([f61ded17a](https://github.com/pluginsGLPI/formcreator/commit/f61ded17a))
+* **abstractitiltarget:** multiple tag questions set but not displayed in designer ([90f2a95d8](https://github.com/pluginsGLPI/formcreator/commit/90f2a95d8))
+* **checkboxesfield,multiselectfield:** default value not displayed ([8f36ab726](https://github.com/pluginsGLPI/formcreator/commit/8f36ab726))
+* **composite:** ignore link to non existing ticket ([8502d4b16](https://github.com/pluginsGLPI/formcreator/commit/8502d4b16))
+* **condition:** allow longer texts ([eecdf8a2a](https://github.com/pluginsGLPI/formcreator/commit/eecdf8a2a))
+* **condition:** display of tested question shows wrong item ([5d34da8b4](https://github.com/pluginsGLPI/formcreator/commit/5d34da8b4))
+* **condition:** width of question dropdown ([ce0389efd](https://github.com/pluginsGLPI/formcreator/commit/ce0389efd))
+* **dropdownfield:** empty SQL IN statement when restricted tickets rights ([5c5244a85](https://github.com/pluginsGLPI/formcreator/commit/5c5244a85))
+* **form:** image upload handling in header field ([5dc66a5ef](https://github.com/pluginsGLPI/formcreator/commit/5dc66a5ef))
+* **formanswer:** default search filter hides legit access ([2dc9f8e3f](https://github.com/pluginsGLPI/formcreator/commit/2dc9f8e3f))
+* **formanswer:** malformed search option ([5339b7912](https://github.com/pluginsGLPI/formcreator/commit/5339b7912))
+* **formanswer:** missing newline between sections of fullform tag ([61122bc93](https://github.com/pluginsGLPI/formcreator/commit/61122bc93))
+* **formanswer:** temporary disable debug mode ([e9e8da484](https://github.com/pluginsGLPI/formcreator/commit/e9e8da484))
+* **formanswer, textfield, textareafield:** escaping ([3e0666d4d](https://github.com/pluginsGLPI/formcreator/commit/3e0666d4d))
+* **glpiselectfield:** cannot set empty value by default for entity question ([fe2130bbe](https://github.com/pluginsGLPI/formcreator/commit/fe2130bbe))
+* **glpiselectfield:** restore entity restriction for users ([e525b3a82](https://github.com/pluginsGLPI/formcreator/commit/e525b3a82))
+* **helpdesk:** better handling of users that can't see tickets ([a93f03126](https://github.com/pluginsGLPI/formcreator/commit/a93f03126))
+* **install:** add empty schema for new version ([817a9ec7e](https://github.com/pluginsGLPI/formcreator/commit/817a9ec7e))
+* **install:** resync not needed in upgrade to 2.13.4 ([d66a12017](https://github.com/pluginsGLPI/formcreator/commit/d66a12017))
+* **install:** typo in method name ([eac5d77ac](https://github.com/pluginsGLPI/formcreator/commit/eac5d77ac))
+* **issue:** follow entity change on ticket transfer ([434bd3572](https://github.com/pluginsGLPI/formcreator/commit/434bd3572))
+* **issues:** Tooltip consistency with core ([c45d21550](https://github.com/pluginsGLPI/formcreator/commit/c45d21550))
+* **question:** subtype plural and appliance in bad group ([1f780370a](https://github.com/pluginsGLPI/formcreator/commit/1f780370a))
+* **tagfield:** php warning ([cc4b673a8](https://github.com/pluginsGLPI/formcreator/commit/cc4b673a8))
+* **targetticket:** allow more itemtypes to associated elements (#3155) ([cee504c24](https://github.com/pluginsGLPI/formcreator/commit/cee504c24))
+* **textfield:** useless HTML entity encode ([c3d03b51e](https://github.com/pluginsGLPI/formcreator/commit/c3d03b51e))
+
+
+### Features
+
+*  drop support for GLPI 10.1 ([a99a8bcb2](https://github.com/pluginsGLPI/formcreator/commit/a99a8bcb2))
+* **dropdownfield:** always show ticket id ([0190adac9](https://github.com/pluginsGLPI/formcreator/commit/0190adac9))
+* **issue:** access tickets from service catalog ([a6b4f19d0](https://github.com/pluginsGLPI/formcreator/commit/a6b4f19d0))
+* **question:** add support for database sub itemtype ([45126012d](https://github.com/pluginsGLPI/formcreator/commit/45126012d))
+* **wizard:** selectable home page in service catalog ([95103fe54](https://github.com/pluginsGLPI/formcreator/commit/95103fe54))
+
+
 <a name="2.13.3"></a>
 ## [2.13.3](https://github.com/pluginsGLPI/formcreator/compare/2.13.2..2.13.3) (2022-11-24)
 
@@ -2844,31 +3064,4 @@ Version 0.85-1.1
 * Affichage du champ non fonctionnel (et non sauvegardé)
 * crash on glpi object
 * Valideur du formulaire devient demandeur du ticket target
-* link between questions only now work with radio button
-* redirect (from notification) not working
-* error missing \_user\_id_requester on ticket creation
-* link for create forms (after breadcrumb) is available for non-admins users
-* Validation sending (ajax get) : request uri too long
-* Show field condition issue
-* Forms list not displayed in central view
-* List LDAP value --- Valeur liste LDAP
-* PHP warnings (related to validation feature ?)
-* Change links by buttons in formcreator configuration
-* PHP Parse error: syntax error, unexpected T\_CONSTANT\_ENCAPSED_STRING in /var/www/glpi/plugins/formcreator/inc/targetticket.class.php on line 87
-
-###Features:
-
-* administration, emplacement objet glpi
-* Formulaire accepté : Accepté ne s'affiche pas
-* item forms in global menu must be added at the end of it
-* Add WYSIWYG editor for textarea fields feature
-
-
-Version 0.85-1.0
-------------------
-
-> 2014-12-18
-
-###Features:
-
-* Port Formcreator 0.84-2.1 to GLPI 0.85. See [Formcreator 0.84 ChangeLog](https://github.com/TECLIB/formcreator/blob/0.84-bugfixes/CHANGELOG.md)
+* li                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

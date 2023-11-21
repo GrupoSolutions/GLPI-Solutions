@@ -47,19 +47,17 @@ $handled = false;
 if (!isset($_POST['itemtype']) || !class_exists($_POST['itemtype'])) {
     Html::displayErrorAndDie('Lost');
 }
-print_r($_POST);
 $track = new $_POST['itemtype']();
 
+
 if (isset($_POST["add"])) {
-    
     $fup->check(-1, CREATE, $_POST);
-    //Aqui vou ter que chamar o src da conexão com o banco, verificar o id do ticket, e ver se é novo e se quem está respondendo é diferente de quem fez a solicitação
+     //Aqui vou ter que chamar o src da conexão com o banco, verificar o id do ticket, e ver se é novo e se quem está respondendo é diferente de quem fez a solicitação
     //Daí entao atribuo o status do chamado para em atendimento.
     require_once '../src/db_config.php';
     
     $idChamado = $_POST['items_id'];
-
-    $SQL = "SELECT id, users_id_lastupdater, status, users_id_recipient FROM glpi_tickets WHERE id = {$idChamado} ";
+    $SQL = "SELECT id, users_id_lastupdater, status, users_id_recipient, id_atendente FROM glpi_tickets WHERE id = {$idChamado} ";
     $buscaChamado = mysqli_query($sqlcon, $SQL);
     $chamado = array();
     if($buscaChamado){
@@ -67,18 +65,74 @@ if (isset($_POST["add"])) {
             array_push($chamado, $ticket);
         }
     }   
+    $ticketStatus = $chamado[0][2];
+    $ticketUltimoUpd = $chamado[0][1];
+    $ticketRecipiente = $chamado[0][3];
     $idUsuario = $_SESSION['glpiID'];
-
-    if($chamado[0][2] == 1 && $chamado[0][1] != $idUsuario && $chamado[0][3] != $idUsuario){
-        $statusSQL = "UPDATE glpi_tickets SET status = 2, id_atendente = {$idUsuario} WHERE id = {$idChamado}";
+    $now = date('Y-m-d H:i:s');
+    $arrAtendentes = array();
+    //Esta parte seta o status para Aguardando Resposta (Quando o Atendente responde e aguarda resposta do cliente/solicitante) e atribui o atendente que respondeu ao chamado. 
+    if($ticketStatus == 1 && $ticketUltimoUpd != $idUsuario && $ticketRecipiente != $idUsuario){
+        $sqlAtribuiChamado = "INSERT INTO glpi_tickets_users(tickets_id, users_id, type, use_notification) VALUES ({$idChamado}, {$idUsuario}, 2, 1)";
+        $atribuiChamado =  mysqli_query($sqlcon, $sqlAtribuiChamado);
+        //Aqui deveria entrar a parte de insert na tabela de pauses, e inserir o id da ultima pausa na tabela glpi_tickets
+        
+        $sqlAddPausa = "INSERT INTO tickets_pause(tickets_id, data_inicio) VALUES ({$idChamado}, '{$now}')";
+        $addPausa = mysqli_query($sqlcon, $sqlAddPausa);
+        $idPausa = mysqli_insert_id($sqlcon);
+        $statusSQL = "UPDATE glpi_tickets SET status = 4, id_atendente = {$idUsuario}, lastpause_id = {$idPausa} WHERE id = {$idChamado}";
         $execStatus = mysqli_query($sqlcon, $statusSQL);
+    } 
+   
+    //Esta parte setará o status para Em atendimento, quando for igual a Pendente/Aguardando Terceiros
+    if ($ticketStatus == 4) {
+        $arrClientes = array();
+        $sqlBuscaClientes = "SELECT users_id FROM glpi_tickets_users WHERE tickets_id = '{$idChamado}' AND type IN (1,3)";
+        $buscaClientes = mysqli_query($sqlcon, $sqlBuscaClientes);
+        if ($buscaClientes) {
+            while ($cliente = mysqli_fetch_row($buscaClientes)) {
+                array_push($arrClientes, $cliente[0]); // Adiciona apenas o valor do ID do cliente no array
+            }
+        }
+        if (in_array($idUsuario, $arrClientes)) {
+            $idLastPause = 0;
+            $buscaIdPausa = "SELECT lastpause_id FROM glpi_tickets WHERE id = {$idChamado}";
+            $buscaPausa = mysqli_query($sqlcon, $buscaIdPausa);
+    
+            if ($buscaPausa) {
+                while ($pausa = mysqli_fetch_row($buscaPausa)) {
+                    $idLastPause = $pausa[0];
+                }
+            }
+    
+    
+            $sqlAddFimPausa = "UPDATE tickets_pause SET data_final = '{$now}' WHERE id = {$idLastPause}";
+            $addFimPausa = mysqli_query($sqlcon, $sqlAddFimPausa);
+    
+            $statusSQL = "UPDATE glpi_tickets SET status = 2 WHERE id = {$idChamado}";
+            $execStatus = mysqli_query($sqlcon, $statusSQL);
+        }
+    } else if ($ticketStatus == 2) {
+        $arrAtendentes = array();
+        $sqlBuscaAtendentes = "SELECT users_id FROM glpi_tickets_users where tickets_id = '{$idChamado}' and type = 2";
+        $buscaAtendentes = mysqli_query($sqlcon, $sqlBuscaAtendentes);
+        if($buscaAtendentes){
+            while ($atendente = mysqli_fetch_row($buscaAtendentes)) {
+                array_push($arrAtendentes, $atendente[0]);
+            }
+        }
+        if (in_array($idUsuario, $arrAtendentes)) {
+            $sqlAddPausa = "INSERT INTO tickets_pause(tickets_id, data_inicio) VALUES ({$idChamado}, '{$now}')";
+            $addPausa = mysqli_query($sqlcon, $sqlAddPausa);
+            $idPausa = mysqli_insert_id($sqlcon);
+    
+            $statusSQL = "UPDATE glpi_tickets SET status = 4, id_atendente = {$idUsuario}, lastpause_id = {$idPausa} WHERE id = {$idChamado}";
+            $execStatus = mysqli_query($sqlcon, $statusSQL);
+        }
     }
    
-    // Aqui deve ser verificado o status, se é diferente de 5 (Pendente), deve ser aplicado o status 5 de pendente
-    // e inserido uma pausa na tabela de pausas, glpi_ticket_pause (id, hora e data da pausa, ticket_id)
-
     $fup->add($_POST);
-    
+
     Event::log(
         $fup->getField('items_id'),
         strtolower($_POST['itemtype']),
@@ -106,9 +160,9 @@ if (isset($_POST["add"])) {
         );
     }
 } else if (isset($_POST["update"])) {
-    print_r($_POST);
-    // $fup->check($_POST['id'], UPDATE);
-    // $fup->update($_POST);
+    $fup->check($_POST['id'], UPDATE);
+    $fup->update($_POST);
+
     Event::log(
         $fup->getField('items_id'),
         strtolower($_POST['itemtype']),
@@ -117,8 +171,8 @@ if (isset($_POST["add"])) {
         //TRANS: %s is the user login
         sprintf(__('%s updates a followup'), $_SESSION["glpiname"])
     );
-    //$redirect = $track->getFormURLWithID($fup->getField('items_id'));
-    //$handled = true;
+    $redirect = $track->getFormURLWithID($fup->getField('items_id'));
+    $handled = true;
 } else if (isset($_POST["purge"])) {
     $fup->check($_POST['id'], PURGE);
     $fup->delete($_POST, 1);
@@ -169,10 +223,10 @@ if ($handled) {
     }
 }
 
-// if (null == $redirect) {
-//     Html::back();
-// } else {
-//     Html::redirect($redirect);
-// }
+if (null == $redirect) {
+    Html::back();
+} else {
+    Html::redirect($redirect);
+}
 
-// Html::displayErrorAndDie('Lost');
+Html::displayErrorAndDie('Lost');

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -98,7 +98,6 @@ class Phone extends CommonDBTM
         $this->addStandardTab('Infocom', $ong, $options);
         $this->addStandardTab('Document_Item', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
-
         return $ong;
     }
 
@@ -113,24 +112,6 @@ class Phone extends CommonDBTM
         unset($input['withtemplate']);
 
         return $input;
-    }
-
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                Computer_Item::class,
-                Item_Project::class,
-            ]
-        );
-
-        Item_Devices::cleanItemDeviceDBOnItemDelete(
-            $this->getType(),
-            $this->fields['id'],
-            (!empty($this->input['keep_devices']))
-        );
     }
 
 
@@ -282,6 +263,13 @@ class Phone extends CommonDBTM
             'datatype'           => 'string',
         ];
 
+        $tab[] = [
+            'id'                 => '9',
+            'table'              => $this->getTable(),
+            'field'              => 'number_line',
+            'name'               => _x('quantity', 'Number of lines'),
+            'datatype'           => 'integer',
+        ];
 
         $tab[] = [
             'id'                 => '70',
@@ -371,6 +359,49 @@ class Phone extends CommonDBTM
             ]
         ];
 
+        $tab[] = [
+            'id'                 => '24',
+            'table'              => 'glpi_users',
+            'field'              => 'name',
+            'linkfield'          => 'users_id_tech',
+            'name'               => __('Technician in charge of the hardware'),
+            'datatype'           => 'dropdown',
+            'right'              => 'own_ticket'
+        ];
+
+        $tab[] = [
+            'id'                 => '49',
+            'table'              => 'glpi_groups',
+            'field'              => 'completename',
+            'linkfield'          => 'groups_id_tech',
+            'name'               => __('Group in charge of the hardware'),
+            'condition'          => ['is_assign' => 1],
+            'datatype'           => 'dropdown'
+        ];
+
+        $tab[] = [
+            'id'                 => '42',
+            'table'              => 'glpi_phonepowersupplies',
+            'field'              => 'name',
+            'name'               => DevicePowerSupply::getTypeName(1),
+            'datatype'           => 'dropdown'
+        ];
+
+        $tab[] = [
+            'id'                 => '43',
+            'table'              => $this->getTable(),
+            'field'              => 'have_headset',
+            'name'               => __('Headset'),
+            'datatype'           => 'bool'
+        ];
+
+        $tab[] = [
+            'id'                 => '44',
+            'table'              => $this->getTable(),
+            'field'              => 'have_hp',
+            'name'               => __('Speaker'),
+            'datatype'           => 'bool'
+        ];
 
         $tab[] = [
             'id'                 => '61',
@@ -383,6 +414,14 @@ class Phone extends CommonDBTM
             'nodisplay'          => true,
         ];
 
+        $tab[] = [
+            'id'                 => '80',
+            'table'              => 'glpi_entities',
+            'field'              => 'completename',
+            'name'               => Entity::getTypeName(1),
+            'massiveaction'      => false,
+            'datatype'           => 'dropdown'
+        ];
 
         $tab[] = [
             'id'                 => '82',
@@ -395,7 +434,7 @@ class Phone extends CommonDBTM
 
         $tab = array_merge($tab, Notepad::rawSearchOptionsToAdd());
 
-        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd(get_class($this)));
+        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd());
 
         return $tab;
     }

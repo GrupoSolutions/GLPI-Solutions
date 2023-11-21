@@ -52,7 +52,7 @@ PluginFormcreatorTranslatableInterface
    static public $items_id = 'plugin_formcreator_sections_id';
 
    /** @var PluginFormcreatorFieldInterface|null $field a field describing the question denpending on its field type  */
-   private ?PluginFormcreatorFieldInterface $field = null;
+   public ?PluginFormcreatorFieldInterface $field = null;
 
    private $skipChecks = false;
 
@@ -191,6 +191,22 @@ PluginFormcreatorTranslatableInterface
       return true;
    }
 
+   public function getDesignLabel(): string {
+      $questionId = $this->getID();
+      $nb = (new DBUtils())->countElementsInTable(PluginFormcreatorCondition::getTable(), [
+         'itemtype' => PluginFormcreatorQuestion::getType(),
+         'items_id' => $questionId,
+      ]);
+      $sectionId = $this->fields[PluginFormcreatorSection::getForeignKeyField()];
+      $onclick = 'plugin_formcreator.showQuestionForm(' . $sectionId . ', ' . $questionId . ');';
+      $html = '<a href="javascript:' . $onclick . '" data-field="name">';
+      $html .= "<sup class='plugin_formcreator_conditions_count' title='" . __('Count of conditions', 'formcreator') ."'>$nb</sup>";
+      $html .= empty($this->fields['name']) ? '(' . $questionId . ')' : $this->fields['name'];
+      $html .= '</a>';
+
+      return $html;
+   }
+
    /**
     * Get the HTML for the question in form designer
     *
@@ -218,16 +234,8 @@ PluginFormcreatorTranslatableInterface
 
       // Question name
       $html .= $field->getHtmlIcon() . '&nbsp;';
-      $onclick = 'plugin_formcreator.showQuestionForm(' . $sectionId . ', ' . $questionId . ');';
-      $html .= '<a href="javascript:' . $onclick . '" data-field="name">';
       // Show count of conditions
-      $nb = (new DBUtils())->countElementsInTable(PluginFormcreatorCondition::getTable(), [
-         'itemtype' => PluginFormcreatorQuestion::getType(),
-         'items_id' => $this->getID(),
-      ]);
-      $html .= "<sup class='plugin_formcreator_conditions_count' title='" . __('Count of conditions', 'formcreator') ."'>$nb</sup>";
-      $html .= empty($this->fields['name']) ? '(' . $questionId . ')' : $this->fields['name'];
-      $html .= '</a>';
+      $html .= $this->getDesignLabel();
 
       // Delete the question
       $html .= "<span class='form_control pointer'>";
@@ -242,13 +250,13 @@ PluginFormcreatorTranslatableInterface
       $html .= "</span>";
 
       // Toggle mandatory for the question
+      $html .= "<span class='form_control pointer'>";
       if ($fieldType::canRequire()) {
-         $html .= "<span class='form_control pointer'>";
          $required = ($this->fields['required'] == '0') ? 'far fa-circle' : 'far fa-check-circle';
          $html .= '<i class="' . $required .'"
                   onclick="plugin_formcreator.toggleRequired(this)"></i> ';
-         $html .= "</span>";
       }
+      $html .= "</span>";
 
       $html .= '</div>'; // grid stack item content
 
@@ -271,8 +279,6 @@ PluginFormcreatorTranslatableInterface
          return '';
       }
 
-      $html = '';
-
       $field = $this->getSubField();
       if (!$field->isPrerequisites()) {
          return '';
@@ -284,7 +290,7 @@ PluginFormcreatorTranslatableInterface
       $x = $this->fields['col'];
       $width = $this->fields['width'];
       $hiddenAttribute = $isVisible ? '' : 'hidden=""';
-      $html .= '<div'
+      $html = '<div'
          . ' gs-x="' . $x . '"'
          . ' gs-w="' . $width . '"'
          . ' data-itemtype="' . self::class . '"'
@@ -346,7 +352,6 @@ PluginFormcreatorTranslatableInterface
          return [];
       }
       // - field type is compatible with accessibility of the form
-      $form = PluginFormcreatorCommon::getForm();
       $section = PluginFormcreatorSection::getById($input[PluginFormcreatorSection::getForeignKeyField()]);
       $form = PluginFormcreatorForm::getByItem($section);
       if ($form->isPublicAccess() && !$this->field->isPublicFormCompatible()) {
@@ -767,6 +772,21 @@ PluginFormcreatorTranslatableInterface
             $export[$key] = $value;
          }
       }
+
+      // Before importing the question, we need to give to the linker the questions
+      // used in the conditions of the question being duplicated
+      $conditions = (new PluginFormcreatorCondition())->find([
+         'itemtype' => self::getType(),
+         'items_id' => $this->getID()
+      ]);
+      foreach ($conditions as $row) {
+         $question = PluginFormcreatorQuestion::getById($row['plugin_formcreator_questions_id']);
+         if ($question === null || $question === false) {
+            continue;
+         }
+         $linker->addObject($row['plugin_formcreator_questions_id'], $question);
+      }
+
       $newQuestionId = static::import($linker, $export, $this->fields[$sectionFk]);
 
       if ($newQuestionId === false) {
@@ -1043,7 +1063,7 @@ PluginFormcreatorTranslatableInterface
     * @param PluginFormcreatorForm $form
     * @param array $crit
     * @param string $name
-    * @param string $value
+    * @param string|array $value
     * @param array $options
     * @return string|int HTML output or random id
     */
@@ -1056,7 +1076,11 @@ PluginFormcreatorTranslatableInterface
          'display' => $options['display'] ?? true,
       ];
       if ($value !== null) {
-         $options['value'] = $value;
+         if (is_array($value)) {
+            $options['values'] = $value;
+         } else {
+            $options['value'] = $value;
+         }
       }
       $output = Dropdown::showFromArray($name, $items, $options);
 
@@ -1193,52 +1217,56 @@ PluginFormcreatorTranslatableInterface
    }
 
    public static function dropdownObjectSubType(string $name, array $options = []): void {
+      $plural = Session::getPluralNumber();
+
       $optgroup = [
          __("Assets") => [
-            Computer::class           => Computer::getTypeName(2),
-            Monitor::class            => Monitor::getTypeName(2),
-            Software::class           => Software::getTypeName(2),
-            NetworkEquipment::class   => Networkequipment::getTypeName(2),
-            Peripheral::class         => Peripheral::getTypeName(2),
-            Printer::class            => Printer::getTypeName(2),
-            CartridgeItem::class      => CartridgeItem::getTypeName(2),
-            ConsumableItem::class     => ConsumableItem::getTypeName(2),
-            Phone::class              => Phone::getTypeName(2),
-            Line::class               => Line::getTypeName(2),
-            PassiveDCEquipment::class => PassiveDCEquipment::getTypeName(2),
-            Appliance::class          => Appliance::getTypeName(2),
+            Computer::class           => Computer::getTypeName($plural),
+            Monitor::class            => Monitor::getTypeName($plural),
+            Software::class           => Software::getTypeName($plural),
+            NetworkEquipment::class   => Networkequipment::getTypeName($plural),
+            Peripheral::class         => Peripheral::getTypeName($plural),
+            Printer::class            => Printer::getTypeName($plural),
+            CartridgeItem::class      => CartridgeItem::getTypeName($plural),
+            ConsumableItem::class     => ConsumableItem::getTypeName($plural),
+            Phone::class              => Phone::getTypeName($plural),
+            Line::class               => Line::getTypeName($plural),
+            PassiveDCEquipment::class => PassiveDCEquipment::getTypeName($plural),
+            PDU::class                => PDU::getTypeName($plural),
          ],
          __("Assistance") => [
-            Ticket::class             => Ticket::getTypeName(2),
-            Problem::class            => Problem::getTypeName(2),
-            Change::class             => Change::getTypeName(2),
-            TicketRecurrent::class    => TicketRecurrent::getTypeName(2)
+            Ticket::class             => Ticket::getTypeName($plural),
+            Problem::class            => Problem::getTypeName($plural),
+            Change::class             => Change::getTypeName($plural),
+            TicketRecurrent::class    => TicketRecurrent::getTypeName($plural),
          ],
          __("Management") => [
-            Budget::class             => Budget::getTypeName(2),
-            Supplier::class           => Supplier::getTypeName(2),
-            Contact::class            => Contact::getTypeName(2),
-            Contract::class           => Contract::getTypeName(2),
-            Document::class           => Document::getTypeName(2),
-            Project::class            => Project::getTypeName(2),
-            Certificate::class        => Certificate::getTypeName(2)
+            Budget::class             => Budget::getTypeName($plural),
+            Supplier::class           => Supplier::getTypeName($plural),
+            Contact::class            => Contact::getTypeName($plural),
+            Contract::class           => Contract::getTypeName($plural),
+            Document::class           => Document::getTypeName($plural),
+            Project::class            => Project::getTypeName($plural),
+            Certificate::class        => Certificate::getTypeName($plural),
+            Appliance::class          => Appliance::getTypeName($plural),
+            Database::class           => Database::getTypeName($plural),
          ],
          __("Tools") => [
             Reminder::class           => __("Notes"),
             RSSFeed::class            => __("RSS feed")
          ],
          __("Administration") => [
-            User::class               => User::getTypeName(2),
-            Group::class              => Group::getTypeName(2),
-            Entity::class             => Entity::getTypeName(2),
-            Profile::class            => Profile::getTypeName(2)
+            User::class               => User::getTypeName($plural),
+            Group::class              => Group::getTypeName($plural),
+            Entity::class             => Entity::getTypeName($plural),
+            Profile::class            => Profile::getTypeName($plural),
          ],
       ];
       if ((new Plugin())->isActivated('appliances')) {
-         $optgroup[__("Assets")][PluginAppliancesAppliance::class] = PluginAppliancesAppliance::getTypeName(2) . ' (' . _n('Plugin', 'Plugins', 1) . ')';
+         $optgroup[__("Assets")][PluginAppliancesAppliance::class] = PluginAppliancesAppliance::getTypeName($plural) . ' (' . _n('Plugin', 'Plugins', 1) . ')';
       }
       if ((new Plugin())->isActivated('databases')) {
-         $optgroup[__("Assets")][PluginDatabasesDatabase::class] = PluginDatabasesDatabase::getTypeName(2) . ' (' . _n('Plugin', 'Plugins', 1) . ')';
+         $optgroup[__("Assets")][PluginDatabasesDatabase::class] = PluginDatabasesDatabase::getTypeName($plural) . ' (' . _n('Plugin', 'Plugins', 1) . ')';
       }
 
       // Get additional itemtypes from plugins

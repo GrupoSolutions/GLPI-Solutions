@@ -147,14 +147,6 @@ class UserEmail extends CommonDBChild
      *
      * @return string
      **/
-    public static function getJSCodeToAddForItemChild($field_name, $child_count_js_var)
-    {
-
-        return "<input title=\'" . __s('Default email') . "\' type=\'radio\' name=\'_default_email\'" .
-             " value=\'-'+$child_count_js_var+'\'>&nbsp;" .
-             "<input type=\'text\' size=\'30\' class=\'form-control\' " . "name=\'" . $field_name .
-             "[-'+$child_count_js_var+']\'>";
-    }
 
 
     /**
@@ -174,8 +166,7 @@ class UserEmail extends CommonDBChild
         }
         $result = "";
         $field_name = $field_name . "[$id]";
-        $result .= "<div class='d-flex align-items-center'>";
-        $result .= "<input title='" . __s('Default email') . "' type='radio' name='_default_email'
+        $result .= "<input title='" . __s('Default email') . "' type='hidden' name='_default_email'
              value='" . $this->getID() . "'";
         if (!$canedit) {
             $result .= " disabled";
@@ -188,9 +179,8 @@ class UserEmail extends CommonDBChild
             $result .= "<input type='hidden' name='$field_name' value='$value'>";
             $result .= sprintf(__('%1$s %2$s'), $value, "<span class='b'>(" . __('D') . ")</span>");
         } else {
-            $result .= "<input type='text' size=30 class='form-control' name='$field_name' value='$value' >";
+            $result .= "<input type='text' size=30 class='form-control usuInput' name='$field_name' value='$value' >";
         }
-        $result .= "</div>";
 
         if ($display) {
             echo $result;
@@ -236,8 +226,7 @@ class UserEmail extends CommonDBChild
         }
         $canedit = ($user->can($users_id, UPDATE) || ($users_id == Session::getLoginUserID()));
 
-        parent::showAddChildButtonForItemForm($user, '_useremails', $canedit);
-
+        
         return;
     }
 

@@ -36,6 +36,8 @@ if (!(new Plugin())->isActivated('formcreator')) {
    Html::displayNotFoundError();
 }
 
+Session::checkLoginUser();
+
 if (!PluginFormcreatorFormAnswer::canView()) {
    Html::displayRightError();
 }
@@ -50,7 +52,23 @@ if (Session::getCurrentInterface() == 'helpdesk') {
       PluginFormcreatorForm::class
    );
 }
+echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
 
+if(isset($_SESSION['chamadoCriado']) && $_SESSION['chamadoCriado'] > 0) {
+   $numeroChamado = $_SESSION['chamadoCriado'];
+   // Gerar o código JavaScript para exibir o SweetAlert
+?>
+   <script>
+         Swal.fire({
+         title: "Chamado Criado!",
+         html: "<p>Número do Chamado: #" + <?php echo $numeroChamado;?> + "<br><a href='/front/ticket.form.php?id=<?php echo $numeroChamado;?>'>Ir para o Chamado</a></p>",
+         icon: "success"
+         });
+   </script>
+         <?php
+   // Limpar o valor da sessão após usar
+   unset($_SESSION['chamadoCriado']);
+}
 Search::show(PluginFormcreatorCommon::getFormanswerItemtype());
 
 if (Session::getCurrentInterface() == 'helpdesk') {

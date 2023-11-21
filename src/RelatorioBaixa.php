@@ -6,15 +6,12 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-$sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
-$GLOBALS['sqlcon'] = $sqlcon;
-
+require("./db_config.php");
 
 $data_inicial = $_POST['data_inicial'];
 $data_final = $_POST['data_final'];
 $data_inicial = date('Y/m/d', strtotime($data_inicial));
 $data_final = date('Y/m/d', strtotime($data_final));
-$sqlcon = $GLOBALS['sqlcon'];
 $frmStatus = $_POST['status'];
 switch ($frmStatus) {
     case 0:
@@ -43,6 +40,7 @@ glpi_plugin_consumables_requests.id,
 UPPER(solicitante.name) as SOLICITANTE,
 UPPER(lider_aprova.name) AS LIDER,
 UPPER(validador.name) as VALIDADOR,
+UPPER(glpi_plugin_consumables_requests.projeto) as PROJETO,
 UPPER(glpi_consumableitems.name) AS INSUMO,
 number AS QUANTIDADE,
 CASE 
@@ -51,6 +49,12 @@ CASE
     WHEN glpi_plugin_consumables_requests.status = 2 THEN 'AGUARDANDO APROVAÇÃO'
 END AS STATUS,
 UPPER(glpi_plugin_consumables_requests.observacao) AS OBSERVACAO,
+UPPER(glpi_plugin_consumables_requests.endereco),
+UPPER(glpi_plugin_consumables_requests.cep),
+UPPER(glpi_plugin_consumables_requests.estado),
+UPPER(glpi_plugin_consumables_requests.cidade),
+UPPER(glpi_plugin_consumables_requests.tipo_entrega),
+UPPER(glpi_plugin_consumables_requests.projeto),
 
 DATE_FORMAT(glpi_plugin_consumables_requests.date_mod,
         '%d/%m/%Y %H:%i') AS DATA_BAIXA
@@ -98,16 +102,22 @@ if($baixaRetorno){
 
     $sheet->setCellValue('A5', 'ID');
     $sheet->setCellValue('B5', 'Solicitado Por');
-    $sheet->setCellValue('C5', 'Validador');
+    $sheet->setCellValue('C5', 'Validado Por');
     $sheet->setCellValue('D5', 'Movimentado Por');
-    $sheet->setCellValue('E5', 'Insumo');
-    $sheet->setCellValue('F5', 'Quantidade');
-    $sheet->setCellValue('G5', 'Status');
-    $sheet->setCellValue('H5', 'Observação');
-    $sheet->setCellValue('I5', 'Data de Baixa');   
+    $sheet->setCellValue('E5', 'Projeto');
+    $sheet->setCellValue('F5', 'Insumo');
+    $sheet->setCellValue('G5', 'Quantidade');
+    $sheet->setCellValue('H5', 'Status');
+    $sheet->setCellValue('I5', 'Observação');
+    $sheet->setCellValue('J5', 'Endereço');  
+    $sheet->setCellValue('K5', 'CEP'); 
+    $sheet->setCellValue('L5', 'Estado');  
+    $sheet->setCellValue('M5', 'Cidade');  
+    $sheet->setCellValue('N5', 'Tipo de entrega');  
+    $sheet->setCellValue('O5', 'Projeto');   
+    $sheet->setCellValue('P5', 'Data de Baixa');   
     $sheet->fromArray($arrSolicitacao, null, 'A6');
     $date = date(" - dmY");
-
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment; filename="RelatoriodeBaixadeInsumos'. $date . '.xlsx"');
     $writer = new Xlsx($spreadsheet);

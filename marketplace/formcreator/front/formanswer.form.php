@@ -38,8 +38,6 @@ if (!(new Plugin())->isActivated('formcreator')) {
    Html::displayNotFoundError();
 }
 
-
-
 $formanswer = PluginFormcreatorCommon::getFormAnswer();
 
 if (isset($_POST['update'])) {
@@ -47,15 +45,13 @@ if (isset($_POST['update'])) {
    $formanswer->update($_POST);
    Html::back();
 
-} else if (isset($_POST['refuse_formanswer'])) {
-   $formanswer->update($_POST);
-   $formanswer->redirectToList();
-
-} else if (isset($_POST['accept_formanswer'])) {
-   	 require_once("loading.php");
-         $formanswer->update($_POST);
-         $formanswer->redirectToList(); 
-
+} else if (isset($_POST['refuse_formanswer']) || isset($_POST['accept_formanswer'])) {
+   if ($formanswer->update($_POST)) {
+      $formanswer->redirectToList();
+   } else {
+      //redirect to formanswer if update failed (ex : missing mandatory field)
+      Html::back();
+   }
 } else if (isset($_POST['save_formanswer'])) {
    if (!$formanswer->update($_POST)) {
       Html::back();
@@ -68,8 +64,8 @@ if (isset($_POST['update'])) {
    }
 
 }
-//Show target ticket form
-$formanswer->getFromDB((int)$_GET['id']);
+// Show target ticket form
+$formanswer->getFromDB((int) $_GET['id']);
 if (!$formanswer->checkEntity()) {
    Html::displayRightError();
 }
@@ -78,10 +74,10 @@ if (Session::getCurrentInterface() == 'helpdesk') {
    Html::helpHeader(__('Service catalog', 'formcreator'));
 } else {
    Html::header(
-      __('Form Creator', 'formcreator'),
+      $formanswer->fields['name'],
       '',
       'admin',
-      'PluginFormcreatorForm'
+      PluginFormcreatorForm::class
    );
 }
 

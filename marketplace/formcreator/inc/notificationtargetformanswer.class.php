@@ -70,6 +70,23 @@ class PluginFormcreatorNotificationTargetFormAnswer extends NotificationTarget
       $this->data['##formcreator.validation_comment##'] = $this->obj->fields['comment'];
       $this->data['##formcreator.validation_link##']    = $link;
       $this->data['##formcreator.request_id##']         = $this->obj->fields['id'];
+
+      $this->data['##lang.formcreator.form_id##']            = __('Form ID', 'formcreator');
+      $this->data['##lang.formcreator.form_name##']          = __('Form name', 'formcreator');
+      $this->data['##lang.formcreator.form_requester##']     = _n('Requester', 'Requesters', 1);
+      $this->data['##lang.formcreator.form_validator##']     = PluginFormcreatorForm_Validator::getTypeName(1);
+      $this->data['##lang.formcreator.form_creation_date##'] = __('Creation date', 'formcreator');
+      $this->data['##lang.formcreator.form_full_answers##']  = __('Full form answers', 'formcreator');
+      $this->data['##lang.formcreator.validation_comment##'] = __('Validation comment', 'formcreator');
+      $this->data['##lang.formcreator.validation_link##']    = __('Validation link', 'formcreator');
+      $this->data['##lang.formcreator.request_id##']         = __('Request ID', 'formcreator');
+
+      $this->getTags();
+      foreach ($this->tag_descriptions[NotificationTarget::TAG_LANGUAGE] as $tag => $values) {
+         if (!isset($this->data[$tag])) {
+            $this->data[$tag] = $values['label'];
+         }
+      }
    }
 
    public function getTags() {

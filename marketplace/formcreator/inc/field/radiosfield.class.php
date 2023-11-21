@@ -38,6 +38,7 @@ use Session;
 use Toolbox;
 use PluginFormcreatorFormAnswer;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Toolbox\Sanitizer;
 
 class RadiosField extends PluginFormcreatorAbstractField
 {
@@ -48,10 +49,9 @@ class RadiosField extends PluginFormcreatorAbstractField
    public function showForm(array $options): void {
       $template = '@formcreator/field/' . $this->question->fields['fieldtype'] . 'field.html.twig';
 
-      $this->question->fields['values'] =  json_decode($this->question->fields['values']);
+      $this->question->fields['values'] = json_decode($this->question->fields['values']);
       $this->question->fields['values'] = is_array($this->question->fields['values']) ? $this->question->fields['values'] : [];
       $this->question->fields['values'] = implode("\r\n", $this->question->fields['values']);
-      $this->question->fields['default_values'] = Html::entities_deep($this->question->fields['default_values']);
       $this->deserializeValue($this->question->fields['default_values']);
       TemplateRenderer::getInstance()->display($template, [
          'item' => $this->question,
@@ -85,14 +85,13 @@ class RadiosField extends PluginFormcreatorAbstractField
                   'id'      => $domId . '_' . $i,
                   'value'   => $value
                ] + $checked);
-               $html .= '<label class="label-radio" title="' . $value . '" for="' . $domId . '_' . $i . '">';
+               $translated_value =  __($value, $domain);
+               $html .= '<label for="' . $domId . '_' . $i . '" class="label-radio" title="' . $translated_value . '">';
                $html .= '<span class="box"></span>';
                $html .= '<span class="check"></span>';
+               $html .= '&nbsp;' . $translated_value;
                $html .= '</label>';
                $html .= '</span>';
-               $html .= '<label for="' . $domId . '_' . $i . '">';
-               $html .= '&nbsp;' . __($value, $domain);
-               $html .= '</label>';
                $html .= '</div>';
             }
          }
@@ -110,18 +109,41 @@ class RadiosField extends PluginFormcreatorAbstractField
    }
 
    public function prepareQuestionInputForSave($input) {
+      global $DB;
+
       if (!isset($input['values']) || empty($input['values'])) {
          Session::addMessageAfterRedirect(
-            __('The field value is required:', 'formcreator') . ' ' . $input['name'],
+            __('The field value is required.', 'formcreator'),
             false,
             ERROR
          );
          return [];
       }
 
-      // trim values
-      $input['values'] = $this->trimValue($input['values']);
-      $input['default_values'] = trim($input['default_values']);
+      // trim values (actually there is only one value then no \r\n expected)
+      $defaultValues = $this->trimValue($input['default_values'] ?? '');
+      if (count($defaultValues) > 1) {
+         Session::addMessageAfterRedirect(
+            __('Only one default value is allowed.', 'formcreator'),
+            false,
+            ERROR
+         );
+         return [];
+      }
+      $values = $this->trimValue($input['values']);
+      if (count($defaultValues) > 0) {
+         $validDefaultValues = array_intersect($this->getAvailableValues($values), $defaultValues);
+         if (count($validDefaultValues) != count($defaultValues)) {
+            Session::addMessageAfterRedirect(
+               __('The default value is not in the list of available values.', 'formcreator'),
+               false,
+               ERROR
+            );
+            return [];
+         }
+      }
+      $input['values'] = $DB->escape(json_encode($values, JSON_UNESCAPED_UNICODE));
+      $input['default_values'] = array_pop($defaultValues);
 
       return $input;
    }
@@ -176,7 +198,7 @@ class RadiosField extends PluginFormcreatorAbstractField
    }
 
    public function getValueForTargetText($domain, $richText): ?string {
-      return __($this->value, $domain);
+      return Sanitizer::unsanitize(__($this->value, $domain));
    }
 
    public function moveUploads() {
@@ -190,7 +212,7 @@ class RadiosField extends PluginFormcreatorAbstractField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '') {
          Session::addMessageAfterRedirect(
-            sprintf(__('A required field is empty: %s', 'formcreator'), $this->getLabel()),
+            sprintf(__('A required field is empty: %s', 'formcreator'), $this->getTtranslatedLabel()),
             false,
             ERROR
          );
@@ -205,8 +227,18 @@ class RadiosField extends PluginFormcreatorAbstractField
       if ($value == '') {
          return true;
       }
+
       $value = trim($value);
-      return in_array($value, $this->getAvailableValues());
+      if (!in_array($value, $this->getAvailableValues())) {
+         Session::addMessageAfterRedirect(
+            sprintf(__('This value %1$s is not allowed: %2$s', 'formcreator'), $value, $this->getTtranslatedLabel()),
+            false,
+            ERROR
+         );
+         return false;
+      }
+
+      return true;
    }
 
    public static function canRequire(): bool {

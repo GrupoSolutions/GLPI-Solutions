@@ -2232,7 +2232,7 @@ JAVASCRIPT;
                             $output .= ' title="' . $param['option_tooltips'][$key] . '"';
                         }
                         $output .= ">" . Html::entities_deep($val) . "</option>";
-                        if ($max_option_size < strlen($val)) {
+                        if (!is_null($val) && ($max_option_size < strlen($val))) {
                             $max_option_size = strlen($val);
                         }
                     }
@@ -4183,7 +4183,7 @@ JAVASCRIPT;
             'results' => $results,
             'count'   => count($results),
         ];
-        if ($total_results > count($results)) {
+        if (count($results) >= $post['page_limit']) {
             $return['pagination'] = [
                 'more' => true,
             ];

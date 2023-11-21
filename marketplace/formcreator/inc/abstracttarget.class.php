@@ -31,7 +31,7 @@
  */
 
 use Glpi\Application\View\TemplateRenderer;
-use Glpi\Toolbox\Sanitizer;
+use \Glpi\Features\Clonable;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -43,6 +43,7 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
    PluginFormcreatorConditionnableInterface,
    PluginFormcreatorTranslatableInterface
 {
+   use Clonable;
    use PluginFormcreatorConditionnableTrait;
    use PluginFormcreatorExportableTrait;
    use PluginFormcreatorTranslatable;
@@ -190,7 +191,7 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
     * @param string $template
     * @param PluginFormcreatorFormAnswer $formAnswer form answer to render
     * @param bool $richText Disable rich text output
-    * @return string
+    * @return string without sql or html escaping
     */
    protected function prepareTemplate($template, PluginFormcreatorFormAnswer $formAnswer, $richText = false) {
       if (strpos($template, '##FULLFORM##') !== false) {
@@ -208,7 +209,6 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
 
       if ($richText) {
          $template = str_replace(['<p>', '</p>'], ['<div>', '</div>'], $template);
-         $template = Sanitizer::sanitize($template);
       }
 
       return $template;
@@ -217,11 +217,11 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
    /**
     * Append fields data to input
     *
-    * @param PluginFormcreatorFormanswer $formanswer the source formanswer
     * @param array $input data of the generated target
-    * @return void
+    * @param PluginFormcreatorFormanswer $formanswer the source formanswer
+    * @return array
     */
-   protected function appendFieldsData(PluginFormcreatorFormanswer $formanswer, &$input): void {
+   protected function appendFieldsData(array $input, PluginFormcreatorFormanswer $formanswer): array {
       global $DB;
 
       //get all PluginFormcreatorAnswer
@@ -262,6 +262,8 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
          }
          $input['c_id'] = $blocks_field;
       }
+
+      return $input;
    }
 
 
@@ -553,5 +555,10 @@ abstract class PluginFormcreatorAbstractTarget extends CommonDBChild implements
       echo '</div>';
       echo '</td>';
       echo '</tr>';
+   }
+
+   public function prepareInputForClone($input) {
+      unset($input['uuid']);
+      return $input;
    }
 }

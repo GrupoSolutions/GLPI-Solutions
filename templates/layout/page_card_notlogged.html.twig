@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -58,10 +58,11 @@
             {% set style = 'max-width: 60rem' %}
          {% endif %}
 
-         <div class="container-tight mt-5" {% if style is not null %}style="{{ style }}"{% endif %}>
+         <div class="container-tight mt-5" {% if style is not null %} style="{{ style }}"{% endif %}>
             <div class="text-center">
-               <div class="col-md">
-                  <span class="glpi-logo mb-2 solutions" title="Ativo"></span>
+               <div class="col-md mb-4 mt-5">
+                  <span class="glpi-logo" title="Ativo"></span>
+                  <img src="pics/logos/logo-GLPI-250-black.png" style="width:400px;"/>
                </div>
             </div>
             <div class="card card-md">
@@ -71,7 +72,7 @@
             </div>
 
             <div class="text-center text-muted mt-3">
-               {% block footer_block %} {% endblock %}
+               {% block footer_block %}{% endblock %}
             </div>
          </div>
       </div>

@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Fields. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
- * @copyright Copyright (C) 2013-2022 by Fields plugin team.
+ * @copyright Copyright (C) 2013-2023 by Fields plugin team.
  * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
  * @link      https://github.com/pluginsGLPI/fields
  * -------------------------------------------------------------------------
@@ -40,10 +40,11 @@ class PluginFieldsMigration extends Migration
      *
      * @param string $field_name
      * @param string $field_type
+     * @param array  $options
      *
      * @return array
      */
-    public static function getSQLFields(string $field_name, string $field_type): array
+    public static function getSQLFields(string $field_name, string $field_type, array $options = []): array
     {
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
@@ -57,11 +58,18 @@ class PluginFieldsMigration extends Migration
                 if ($field_type === 'dropdown') {
                     $field_name = getForeignKeyFieldForItemType(PluginFieldsDropdown::getClassname($field_name));
                 }
-                $fields[$field_name] = "INT {$default_key_sign} NOT NULL DEFAULT 0";
+                if ($options['multiple'] ?? false) {
+                    $fields[$field_name] = "LONGTEXT";
+                } else {
+                    $fields[$field_name] = "INT {$default_key_sign} NOT NULL DEFAULT 0";
+                }
                 break;
             case $field_type === 'textarea':
             case $field_type === 'url':
                 $fields[$field_name] = 'TEXT DEFAULT NULL';
+                break;
+            case $field_type === 'richtext':
+                $fields[$field_name] = 'LONGTEXT DEFAULT NULL';
                 break;
             case $field_type === 'yesno':
                 $fields[$field_name] = 'INT NOT NULL DEFAULT 0';
@@ -164,7 +172,7 @@ class PluginFieldsMigration extends Migration
         // For each defined fields in the given container
         $fields = (new PluginFieldsField())->find(['plugin_fields_containers_id' => $container_id]);
         foreach ($fields as $row) {
-            $fields = self::getSQLFields($row['name'], $row['type']);
+            $fields = self::getSQLFields($row['name'], $row['type'], $row);
             array_push($valid_fields, ...array_keys($fields));
         }
 

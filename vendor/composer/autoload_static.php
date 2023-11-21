@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
+class ComposerStaticInita2625ea881490b3785650eba93fe758f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -444,6 +444,7 @@ class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
         'Brick\\Math\\Internal\\Calculator\\GmpCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/GmpCalculator.php',
         'Brick\\Math\\Internal\\Calculator\\NativeCalculator' => __DIR__ . '/..' . '/brick/math/src/Internal/Calculator/NativeCalculator.php',
         'Brick\\Math\\RoundingMode' => __DIR__ . '/..' . '/brick/math/src/RoundingMode.php',
+        'CURLStringFile' => __DIR__ . '/..' . '/symfony/polyfill-php81/Resources/stubs/CURLStringFile.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
         'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
@@ -620,6 +621,7 @@ class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
         'Glpi\\Features\\Teamwork' => __DIR__ . '/../..' . '/src/Features/Teamwork.php',
         'Glpi\\Features\\Timeline' => __DIR__ . '/../..' . '/src/Features/Timeline.php',
         'Glpi\\Features\\TreeBrowse' => __DIR__ . '/../..' . '/src/Features/TreeBrowse.php',
+        'Glpi\\Http\\Firewall' => __DIR__ . '/../..' . '/src/Http/Firewall.php',
         'Glpi\\Http\\ProxyRouter' => __DIR__ . '/../..' . '/src/Http/ProxyRouter.php',
         'Glpi\\Http\\Response' => __DIR__ . '/../..' . '/src/Http/Response.php',
         'Glpi\\Inventory\\Asset\\Antivirus' => __DIR__ . '/../..' . '/src/Inventory/Asset/Antivirus.php',
@@ -2568,7 +2570,6 @@ class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
         'Twig\\Util\\DeprecationCollector' => __DIR__ . '/..' . '/twig/twig/src/Util/DeprecationCollector.php',
         'Twig\\Util\\TemplateDirIterator' => __DIR__ . '/..' . '/twig/twig/src/Util/TemplateDirIterator.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
-        'UploadHandler' => __DIR__ . '/..' . '/blueimp/jquery-file-upload/server/php/UploadHandler.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
@@ -2637,10 +2638,10 @@ class ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf73f90d7494e7e773fb7e9f33651930c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita2625ea881490b3785650eba93fe758f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita2625ea881490b3785650eba93fe758f::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInita2625ea881490b3785650eba93fe758f::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInita2625ea881490b3785650eba93fe758f::$classMap;
 
         }, null, ClassLoader::class);
     }

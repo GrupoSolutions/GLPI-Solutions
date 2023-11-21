@@ -60,9 +60,6 @@ if (isset($_POST["disconnect"])) {
 
    // Connect a computer to a printer/monitor/phone/peripheral
 } else if (isset($_POST["add"])) {
-    print_r($_POST);
-    var_dump($_POST);
-    return false;
     if (isset($_POST["items_id"]) && ($_POST["items_id"] > 0)) {
         $conn->check(-1, CREATE, $_POST);
         if ($conn->add($_POST)) {

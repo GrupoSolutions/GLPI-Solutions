@@ -433,6 +433,15 @@ PluginFormcreatorTranslatableInterface
       return $data;
    }
 
+   protected function setTargetPriority(array $data): array {
+      // Remove default priority so it can be computed
+      if (isset($data['urgency']) || isset($data['impact'])) {
+         unset($data['priority']);
+      }
+      return $data;
+   }
+
+
    /**
     * find all actors and prepare data for the ticket being created
     */
@@ -969,7 +978,7 @@ PluginFormcreatorTranslatableInterface
 
    protected function showCategorySettings($rand) {
       echo '<tr>';
-      echo '<td width="15%">' . PluginFormcreatorCategory::getTypeName(1) . '</td>';
+      echo '<td width="15%">' . ITILCategory::getTypeName(1) . '</td>';
       echo '<td width="25%">';
       Dropdown::showFromArray(
          'category_rule',
@@ -1112,7 +1121,7 @@ SCRIPT;
                'fieldtype' => ['tag'],
             ],
             '_tag_questions',
-            $this->fields['tag_questions'],
+            explode(',', $this->fields['tag_questions']),
             [
                'multiple' => true,
             ]
@@ -2275,8 +2284,6 @@ SCRIPT;
       $targetTemplateFk = $targetItemtype::getForeignKeyField();
 
       $data = $targetItemtype::getDefaultValues();
-      // Determine category early, because it is used to determine the template
-      $data = $this->setTargetCategory($data, $formanswer);
 
       $this->fields[$targetTemplateFk] = $this->getTargetTemplate($data);
 
@@ -2317,6 +2324,13 @@ SCRIPT;
       }
 
       $data = array_merge($data, $predefined_fields);
+
+      $data = $this->setTargetCategory($data, $formanswer);
+
+      if (($data['requesttypes_id'] ?? 0) == 0) {
+         unset($data['requesttypes_id']);
+      }
+
       return $data;
    }
 
@@ -2356,6 +2370,29 @@ SCRIPT;
                }
             }
          }
+      }
+
+      return $data;
+   }
+
+   /**
+    * Undocumented function
+    *
+    * @param array $data
+    * @param PluginFormcreatorFormAnswer $formanswer
+    * @return array
+    */
+   protected function setDocuments($data, PluginFormcreatorFormAnswer $formanswer): array {
+      foreach ($formanswer->getQuestionFields($formanswer->getForm()->getID()) ?? [] as $field) {
+         $question = $field->getQuestion();
+         if ($question->fields['fieldtype'] !== 'glpiselect') {
+            continue;
+         }
+         if ($question->fields['itemtype'] !== Document::class) {
+            continue;
+         }
+
+         $data['_documents_id'][] = $field->getRawValue();
       }
 
       return $data;
@@ -2483,5 +2520,18 @@ SCRIPT;
 
    public static function getNoMailImage() {
       return '<i class="fas fa-envelope pointer" title="' . __('Email followup') . ' ' . __('No') . '" width="20"></i>';
+   }
+
+   public function getCloneRelations(): array {
+      return [
+         PluginFormcreatorTarget_Actor::class,
+         PluginFormcreatorCondition::class,
+      ];
+   }
+
+   public function prepareInputForClone($input) {
+      $input = parent::prepareInputForClone($input);
+      $input['_skip_create_actors'] = true;
+      return $input;
    }
 }

@@ -73,7 +73,7 @@ class TagField extends DropdownField
       if (!$canEdit) {
          $html .= '<div class="form_field">';
          $tagNames = [];
-         if (count($this->value) > 0) {
+         if (is_array($this->value) && count($this->value) > 0) {
             foreach ($this->value as $tagId) {
                $tag = new PluginTagTag();
                if (!$tag->getFromDB($tagId)) {
@@ -160,7 +160,7 @@ class TagField extends DropdownField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '') {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );

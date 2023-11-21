@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -80,17 +80,6 @@ class Consumable extends CommonDBChild
     public static function getTypeName($nb = 0)
     {
         return _n('Consumable', 'Consumables', $nb);
-    }
-
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                Infocom::class,
-            ]
-        );
     }
 
 
@@ -399,9 +388,6 @@ class Consumable extends CommonDBChild
         return 0;
     }
 
-    public function getURL(){
-       
-    }
     /**
      * Get the consumable count HTML array for a defined consumable type
      *
@@ -427,20 +413,10 @@ class Consumable extends CommonDBChild
             }
            //TRANS: For consumable. %1$d is total number, %2$d is unused number, %3$d is old number
             $tmptxt = sprintf(__('Total: %1$d, New: %2$d, Used: %3$d'), $total, $unused, $old);
-
-            $str = str_replace("/glpi/ajax/common.tabs.php?_target=/glpi/front/", "", $_SERVER["REQUEST_URI"]);
-            $url = strstr($str,'.php',true);
             if ($nohtml) {
                 $out = $tmptxt;
             } else {
-                $str = str_replace("/glpi/ajax/common.tabs.php?_target=/glpi/front/", "", $_SERVER["REQUEST_URI"]);
-                $url = strstr($str,'.php',true);
-                if($url = "consumableitem.form"){
-                    $tmptxt = sprintf(__('Total: %1$d  Disponiveis:  %2$d Usados:  %3$d'), $total, $unused, $old);
-                    $out = $tmptxt;
-                }else{
                 $out = "<div $highlight>" . $tmptxt . "</div>";
-                }
             }
         } else {
             if ($nohtml) {
@@ -514,6 +490,7 @@ class Consumable extends CommonDBChild
         } else if (self::isOld($cID)) {
             return _nx('consumable', 'Used', 'Used', 1);
         }
+        return '';
     }
 
 
@@ -530,27 +507,22 @@ class Consumable extends CommonDBChild
         $ID = $consitem->getField('id');
         $name = $consitem->getField('name');
         $locID = $consitem->getField('locations_id');
-
         if (!$consitem->can($ID, UPDATE)) {
             return;
         }
-
         if ($ID > 0) {
             ?>
                 <div class="boxMovimentacao " align="center">
                     <div class="boxP"> 
                         <p>Alteração de Localidade:</p>
                     </div>
-
                    
                     <div class="container">
-                        <input type="checkbox" onchange="showDiv()" class="checkbox" id="checkbox">
-                        <label class="switch" for="checkbox">
-                            <span class="slider"></span>
-                        </label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" onchange="showDiv()" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        </div>
                     </div>
                 </div>
-
 <?php
             require_once 'db_config.php';
             $query = "SELECT glpi_consumableitems.id,
@@ -574,19 +546,14 @@ class Consumable extends CommonDBChild
             echo "<input type='hidden' name='consumableitems_id' value='$ID'>\n";
             echo "</td></tr>";
             echo "<p style='font-size:12px; color:gray'>Os campos com<span class='required'>*</span> são obrigatórios.</p>";
-
             echo "<tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>";
             echo "<td><input type='text' pattern='[0-9]*' name='to_add' required/></td>";
-
             echo "<td><label>Valor(R$): </label><span class='required'>*</span></td>";
             echo "<td><input placeholder='ex: 1500,00' type='number' min='0.1' step='any' name='valor_insumo' required/></td></tr>";
-
             echo "<tr><td><label>Data da NF: </label><span class='required'>*</span></td>";
             echo "<td><input style='width:225px' type='date' name='data_nf' required/></td>";
-
             echo "<td><label>Número da NF:</label><span class='required'>*</span></td>";
             echo "<td><input type='text' pattern='[0-9]*' name='numero_nf' required/></td></tr>";
-
             echo "<td><label>Observação:</label></td>";
             echo "<td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea></td>";
             echo "<div>";
@@ -602,19 +569,16 @@ class Consumable extends CommonDBChild
                 <tr class="center"><td class="tab_bg_2"></td></tr>
                 <tr><td width='18%'><label>Quantidade de insumos:</label><span class='required'>*</span></td>
                 <td><input type='text' pattern='[0-9]*' name='qtdInsumos' required/></td>
-
                 <td width='18%'><label>Destino:</label><span class='required'>*</span></td>
                 <td><select name="idDestino" required><option class='disabled' value=''>Selecione o destino</option><?php
                     foreach($arrInsumos as $insumo){
                         echo "<option name='id' value='$insumo[0]'>$insumo[1] - $insumo[2]</option>";
                     }
                 ?></select></td>
-
                 <tr><td><label>Observação:</label> </td>
                 <td><textarea id='comentario' name='comentario' rows='4' cols='23'></textarea> </td></tr>
             </table>
             <p align='center'><input type='submit' name='add_several' value="Movimentar Insumos" class='btn btn-primary'></p>
-
             <script>
             function showDiv(){
                 const divHide = document.getElementById('frmAdd');
@@ -676,21 +640,17 @@ class Consumable extends CommonDBChild
             'LIMIT'  => (int)$_SESSION['glpilist_limit']
         ]);
 
-        echo "<div class='spaced'>";
 
-       // Display the pager
-
-       
-
-        echo "<table class='tab_cadre_fixehov' style='text-align:center;'>";
+        echo "<table class='tab_cadre_fixehov' style='text-align: center;'>";
         if (!$show_old) {
             echo "<tr><th colspan=" . ($canedit ? '5' : '4') . ">";
             echo self::getCount($tID, -1);
             echo "</th></tr>";
         } 
-        echo "</table>";
 
-        echo "</div>";
+       
+        echo "</table>";
+        
     }
 
 
@@ -867,8 +827,9 @@ class Consumable extends CommonDBChild
                 self::showAddForm($item);
                 self::showForConsumableItem($item);
                 self::showForConsumableItem($item, 1);
-                return true;
+                break;
         }
+        return true;
     }
 
     public function getRights($interface = 'central')

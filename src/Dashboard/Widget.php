@@ -296,6 +296,30 @@ class Widget
         $href = strlen($p['url'])
          ? "href='{$p['url']}'"
          : "";
+        if($p['label'] == 'Chamados novos'){
+            $href = strlen($p['url'])
+            ? "href='/front/ticket.php?status=novo'"
+            : "";
+        } else if($p['label'] == 'Chamados atribuídos'){
+            $href = strlen($p['url']) ? "href='/front/ticket.php?status=ematendimento'" : "";
+        } else if($p['label'] == 'Chamados fechados'){
+            $href = strlen($p['url']) ? "href='/front/ticket.php?status=fechados'" : "";
+        } else if ($p['label'] == 'Chamados planejados'){
+            $p['label'] = 'Aguardando terceiros';
+            $href =  strlen($p['url']) ? "href='/front/ticket.php?status=terceiros'" : "";
+        } else if ($p['label'] == 'Chamados pendentes'){
+         $p['label'] = 'Aguardando usuário';
+         $href =  strlen($p['url']) ? "href='/front/ticket.php?status=usuario'" : "";
+         } else if ($p['label'] == 'Chamados solucionados'){
+            $href =  strlen($p['url']) ? "href='/front/ticket.php?status=solucionado'" : "";
+            }
+        else {
+            //$href= strlen($p['url']) ? "" : "";
+$href = strlen($p['url'])
+         ? "href='{$p['url']}'"
+         : "";
+
+        }
 
         $label = $p['label'];
         $html = <<<HTML

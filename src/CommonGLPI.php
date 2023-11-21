@@ -1015,7 +1015,7 @@ class CommonGLPI implements CommonGLPIInterface
                 }
             }
             $cleantarget = Html::cleanParametersURL($target);
-            echo "<div class='navigationheader justify-content-sm-between'>";
+            echo "<div class='navigationheader justify-content-sm-between' style='margin-top:-15px'>";
 
             // First set of header pagination actions, displayed on the left side of the page
             echo "<div>";

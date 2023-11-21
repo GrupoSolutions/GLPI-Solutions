@@ -32,6 +32,7 @@
 use GlpiPlugin\Formcreator\Exception\ImportFailureException;
 use GlpiPlugin\Formcreator\Exception\ExportFailureException;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Toolbox\Sanitizer;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -620,18 +621,13 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
             'FROM'   => ITILCategory::getTable(),
             'WHERE'  => ['id' => $data['itilcategories_id']]
          ]);
-         if ($row = $rows->current()) { // assign change template according to resulting change category
+         if ($row = $rows->current()) {
+            // assign change template according to resulting change category
             return $row[$targetTemplateFk];
          }
       }
 
       return $this->fields[$targetTemplateFk] ?? 0;
-   }
-
-   public function getDefaultData(PluginFormcreatorFormAnswer $formanswer): array {
-      $data = parent::getDefaultData($formanswer);
-
-      return $data;
    }
 
    /**
@@ -654,7 +650,6 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
          $formanswer,
          true
       );
-      $data['name'] = Toolbox::addslashes_deep($data['name']);
       $data['name'] = $formanswer->parseTags($data['name'], $this);
 
       $changeFields = [
@@ -667,21 +662,21 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
       ];
       foreach ($changeFields as $changeField) {
          $data[$changeField] = $this->prepareTemplate(
-            $this->fields[$changeField] ?? '',
+            Sanitizer::unsanitize(__($this->fields[$changeField], $domain)) ?? '',
             $formanswer,
-            $changeField == 'content' // only content supports rich text
+            true // all *content supports rich text
          );
          $data[$changeField] = $data[$changeField] ?? '';
 
-         $data[$changeField] = $formanswer->parseTags($data[$changeField], $this, $changeField == 'content');
+         $data[$changeField] = $formanswer->parseTags($data[$changeField], $this, true); // all *content supports rich text
       }
 
-      $data['_users_id_recipient']   = $_SESSION['glpiID'];
+      $data['_users_id_recipient'] = $formanswer->fields['requester_id'];
 
       $this->prepareActors($form, $formanswer);
 
       if (count($this->requesters['_users_id_requester']) == 0) {
-         $this->addActor('requester', $formanswer->fields['requester_id'], true);
+         $this->addActor(PluginFormcreatorTarget_Actor::ACTOR_ROLE_REQUESTER, $formanswer->fields['requester_id'], true);
          $requesters_id = $formanswer->fields['requester_id'];
       } else {
          $requesterAccounts = array_filter($this->requesters['_users_id_requester'], function($v) {
@@ -699,6 +694,7 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
       $data = $this->setSLA($data, $formanswer);
       $data = $this->setOLA($data, $formanswer);
       $data = $this->setTargetUrgency($data, $formanswer);
+      $data = $this->setTargetPriority($data, $formanswer);
       $data = $this->setTargetValidation($data, $formanswer);
 
       $data = $this->requesters + $this->observers + $this->assigned + $this->assignedSuppliers + $data;
@@ -706,7 +702,7 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
 
       $data = $this->prepareUploadedFiles($data, $formanswer);
 
-      $this->appendFieldsData($formanswer, $data);
+      $data = $this->appendFieldsData($data, $formanswer);
 
       // Cleanup actors array
       $data = $this->cleanActors($data);
@@ -716,8 +712,6 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
          return null;
       }
 
-      $this->saveTags($formanswer, $changeID);
-
       // Add link between Change and FormAnswer
       $itemlink = $this->getItem_Item();
       $itemlink->add([
@@ -725,6 +719,8 @@ class PluginFormcreatorTargetChange extends PluginFormcreatorAbstractItilTarget
          'items_id'     => $formanswer->fields['id'],
          'changes_id'  => $changeID,
       ]);
+
+      $this->saveTags($formanswer, $changeID);
 
       return $change;
    }

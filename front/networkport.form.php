@@ -41,6 +41,7 @@ use Glpi\Event;
 
 include('../inc/includes.php');
 
+Session::checkRight("networking", READ);
 
 $np  = new NetworkPort();
 $nn  = new NetworkPort_NetworkPort();
@@ -151,6 +152,20 @@ if (isset($_POST["add"])) {
 
     if (isset($_POST["id"])) {
         $nn->delete($_POST);
+    }
+    Html::back();
+} else if (isset($_POST["restore"])) {
+    $np->check($_POST["id"], DELETE);
+
+    if ($np->restore($_POST)) {
+        Event::log(
+            $_POST["id"],
+            "networkport",
+            4,
+            "inventory",
+            //TRANS: %s is the user login
+            sprintf(__('%s restores an item'), $_SESSION["glpiname"])
+        );
     }
     Html::back();
 } else {

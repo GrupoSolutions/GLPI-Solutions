@@ -25,13 +25,14 @@
  * @license   http://www.gnu.org/licenses/gpl.txt GPLv3+
  * @link      https://github.com/pluginsGLPI/formcreator/
  * @link      https://pluginsglpi.github.io/formcreator/
- * @link      http://plugins.glpi-project.org/#/plugin/formcreatorp@
+ * @link      http://plugins.glpi-project.org/#/plugin/formcreator
  * ---------------------------------------------------------------------
  */
 
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Toolbox\Sanitizer;
 use GlpiPlugin\Formcreator\Field\DropdownField;
+use Glpi\Application\ErrorHandler;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -127,8 +128,10 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       $groupUser = new Group_User();
       $groups = $groupUser->getUserGroups($currentUser);
-      if (in_array($this->fields['users_id_validator'], $groups)) {
-         return true;
+      foreach ($groups as $group) {
+         if ($this->fields['groups_id_validator'] == $group['id']) {
+            return true;
+         }
       }
 
       $request = [
@@ -162,6 +165,44 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                }
             }
          }
+      }
+
+      // Check if the current user is a requester of a ticket linked to a form answer typed
+      // Matches search option 42, 43 and 44 of PluginFormcreatorIssue (requester, watcher, assigned)
+      $ticket_table = Ticket::getTable();
+      $ticket_user_table = Ticket_User::getTable();
+      $item_ticket_table = Item_Ticket::getTable();
+      $request = [
+         'SELECT' => [
+            Ticket_User::getTableField(User::getForeignKeyField()),
+            Ticket::getTableField('id'),
+         ],
+         'FROM' => $ticket_user_table,
+         'INNER JOIN' => [
+            $ticket_table => [
+               'FKEY' => [
+                  $ticket_table => 'id',
+                  $ticket_user_table => 'tickets_id',
+                  ['AND' => [
+                     Ticket_User::getTableField(User::getForeignKeyField()) => $currentUser,
+                  ]],
+               ],
+            ],
+            $item_ticket_table => [
+               'FKEY' => [
+                  $item_ticket_table => 'tickets_id',
+                  $ticket_table => 'id',
+                  ['AND' => [
+                     Item_Ticket::getTableField('itemtype') => self::getType(),
+                     Item_Ticket::getTableField('items_id') => $this->getID(),
+                  ]],
+               ],
+            ],
+         ]
+      ];
+
+      if ($DB->request($request)->count() > 0) {
+         return true;
       }
 
       return false;
@@ -208,7 +249,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          'table'              => 'glpi_plugin_formcreator_forms',
          'field'              => 'name',
          'name'               => PluginFormcreatorForm::getTypeName(1),
-         'datatype'           => 'string',
+         'datatype'           => 'dropdown',
          'massiveaction'      => false
       ];
 
@@ -543,7 +584,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $options['canedit'] = false;
 
       // Print css media
-      echo Html::css("/marketplace/css/print_form.css", ['media' => 'print']);
+      echo Html::css(FORMCREATOR_ROOTDOC . "/css/print_form.css", ['media' => 'print']);
 
       $style = "<style>";
       // force colums width
@@ -568,12 +609,18 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       . ' class="plugin_formcreator_form"'
       . ' action="' . $formUrl . '"'
       . ' id="plugin_formcreator_form"'
+      . ' data-submit-once="true"'
       . '>';
 
       $form = $this->getForm();
 
       // Edit mode for validator
       $editMode = !isset($options['edit']) ? false : ($options['edit'] != '0');
+      // Can the current user edit the answers ?
+      $canEdit = $this->fields['status'] == self::STATUS_REFUSED
+         && Session::getLoginUserID() == $this->fields['requester_id']
+         || $this->fields['status'] == self::STATUS_WAITING
+         && $this->canValidate() && $editMode;
 
       // form title
       if (version_compare(GLPI_VERSION, '10.0.3') < 0) {
@@ -613,7 +660,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       }
 
       echo '<ol>';
-      $domain = PluginFormcreatorForm::getTranslationDomain($_SESSION['glpilanguage'], $form->getID());
+      $domain = PluginFormcreatorForm::getTranslationDomain($form->getID());
 
       // Get fields populated with answers
       $this->loadAnswers();
@@ -658,7 +705,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                   }
                }
             }
-            echo $question->getRenderedHtml($domain, $editMode, $this, $visibility[$question->getType()][$question->getID()]);
+            echo $question->getRenderedHtml($domain, $canEdit, $this, $visibility[$question->getType()][$question->getID()]);
             $lastQuestion = $question;
          }
          echo '</div>';
@@ -683,17 +730,16 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       } else if (($this->fields['status'] == self::STATUS_WAITING) && $this->canValidate()) {
          // Display validation form
          echo '<div class="form-group required line1">';
-                  echo '<label for="comment">' . __('Comment', 'formcreator') . ' <span class="red">*</span></label>';
+         echo '<label for="comment">' . __('Comment', 'formcreator') . ' <span class="red">*</span></label>';
          Html::textarea([
             'name' => 'comment',
-            'value' => $this->fields['comment'],
-            'rows' => 5
+            'value' => $this->fields['comment']
          ]);
          echo '<div class="help-block">' . __('Required if refused', 'formcreator') . '</div>';
          echo '</div>';
-       
-         
 
+         
+         echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
          echo '<div class="form-group line1">';
          echo '<div class="center" style="float: left; width: 30%;">';
          echo Html::submit(
@@ -721,9 +767,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          echo "<input type='hidden' id='formID' name='formID' value='{$ID}'>";
 
          echo "<input type='hidden' id='validatorID' name='validatorID' value='{$validatorID}'>";
-         //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]))
-         echo "<input type='button' id='myBtn' value='Enviar'";
-         require_once("modal.php");
+        //var_dump(Html::submit( __('Accept', 'formcreator'), [ 'name'      => 'accept_formanswer',]));
+         echo "<input type='submit' id='myBtn' class='btn' value='Enviar'>";
+         echo "<input type='hidden' name='accept_formanswer' >";
       }
 
       if (Plugin::isPluginActive(PLUGIN_FORMCREATOR_ADVANCED_VALIDATION)) {
@@ -738,7 +784,29 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       echo Html::hidden('id', ['value' => $this->getID()]);
       echo Html::hidden('_glpi_csrf_token', ['value' => Session::getNewCSRFToken()]);
 
-      echo '</div>';
+      echo '</div>';?>
+
+      <script>
+         
+         function verificarEObterOperacao() {
+         // Inicializa a variável operação
+         var operacao = '';
+         // Verifica se um elemento com a classe 'form_field' existe e tem um valor
+         var elementos = document.querySelectorAll('[title="RMA"], [title="TRIAGEM"], [title="WHP"]').length;
+         console.log(elementos);
+         if(elementos == 0){
+            const formField = document.querySelector('.form_field');
+            operacao = formField.innerText;
+         } else {
+            var elementos = document.querySelectorAll('[title="RMA"], [title="TRIAGEM"], [title="WHP"]')[0].innerText;
+            operacao = elementos
+         }
+         console.log(operacao);
+         return operacao;
+         // Retorna a operação
+         }
+      </script>
+      <?php
       echo '<script type="text/javascript">
                function plugin_formcreator_checkComment(field) {
                   if ($("textarea[name=comment]").val() == "") {
@@ -746,17 +814,89 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      return false;
                   }
                }
+              
+
+               document.getElementById("myBtn").addEventListener("click", function(event) {
+                  event.preventDefault(); // Impede a submissão padrão do formulário
+                  
+                  confirmacao((confirmado) => {
+                    if (confirmado) {
+                      // O usuário confirmou, agora podemos submeter o formulário
+                      document.getElementById("plugin_formcreator_form").submit();
+                    }
+                  });
+                });
+                
+
+                function confirmacao(callback) {
+                  const idF = document.getElementById("formID").value;
+                  const validatorID = document.getElementById("validatorID").value;
+
+               
+                  let oop = verificarEObterOperacao();
+                  
+                  const {value: tipoEntrega} = Swal.fire({
+                     title: "Informe o tipo de entrega",
+                     input: "select",
+                     inputOptions: {
+                        0: "Via Varejo",
+                        1: "Matriz",
+                        2: "Correio"
+                     },
+                     inputPlaceholder: "Selecione um tipo de entrega",
+                     icon: "question",
+                     showCancelButton: true,
+                     confirmButtonColor: "#3085d6",
+                     cancelButtonColor: "#d33",
+                     cancelButtonText: "Cancelar",
+                     confirmButtonText: "Aprovar Solicitação"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                     // Construa os dados que serão enviados ao PHP
+                     const formData = new FormData();
+                     formData.append("idF", idF);
+                     formData.append("entrega", result.value);
+                     formData.append("validator", validatorID);
+                     formData.append("operacao", oop);
+                     // Adicione mais campos, se necessário.
+             
+                     // Use a função fetch para enviar a requisição POST para o arquivo PHP
+                     fetch("../ajax/enviaEntrega.php", {
+                         method: "POST",
+                         body: formData
+                     })
+                     .then(response => response.text())
+                     .then(data => {
+                         // Manipule a resposta do servidor aqui, se necessário.
+                         Swal.fire(
+                              "Sucesso",
+                              "Solicitação Aprovada!",
+                              "success"
+                         )
+                     })
+                     .catch(error => {
+                         Swal.fire(
+                             "Falha!",
+                             "Erro ao atualizar endereço " + error,
+                             "error"
+                         )
+                     }); 
+                      callback(true);
+                    } else {
+                      callback(false);
+                    }
+                  });
+                }
                var modal = document.getElementById("myModal");
                var btn = document.getElementById("myBtn");
-               var span = document.getElementsByClassName("close")[0];
-               btn.onclick = function() {
-               modal.style.display = "block";
-               }
-               span.onclick = function() {
-               modal.style.display = "none";
-               }
+               // var span = document.getElementsByClassName("close")[0];
+               // btn.onclick = function() {
+               // modal.style.display = "block";
+               // }
+               // span.onclick = function() {
+               // modal.style.display = "none";
+               // }
             </script>';
-
       echo '</td></tr>';
 
       $this->showFormButtons($options);
@@ -773,7 +913,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * @return array the modified $input array
     */
    public function prepareInputForAdd($input) {
-      global $DB;
+      global $GLPI;
 
       // A requester submits his answers to a form
       if (!isset($input['plugin_formcreator_forms_id'])) {
@@ -788,8 +928,15 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          }
       }
 
-      if (!$this->validateFormAnswer($input)) {
-         // Validation of answers failed
+      try {
+         if (!$this->validateFormAnswer($input)) {
+            // Validation of answers failed
+            return false;
+         }
+      } catch (Exception $e) {
+         // A fatal error caught during validation of answers
+         $GLPI->getErrorHandler()->handleException($e, false);
+         Session::addMessageAfterRedirect(__('An internal error occured when verifying your answers. Please report it to your administrator.', 'formcreator'), false, ERROR);
          return false;
       }
       if (!$this->validateCaptcha($input)) {
@@ -801,13 +948,18 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          return false;
       }
 
-      $input['name'] = $DB->escape($this->parseTags($form->fields['formanswer_name']));
+      try {
+         $input['name'] = $this->parseTags($form->fields['formanswer_name']);
+      } catch (Exception $e) {
+         // A fatal error caught during parsing of tags
+         $GLPI->getErrorHandler()->handleException($e, false);
+         Session::addMessageAfterRedirect(__('An internal error occured when verifying your answers. Please report it to your administrator.', 'formcreator'), false, ERROR);
+         return false;
+      }
 
       $input = $this->setValidator($input, $form);
 
-      $input['entities_id'] = isset($_SESSION['glpiactive_entity'])
-                            ? $_SESSION['glpiactive_entity']
-                            : $form->fields['entities_id'];
+      $input['entities_id'] = $_SESSION['glpiactive_entity'] ?? $form->fields['entities_id'];
 
       $input['is_recursive']                = $form->fields['is_recursive'];
       $input['plugin_formcreator_forms_id'] = $form->getID();
@@ -942,12 +1094,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
 
       // Generate targets
       $generatedTargets = new PluginFormcreatorComposite(new PluginFormcreatorItem_TargetTicket(), new Ticket_Ticket(), $this);
-      //var_dump($generatedTargets);
-      
       foreach ($all_targets as $targets) {
          foreach ($targets as $targetObject) {
             // Check the condition of the target
-            
             if (!PluginFormcreatorFields::isVisible($targetObject, $this->questionFields)) {
                // The target shall not be generated
                continue;
@@ -972,15 +1121,16 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       Session::addMessageAfterRedirect(__('The form has been successfully saved!', 'formcreator'), true, INFO);
       $formID = $_POST['formID'];
       $validatorID = $_POST['validatorID'];
+      echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
 
+      /** @var CommonDBTM $target */
       foreach ($this->targetList as $target) {
          // TRANS: %1$s is the name of the target, %2$s is the type of the target, %3$s is the ID of the target in a HTML hyperlink
          $targetUrl = '<a href="' . $target->getFormURLWithID($target->getID()) . '">' . $target->getID() . '</a>';
          $idChamado = $target->getID();
-         Session::addMessageAfterRedirect(sprintf(__('Item sucessfully added: %1$s (%2$s: %3$s)', 'formcreator'), $target->getName(), $target->getTypeName(1), $targetUrl), false, INFO);
+         $_SESSION['chamadoCriado'] = $idChamado;
       }
-      $sqlcon = mysqli_connect('localhost', 'glpi', '16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@', 'glpi', '3306');  
-      $GLOBALS['sqlcon'] = $sqlcon;
+      require_once('../../../src/db_config.php');
       
       //Busca as perguntas e respostas do formulario
       $sql = "SELECT RESPOSTA.id as id, IF(name = 'Tamanho', 'BOTA DE SEGURANÇA', PERGUNTAS.name) AS CONSUMIVEL, RESPOSTA.answer as RESPOSTA FROM glpi_plugin_formcreator_answers RESPOSTA LEFT JOIN  glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' AND PERGUNTAS.name != 'Tipo de Vestimenta' AND PERGUNTAS.name != 'Informe qual projeto você participa'";
@@ -989,28 +1139,45 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $arrPedidos = [];
       $ids = [];
       //Busca o id do requerente
-      $buscaIDRequerente = "SELECT requester_id as REQUERENTE FROM glpi_plugin_formcreator_formanswers WHERE id = '{$formID}'";
+      $buscaIDRequerente = "SELECT requester_id as REQUERENTE, entrega FROM glpi_plugin_formcreator_formanswers WHERE id = '{$formID}'";
       $retornaIDRequerente = mysqli_query($sqlcon, $buscaIDRequerente);
 
       $_SESSION['validaPedido'] = [$formID, $validatorID];
-      $endereco = $_POST['endereco'];
-      $cep = $_POST['cep'];
-      $estado = $_POST['estado'];
-      $tipoentrega = $_POST['entrega'];
-      $cidade = $_POST['cidade'];
-
-      $_SESSION['dataPedido'] = [$endereco, $cep, $estado, $tipoentrega, $cidade];
       if($retornaIDRequerente){
          while($req = mysqli_fetch_row($retornaIDRequerente)){
             $idRequerente = $req['0'];
+            $entrega = $req['1'];
          }
+      }
+      $sqlBuscaLocation = "SELECT locations_id FROM glpi_users WHERE id = $idRequerente";
+      $resBuscaLocation = mysqli_query($sqlcon, $sqlBuscaLocation);
+      if($resBuscaLocation){
+         while($req = mysqli_fetch_row($resBuscaLocation)){
+            $idLocation = $req["0"];
+         }
+      }
+
+      $sqlBuscaEndereco = "SELECT address, bairro, postcode, town, state, building FROM glpi_locations where id = $idLocation";
+      $buscaEndereco = mysqli_query($sqlcon, $sqlBuscaEndereco);
+      if($buscaEndereco){
+            while($endereco = mysqli_fetch_array($buscaEndereco)){
+               $address = $endereco[0];
+               $bairro = $endereco[1]; 
+               $cep = $endereco[2];   
+               $uf = $endereco[3];
+               $estado = $endereco[4];
+               $numero = $endereco[5];
+            }
+
       }
       //Percorre o array do retorno sql das perguntas e respostas
       if($solicitacaoRetorno){
          while($row = mysqli_fetch_array($solicitacaoRetorno)){
+
             $quantidade = $row['RESPOSTA'];
+            
    
-            if($quantidade != 'TRIAGEM' || $quantidade != 'WHIRLPOOL'){
+            if($quantidade != 'TRIAGEM' || $quantidade != 'WHIRLPOOL' || $quantidade != 'RMA'){
    
                $consumivel = $row['CONSUMIVEL'];
    
@@ -1026,28 +1193,50 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                         }
                      }
                      $data = date("Y-m-d H:i:s");
-                     $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado')";
+
+                     $sqlBuscaOperacao = "SELECT
+                     RESPOSTA.answer as RESPOSTA 
+                     FROM glpi_plugin_formcreator_answers RESPOSTA
+                     LEFT JOIN glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id 
+                     WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' 
+                     AND PERGUNTAS.name != 'Tipo de Vestimenta' 
+                     AND PERGUNTAS.name = 'Informe qual projeto você participa'";
+                     $retornaOperacao = mysqli_query($sqlcon, $sqlBuscaOperacao);
+                     if($retornaOperacao){
+                        while($r = mysqli_fetch_array($retornaOperacao)){
+                           $operacao = $r[0];
+                        }
+                     }
+
+                     $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id, projeto, endereco, bairro, cep, cidade, estado, tipo_entrega) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado', '$operacao', '$address', '$entrega', '$cep', '$uf', '$estado', '$entrega')";
                      if($insert = mysqli_query($sqlcon, $sqlINSERT)){
                         echo '<script>"Inserido no banco" . $row["CONSUMIVEL"])</script>';
                      } else{
                         echo'<script>alert("ERRO: " . $sqlINSERT . "<br>" . mysqli_error($sqlcon))</script>';
                      }
-                     $endereco = $_POST['endereco'];
-                     $cep = $_POST['cep'];
-                     $estado = $_POST['estado'];
-                     $tipoentrega = $_POST['entrega'];
-                     $cidade = $_POST['cidade'];
-                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
-                    
+                     //$insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', cidade = '{$uf}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+
                   }
                   else{
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . ", favor contatar o suporte!'); history.go(-1);</script>";
                      require_once('erroNomenclatura.php');
 
-                     exit;
+                     return false;
                   }
                } else{
-
+                  $sqlBuscaOperacao = "SELECT
+                  RESPOSTA.answer as RESPOSTA 
+                  FROM glpi_plugin_formcreator_answers RESPOSTA
+                  LEFT JOIN glpi_plugin_formcreator_questions PERGUNTAS on PERGUNTAS.id = RESPOSTA.plugin_formcreator_questions_id 
+                  WHERE plugin_formcreator_formanswers_id = {$formID} and RESPOSTA.answer IS NOT NULL AND RESPOSTA.answer <> '' AND PERGUNTAS.fieldtype <> 'checkboxes' 
+                  AND PERGUNTAS.name != 'Tipo de Vestimenta' 
+                  AND PERGUNTAS.name = 'Informe qual projeto você participa'";
+                  $retornaOperacao = mysqli_query($sqlcon, $sqlBuscaOperacao);
+                  if($retornaOperacao){
+                     while($r = mysqli_fetch_array($retornaOperacao)){
+                        $operacao = $r[0];
+                     }
+                  }
                   $buscaIDInsumo = "SELECT id, consumableitemtypes_id FROM glpi_consumableitems WHERE glpi_consumableitems.name != 'Informe qual projeto você participa' and glpi_consumableitems.name = '{$consumivel}'";
                   $retornaIDInsumo = mysqli_query($sqlcon, $buscaIDInsumo);
                   $numR= mysqli_num_rows($retornaIDInsumo);
@@ -1060,8 +1249,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                         }
                      }
                      $data = date("Y-m-d H:i:s");
+                     
                      if($quantidade > 0){
-                        $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '{$quantidade}', '{$data}', '$idChamado')";
+                        $sqlINSERT = "INSERT INTO glpi_plugin_consumables_requests(consumables_id, consumableitemtypes_id, requesters_id, give_itemtype, give_items_id, status, number, date_mod, ticket_id, projeto, endereco, bairro, cep, cidade, estado, tipo_entrega) VALUES ('{$idInsumo}', '{$idTipo}', '{$validatorID}', 'User', '{$idRequerente}', '2', '1', '{$data}', '$idChamado', '$operacao', '$address', '$bairro', '$cep', '$uf', '$estado', '$entrega')";
                      } else{
                         echo "ERRO AO INSERIR ITEM";
                      }
@@ -1072,16 +1262,16 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                      }
                     
                      print_r($target->getID());
+                     
 
-                     $insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
+                     //$insertEndereco = "UPDATE glpi_plugin_formcreator_formanswers SET endereco = '{$endereco}', cep = '{$cep}', estado = '{$estado}', entrega = '{$tipoentrega}', cidade = '{$cidade}' WHERE glpi_plugin_formcreator_formanswers.id = '{$formID}'";
                      
                   }
                   else {
                      //echo "<script>alert('Erro ao efetuar pedido " . $consumivel . " , favor contatar o suporte!'); history.go(-1);;</script>";
                      require_once("../inc/erroNomenclatura.php");
-                     exit;
-                  }
-                   /** @var CommonDBTM $target */
+                     return false;
+                  }           /** @var CommonDBTM $target */
                  
                }
               
@@ -1090,8 +1280,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          
       
       }
-     
-
       unset($CFG_GLPI['plugin_formcreator_disable_hook_create_ticket']);
       return $success;
    }
@@ -1104,8 +1292,11 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    public function loadAnswers(): void {
       global $DB;
 
-      $this->answers = [];
       if ($this->isNewItem()) {
+         return;
+      }
+
+      if (count($this->answers) > 0) {
          return;
       }
 
@@ -1116,11 +1307,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             'plugin_formcreator_formanswers_id' => $this->getID()
          ]
       ]);
-      $answers_values = [];
       foreach ($answers as $found_answer) {
-         $answers_values['formcreator_field_' . $found_answer['plugin_formcreator_questions_id']] = $found_answer['answer'];
+         $this->answers['formcreator_field_' . $found_answer['plugin_formcreator_questions_id']] = $found_answer['answer'];
       }
-      $this->answers = $answers_values;
    }
 
    /**
@@ -1230,6 +1419,9 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                // The section is not visible, skip it as well all its questions
                continue;
             }
+            if ($last_section !== -1) {
+               $output .= ($richText ? '<p>&nbsp;</p>' : $eol);
+            }
             if ($richText) {
                $output .= '<h2>' . $question_line['section_name'] . '</h2>';
             } else {
@@ -1239,12 +1431,8 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             $last_section = $question_line[$sectionFk];
          }
 
-         // Don't save tags in "full form"
-         if ($question_line['fieldtype'] == 'tag') {
-            continue;
-         }
-
-         if ($question_line['fieldtype'] == 'fields') {
+         // Don't save tags, additional fields or descriptions in "full form"
+         if (in_array($question_line['fieldtype'], ['tag', 'fields', 'description'])) {
             continue;
          }
 
@@ -1252,28 +1440,29 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             continue;
          }
 
-         if ($question_line['fieldtype'] != 'description') {
-            $question_no++;
-            if ($richText) {
-               $output .= '<div>';
-               $output .= '<b>' . $question_no . ') ##question_' . $question_line['id'] . '## : </b>';
-               $output .= '##answer_' . $question_line['id'] . '##';
-               $output .= '</div>';
-            } else {
-               $output .= $question_no . ') ##question_' . $question_line['id'] . '## : ';
-               $output .= '##answer_' . $question_line['id'] . '##' . $eol . $eol;
-            }
+         $question_no++;
+         if ($richText) {
+            $output .= '<div>';
+            $output .= '<b>' . $question_no . ') ##question_' . $question_line['id'] . '## : </b>';
+            $output .= '##answer_' . $question_line['id'] . '##';
+            $output .= '</div>';
+         } else {
+            $output .= $question_no . ') ##question_' . $question_line['id'] . '## : ';
+            $output .= '##answer_' . $question_line['id'] . '##' . $eol . $eol;
          }
       }
 
       return $output;
    }
 
+   public function post_getFromDB() {
+      $this->answers = [];
+   }
+
    public function post_addItem() {
       // Save questions answers
       $formAnswerId = $this->getID();
-    
-                    
+      $formId = $this->input[PluginFormcreatorForm::getForeignKeyField()];
       /** @var PluginFormcreatorAbstractField $field */
       foreach ($this->getQuestionFields($formId) as $questionId => $field) {
          $field->moveUploads();
@@ -1397,7 +1586,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
     * @param  string $content                            String to be parsed
     * @param  PluginFormcreatorTargetInterface $target   Target for which output is being generated
     * @param  boolean $richText                          Disable rich text mode for field rendering
-    * @return string                                     Parsed string with tags replaced by form values
+    * @return string                                     Parsed string with tags replaced by form values. Not SQL nor HTML escaped
     */
    public function parseTags(string $content, PluginFormcreatorTargetInterface $target = null, $richText = false): string {
       // Prepare all fields of the form
@@ -1414,11 +1603,12 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          $name = '';
          $value = '';
          if (PluginFormcreatorFields::isVisible($question, $this->questionFields)) {
-            $name  = $question->fields['name'];
+            $name  = __($question->fields['name'], $domain);
             $value = $this->questionFields[$questionId]->getValueForTargetText($domain, $richText);
          }
 
-         $content = str_replace('##question_' . $questionId . '##', Sanitizer::sanitize($name), $content);
+         // $content = str_replace('##question_' . $questionId . '##', Sanitizer::sanitize($name), $content);
+         $content = str_replace('##question_' . $questionId . '##', $name, $content);
          if ($question->fields['fieldtype'] === 'file') {
             if (strpos($content, '##answer_' . $questionId . '##') !== false) {
                if ($target !== null && $target instanceof PluginFormcreatorAbstractItilTarget) {
@@ -1428,7 +1618,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
                }
             }
          }
-         $content = str_replace('##answer_' . $questionId . '##', Sanitizer::sanitize($value ?? ''), $content);
+         $content = str_replace('##answer_' . $questionId . '##', $value ?? '', $content);
 
          if ($this->questionFields[$questionId] instanceof DropdownField) {
             $content = $this->questionFields[$questionId]->parseObjectProperties($field->getValueForDesign(), $content);
@@ -1439,7 +1629,11 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          // convert sanitization from old style GLPI ( up to 9.5 to modern style)
          $content = Sanitizer::unsanitize($content);
          $content = Sanitizer::sanitize($content);
+      } else {
+         $content = Sanitizer::sanitize($content);
       }
+
+      $content = $this->parseExtraTags($content, $target, $richText);
 
       $hook_data = Plugin::doHookFunction('formcreator_parse_extra_tags', [
          'formanswer' => $this,
@@ -1449,6 +1643,12 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       ]);
 
       return $hook_data['content'];
+   }
+
+   protected function parseExtraTags(string $content, PluginFormcreatorTargetInterface $target = null, $richText = false): string {
+      $content = str_replace('##answer_id##', $this->getField('id'), $content);
+
+      return $content;
    }
 
    /**
@@ -1470,11 +1670,32 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
       $this->isAnswersValid = !in_array(false, $fieldValidities, true);
 
       if ($this->isAnswersValid) {
+         $form = $this->getForm();
+         $domain = PluginFormcreatorForm::getTranslationDomain($form->getID());
          foreach ($this->questionFields as $id => $field) {
             if (!$this->questionFields[$id]->isPrerequisites()) {
                continue;
             }
+            // Count the errors in session
+            $errors_count = 0;
+            if (isset($_SESSION['MESSAGE_AFTER_REDIRECT'][ERROR])) {
+               $errors_count = count($_SESSION['MESSAGE_AFTER_REDIRECT'][ERROR]);
+            }
             if (PluginFormcreatorFields::isVisible($field->getQuestion(), $this->questionFields) && !$this->questionFields[$id]->isValid()) {
+               $new_errors_count = $_SESSION['MESSAGE_AFTER_REDIRECT'][ERROR]
+                                   ? count($_SESSION['MESSAGE_AFTER_REDIRECT'][ERROR])
+                                   : 0;
+
+               if ($new_errors_count <= $errors_count) {
+                  // If there are new errors, we add a message to the user
+                  $field_name = __($field->getQuestion()->fields['name'], $domain);
+                  Session::addMessageAfterRedirect(
+                     sprintf(__('Answer is invalid in %1$s', 'formcreator'), $field_name),
+                     true,
+                     ERROR
+                  );
+               }
+
                $this->isAnswersValid = false;
             }
          }
@@ -1551,9 +1772,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
             // Notify the requester
             $form = $this->getForm();
             if ($form->validationRequired()) {
-              
                NotificationEvent::raiseEvent('plugin_formcreator_accepted', $this);
-                
             } else {
                NotificationEvent::raiseEvent('plugin_formcreator_form_created', $this);
             }
@@ -1620,7 +1839,6 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          throw new RuntimeException('Formcreator: Missing ticket ' . $itemTicket->fields['tickets_id'] . ' for formanswer ' . $this->getID());
       }
       $ticketId = $ticket->getID();
-      echo "<script>alert('ticket = {$ticket}')</script>";
       $ticketUser = new Ticket_User();
       $ticketUserRow = $ticketUser->find([
          'tickets_id' => $ticketId,
@@ -1637,7 +1855,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
          'items_id'           => $ticketId,
          'itemtype'           => Ticket::class,
          'name'               => $issueName,
-         'status'             => $ticket->fields['status'],
+         'status'             => PluginFormcreatorCommon::getTicketStatusForIssue($ticket),
          'date_creation'      => $ticket->fields['date'],
          'date_mod'           => $ticket->fields['date_mod'],
          'entities_id'        => $ticket->fields['entities_id'],
@@ -1757,7 +1975,7 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    /**
     * get all fields from a form
     *
-    * @param int $formId ID of the form where come the fileds to load
+    * @param int $formId ID of the form where come the fields to load
     * @return PluginFormcreatorAbstractField[]
     */
    public function getQuestionFields($formId) : array {
@@ -1992,76 +2210,82 @@ class PluginFormcreatorFormAnswer extends CommonDBTM
    }
 
    /**
-    * Get the lowest status among the associated tickets
+    * Get the most appropriate status among the associated tickets
+    *
+    * Conversion matrix between the temporary status of the form answer
+    * and the status of the ticket under process. The matrix below is subjective
+    * and is designed in a way to give priority to requester's action.
+    *
+    * The function traverses all generated tickets and computes a temporary status
+    * fron the previous temporary status and the ticket being processed.
+    * When all tickets are processed, the final status is known.
+    *
+    *
+    *                      Status of the ticket under process
+    *                +----------+-- -------+---------+---------+--------+--------+
+    *                | INCOMING | ASSIGNED | PLANNED | WAITING | SOLVED | CLOSED
+    *     + ---------+----------+----------+---------+---------+--------+--------+
+    *     | (null)   | INCOMING   ASSIGNED   PLANNED   WAITING   SOLVED   CLOSED
+    *   S | INCOMING | INCOMING   ASSIGNED   PLANNED   WAITING  INCOMING  INCOMING
+    * T t | ASSIGNED | ASSIGNED   ASSIGNED   PLANNED   WAITING  ASSIGNED  ASSIGNED
+    * e a | PLANNED  | PLANNED    PLANNED    PLANNED   WAITING  PLANNED   PLANNED
+    * m t | WAITING  | WAITING    WAITING    WAITING   WAITING  WAITING   WAITING
+    * p u | SOLVED   | INCOMING   ASSIGNED   PLANNED   WAITING   SOLVED   SOLVED
+    *   s | CLOSED   | INCOMING   ASSIGNED   PLANNED   WAITING   SOLVED   CLOSED
+    *
+    * T = status picked from Ticket
+    * V = status picked from Validation
     *
     * @return null|int
     */
    public function getAggregatedStatus(): ?int {
       $generatedTargets = $this->getGeneratedTargets([PluginFormcreatorTargetTicket::getType()]);
-
-      $isWaiting = false;
-      $isAssigned = false;
-      $isProcessing = false;
-
-      // Find the minimal status of the first generated tickets in the array (deleted items excluded)
-      $generatedTarget = array_shift($generatedTargets);
-      while ($generatedTarget!== null && $generatedTarget->fields['is_deleted']) {
-         $generatedTarget = array_shift($generatedTargets);
-      }
-      if ($generatedTarget === null) {
+      if (count($generatedTargets) === 0) {
          // No target found, nothing to do
          return null;
       }
 
-      // Find status of the first ticket in the array
-      $aggregatedStatus = PluginFormcreatorCommon::getTicketStatusForIssue($generatedTarget);
-      if ($aggregatedStatus == CommonITILObject::ASSIGNED) {
-         $isAssigned = true;
-      }
-      if ($aggregatedStatus == CommonITILObject::PLANNED) {
-         $isProcessing = true;
-      }
-      if ($aggregatedStatus == CommonITILObject::WAITING) {
-         $isWaiting = true;
-      }
+      $aggregatedStatus = null;
 
-      // Traverse all other tickets and set the minimal status
+      // Traverse all tickets and set the minimal status
       foreach ($generatedTargets as $generatedTarget) {
          /** @var Ticket $generatedTarget  */
          if ($generatedTarget::getType() != Ticket::getType()) {
             continue;
          }
          if ($generatedTarget->isDeleted()) {
+            // Ignore deleted tickets
             continue;
          }
          $ticketStatus = PluginFormcreatorCommon::getTicketStatusForIssue($generatedTarget);
          if ($ticketStatus >= PluginFormcreatorFormAnswer::STATUS_WAITING) {
+            // Ignore tickets refused or pending for validation
+            // getTicketStatusForIssue() does not returns STATUS_ACCEPTED
             continue;
          }
 
-         if ($ticketStatus == CommonITILObject::ASSIGNED) {
-            $isAssigned = true;
+         if ($ticketStatus == CommonITILObject::WAITING) {
+            $aggregatedStatus = CommonITILObject::WAITING;
+            break;
          }
          if ($ticketStatus == CommonITILObject::PLANNED) {
-            $isProcessing = true;
+            $aggregatedStatus = CommonITILObject::PLANNED;
+            continue;
          }
-         if ($ticketStatus == CommonITILObject::WAITING) {
-            $isWaiting = true;
+         if ($ticketStatus == CommonITILObject::ASSIGNED) {
+            $aggregatedStatus = CommonITILObject::ASSIGNED;
+            continue;
          }
-         $aggregatedStatus = min($aggregatedStatus, $ticketStatus);
-      }
+         if ($ticketStatus == CommonITILObject::INCOMING) {
+            $aggregatedStatus = CommonITILObject::INCOMING;
+            continue;
+         }
+         if ($aggregatedStatus === null) {
+            $aggregatedStatus = $ticketStatus;
+            continue;
+         }
 
-      // Assigned status takes precedence
-      if ($isAssigned) {
-         $aggregatedStatus = CommonITILObject::ASSIGNED;
-      }
-      // Planned status takes precedence
-      if ($isProcessing) {
-         $aggregatedStatus = CommonITILObject::PLANNED;
-      }
-      // Waiting status takes precedence to inform the requester his feedback is required
-      if ($isWaiting) {
-         $aggregatedStatus = CommonITILObject::WAITING;
+         $aggregatedStatus = min($aggregatedStatus, $ticketStatus);
       }
 
       return $aggregatedStatus;

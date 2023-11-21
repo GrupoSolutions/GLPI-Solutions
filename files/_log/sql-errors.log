@@ -1,0 +1,74 @@
+[2023-11-17 11:14:58] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `urgency`, `locations_id`, `name`, `content`, `entities_id`, `status`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_waiting_duration`, `time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '5', '3', '0', 'Estoy testando', '&#60;p&#62;Teste&#60;/p&#62;', '0', '1', '3', '3', '58', '58', '2023-11-17 11:14:56', '1', '1', '2', '1', '0', '0', '0', '2023-11-24 10:14:56', '0', '0', '0', '2023-11-17 13:14:56', '2023-11-17 11:14:56', '2023-11-17 11:14:56')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\tracking.injector.php:82                     CommonDBTM->add()
+  {"user":"58@GS003021"} 
+[2023-11-17 14:11:50] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `urgency`, `locations_id`, `name`, `content`, `entities_id`, `status`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_waiting_duration`, `time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '5', '3', '0', 'PRECISO DE AJUDA', '&#60;p&#62;TESTE&#60;/p&#62;', '0', '1', '3', '3', '2', '2', '2023-11-17 14:11:50', '1', '1', '2', '1', '0', '0', '0', '2023-11-24 13:11:50', '0', '0', '0', '2023-11-17 16:11:50', '2023-11-17 14:11:50', '2023-11-17 14:11:50')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\tracking.injector.php:82                     CommonDBTM->add()
+  {"user":"2@GS003021"} 
+[2023-11-17 16:23:03] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `urgency`, `locations_id`, `name`, `content`, `entities_id`, `status`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_waiting_duration`, `time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '21', '3', '0', 'Thunflin', '&#60;p&#62;Thunflay&#60;/p&#62;', '0', '1', '3', '3', '2', '2', '2023-11-17 16:23:02', '1', '1', '2', '1', '0', '0', '0', '2023-11-24 15:23:02', '0', '0', '0', '2023-11-20 09:23:02', '2023-11-17 16:23:02', '2023-11-17 16:23:02')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\tracking.injector.php:82                     CommonDBTM->add()
+  {"user":"2@GS003021"} 
+[2023-11-17 16:24:07] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`id`, `type`, `itilcategories_id`, `urgency`, `locations_id`, `name`, `content`, `entities_id`, `status`, `impact`, `priority`, `users_id_lastupdater`, `users_id_recipient`, `date`, `requesttypes_id`, `global_validation`, `slas_id_ttr`, `slas_id_tto`, `olas_id_tto`, `olas_id_ttr`, `slalevels_id_ttr`, `time_to_resolve`, `sla_waiting_duration`, `olalevels_id_ttr`, `ola_waiting_duration`, `time_to_own`, `date_creation`, `date_mod`) VALUES ('0', '2', '21', '3', '0', 'thubilao', '&#60;p&#62;thubilau&#60;/p&#62;', '0', '1', '3', '3', '58', '58', '2023-11-17 16:24:07', '1', '1', '2', '1', '0', '0', '0', '2023-11-24 15:24:07', '0', '0', '0', '2023-11-20 09:24:07', '2023-11-17 16:24:07', '2023-11-17 16:24:07')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  front\tracking.injector.php:82                     CommonDBTM->add()
+  {"user":"58@GS003021"} 
+[2023-11-21 08:23:00] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`name`, `content`, `itilcategories_id`, `urgency`, `impact`, `requesttypes_id`, `actiontime`, `date`, `entities_id`, `status`, `locations_id`, `global_validation`, `time_to_resolve`, `time_to_own`, `slas_id_tto`, `slas_id_ttr`, `internal_time_to_resolve`, `internal_time_to_own`, `olas_id_tto`, `olas_id_ttr`, `type`, `users_id_recipient`, `users_id_lastupdater`, `priority`, `date_creation`, `date_mod`) VALUES ('Solicitação de Vestimenta', '&#60;div&#62;&#60;h1&#62;Dados do formulário&#60;/h1&#62;&#60;h2&#62;Projeto&#60;/h2&#62;&#60;div&#62;&#60;b&#62;1) Informe qual projeto você participa : &#60;/b&#62;TRIAGEM&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Solicitação de Vestimentas&#60;/h2&#62;&#60;div&#62;&#60;b&#62;2) Tipo de Vestimenta : &#60;/b&#62;CAMISETA FEMININA&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Tamanho&#60;/h2&#62;&#60;div&#62;&#60;b&#62;3) Tamanho : &#60;/b&#62;M&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Quantidade&#60;/h2&#62;&#60;div&#62;&#60;b&#62;4) CAMISETA FEMININA M : &#60;/b&#62;5&#60;/div&#62;&#60;/div&#62;', '18', '3', '3', '1', '0', '2023-11-21 08:22:58', '0', '1', '0', '1', NULL, NULL, '0', '0', NULL, NULL, '0', '0', '2', '19', '54', '3', '2023-11-21 08:22:58', '2023-11-21 08:22:58')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  ...lace\formcreator\inc\targetticket.class.php:906 CommonDBTM->add()
+  ...place\formcreator\inc\formanswer.class.php:1106 PluginFormcreatorTargetTicket->save()
+  ...place\formcreator\inc\formanswer.class.php:1543 PluginFormcreatorFormAnswer->generateTarget()
+  src\CommonDBTM.php:1721                            PluginFormcreatorFormAnswer->post_updateItem()
+  ...tplace\formcreator\front\formanswer.form.php:49 CommonDBTM->update()
+  {"user":"54@GS003021"} 
+[2023-11-21 10:14:52] glpisqllog.WARNING: DBmysql::query() in C:\wamp64\www\glpi\src\DBmysql.php line 419
+  *** MySQL query warnings:
+  SQL: INSERT INTO `glpi_tickets` (`name`, `content`, `itilcategories_id`, `urgency`, `impact`, `requesttypes_id`, `actiontime`, `date`, `entities_id`, `status`, `locations_id`, `global_validation`, `time_to_resolve`, `time_to_own`, `slas_id_tto`, `slas_id_ttr`, `internal_time_to_resolve`, `internal_time_to_own`, `olas_id_tto`, `olas_id_ttr`, `type`, `users_id_recipient`, `users_id_lastupdater`, `priority`, `date_creation`, `date_mod`) VALUES ('Solicitação de Vestimenta', '&#60;div&#62;&#60;h1&#62;Dados do formulário&#60;/h1&#62;&#60;h2&#62;Projeto&#60;/h2&#62;&#60;div&#62;&#60;b&#62;1) Informe qual projeto você participa : &#60;/b&#62;TRIAGEM&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Solicitação de Vestimentas&#60;/h2&#62;&#60;div&#62;&#60;b&#62;2) Tipo de Vestimenta : &#60;/b&#62;CAMISETA FEMININA&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Tamanho&#60;/h2&#62;&#60;div&#62;&#60;b&#62;3) Tamanho : &#60;/b&#62;G&#60;/div&#62;&#60;div&#62;&#38;nbsp;&#60;/div&#62;&#60;h2&#62;Quantidade&#60;/h2&#62;&#60;div&#62;&#60;b&#62;4) CAMISETA FEMININA G : &#60;/b&#62;2&#60;/div&#62;&#60;/div&#62;', '18', '3', '3', '1', '0', '2023-11-21 10:14:51', '0', '1', '0', '1', NULL, NULL, '0', '0', NULL, NULL, '0', '0', '2', '19', '54', '3', '2023-11-21 10:14:51', '2023-11-21 10:14:51')
+  Warnings: 
+1364: Field 'id_atendente' doesn't have a default value
+  Backtrace :
+  src\DBmysql.php:1349                               
+  src\CommonDBTM.php:722                             DBmysql->insert()
+  src\CommonDBTM.php:1323                            CommonDBTM->addToDB()
+  ...lace\formcreator\inc\targetticket.class.php:906 CommonDBTM->add()
+  ...place\formcreator\inc\formanswer.class.php:1106 PluginFormcreatorTargetTicket->save()
+  ...place\formcreator\inc\formanswer.class.php:1543 PluginFormcreatorFormAnswer->generateTarget()
+  src\CommonDBTM.php:1721                            PluginFormcreatorFormAnswer->post_updateItem()
+  ...tplace\formcreator\front\formanswer.form.php:49 CommonDBTM->update()
+  {"user":"54@GS003021"} 

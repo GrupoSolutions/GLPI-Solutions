@@ -32,6 +32,8 @@
 use GlpiPlugin\Formcreator\Exception\ImportFailureException;
 use GlpiPlugin\Formcreator\Exception\ExportFailureException;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Toolbox\Sanitizer;
+
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -782,20 +784,15 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
             'FROM'   => ITILCategory::getTable(),
             'WHERE'  => ['id' => $data['itilcategories_id']]
          ]);
-         if ($row = $rows->current()) { // assign ticket template according to resulting ticket category and ticket type
+         if ($row = $rows->current()) {
+            // assign ticket template according to resulting ticket category and ticket type
             return ($data['type'] == Ticket::INCIDENT_TYPE
                     ? $row["{$targetTemplateFk}_incident"]
                     : $row["{$targetTemplateFk}_demand"]);
          }
       }
 
-      return $this->fields['tickettemplates_id'] ?? 0;
-   }
-
-   public function getDefaultData(PluginFormcreatorFormAnswer $formanswer): array {
-      $data = parent::getDefaultData($formanswer);
-
-      return $data;
+      return $this->fields[$targetTemplateFk] ?? 0;
    }
 
    /**
@@ -806,6 +803,8 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
     * @return Ticket|null Generated ticket if success, null otherwise
     */
    public function save(PluginFormcreatorFormAnswer $formanswer): ?CommonDBTM {
+      global $CFG_GLPI;
+
       $ticket  = new Ticket();
       $form = $formanswer->getForm();
       $data = $this->getDefaultData($formanswer);
@@ -816,21 +815,19 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       $richText = true;
       $domain = PluginFormcreatorForm::getTranslationDomain($form->getID());
       $data['name'] = $this->prepareTemplate(
-         __($this->fields['target_name'], $domain),
+         Sanitizer::unsanitize(__($this->fields['target_name'], $domain)),
          $formanswer,
          false
       );
-      $data['name'] = Toolbox::addslashes_deep($data['name']);
       $data['name'] = $formanswer->parseTags($data['name'], $this);
       $data['date'] = $_SESSION['glpi_currenttime'];
 
       $data['content'] = $this->prepareTemplate(
-         $this->fields['content'] ?? '',
+         Sanitizer::unsanitize(__($this->fields['content'], $domain)) ?? '',
          $formanswer,
          $richText
       );
 
-      // $data['content'] = Toolbox::addslashes_deep($data['content']);
       $data['content'] = $formanswer->parseTags($data['content'], $this, $richText);
 
       $data['_tickettemplates_id'] = $this->fields['tickettemplates_id'];
@@ -868,6 +865,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
       $data = $this->setSLA($data, $formanswer);
       $data = $this->setOLA($data, $formanswer);
       $data = $this->setTargetUrgency($data, $formanswer);
+      $data = $this->setTargetPriority($data, $formanswer);
       $data = $this->setTargetLocation($data, $formanswer);
       $data = $this->setTargetAssociatedItem($data, $formanswer);
       $data = $this->setTargetValidation($data, $formanswer);
@@ -895,9 +893,10 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
          $data = $this->assignedGroups + $data;
       }
 
+      $data = $this->setDocuments($data, $formanswer);
       $data = $this->prepareUploadedFiles($data, $formanswer);
 
-      $this->appendFieldsData($formanswer, $data);
+      $data = $this->appendFieldsData($data, $formanswer);
 
       // Cleanup actors array
       $data = $this->cleanActors($data);
@@ -908,7 +907,21 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
          return null;
       }
 
-      $this->saveTags($formanswer, $ticketID);
+      // Set default document category
+      $document_category = $CFG_GLPI['documentcategories_id_forticket'] ?? 0;
+      if ($document_category) {
+         foreach (array_keys($this->attachedDocuments) as $documents_id) {
+            $document = Document::getById($documents_id);
+            if (!$document) {
+               continue;
+            }
+
+            $document->update([
+               'id' => $document->fields['id'],
+               'documentcategories_id' => $document_category,
+            ]);
+         }
+      }
 
       // Add link between Ticket and FormAnswer
       $itemlink = $this->getItem_Item();
@@ -917,6 +930,8 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
          'items_id'   => $formanswer->fields['id'],
          'tickets_id' => $ticketID,
       ]);
+
+      $this->saveTags($formanswer, $ticketID);
 
       // Attach validation message as first ticket followup if validation is required and
       // if is set in ticket target configuration
@@ -934,12 +949,9 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
            'date'                            => $_SESSION['glpi_currenttime'],
            'users_id'                        => Session::getLoginUserID(),
            'content'                         => $message,
-           '_do_not_compute_takeintoaccount' => true
-         ];
-         // GLPI 9.4+
-         $followUpInput += [
-            'items_id' => $ticketID,
-            'itemtype' => Ticket::class,
+           '_do_not_compute_takeintoaccount' => true,
+            'itemtype'                       => Ticket::class,
+            'items_id'                       => $ticketID,
          ];
          $ticketFollowup = new ITILFollowup();
          $ticketFollowup->add($followUpInput);
@@ -1032,11 +1044,8 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
    }
 
    protected function setTargetSource(array $data, PluginFormcreatorFormAnswer $formanswer): array {
+      // do nothing with self::REQUESTSOURCE_NONE
       switch ($this->fields['source_rule']) {
-         case self::REQUESTSOURCE_NONE:
-            $data['requesttypes_id'] = PluginFormcreatorCommon::getFormcreatorRequestTypeId();
-            break;
-
          case self::REQUESTSOURCE_FORMCREATOR:
             $data['requesttypes_id'] = $this->fields['source_question'];
             break;
@@ -1191,7 +1200,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
     * @return array
     */
    protected function setTargetAssociatedItem(array $data, PluginFormcreatorFormAnswer $formanswer) : array {
-      global $DB, $CFG_GLPI;
+      global $DB;
 
       switch ($this->fields['associate_rule']) {
          case self::ASSOCIATE_RULE_ANSWER:
@@ -1267,6 +1276,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
                ]
             ]);
 
+            $valid_associated_itemtypes = $_SESSION["glpiactiveprofile"]["helpdesk_item_type"];
             foreach ($answers as $answer) {
                // Skip if the object type is not valid asset type
                $question = new PluginFormcreatorQuestion();
@@ -1275,7 +1285,7 @@ class PluginFormcreatorTargetTicket extends PluginFormcreatorAbstractItilTarget
                $field = $question->getSubField();
                $field->deserializeValue($answer['answer']);
                $itemtype = $field->getSubItemtype();
-               if (!in_array($itemtype, $CFG_GLPI['asset_types'])) {
+               if (!in_array($itemtype, $valid_associated_itemtypes)) {
                   continue;
                }
 

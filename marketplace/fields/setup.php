@@ -22,13 +22,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Fields. If not, see <http://www.gnu.org/licenses/>.
  * -------------------------------------------------------------------------
- * @copyright Copyright (C) 2013-2022 by Fields plugin team.
+ * @copyright Copyright (C) 2013-2023 by Fields plugin team.
  * @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
  * @link      https://github.com/pluginsGLPI/fields
  * -------------------------------------------------------------------------
  */
 
-define('PLUGIN_FIELDS_VERSION', '1.18.2');
+define('PLUGIN_FIELDS_VERSION', '1.21.6');
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_FIELDS_MIN_GLPI", "10.0.0");
@@ -99,7 +99,7 @@ function plugin_init_fields()
         ) {
             foreach ($_POST as $key => $value) {
                 if (!is_array($value)) {
-                    $_SESSION['plugin']['fields']['values_sent'][$key] = stripcslashes($value);
+                    $_SESSION['plugin']['fields']['values_sent'][$key] = $value;
                 }
             }
         }
@@ -121,10 +121,13 @@ function plugin_init_fields()
             $PLUGIN_HOOKS["menu_toadd"]['fields'] = ['config' => 'PluginFieldsMenu'];
 
             // add tabs to itemtypes
-            Plugin::registerClass(
-                'PluginFieldsContainer',
-                ['addtabon' => array_unique(PluginFieldsContainer::getEntries())]
-            );
+            $itemtypes = array_unique(PluginFieldsContainer::getEntries());
+            if (count($itemtypes) > 0) {
+                Plugin::registerClass(
+                    'PluginFieldsContainer',
+                    ['addtabon' => $itemtypes]
+                );
+            }
 
             //include js and css
             $debug = (isset($_SESSION['glpi_use_mode'])

@@ -32,6 +32,7 @@
 use GlpiPlugin\Formcreator\Exception\ImportFailureException;
 use GlpiPlugin\Formcreator\Exception\ExportFailureException;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Toolbox\Sanitizer;
 
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access this file directly");
@@ -175,7 +176,6 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
          $formanswer,
          true
       );
-      $data['name'] = Toolbox::addslashes_deep($data['name']);
       $data['name'] = $formanswer->parseTags($data['name'], $this);
 
       $problemFields = [
@@ -186,7 +186,7 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
       ];
       foreach ($problemFields as $problemFields) {
          $data[$problemFields] = $this->prepareTemplate(
-            $this->fields[$problemFields] ?? '',
+            Sanitizer::unsanitize(__($this->fields[$problemFields], $domain)) ?? '',
             $formanswer,
             $problemFields == 'content' // only content supports rich text
          );
@@ -195,12 +195,12 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
          $data[$problemFields] = $formanswer->parseTags($data[$problemFields], $this, $problemFields == 'content');
       }
 
-      $data['_users_id_recipient']   = $_SESSION['glpiID'];
+      $data['_users_id_recipient'] = $formanswer->fields['requester_id'];
 
       $this->prepareActors($form, $formanswer);
 
       if (count($this->requesters['_users_id_requester']) == 0) {
-         $this->addActor('requester', $formanswer->fields['requester_id'], true);
+         $this->addActor(PluginFormcreatorTarget_Actor::ACTOR_ROLE_REQUESTER, $formanswer->fields['requester_id'], true);
          $requesters_id = $formanswer->fields['requester_id'];
       } else {
          $requesterAccounts = array_filter($this->requesters['_users_id_requester'], function($v) {
@@ -215,13 +215,14 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
 
       $data = $this->setTargetEntity($data, $formanswer, $requesters_id);
       $data = $this->setTargetUrgency($data, $formanswer);
+      $data = $this->setTargetPriority($data, $formanswer);
 
       $data = $this->requesters + $this->observers + $this->assigned + $this->assignedSuppliers + $data;
       $data = $this->requesterGroups + $this->observerGroups + $this->assignedGroups + $data;
 
       $data = $this->prepareUploadedFiles($data, $formanswer);
 
-      $this->appendFieldsData($formanswer, $data);
+      $data = $this->appendFieldsData($data, $formanswer);
 
       // Cleanup actors array
       $data = $this->cleanActors($data);
@@ -231,8 +232,6 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
          return null;
       }
 
-      $this->saveTags($formanswer, $problemID);
-
       // Add link between Problem and FormAnswer
       $itemlink = $this->getItem_Item();
       $itemlink->add([
@@ -240,6 +239,8 @@ class PluginFormcreatorTargetProblem extends PluginFormcreatorAbstractItilTarget
          'items_id'     => $formanswer->fields['id'],
          'problems_id'  => $problemID,
       ]);
+
+      $this->saveTags($formanswer, $problemID);
 
       return $problem;
    }

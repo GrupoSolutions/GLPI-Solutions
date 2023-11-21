@@ -33,13 +33,17 @@
  * ---------------------------------------------------------------------
  */
 
+if (isset($_GET["embed"]) && isset($_GET["dashboard"])) {
+    $SECURITY_STRATEGY = 'no_check'; // Allow anonymous access for embed dashboards.
+}
+
 include('../inc/includes.php');
 
 // embed (anonymous) dashboard
 if (isset($_GET["embed"]) && isset($_GET["dashboard"])) {
     $grid      = new Glpi\Dashboard\Grid($_GET["dashboard"]);
     $dashboard = $grid->getDashboard();
-    Html::popHeader($dashboard->getTitle(), $_SERVER['PHP_SELF'], false, 'central', 'central');
+    Html::zeroSecurityIframedHeader('central', 'central');
     echo $grid->embed($_REQUEST);
     Html::popFooter();
     exit;

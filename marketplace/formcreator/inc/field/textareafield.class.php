@@ -33,7 +33,6 @@
 namespace GlpiPlugin\Formcreator\Field;
 
 use PluginFormcreatorCommon;
-use PluginFormcreatorQuestion;
 use PluginFormcreatorForm;
 use PluginFormcreatorFormAnswer;
 use Html;
@@ -150,28 +149,22 @@ class TextareaField extends TextField
       $id           = $this->question->getID();
       $rand         = mt_rand();
       $fieldName    = 'formcreator_field_' . $id;
-      $value = $this->value;
+      // Translations are saved sanitized, so we need to sanitize initial value and unsanitize translated value
+      $defaultValue = Sanitizer::unsanitize(__(Sanitizer::sanitize($this->value), $domain));
       $html = '';
+      $form = PluginFormcreatorForm::getByItem($this->getQuestion());
       $html .= Html::textarea([
          'name'              => $fieldName,
          'editor_id'         => "$fieldName$rand",
          'rand'              => $rand,
-         'value'             => $value,
+         'value'             => $defaultValue,
          'rows'              => 5,
          'display'           => false,
          'enable_richtext'   => true,
+         'enable_images'     => !$form->isPublicAccess(),
          'enable_fileupload' => false,
          'uploads'           => $this->uploads,
       ]);
-      // The following file upload area is needed to allow embedded pics in the textarea
-      $html .=  '<div style="display:none;">';
-      Html::file(['editor_id'    => "$fieldName$rand",
-                  'filecontainer' => "filecontainer$rand",
-                  'onlyimages'    => true,
-                  'showtitle'     => false,
-                  'multiple'      => true,
-                  'display'       => false]);
-      $html .=  '</div>';
       $html .= Html::scriptBlock("$(function() {
          pluginFormcreatorInitializeTextarea('$fieldName', '$rand');
       });");
@@ -210,7 +203,6 @@ class TextareaField extends TextField
          );
          $input[$key] = $this->value; // Restore the text because we don't want image converted into A + IMG tags
          // $this->value = $input[$key];
-         $this->value = Sanitizer::unsanitize($this->value);
          foreach ($input['_tag'] as $docKey => $tag) {
             $newTag = $this->uploads['dedup'][$tag];
             $regex = '/<img[^>]+' . preg_quote($tag, '/') . '[^<]+>/im';
@@ -224,7 +216,7 @@ class TextareaField extends TextField
 
    public function deserializeValue($value) {
       $this->value = ($value !== null && $value !== '')
-         ? $value
+         ? Sanitizer::unsanitize($value)
          : '';
    }
 
@@ -244,7 +236,7 @@ class TextareaField extends TextField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '') {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );

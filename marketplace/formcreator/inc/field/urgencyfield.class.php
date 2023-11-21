@@ -114,7 +114,7 @@ class UrgencyField extends PluginFormcreatorAbstractField
       return true;
    }
 
-   public function getAvailableValues() {
+   public function getAvailableValues(array $values = null): array {
       return [
          5 => _x('urgency', 'Very high'),
          4 => _x('urgency', 'High'),
@@ -162,7 +162,7 @@ class UrgencyField extends PluginFormcreatorAbstractField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '0') {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );

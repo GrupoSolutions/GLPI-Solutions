@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -100,7 +100,6 @@ class Peripheral extends CommonDBTM
         $this->addStandardTab('Document_Item', $ong, $options);
         $this->addStandardTab('RuleMatchedLog', $ong, $options);
         $this->addStandardTab('Log', $ong, $options);
-
         return $ong;
     }
 
@@ -114,25 +113,6 @@ class Peripheral extends CommonDBTM
         unset($input['id']);
         unset($input['withtemplate']);
         return $input;
-    }
-
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                Certificate_Item::class,
-                Computer_Item::class,
-                Item_Project::class,
-            ]
-        );
-
-        Item_Devices::cleanItemDeviceDBOnItemDelete(
-            $this->getType(),
-            $this->fields['id'],
-            (!empty($this->input['keep_devices']))
-        );
     }
 
 
@@ -371,7 +351,7 @@ class Peripheral extends CommonDBTM
 
         $tab = array_merge($tab, Rack::rawSearchOptionsToAdd(get_class($this)));
 
-        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd(get_class($this)));
+        $tab = array_merge($tab, Socket::rawSearchOptionsToAdd());
         return $tab;
     }
 

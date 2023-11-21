@@ -303,8 +303,8 @@ JAVASCRIPT;
                 $orientation = "horizontal";
             }
 
-            $flex_container = "flex-column flex-md-row";
-            $flex_tab       = "flex-row flex-md-column d-none d-md-block";
+            $flex_container = "flex-column ";
+            $flex_tab       = "flex-row ";
             $border         = "border-start-0";
             $navitemml      = "ms-0";
             $navlinkp       = "pe-1";
@@ -358,9 +358,9 @@ JAVASCRIPT;
             echo "</div>"; // .container-fluid
             $js = "
          var loadTabContents = function (tablink, force_reload = false) {
+            const href_url_params = new URLSearchParams($(tablink).prop('href'));
             var url = tablink.attr('href');
             var target = tablink.attr('data-bs-target');
-            var index = tablink.closest('.nav-item').index();
 
             const updateCurrentTab = () => {
                 $.get(
@@ -368,7 +368,7 @@ JAVASCRIPT;
                   {
                      itemtype: '" . addslashes($type) . "',
                      id: '$ID',
-                     tab: index,
+                     tab_key: href_url_params.get('_glpi_tab'),
                      withtemplate: " . (int)($_GET['withtemplate'] ?? 0) . "
                   }
                );

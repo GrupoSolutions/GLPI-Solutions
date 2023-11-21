@@ -52,7 +52,6 @@ if (isset($_POST["add"])) {
     $nameUpper = $_POST['name'];
     $commentUpper = $_POST['comment'];
     $serialUpper = $_POST['serial'];
-
     $_POST['name'] = mb_strtoupper($nameUpper);
     $_POST['comment'] = mb_strtoupper($commentUpper);
     $_POST['serial'] = mb_strtoupper($serialUpper);
@@ -113,7 +112,6 @@ if (isset($_POST["add"])) {
     $nameUpper = $_POST['name'];
     $commentUpper = $_POST['comment'];
     $serialUpper = $_POST['serial'];
-
     $_POST['name'] = mb_strtoupper($nameUpper);
     $_POST['comment'] = mb_strtoupper($commentUpper);
     $_POST['serial'] = mb_strtoupper($serialUpper);

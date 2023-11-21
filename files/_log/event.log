@@ -1,0 +1,56 @@
+2023-11-16 15:17:31 [@GS003021]
+[login] 3: Login falhou para  no IP ::1
+2023-11-16 15:17:35 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-17 11:10:02 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-17 11:12:08 [58@GS003021]
+[Impersonate] 3: Administrador começa a personificar o usuário Dayse Marques
+2023-11-17 14:11:24 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-17 16:23:52 [58@GS003021]
+[Impersonate] 3: Administrador começa a personificar o usuário Dayse Marques
+2023-11-17 19:59:57 [@GS003021]
+[login] 3: Dayse Marques fez login no IP ::1
+2023-11-17 23:17:07 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-21 06:59:38 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-21 07:23:56 [2@GS003021]
+[setup] [Plugin 15037] 3: Plugin Pedidos de consumíveis foi ativado por Administrador (2).
+2023-11-21 07:24:05 [2@GS003021]
+[setup] [Plugin 15038] 3: Plugin dashboard limpo!
+2023-11-21 07:24:07 [2@GS003021]
+[setup] [Plugin 15039] 3: Plugin Used items export foi ativado por Administrador (2).
+2023-11-21 07:24:12 [2@GS003021]
+[setup] [Plugin 15040] 3: Plugin Campos adicionais foi ativado por Administrador (2).
+2023-11-21 07:24:23 [2@GS003021]
+[setup] [Plugin 15041] 3: Plugin Situação dos ativos foi ativado por Administrador (2).
+2023-11-21 07:25:31 [2@GS003021]
+[setup] [Plugin 15042] 3: Plugin formcreator limpo!
+2023-11-21 07:35:47 [2@GS003021]
+[setup] [Plugin 15043] 3: Plugin Form Creator foi instalado por Administrador (2).
+2023-11-21 07:35:52 [2@GS003021]
+[setup] [Plugin 15044] 3: Plugin Form Creator foi ativado por Administrador (2).
+2023-11-21 07:52:10 [19@GS003021]
+[Impersonate] 3: Administrador começa a personificar o usuário Andrei Santos
+2023-11-21 08:18:00 [2@GS003021]
+[Impersonate] 3: Administrador pára de personificar o usuário Andrei Santos
+2023-11-21 08:22:23 [54@GS003021]
+[Impersonate] 3: Administrador começa a personificar o usuário Barbara Silva
+2023-11-21 08:23:18 [2@GS003021]
+[Impersonate] 3: Administrador pára de personificar o usuário Barbara Silva
+2023-11-21 10:03:43 [2@GS003021]
+[setup] [Plugin 15050] 3: Plugin Campos adicionais foi desativado por Administrador (2).
+2023-11-21 10:04:27 [2@GS003021]
+[setup] [Plugin 15051] 3: Plugin Campos adicionais foi instalado por Administrador (2).
+2023-11-21 10:04:31 [2@GS003021]
+[setup] [Plugin 15052] 3: Plugin Campos adicionais foi ativado por Administrador (2).
+2023-11-21 10:05:44 [@GS003021]
+[login] 3: Barbara Silva fez login no IP ::1
+2023-11-21 10:24:16 [@GS003021]
+[login] 3: Administrador fez login no IP ::1
+2023-11-21 10:40:19 [19@GS003021]
+[Impersonate] 3: Administrador começa a personificar o usuário Andrei Santos
+2023-11-21 10:41:32 [2@GS003021]
+[Impersonate] 3: Administrador pára de personificar o usuário Andrei Santos

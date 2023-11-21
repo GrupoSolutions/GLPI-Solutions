@@ -783,20 +783,22 @@ JAVASCRIPT;
          'title'   => __('Seek assistance', 'formcreator'),
          'icon'    => 'fa-fw ti ti-headset',
       ];
-      $newMenu['my_assistance_requests'] = [
-         'default' => PluginFormcreatorIssue::getSearchURL(false),
-         'title'   => __('My requests for assistance', 'formcreator'),
-         'icon'    => 'fa-fw ti ti-list',
-         'content' => [
-            PluginFormcreatorIssue::class => [
-               'title' => __('My requests for assistance', 'formcreator'),
-               'icon'  => 'fa-fw ti ti-list',
-               'links'   => [
-                  'lists' => '',
+      if (Ticket::canView()) {
+         $newMenu['my_assistance_requests'] = [
+            'default' => PluginFormcreatorIssue::getSearchURL(false),
+            'title'   => __('My requests for assistance', 'formcreator'),
+            'icon'    => 'fa-fw ti ti-list',
+            'content' => [
+               PluginFormcreatorIssue::class => [
+                  'title' => __('My requests for assistance', 'formcreator'),
+                  'icon'  => 'fa-fw ti ti-list',
+                  'links'   => [
+                     'lists' => '',
+                  ],
                ],
             ],
-         ],
-      ];
+         ];
+      }
 
       if (PluginFormcreatorEntityConfig::getUsedConfig('is_kb_separated', Session::getActiveEntity()) == PluginFormcreatorEntityConfig::CONFIG_KB_DISTINCT
          && Session::haveRight('knowbase', KnowbaseItem::READFAQ)
@@ -804,11 +806,31 @@ JAVASCRIPT;
          $newMenu['faq'] = $menus['faq'];
          $newMenu['faq']['default'] = Plugin::getWebDir('formcreator', false) . '/front/knowbaseitem.php';
       }
-      if (Session::haveRight("reservation", ReservationItem::RESERVEANITEM)) {
+      if (Session::haveRightsOr("reservation", [READ, ReservationItem::RESERVEANITEM])) {
          if (isset($menus['reservation'])) {
             $newMenu['reservation'] = $menus['reservation'];
          }
       }
+      $reminderTable = Reminder::getTable();
+      $criteria = [
+         'SELECT'   => "$reminderTable.*",
+         'DISTINCT' => true,
+         'FROM'     => $reminderTable,
+         'ORDER'    => "$reminderTable.name"
+      ];
+      $criteria = $criteria + Reminder::getVisibilityCriteria();
+      $criteria['WHERE']["$reminderTable.users_id"] = ['<>', Session::getLoginUserID()];
+      $iterator = $DB->request($criteria);
+      $hasReminder = $iterator->count() > 0;
+
+      if (Reminder::canView() && $hasReminder) {
+         $newMenu['reminders'] = [
+            'default' => Plugin::getWebDir('formcreator', false) . '/front/wizardreminders.php',
+            'title'   => __('Consult reminders', 'formcreator'),
+            'icon'    => 'fa fa-sticky-note',
+         ];
+      }
+
       $rssFeedTable = RSSFeed::getTable();
       $criteria = [
          'SELECT'   => "$rssFeedTable.*",
@@ -849,7 +871,7 @@ JAVASCRIPT;
 
       if (PluginFormcreatorEntityconfig::getUsedConfig('is_dashboard_visible', Session::getActiveEntity()) == PluginFormcreatorEntityconfig::CONFIG_DASHBOARD_VISIBLE) {
          if (version_compare(GLPI_VERSION, '10.0.3') > 0) {
-            $dashboard = new Glpi\Dashboard\Grid('plugin_formcreator_issue_counters', 33, 1, 'mini_core');
+            $dashboard = new Glpi\Dashboard\Grid('plugin_formcreator_issue_counters', 33, 2, 'mini_core');
          } else {
             $dashboard = new Glpi\Dashboard\Grid('plugin_formcreator_issue_counters', 33, 0, 'mini_core');
          }

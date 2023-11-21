@@ -6,8 +6,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
-$sqlcon = mysqli_connect('localhost', 'root', '', 'base_104', '3306'); // ALTERAR AO SUBIR PARA PROD
-$GLOBALS['sqlcon'] = $sqlcon;
+$sqlcon = mysqli_connect('localhost', 'glpi', '16oL97*l2L^^6GZ%dKdKNvm&gW06#j6@q6zDC3d@', 'glpi', '3306'); // ALTERAR AO SUBIR PARA PROD
 
 
 $data_inicial = $_POST['data_inicial'];

@@ -7,7 +7,7 @@
  *
  * http://glpi-project.org
  *
- * @copyright 2015-2022 Teclib' and contributors.
+ * @copyright 2015-2023 Teclib' and contributors.
  * @copyright 2003-2014 by the INDEPNET Development Team.
  * @licence   https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -96,11 +96,8 @@ class Monitor extends CommonDBTM
         $this->addImpactTab($ong, $options);
         $this->addStandardTab('Item_Devices', $ong, $options);
         $this->addStandardTab('Computer_Item', $ong, $options);
-        
         $this->addStandardTab('Infocom', $ong, $options);
-        
         $this->addStandardTab('Log', $ong, $options);
-
         return $ong;
     }
 
@@ -117,24 +114,6 @@ class Monitor extends CommonDBTM
         unset($input['withtemplate']);
 
         return $input;
-    }
-
-
-    public function cleanDBonPurge()
-    {
-
-        $this->deleteChildrenAndRelationsFromDb(
-            [
-                Computer_Item::class,
-                Item_Project::class,
-            ]
-        );
-
-        Item_Devices::cleanItemDeviceDBOnItemDelete(
-            $this->getType(),
-            $this->fields['id'],
-            (!empty($this->input['keep_devices']))
-        );
     }
 
 

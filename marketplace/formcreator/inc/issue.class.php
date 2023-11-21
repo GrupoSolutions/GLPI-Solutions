@@ -455,7 +455,7 @@ class PluginFormcreatorIssue extends CommonDBTM {
       $rows = $DB->request([
          'FROM'  => Item_Ticket::getTable(),
          'WHERE' => [
-            'itemtype' => 'PluginFormcreatorFormAnswer',
+            'itemtype' => PluginFormcreatorFormAnswer::getType(),
             'items_id' => $item->getID() // $item is a PluginFormcreatorFormAnswer
          ],
          'ORDER' => 'tickets_id ASC'
@@ -472,8 +472,8 @@ class PluginFormcreatorIssue extends CommonDBTM {
                $item = $ticket;
             }
          } else {
-            // multiple tickets, ticket specified, then substitute the ticket to the form answer
             if (isset($options['tickets_id'])) {
+               // multiple tickets, ticket specified, then substitute the ticket to the form answer
                $ticket = Ticket::getById((int) $options['tickets_id']);
                if ($ticket) {
                   $item = $ticket;
@@ -491,11 +491,28 @@ class PluginFormcreatorIssue extends CommonDBTM {
    public function rawSearchOptions() {
       $tab = [];
       $hide_technician = false;
+      $hide_technician_group = false;
       if (!Session::isCron()) {
-         $hide_technician = \Entity::getUsedConfig(
+         $anonymisation = Entity::getUsedConfig(
             'anonymize_support_agents',
             Session::getActiveEntity()
          );
+         switch ($anonymisation) {
+            case Entity::ANONYMIZE_USE_GENERIC:
+            case Entity::ANONYMIZE_USE_NICKNAME:
+               $hide_technician       = true;
+               $hide_technician_group = true;
+               break;
+
+            case Entity::ANONYMIZE_USE_GENERIC_USER:
+            case Entity::ANONYMIZE_USE_NICKNAME_USER:
+               $hide_technician       = true;
+               break;
+
+            case Entity::ANONYMIZE_USE_GENERIC_GROUP:
+               $hide_technician_group = true;
+               break;
+         }
       }
 
       $tab[] = [
@@ -645,17 +662,50 @@ class PluginFormcreatorIssue extends CommonDBTM {
          'massiveaction'      => false,
          'joinparams'         => [
             'beforejoin'         => [
-               'table'              => TicketValidation::getTable(),
-               'joinparams'         => [
-                  'jointype'           => 'child',
-                  'beforejoin'         => [
-                     'table'              => Ticket::getTable(),
-                     'joinparams'         => [
-                        'jointype'        => 'itemtype_item_revert',
-                        'specific_itemtype'  => Ticket::class,
+               [
+                  'table'              => TicketValidation::getTable(),
+                  'joinparams'         => [
+                     'jointype'           => 'child',
+                     'beforejoin'         => [
+                        'table'              => Ticket::getTable(),
+                        'joinparams'         => [
+                           'jointype'        => 'itemtype_item_revert',
+                           'specific_itemtype'  => Ticket::class,
+                        ]
                      ]
                   ]
-               ]
+               ],
+               [
+                  'table'              => TicketValidation::getTable(),
+                  'joinparams'         => [
+                     'jointype'           => 'child',
+                     'beforejoin'         => [
+                        'table'              => Ticket::getTable(),
+                        'joinparams'      => [
+                           'jointype'        => 'empty',
+                           'condition'       => [
+                              new \QueryExpression(
+                                 '1=1'
+                              ),
+                           ],
+                           'beforejoin'      => [
+                              'table'           => Item_Ticket::getTable(),
+                              'joinparams'      => [
+                                 'jointype'        => 'itemtype_item',
+                                 'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                                 'beforejoin'      => [
+                                    'table'           => PluginFormcreatorFormAnswer::getTable(),
+                                    'joinparams'      => [
+                                       'jointype'          => 'itemtype_item_revert',
+                                       'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                                    ],
+                                 ],
+                              ],
+                           ],
+                        ],
+                     ]
+                  ]
+               ],
             ],
          ]
       ];
@@ -710,8 +760,8 @@ class PluginFormcreatorIssue extends CommonDBTM {
             'datatype'           => 'dropdown',
             'forcegroupby'       => true,
             'massiveaction'      => false,
-            'nodisplay'          => $hide_technician,
-            'nosearch'           => $hide_technician,
+            'nodisplay'          => $hide_technician_group,
+            'nosearch'           => $hide_technician_group,
             'condition'          => ['is_assign' => 1],
             'joinparams'         => [
                'beforejoin'         => [
@@ -800,6 +850,149 @@ class PluginFormcreatorIssue extends CommonDBTM {
          }
       }
 
+      $tab[] = [
+         'id'                 => '42',
+         'table'              => User::getTable(),
+         'field'              => 'name',
+         'name'               => __('Ticket requester', 'formcreator'),
+         'massiveaction'      => false,
+         'datatype'           => 'dropdown',
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'jointype'        => 'empty',
+            'beforejoin'      => [
+               'table'           => Ticket_User::getTable(),
+               'joinparams'      => [
+                  'jointype'        => 'child',
+                  'condition'       => [
+                     'NEWTABLE.type' => CommonITILActor::REQUESTER,
+                  ],
+                  'beforejoin'      => [
+                     'table'           => Ticket::getTable(),
+                     'joinparams'      => [
+                        'jointype'        => 'empty',
+                        'condition'       => [
+                           new QueryExpression(
+                              '1=1'
+                           ),
+                        ],
+                        'beforejoin'      => [
+                           'table'           => Item_Ticket::getTable(),
+                           'joinparams'      => [
+                              'jointype'        => 'itemtype_item',
+                              'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                              'beforejoin'      => [
+                                 'table'           => PluginFormcreatorFormAnswer::getTable(),
+                                 'joinparams'      => [
+                                    'jointype'          => 'itemtype_item_revert',
+                                    'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                                 ],
+                              ],
+                           ],
+                        ],
+                     ],
+                  ],
+               ],
+            ],
+         ],
+      ];
+
+      $tab[] = [
+         'id'                 => '43',
+         'table'              => User::getTable(),
+         'field'              => 'name',
+         'name'               => __('Ticket observer', 'formcreator'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'datatype'           => 'dropdown',
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'jointype'        => 'empty',
+            'beforejoin'      => [
+               'table'           => Ticket_User::getTable(),
+               'joinparams'      => [
+                  'jointype'        => 'child',
+                  'condition'       => [
+                     'NEWTABLE.type' => CommonITILActor::OBSERVER,
+                  ],
+                  'beforejoin'      => [
+                     'table'           => Ticket::getTable(),
+                     'joinparams'      => [
+                        'jointype'        => 'empty',
+                        'condition'       => [
+                           new \QueryExpression(
+                              '1=1'
+                           ),
+                        ],
+                        'beforejoin'      => [
+                           'table'           => Item_Ticket::getTable(),
+                           'joinparams'      => [
+                              'jointype'        => 'itemtype_item',
+                              'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                              'beforejoin'      => [
+                                 'table'           => PluginFormcreatorFormAnswer::getTable(),
+                                 'joinparams'      => [
+                                    'jointype'          => 'itemtype_item_revert',
+                                    'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                                 ],
+                              ],
+                           ],
+                        ],
+                     ],
+                  ],
+               ],
+            ],
+         ],
+      ];
+
+      $tab[] = [
+         'id'                 => '44',
+         'table'              => User::getTable(),
+         'field'              => 'name',
+         'name'               => __('Ticket technician', 'formcreator'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'datatype'           => 'dropdown',
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'jointype'        => 'empty',
+            'beforejoin'      => [
+               'table'           => Ticket_User::getTable(),
+               'joinparams'      => [
+                  'jointype'        => 'child',
+                  'condition'       => [
+                     'NEWTABLE.type' => CommonITILActor::ASSIGN,
+                  ],
+                  'beforejoin'      => [
+                     'table'           => Ticket::getTable(),
+                     'joinparams'      => [
+                        'jointype'        => 'empty',
+                        'condition'       => [
+                           new \QueryExpression(
+                              '1=1'
+                           ),
+                        ],
+                        'beforejoin'      => [
+                           'table'           => Item_Ticket::getTable(),
+                           'joinparams'      => [
+                              'jointype'        => 'itemtype_item',
+                              'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                              'beforejoin'      => [
+                                 'table'           => PluginFormcreatorFormAnswer::getTable(),
+                                 'joinparams'      => [
+                                    'jointype'          => 'itemtype_item_revert',
+                                    'specific_itemtype' => PluginFormcreatorFormAnswer::class,
+                                 ],
+                              ],
+                           ],
+                        ],
+                     ],
+                  ],
+               ],
+            ],
+         ],
+      ];
+
       return $tab;
    }
 
@@ -882,7 +1075,11 @@ class PluginFormcreatorIssue extends CommonDBTM {
                      trigger_error(sprintf("Formanswer ID %s not found", $id), E_USER_WARNING);
                      break;
                   }
-                  $content = $formAnswer->parseTags($formAnswer->getFullForm());
+                  try {
+                     $content = $formAnswer->parseTags($formAnswer->getFullForm());
+                  } catch (Exception $e) {
+                     $content = ''; // Exception when computing the tooltip
+                  }
                   break;
             }
             $link = self::getFormURLWithID($data['id']);
@@ -893,9 +1090,10 @@ class PluginFormcreatorIssue extends CommonDBTM {
             }
 
             $key = 'id';
-            $tooltip = Html::showToolTip(nl2br(RichText::getTextFromHtml($content)), [
-               'applyto' => $itemtype.$data['raw'][$key],
-               'display' => false,
+            $tooltip = Html::showToolTip(RichText::getEnhancedHtml($content), [
+               'applyto'        => $itemtype.$data['raw'][$key],
+               'display'        => false,
+               'images_gallery' => false
             ]);
             return '<a id="' . $itemtype.$data['raw'][$key] . '" href="' . $link . '">'
                . sprintf(__('%1$s %2$s'), $name, $tooltip)

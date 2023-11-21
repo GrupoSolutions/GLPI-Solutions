@@ -53,7 +53,7 @@ class PluginFormcreatorCategory extends CommonTreeDropdown
    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       $env       = new self;
       $found_env = $env->find([static::getForeignKeyField() => $item->getID()]);
-      $nb        = count($found_env);
+      $nb        = $_SESSION['glpishow_count_on_tabs'] ? count($found_env) : 0;
       return self::createTabEntry(self::getTypeName($nb), $nb);
    }
 
@@ -91,16 +91,19 @@ class PluginFormcreatorCategory extends CommonTreeDropdown
 
       $cat_table  = PluginFormcreatorCategory::getTable();
       $form_table = PluginFormcreatorForm::getTable();
-      $table_fp   = PluginFormcreatorForm_Profile::getTable();
+
+      if (version_compare(GLPI_VERSION, '10.0.6') > 0) {
+         $knowbase_category = KnowbaseItemCategory::SEEALL;
+      } else {
+         $knowbase_category = 0;
+      }
 
       $query_faqs = KnowbaseItem::getListRequest([
          'faq'      => '1',
          'contains' => '',
-         'knowbaseitemcategories_id' => 0,
+         'knowbaseitemcategories_id' => $knowbase_category,
       ]);
-      // GLPI 9.5 returns an array
-      $subQuery = new DBMysqlIterator($DB);
-      $subQuery->buildQuery($query_faqs);
+      $query_faqs['SELECT'] = [$query_faqs['FROM'] . '.' . 'id'];
 
       $dbUtils = new DbUtils();
       $entityRestrict = $dbUtils->getEntitiesRestrictCriteria($form_table, "", "", true, false);
@@ -114,24 +117,20 @@ class PluginFormcreatorCategory extends CommonTreeDropdown
       // Get base query, add count and category condition
       $count_forms_criteria = PluginFormcreatorForm::getFormListQuery();
       $count_forms_criteria['COUNT'] = 'count';
-      $count_forms_criteria['WHERE']["$form_table.$categoryFk"] = new QueryExpression("$cat_table.id");
+      $count_forms_criteria['WHERE']["`$form_table`.`$categoryFk`"] = new QueryExpression("`$cat_table`.`id`");
 
       $count1 = new QuerySubQuery($count_forms_criteria);
       $count2 = new QuerySubQuery([
          'COUNT' => 'count',
          'FROM' => 'glpi_knowbaseitems_knowbaseitemcategories',
          'WHERE' => [
-            'knowbaseitems_id' => new QuerySubQuery([
-               'SELECT' => 'faqs.id',
-               'FROM' => (new QuerySubQuery($query_faqs, 'faqs'))
-            ]),
-            [(new QueryExpression("knowbaseitemcategories_id = $cat_table.knowbaseitemcategories_id"))],
+            'knowbaseitems_id' => new QuerySubQuery($query_faqs),
+            [(new QueryExpression("`glpi_knowbaseitems_knowbaseitemcategories`.`knowbaseitemcategories_id` = `$cat_table`.`knowbaseitemcategories_id`"))],
          ]
       ]);
       $request = [
          'SELECT' => [
-            'id',
-            'name',
+            self::getTableField('id'),
             "$categoryFk as parent",
             'level',
             new QueryExpression(
@@ -139,8 +138,43 @@ class PluginFormcreatorCategory extends CommonTreeDropdown
             ),
          ],
          'FROM' => $cat_table,
+         'LEFT JOIN' => [],
          'ORDER' => ["level DESC", "name DESC"],
       ];
+      $translation_table = DropdownTranslation::getTable();
+      if (Session::haveTranslations(self::getType(), 'name')) {
+         $request['LEFT JOIN']["$translation_table as namet"] = [
+            'FKEY' => [
+               $cat_table => 'id',
+               'namet' => 'items_id',
+               ['AND' => [
+                  'namet.language' => $_SESSION['glpilanguage'],
+                  'namet.itemtype' => self::getType(),
+                  'namet.field' => 'name',
+               ]],
+            ],
+         ];
+         $request['SELECT'][] = 'namet.value as name';
+      } else {
+         $request['SELECT'][] = 'name';
+         $request['SELECT'][] = 'comment';
+      }
+      if (Session::haveTranslations(self::getType(), 'comment')) {
+         $request['LEFT JOIN']["$translation_table as commentt"] = [
+            'FKEY' => [
+               $cat_table => 'id',
+               'commentt' => 'items_id',
+               ['AND' => [
+                  'namet.language' => $_SESSION['glpilanguage'],
+                  'namet.itemtype' => self::getType(),
+                  'namet.field' => 'comment',
+               ]],
+            ],
+         ];
+         $request['SELECT'][] = 'commentt.value as comment';
+      } else {
+         $request['SELECT'][] = 'comment';
+      }
       $result = $DB->request($request);
 
       $categories = [];

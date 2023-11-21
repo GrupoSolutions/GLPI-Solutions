@@ -5,7 +5,7 @@
  #
  # http://glpi-project.org
  #
- # @copyright 2015-2022 Teclib' and contributors.
+ # @copyright 2015-2023 Teclib' and contributors.
  # @copyright 2003-2014 by the INDEPNET Development Team.
  # @licence   https://www.gnu.org/licenses/gpl-3.0.html
  #
@@ -45,12 +45,21 @@
 {% block timeline_card %}
    {% if form_mode == 'view' %}
       <div class="read-only-content">
-         {{ entry_i['content']|enhanced_html({
-            'user_mentions': true,
-            'images_gallery': true
-         }) }}
+         <div class="rich_text_container">
+            {{ entry_i['content']|enhanced_html({
+               'user_mentions': true,
+               'images_gallery': true
+            }) }}
+         </div>
 
          <div class="timeline-badges">
+            {% if entry_i['requesttypes_id'] %}
+               <span class="badge bg-blue-lt" title="{{ __('Source of followup') }}">
+                  <i class="fas fa-inbox me-1"></i>
+                  {{ get_item_name('RequestType', entry_i['requesttypes_id']) }}
+               </span>
+            {% endif %}
+
             {% if entry_i['sourceitems_id'] %}
                <span class="badge bg-blue-lt">
                   <i class="fas fa-code-branch me-1"></i>
@@ -91,7 +100,7 @@
                <input type="hidden" name="add_reopen" value="1" />
             {% endif %}
 
-            <div class="row">
+            <div class="row mx-n3">
                <div class="col-12 {{ col_md }}">
                   {{ fields.textareaField(
                      'content',
@@ -103,36 +112,46 @@
                         'enable_richtext': true,
                         'enable_fileupload': true,
                         'enable_mentions': true,
+                        'entities_id': item.fields['entities_id'],
                         'rand': rand,
                         'required': add_reopen
                      }
                   ) }}
-               </div>
-                           </div>
+                  </div>
+            </div>
 
             {{ call_plugin_hook('post_item_form', {"item": subitem, 'options': params}) }}
-            <div class="d-flex card-footer mx-n3 mb-n3">
+            {# Fixed min-height ensure no height increase when toggling the pending reason button, as select 2 dropdown are a bit higher than the default footer height #}
+            <div class="d-flex card-footer mx-n3 mb-n3 flex-wrap" style="row-gap: 10px; min-height: 79px; border-radius:15px;">
+               {% set pending_reasons %}
+                  {% set show_pending_reasons_actions = item.fields['status'] == constant('CommonITILObject::WAITING') and not has_pending_reason and not add_reopen %}
+                 
+               {% endset %}
+
                {% if subitem.fields['id'] <= 0 %}
-                  <div class="input-group">
-                     <button class="btn btn-primary" type="submit" name="add">
+                  {# Do not enable flex wrapping when creating a new item as the pending form will be merged with the add button in an input group #}
+                  <div class="input-group flex-nowrap">
+                     <button class="btn btn-primary" type="submit" name="add" style="z-index:0">
                         <i class="fa-fw ti ti-message-circle"></i>
-                        <span>Responder</span>
+                        <span>{{ 'Responder' }}</span>
                      </button>
+                     {{ pending_reasons|raw }}
                   </div>
                {% else %}
                   <input type="hidden" name="id" value="{{ subitem.fields['id'] }}" />
                   <button class="btn btn-primary me-2" type="submit" name="update">
                      <i class="far fa-save"></i>
-                     <span>Salvar</span>
+                     <span>{{ _x('button', 'Save') }}</span>
                   </button>
 
-                  {% if subitem.can(id, constant('PURGE')) %}
+                  {% if subitem.can(subitem.fields['id'], constant('PURGE')) %}
                      <button class="btn btn-outline-danger me-2" type="submit" name="purge"
                              onclick="return confirm('{{ __('Confirm the final deletion?') }}');">
                         <i class="fas fa-trash-alt"></i>
                         <span>{{ _x('button', 'Delete permanently') }}</span>
                      </button>
                   {% endif %}
+                  {{ pending_reasons|raw }}
                {% endif %}
             </div>
 
@@ -156,11 +175,13 @@
                   : parseInt(data.requesttypes_id);
 
                // set textarea content
-               if (tasktinymce = tinymce.get("content_{{ rand }}")) {
-                  tasktinymce.setContent(data.content);
-               }
+               setRichTextEditorContent("content_{{ rand }}", data.content);
                // set category
-               $("#dropdown_requesttypes_id{{ rand }}").trigger("setValue", requesttypes_id);
+               //need to create new DOM option, because SELECT is remotely-sourced (AJAX)
+               //see : https://select2.org/programmatic-control/add-select-clear-items#preselecting-options-in-an-remotely-sourced-ajax-select2
+               var newOption = new Option(data.requesttypes_name, requesttypes_id, true, true);
+               $("#dropdown_requesttypes_id{{ rand }}").append(newOption).trigger('change');
+
                // set is_private
                $("#is_private_{{ rand }}")
                   .prop("checked", data.is_private == "0"

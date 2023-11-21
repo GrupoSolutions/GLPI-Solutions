@@ -111,7 +111,7 @@ class RequestTypeField extends SelectField
       return true;
    }
 
-   public function getAvailableValues() {
+   public function getAvailableValues(array $values = null): array {
       return Ticket::getTypes();
    }
 
@@ -157,7 +157,7 @@ class RequestTypeField extends SelectField
       // If the field is required it can't be empty
       if ($this->isRequired() && $this->value == '0') {
          Session::addMessageAfterRedirect(
-            __('A required field is empty:', 'formcreator') . ' ' . $this->getLabel(),
+            __('A required field is empty:', 'formcreator') . ' ' . $this->getTtranslatedLabel(),
             false,
             ERROR
          );
@@ -173,7 +173,15 @@ class RequestTypeField extends SelectField
    }
 
    public function equals($value): bool {
+      global $TRANSLATE;
+
+      $oldLocale = $TRANSLATE->getLocale();
+      $TRANSLATE->setLocale("en_GB");
+      $_SESSION['glpilanguage'] = "en_GB";
       $available = $this->getAvailableValues();
+      $TRANSLATE->setLocale($oldLocale);
+      $_SESSION['glpilanguage'] = $oldLocale;
+
       if (!isset($available[$this->value])) {
          return false;
       }
@@ -181,7 +189,15 @@ class RequestTypeField extends SelectField
    }
 
    public function notEquals($value): bool {
+      global $TRANSLATE;
+
+      $oldLocale = $TRANSLATE->getLocale();
+      $TRANSLATE->setLocale("en_GB");
+      $_SESSION['glpilanguage'] = "en_GB";
       $available = $this->getAvailableValues();
+      $TRANSLATE->setLocale($oldLocale);
+      $_SESSION['glpilanguage'] = $oldLocale;
+
       if (!isset($available[$this->value])) {
          return false;
       }
@@ -189,7 +205,15 @@ class RequestTypeField extends SelectField
    }
 
    public function greaterThan($value): bool {
+      global $TRANSLATE;
+
+      $oldLocale = $TRANSLATE->getLocale();
+      $TRANSLATE->setLocale("en_GB");
+      $_SESSION['glpilanguage'] = "en_GB";
       $available = $this->getAvailableValues();
+      $TRANSLATE->setLocale($oldLocale);
+      $_SESSION['glpilanguage'] = $oldLocale;
+
       if (!isset($available[$this->value])) {
          return false;
       }
@@ -197,7 +221,15 @@ class RequestTypeField extends SelectField
    }
 
    public function lessThan($value): bool {
+      global $TRANSLATE;
+
+      $oldLocale = $TRANSLATE->getLocale();
+      $TRANSLATE->setLocale("en_GB");
+      $_SESSION['glpilanguage'] = "en_GB";
       $available = $this->getAvailableValues();
+      $TRANSLATE->setLocale($oldLocale);
+      $_SESSION['glpilanguage'] = $oldLocale;
+
       if (!isset($available[$this->value])) {
          return false;
       }

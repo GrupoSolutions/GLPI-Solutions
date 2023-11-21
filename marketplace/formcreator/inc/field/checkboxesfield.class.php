@@ -50,11 +50,25 @@ class CheckboxesField extends PluginFormcreatorAbstractField
    public function showForm(array $options): void {
       $template = '@formcreator/field/' . $this->question->fields['fieldtype'] . 'field.html.twig';
 
+      $value = [];
+      $items = json_decode($this->question->fields['default_values']);
+      if ($items !== null) {
+         // when we edit an existing question
+         foreach ($items as $item) {
+            if (trim($item) === '') {
+               continue;
+            }
+            if (!in_array($item, $this->getAvailableValues())) {
+               continue;
+            }
+            $value[] = $item;
+         }
+         $this->question->fields['default_values'] = implode("\r\n", $value);
+         $this->deserializeValue($this->question->fields['default_values']);
+      }
       $this->question->fields['values'] =  json_decode($this->question->fields['values']);
       $this->question->fields['values'] = is_array($this->question->fields['values']) ? $this->question->fields['values'] : [];
       $this->question->fields['values'] = implode("\r\n", $this->question->fields['values']);
-      $this->question->fields['default_values'] = Html::entities_deep($this->getValueForDesign());
-      $this->deserializeValue($this->question->fields['default_values']);
 
       $parameters = $this->getParameters();
       TemplateRenderer::getInstance()->display($template, [
@@ -89,6 +103,7 @@ class CheckboxesField extends PluginFormcreatorAbstractField
          foreach ($values as $value) {
             if ((trim($value) != '')) {
                $i++;
+               $translated_value =  __($value, $domain);
                $html .= "<div class='checkbox'>";
                $html .= Html::getCheckbox([
                   'title'         => htmlentities($value, ENT_QUOTES),
@@ -98,8 +113,8 @@ class CheckboxesField extends PluginFormcreatorAbstractField
                   'zero_on_empty' => false,
                   'checked'       => in_array($value, $this->value)
                ]);
-               $html .= '<label for="' . $domId . '_' . $i . '">';
-               $html .= '&nbsp;' . __($value, $domain);
+               $html .= '<label for="' . $domId . '_' . $i . '" class="label-checkbox" title="' . $translated_value . '">';
+               $html .= '&nbsp;' . $translated_value;
                $html .= '</label>';
                $html .= "</div>";
             }
@@ -172,7 +187,7 @@ class CheckboxesField extends PluginFormcreatorAbstractField
       // If the field is required it can't be empty
       if ($this->isRequired() && count($value) <= 0) {
          Session::addMessageAfterRedirect(
-            sprintf(__('A required field is empty: %s', 'formcreator'), $this->getLabel()),
+            sprintf(__('A required field is empty: %s', 'formcreator'), $this->getTtranslatedLabel()),
             false,
             ERROR
          );
@@ -189,9 +204,19 @@ class CheckboxesField extends PluginFormcreatorAbstractField
 
       foreach ($value as $item) {
          if (trim($item) == '') {
+            Session::addMessageAfterRedirect(
+               sprintf(__('Empty values are not allowed: %s', 'formcreator'), $this->getTtranslatedLabel()),
+               false,
+               ERROR
+            );
             return false;
          }
          if (!in_array($item, $this->getAvailableValues())) {
+            Session::addMessageAfterRedirect(
+               sprintf(__('This value %1$s is not alowed: %2$s', 'formcreator'), $item, $this->getTtranslatedLabel()),
+               false,
+               ERROR
+            );
             return false;
          }
       }
@@ -208,14 +233,14 @@ class CheckboxesField extends PluginFormcreatorAbstractField
          $rangeMin = $parameters['range']->fields['range_min'];
          $rangeMax = $parameters['range']->fields['range_max'];
          if ($rangeMin > 0 && count($value) < $rangeMin) {
-            $message = sprintf(__('The following question needs at least %d answers', 'formcreator'), $rangeMin);
-            Session::addMessageAfterRedirect($message . ' ' . $this->getLabel(), false, ERROR);
+            $message = sprintf(__('The following question needs at least %d answers: %s', 'formcreator'), $rangeMin, $this->getTtranslatedLabel());
+            Session::addMessageAfterRedirect($message, false, ERROR);
             return false;
          }
 
          if ($rangeMax > 0 && count($value) > $rangeMax) {
-            $message = sprintf(__('The following question does not accept more than %d answers', 'formcreator'), $rangeMax);
-            Session::addMessageAfterRedirect($message . ' ' . $this->getLabel(), false, ERROR);
+            $message = sprintf(__('The following question does not accept more than %d answers: %s', 'formcreator'), $rangeMax, $this->getTtranslatedLabel());
+            Session::addMessageAfterRedirect($message, false, ERROR);
             return false;
          }
       }
@@ -224,22 +249,33 @@ class CheckboxesField extends PluginFormcreatorAbstractField
    }
 
    public function prepareQuestionInputForSave($input) {
+      global $DB;
+
       if (!isset($input['values']) || empty($input['values'])) {
          Session::addMessageAfterRedirect(
-            __('The field value is required:', 'formcreator') . ' ' . $input['name'],
+            __('The field value is required.', 'formcreator'),
             false,
             ERROR
          );
          return [];
       }
 
-      // trim values
-      $input['values'] = $this->trimValue($input['values']);
-
-      if (isset($input['default_values'])) {
+      $values = $this->trimValue($input['values']);
+      $defaultValues = $this->trimValue($input['default_values'] ?? '');
+      if (count($defaultValues) > 0) {
          // trim values
-         $input['default_values'] = $this->trimValue($input['default_values']);
+         $validDefaultValues = array_intersect($this->getAvailableValues($values), $defaultValues);
+         if (count($validDefaultValues) != (count($defaultValues))) {
+            Session::addMessageAfterRedirect(
+               __('The default values are not in the list of available values.', 'formcreator'),
+               false,
+               ERROR
+            );
+            return [];
+         }
+         $input['default_values'] = $DB->escape(json_encode($defaultValues, JSON_UNESCAPED_UNICODE));
       }
+      $input['values'] = $DB->escape(json_encode($values, JSON_UNESCAPED_UNICODE));
 
       return $input;
    }

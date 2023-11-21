@@ -64,7 +64,16 @@ implements PluginFormcreatorExportableInterface
 
    public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if ($item instanceof PluginFormcreatorForm) {
-         return self::getTypeName(Session::getPluralNumber());
+         $nb = 0;
+         if ($_SESSION['glpishow_count_on_tabs']) {
+            $nb = (new DbUtils())->countElementsInTable(self::getTable(), [
+               'plugin_formcreator_forms_id' => $item->getID(),
+            ]);
+         }
+         return self::createTabEntry(
+            self::getTypeName(Session::getPluralNumber()),
+            $nb
+         );
       }
       if ($item->getType() == self::class) {
          $nb = 0;
@@ -105,10 +114,12 @@ implements PluginFormcreatorExportableInterface
    }
 
    public function prepareInputForAdd($input) {
+      global $CFG_GLPI;
+
       $formFk = PluginFormcreatorForm::getForeignKeyField();
       if (!isset($input['name'])) {
          Session::addMessageAfterRedirect(
-            __('The name cannot be empty!', 'formcreator'),
+            __('The name cannot be empty.', 'formcreator'),
             false,
             ERROR
          );
@@ -116,7 +127,15 @@ implements PluginFormcreatorExportableInterface
       }
       if (!isset($input[$formFk])) {
          Session::addMessageAfterRedirect(
-            __('The language must be associated to a form!', 'formcreator'),
+            __('The language must be associated to a form.', 'formcreator'),
+            false,
+            ERROR
+         );
+         return [];
+      }
+      if (!isset($CFG_GLPI['languages'][$input['name']])) {
+         Session::addMessageAfterRedirect(
+            __('The specified language is not available.', 'formcreator'),
             false,
             ERROR
          );
@@ -151,7 +170,7 @@ implements PluginFormcreatorExportableInterface
 
       // Reset cache for the edited translations
       $formFk = PluginFormcreatorForm::getForeignKeyField();
-      $domain = PluginFormcreatorForm::getTranslationDomain($this->fields['name'], $this->fields[$formFk]);
+      $domain = PluginFormcreatorForm::getTranslationDomain($this->fields[$formFk], $this->fields['name']);
       $TRANSLATE->clearCache($domain, $this->fields['name']);
    }
 
@@ -345,14 +364,23 @@ implements PluginFormcreatorExportableInterface
       $header = '<tr>';
       $header.= '<th>' . Html::getCheckAllAsCheckbox("translation_list$rand", $rand) . '</th>';
       $header.= '<th>' . __('Original string', 'formcreator') . '</th>';
-      $header.= '<th>' . __('Translation', 'Translations', 1, 'formcreator') . '</th>';
+      $header.= '<th>' . _n('Translation', 'Translations', 1, 'formcreator') . '</th>';
       $header.= '</tr>';
       echo $header;
       echo '</thead>';
 
+      $all_translated_strings = $form->getTranslatableStrings([
+         'translated' => true,
+         'language'   => $this->fields['name']
+      ]);
+
       echo '<tbody>';
       foreach ($translations as $original => $translated) {
          $id = PluginFormcreatorTranslation::getTranslatableStringId($original);
+         if (!in_array($id, array_keys($all_translated_strings['id']))) {
+            // String is translated but no longer used in the form or its sub objects
+            continue;
+         }
          echo '<tr data-itemtype="PluginFormcreatorTranslation" data-id="' . $id . '">';
          echo '<td>'
          . Html::getCheckbox([
