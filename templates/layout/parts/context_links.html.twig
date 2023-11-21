@@ -46,6 +46,7 @@
 {% endif %}
 
 {% if links['search'] is defined %}
+<<<<<<< Updated upstream
 <li class="nav-item">
    <a href="{{ path(links['search']) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Search') }}">
       <i class="ti ti-search"></i>
@@ -62,11 +63,19 @@
       <span class="d-none d-xxl-block">{{ __('Lists') }}</span>
    </a>
 </li>
+=======
+
+{% endif %}
+
+{% if links['lists'] is defined %}
+
+>>>>>>> Stashed changes
 {% endif %}
 
 {% for type, link in links %}
    {% if type == 'add' or type == 'search' or type == 'lists' %}
    {% elseif type == 'template' %}
+<<<<<<< Updated upstream
       <li class="nav-item">
          <a href="{{ path(link) }}" class="btn btn-icon btn-sm btn-outline-secondary me-1 pe-2 pesquisa" title="{{ __('Manage templates...') }}">
             <i class="ti ti-template"></i>
@@ -114,6 +123,20 @@
             {{ type|raw }}
          </a>
       </li>
+=======
+
+   {% elseif type == 'showall' %}
+
+   {% elseif type == 'summary' %}
+
+   {% elseif type == 'summary_kanban' %}
+    
+   {% elseif type == 'transfer_list' %}
+   {% elseif type == 'config' %}
+      
+   {% else %}
+    
+>>>>>>> Stashed changes
    {% endif %}
 
 {% endfor %}

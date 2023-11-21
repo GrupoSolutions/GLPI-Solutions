@@ -42,12 +42,80 @@
 
 <div class="mx-n2 mb-n2 itil-footer itil-footer p-0 border-top" id="itil-footer">
    <div class="buttons-bar d-flex py-2">
+<<<<<<< Updated upstream
    <div class="form-buttons {{ form_btns_cls }} d-flex ms-auto ms-md-0 my-n2 py-2 pe-3 card-footer border-top-0 position-relative">
          <span class="d-none d-md-block position-absolute top-0 start-0"
                data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('Toggle panels width') }}">
            
          </span>
 
+=======
+      <div class="col {{ timeline_btns_cls }} ps-3 timeline-buttons d-flex">
+         {% if not item.isNewItem() %}
+            {% set main_actions_itemtypes = timeline_itemtypes|filter((v, k) => v.hide_in_menu is not defined or v.hide_in_menu != true) %}
+
+            {% set default_action_data = main_actions_itemtypes|first %}
+            {% set default_action = main_actions_itemtypes|keys|first %}
+            {% if item.isNotSolved() and default_action_data != false %}
+               {% if main_actions_itemtypes|length > 1 %}
+                  {% set btn_class = timeline_btn_layout == constant('Config::TIMELINE_ACTION_BTN_SPLITTED') ? "" : "btn-group" %}
+                  <div class="{{ btn_class }} me-2 main-actions" style="{{ load_kb_sol > 0 ? 'display:none;' : '' }}">
+               {% else %}
+                  {# Don't use d-inline-flex class as it add an '!important' tag that mess with our javascript that will hide this div #}
+                  <div class="main-actions" style="display:inline-flex">
+               {% endif %}
+                  <button
+                     class="btn btn-primary answer-action mb-2 {{ default_action != "answer" ? "action-" ~ default_action : "" }}"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#new-{{ default_action_data.class }}-block"
+                  >
+                     <i class="{{ default_action_data.icon }}"></i>
+                     <span>{{ default_action_data.label }}</span>
+                  </button>
+
+                  {% if main_actions_itemtypes|length > 1 %}
+                     {% if timeline_btn_layout == constant('Config::TIMELINE_ACTION_BTN_SPLITTED') %}
+                        {% for action, timeline_itemtype in main_actions_itemtypes %}
+                        {% if loop.index0 > 0 %}
+                              <button class="ms-2 mb-2 btn btn-primary answer-action action-{{ action }}" data-bs-toggle="collapse" data-bs-target="#new-{{ timeline_itemtype.class }}-block">
+                                 <i class="{{ timeline_itemtype.icon }}"></i>
+                                 <span>{{ timeline_itemtype.short_label }}</span>
+                              </button>
+                              {% endif %}
+                        {% endfor %}
+                     {% else %}
+                        <button
+                           type="button"
+                           class="btn btn-primary dropdown-toggle dropdown-toggle-split mb-2 {{ default_action != "answer" ? "action-" ~ default_action : "" }}"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false"
+                        >
+                           <span class="visually-hidden">{{ __('View other actions') }}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                              {% for action, timeline_itemtype in main_actions_itemtypes %}
+                                 {% if loop.index0 > 0 %}
+                                 <li><a class="dropdown-item action-{{ action }} answer-action" href="#"
+                                    data-bs-toggle="collapse" data-bs-target="#new-{{ timeline_itemtype.class }}-block">
+                                    <i class="{{ timeline_itemtype.icon }}"></i>
+                                    <span>{{ timeline_itemtype.label }}</span>
+                                 </a></li>
+                                 {% endif %}
+                              {% endfor %}
+                        </ul>
+                     {% endif %}
+                  {% endif %}
+               </div>
+            {% endif %}
+
+         {% endif %}
+     </div>
+
+      <div class="form-buttons {{ form_btns_cls }} d-flex justify-content-between ms-auto ms-lg-0 my-n2 py-2 pe-3 card-footer border-top-0 position-relative">
+
+         <span>
+         
+>>>>>>> Stashed changes
          {% if item.isNewItem() %}
             <button class="btn btn-primary" type="submit" name="add" form="itil-form"
                   title="{{ _x('button', 'Add') }}">
@@ -56,6 +124,7 @@
             </button>
          {% else %}
 
+<<<<<<< Updated upstream
             <div class="btn-group" role="group">
                {% if item.canDeleteItem() %}
                   {% if item.isDeleted() %}
@@ -79,7 +148,13 @@
                      </button>
                   {% endif %}
                {% endif %}
+=======
+            
+>>>>>>> Stashed changes
 
+         {% endif %}
+         </span>
+         <div class="btn-group" role="group" id="right-actions">
                {% if canupdate %}
                   {{ include('components/form/single-action.html.twig', {
                      'onlyicon': true
@@ -96,8 +171,11 @@
                   </button>
                {% endif %}
             </div>
+<<<<<<< Updated upstream
 
          {% endif %}
+=======
+>>>>>>> Stashed changes
       </div>
       <div class="{{ timeline_btns_cls }} ps-3 timeline-buttons">
          {% if not item.isNewItem() %}

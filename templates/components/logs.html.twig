@@ -43,8 +43,13 @@
    <div class="table-responsive">
    <table class="table table-hover">
       <thead>
+<<<<<<< Updated upstream
          <tr>
          {% set insumo = "text" %}
+=======
+      <tr>
+        {% set insumo = "text" %}
+>>>>>>> Stashed changes
          {% for entry in logs %}
             {% if entry['field'] == 'Insumo' %}
                {% set insumo = "true" %}
@@ -57,15 +62,22 @@
             <th>Quantidade</th>
             <th>{{ _x('name', 'Update') }}</th>
          {% else %}
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
             <th>{{ __('ID') }}</th>
             <th>{{ _n('Date', 'Dates', 1) }}</th>
             <th>{{ 'User'|itemtype_name }}</th>
             <th>{{ _n('Field', 'Fields', 1) }}</th>
             <th>{{ _x('name', 'Update') }}</th>
          {% endif %}
+<<<<<<< Updated upstream
        
             <th>
+=======
+         <tr>
+>>>>>>> Stashed changes
                <span class="float-end log-toolbar mb-0">
                   <button class="btn btn-sm show_log_filters {{ filters|length > 0 ? 'btn-secondary active' : 'btn-outline-secondary' }}">
                      <i class="fas fa-filter"></i>

@@ -52,6 +52,7 @@
     {% set left_side_cls = left_expanded_cls %}
     {% set right_side_cls = right_expanded_cls %}
 {% endif %}
+<<<<<<< Updated upstream
    {% if not item.isNewItem() %}
    {% endif %}
 
@@ -59,6 +60,14 @@
    {% if item.isNewItem and not params['template_preview'] %}
       {{ include('components/itilobject/mainform_open.html.twig') }}
    {% endif %}
+=======
+
+
+<div id="itil-object-container mt-5" class=" right">
+   {% if item.isNewItem() and not params['template_preview'] %}
+      {{ include('components/itilobject/mainform_open.html.twig') }}
+   {% endif %}
+>>>>>>> Stashed changes
   <div class="itil-right-side col-12 {{ right_side_cls }} mt-0 mt-md-n1 card-footer p-0 rounded-0" style="width:100%">
          {% if not item.isNewItem() %}
             {{ include('components/itilobject/mainform_open.html.twig') }}
@@ -70,7 +79,11 @@
          {% endif %}
       </div>
    <div class="row d-flex flex-column alin-items-stretch itil-object mt-3">
+<<<<<<< Updated upstream
       {% set fl_direction = (item.isNewItem ? 'flex-column' : 'flex-column-reverse') %}
+=======
+      {% set fl_direction = (item.isNewItem() ? 'flex-column' : 'flex-column-reverse') %}
+>>>>>>> Stashed changes
       <div class="itil-left-side col-12 {{ left_side_cls }} order-last order-md-first pt-2 pe-2 pe-md-4 d-flex {{ fl_direction }} border-top border-4" style="width:100%" >
          {% if item.isNewItem() %}
             {{ include('components/itilobject/timeline/new_form.html.twig') }}
@@ -90,7 +103,6 @@
    {% endif %}
 
 </div>
-
 {% if ticket_ticket %}
    {# Common form fields for ticket_ticket purge action #}
    <form method="POST" action="{{ ticket_ticket.getFormURL() }}" class="d-none" id="linked_tickets_{{ main_rand }}" data-submit-once>

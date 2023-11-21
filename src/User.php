@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?php
 
 /**
@@ -6382,3 +6383,5 @@ HTML;
         return __('Unknown user');
     }
 }
+=======
+>>>>>>> Stashed changes

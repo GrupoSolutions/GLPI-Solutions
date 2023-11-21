@@ -32,6 +32,7 @@
  #}
 
 {% set anonymous = session('glpiactiveprofile') is null %}
+{% set glpiID = session('glpiID') %}
 
 {% set is_vertical = user_pref('page_layout') == 'vertical' %}
 
@@ -94,10 +95,143 @@
          <div class="container-fluid flex-xl-nowrap pe-xl-0">
             {% if user_pref('page_layout') == 'vertical' %}
                {{ include('layout/parts/breadcrumbs.html.twig') }}
+<<<<<<< Updated upstream
 
                <div class="ms-lg-auto d-none d-lg-block flex-grow-1 flex-lg-grow-0">
                   {{ include('layout/parts/global_search_form.html.twig') }}
                </div>
+=======
+               <link rel="stylesheet" href="/glpi/assets/css/toastr.min.css">
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" type="text/javascript"></script>
+               <script src="../assets/css/fa6.js" crossorigin="anonymous"></script>
+               {% if config('allow_search_global') %}
+                  <div class="ms-lg-auto d-none d-lg-block flex-grow-1 flex-lg-grow-0">
+                     <script>
+                        const id = {{ glpiID }}
+                        console.log(id);
+                        var request = $.ajax({
+                           type: "POST",
+                           data: {
+                              'id': id,
+
+                           },
+                           url: "/glpi/assets/php/ajax/buscaTickets.php",
+                           data: 'JSON',
+                           success: function(response){
+                              console.log(response);
+                              //Aqui ele atribui a quantidade de itens no array
+                              var sino = document.getElementById("qtdNotificacao");
+                              var divDropdown = document.getElementById('myDropdown');
+                              sino.innerText = response.length;
+                              for(var elemento of response){
+                                 var link = document.createElement('a');
+
+                                 link.href = `/glpi/front/ticket.form?id=${elemento["id"]}`;
+                                 link.textContent = `${elemento["id"]} - ${elemento["status"]}`;
+
+                                 divDropdown.appendChild(link);
+
+                                 toastr["info"](`${elemento["id"]} - ${elemento["status"]}`, "HelpDesk");
+                                 toastr.options = {
+                                    "closeButton": true,
+                                    "debug": false,
+                                    "newestOnTop": true,
+                                    "progressBar": true,
+                                    "positionClass": "toast-top-right",
+                                    "preventDuplicates": false,
+                                    "onclick": function(){window.location.href=`/glpi/front/ticket.form?id=${elemento["id"]}`;},
+                                    "showDuration": "300",
+                                    "hideDuration": "1000",
+                                    "timeOut": "5000",
+                                    "extendedTimeOut": "1000",
+                                    "showEasing": "swing",
+                                    "hideEasing": "linear",
+                                    "showMethod": "fadeIn",
+                                    "hideMethod": "fadeOut"
+                                 }
+                              }
+                           },
+                           error: function(err) {
+                              console.error("Erro na requisição AJAX:" + err);
+                           }
+                        });
+                     </script> 
+                    <style>
+                    .dropbtn {
+                        background-color: #FFF;
+                        padding: 16px;
+                        font-size: 16px;
+                        border: none;
+                        cursor: pointer;
+                        z-index: 500;
+                        }
+
+                        .dropbtn:hover, .dropbtn:focus {
+                        background-color: #FFF;
+                        }
+
+                        .dropdown {
+                        position: relative;
+                        display: inline-block;
+                        }
+
+                        .dropdown-content {
+                        display: none;
+                        position: absolute;
+                        background-color: #f1f1f1;
+                        min-width: 260px;
+                        overflow: auto;
+                        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                        z-index: 1;
+                        }
+
+                        .dropdown-content a {
+                        color: black;
+                        padding: 12px 16px;
+                        text-decoration: none;
+                        display: block;
+                        }
+
+                        .dropdown a:hover {background-color: #ddd;}
+
+                        .show {display: block;}
+                    </style>
+                        <div class="dropdown">
+                        <i onclick="myFunction()" class="fa-regular fa-bell fa-xl"></i>   
+                        <span class='badge' style="background:#f76707;margin-bottom:10px;" id='qtdNotificacao'>0</span>
+                        <div id="myDropdown" class="dropdown-content">
+                        <span style="text-align:center; margin:65px">Lista de Notificações</span>
+                        </div>
+                        </div>
+
+                        <script>
+                        /* When the user clicks on the button, 
+                        toggle between hiding and showing the dropdown content */
+                        function myFunction() {
+                        document.getElementById("myDropdown").classList.toggle("show");
+                        }
+
+                        // Close the dropdown if the user clicks outside of it
+                        window.onclick = function(event) {
+                        if (!event.target.matches('.fa-bell')) {
+                           var dropdowns = document.getElementsByClassName("dropdown-content");
+                           var i;
+                           for (i = 0; i < dropdowns.length; i++) {
+                              var openDropdown = dropdowns[i];
+                              if (openDropdown.classList.contains('show')) {
+                              openDropdown.classList.remove('show');
+                              }
+                           }
+                        }
+                        }
+                        </script>
+
+                    
+                     {# aqui tem que vir o sininho belem belem #}
+                  </div>
+               {% endif %}
+
+>>>>>>> Stashed changes
             {% elseif user_pref('page_layout') == 'horizontal' %}
                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
                   <span class="navbar-toggler-icon"></span>

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?php
 
 /**
@@ -2108,3 +2109,5 @@ JAVASCRIPT;
         return $palette_css;
     }
 }
+=======
+>>>>>>> Stashed changes

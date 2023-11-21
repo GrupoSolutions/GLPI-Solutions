@@ -61,8 +61,15 @@
             {% endif %}
             {% if user['phone']|length > 0 %}
                <div>
+<<<<<<< Updated upstream
                   <i class="fas fa-fw fa-phone"></i>
                   <a href="tel:{{ user['phone'] }}">{{ user['phone'] }}</a>
+=======
+                  {% if not user['phone'] is empty %}
+                     <i class="fas fa-fw fa-phone"></i>
+                     <a href="tel:{{ user['phone'] }}">{{ user['phone'] }}</a>
+                  {% endif %}
+>>>>>>> Stashed changes
                </div>
             {% endif %}
             {% if user['mobile']|length > 0 %}

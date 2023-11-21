@@ -196,6 +196,7 @@
                         ) }}
                      {% endif %}
 
+<<<<<<< Updated upstream
                     {# {% if item.isField('registration_number') %}
                         {{ fields.autoNameField(
                            'registration_number',
@@ -206,6 +207,8 @@
                         ) }}
                      {% endif %} #}
 
+=======
+>>>>>>> Stashed changes
                      {% if item.isField('phone') %}
                         {{ fields.autoNameField(
                            'phone',
@@ -216,55 +219,6 @@
                         ) }}
                      {% endif %}
 
-                     {% if item.isField('phone2') %}
-                        {{ fields.autoNameField(
-                           'phone2',
-                           item,
-                           __('Phone 2'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('phonenumber') %}
-                        {{ fields.autoNameField(
-                           'phonenumber',
-                           item,
-                           'Phone'|itemtype_name,
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('mobile') %}
-                        {{ fields.autoNameField(
-                           'mobile',
-                           item,
-                           __('Mobile phone'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('fax') %}
-                        {{ fields.autoNameField(
-                           'fax',
-                           item,
-                           __('Fax'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
-
-                     {% if item.isField('website') %}
-                        {{ fields.autoNameField(
-                           'website',
-                           item,
-                           __('Website'),
-                           withtemplate,
-                           field_options
-                        ) }}
-                     {% endif %}
 
                      {% if item.isField('email') %}
                         {{ fields.autoNameField(
@@ -288,7 +242,10 @@
                            item,
                            __('Postal code'),
                            withtemplate,
-                           field_options
+                           field_options|merge({
+                              required:true,
+                              
+                           })
                         ) }}
                         
                      {% endif %}
@@ -299,7 +256,10 @@
                            item,
                            'Cidadezinha',
                            withtemplate,
-                           field_options
+                           field_options|merge({
+                              required:true,
+                              
+                           })
                         ) }}
                      {% endif %}
 
@@ -356,6 +316,7 @@
                            field_options
                         ) }}
                      {% endif %}
+<<<<<<< Updated upstream
 
                     {# {% if item.isField('users_id_tech') %}
                         {{ fields.dropdownField(
@@ -369,6 +330,9 @@
                            })
                         ) }}
                      {% endif %} #}     
+=======
+   
+>>>>>>> Stashed changes
 
                      {% if item.isField('manufacturers_id') %}
                         {{ fields.dropdownField(
@@ -376,6 +340,7 @@
                            'manufacturers_id',
                            item.fields['manufacturers_id'],
                            (item_type starts with 'Software' ? __('Publisher') : 'Manufacturer'|itemtype_name),
+<<<<<<< Updated upstream
                            field_options|merge({
                               required:true,
                               
@@ -389,13 +354,16 @@
                            'groups_id_tech',
                            item.fields['groups_id_tech'],
                            __('Group in charge of the hardware'),
+=======
+>>>>>>> Stashed changes
                            field_options|merge({
-                              'entity': item.fields['entities_id'],
-                              'condition': {'is_assign': 1},
+                              required:true,
+                              
                            })
                         ) }}
                      {% endif %}#}
 
+                 
                      {% set model_itemtype = item.getModelClass() %}
                      {% set model_fk = item.getModelForeignKeyField() %}
                      {% if item.isField(model_fk) %}
@@ -407,6 +375,7 @@
                            field_options|merge({
                               required:true
                            })
+<<<<<<< Updated upstream
                         ) }}
                      {% endif %}
 
@@ -417,6 +386,8 @@
                            item.fields['contact_num'],
                            __('Alternate username number'),
                            field_options
+=======
+>>>>>>> Stashed changes
                         ) }}
                      {% endif %} #}
 
@@ -431,6 +402,7 @@
                         ) }}
                      {% endif %}
 
+<<<<<<< Updated upstream
                      {#{% if item_type != 'SoftwareLicense' and item.isField('contact') %}
                         {# TODO Drop unused 'contact' field in Software License schema?
                         {{ fields.textField(
@@ -452,6 +424,8 @@
                      {% endif %}#}
 
                    
+=======
+>>>>>>> Stashed changes
 
                      {% if item.isField('users_id') %}
                         {{ fields.dropdownField(
@@ -480,6 +454,7 @@
                         ) }}
                      {% endif %}
 
+<<<<<<< Updated upstream
                      {#{% if item.isField('networks_id') %}
                         {{ fields.dropdownField(
                            'Network',
@@ -522,6 +497,9 @@
                         ) }}
                      {% endif %}#}
 
+=======
+                    
+>>>>>>> Stashed changes
                      {% if item.isField('comment') %}
                         {{ fields.textareaField(
                            'comment',
@@ -569,6 +547,7 @@
                         ) }}
                      {% endif %}
 
+<<<<<<< Updated upstream
                      {#{% if item.isField('autoupdatesystems_id') %}
                         {{ fields.dropdownField(
                            'AutoUpdateSystem',
@@ -579,6 +558,8 @@
                         ) }}
                      {% endif %}#}
 
+=======
+>>>>>>> Stashed changes
                      {% if item.isField('pictures') %}
                         {{ fields.fileField('pictures', null, _n('Picture', 'Pictures', get_plural_number()), {
                            'onlyimages': true,

@@ -91,7 +91,11 @@
                <input type="hidden" name="add_reopen" value="1" />
             {% endif %}
 
+<<<<<<< Updated upstream
             <div class="row">
+=======
+            <div class="row mx-n3">
+>>>>>>> Stashed changes
                <div class="col-12 {{ col_md }}">
                   {{ fields.textareaField(
                      'content',
@@ -107,6 +111,7 @@
                         'required': add_reopen
                      }
                   ) }}
+<<<<<<< Updated upstream
                </div>
                            </div>
 
@@ -117,6 +122,25 @@
                      <button class="btn btn-primary" type="submit" name="add">
                         <i class="fa-fw ti ti-message-circle"></i>
                         <span>Responder</span>
+=======
+                  </div>
+            </div>
+
+            {{ call_plugin_hook('post_item_form', {"item": subitem, 'options': params}) }}
+            {# Fixed min-height ensure no height increase when toggling the pending reason button, as select 2 dropdown are a bit higher than the default footer height #}
+            <div class="d-flex card-footer mx-n3 mb-n3 flex-wrap" style="row-gap: 10px; min-height: 79px; border-radius:15px;">
+               {% set pending_reasons %}
+                  {% set show_pending_reasons_actions = item.fields['status'] == constant('CommonITILObject::WAITING') and not has_pending_reason and not add_reopen %}
+                 
+               {% endset %}
+
+               {% if subitem.fields['id'] <= 0 %}
+                  {# Do not enable flex wrapping when creating a new item as the pending form will be merged with the add button in an input group #}
+                  <div class="input-group flex-nowrap">
+                     <button class="btn btn-primary" type="submit" name="add" style="z-index:0">
+                        <i class="fa-fw ti ti-message-circle"></i>
+                        <span>{{ 'Responder' }}</span>
+>>>>>>> Stashed changes
                      </button>
                   </div>
                {% else %}
