@@ -1,0 +1,174 @@
+{#
+ # ---------------------------------------------------------------------
+ #
+ # GLPI - Gestionnaire Libre de Parc Informatique
+ #
+ # http://glpi-project.org
+ #
+ # @copyright 2015-2023 Teclib' and contributors.
+ # @copyright 2003-2014 by the INDEPNET Development Team.
+ # @licence   https://www.gnu.org/licenses/gpl-3.0.html
+ #
+ # ---------------------------------------------------------------------
+ #
+ # LICENSE
+ #
+ # This file is part of GLPI.
+ #
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation, either version 3 of the License, or
+ # (at your option) any later version.
+ #
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ #
+ # ---------------------------------------------------------------------
+ #}
+
+{% import 'components/form/fields_macros.html.twig' as fields %}
+{% set field_options = {
+   'full_width': true,
+   'fields_template': itiltemplate,
+   'disabled': (not canupdate),
+   'add_field_class': (is_expanded ? 'col-sm-6' : ''),
+} %}
+
+{% set itil_layout    = user_pref('itil_layout', true) %}
+{% set headers_states = itil_layout['items'] %}
+
+<div class="accordion open accordion-flush" id="itil-data" style="display:flex">
+   {% set main_show = headers_states['item-main'] is not defined or headers_states['item-main'] == "true" ? true : false %}
+   <div class="accordion-item" style="width:100%">
+      <h2 class="accordion-header" id="heading-main-item">
+         <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#item-main" aria-expanded="true" aria-controls="ticket-main">
+            <i class="ti ti-alert-circle me-1 item-icon"></i>
+            <span class='status-recall'>
+                {{ item.getStatusIcon(item.fields['status'])|raw }}
+            </span>
+            <span class="item-title">
+                {{ item.getTypeName(1) }}
+            </span>
+         </button>
+      </h2>
+      <div id="item-main" class="accordion-collapse collapse {{ main_show ? "show" : "" }}" aria-labelledby="heading-main-item">
+         <div class="accordion-body row m-0 mt-n2" style="width:100%">
+
+            {{ call_plugin_hook('pre_item_form', {"item": item, 'options': params}) }}
+
+            {% if item.isSolved(true) %}
+               {{ fields.datetimeField(
+               'solvedate',
+               item.fields['solvedate'],
+               __('Resolution date'),
+               field_options
+            ) }}
+            {% endif %}
+
+            
+
+            {% set cat_params = field_options|merge({
+               'entity': item.fields['entities_id'],
+               'disabled': (not (canupdate or can_requester)),
+            }) %}
+            {% if item.isNewItem() %}
+               {% set cat_params = cat_params|merge({
+                  'on_change': 'this.form.submit()',
+               }) %}
+            {% endif %}
+            {% if not item.isNewItem() and itiltemplate.isMandatoryField('itilcategories_id') and item.fields['itilcategories_id'] > 0 %}
+               {% set cat_params = cat_params|merge({
+                  'display_emptychoice': false
+               }) %}
+            {% endif %}
+           
+            <span id="category_block_{{ rand }}">
+            {{ fields.dropdownField(
+               'ITILCategory',
+               'itilcategories_id',
+               item.fields['itilcategories_id'],
+               _n('Departamento', 'Departamentos', 1),
+               cat_params
+            ) }}
+            </span>
+
+            {{ include('components/itilobject/fields/status.html.twig') }}
+
+
+
+            {% if item.isNewItem() and item.getType() == 'Ticket' %}
+               {{ fields.dropdownField(
+                  'Contract',
+                  '_contracts_id',
+                  params['_contracts_id']|default(0),
+                  'Contract'|itemtype_name,
+                  field_options|merge({
+                     'entity': item.fields['entities_id'],
+                     'width': '100%',
+                     'hide_if_no_elements': true
+                  })
+               ) }}
+            {% endif %}
+
+            {{ include('components/itilobject/fields/global_validation.html.twig') }}
+
+            {{ call_plugin_hook('post_item_form', {"item": item, 'options': params}) }}
+         </div>
+      </div>
+   </div>
+
+   {% set actors_show = headers_states['actors'] is not defined or headers_states['actors'] == "true" ? true : false %}
+   <div class="accordion-item" style="width:100%">
+      <h2 class="accordion-header" id="heading-actor" title="{{ __('Actors') }}" data-bs-toggle="tooltip">
+         <button class="accordion-button {{ actors_show ? "" : "collapsed" }}" type="button" data-bs-toggle="collapse" data-bs-target="#actors" aria-expanded="true" aria-controls="actors">
+            <i class="ti ti-users me-1"></i>
+            <span class="item-title">
+                {{ __('Actors') }}
+            </span>
+            <span class="badge bg-secondary ms-2">
+               {{ item.countActors() }}
+            </span>
+         </button>
+      </h2>
+      <div id="actors" class="accordion-collapse collapse {{ actors_show ? "show" : "" }}" aria-labelledby="heading-actor">
+         <div class="accordion-body accordion-actors row m-0 mt-n2"  style="text-align:left">
+            {{ include('components/itilobject/actors/main.html.twig') }}
+         </div>
+      </div>
+   </div>
+
+
+    <span class="d-none d-md-block">
+        <button type="button" class="switch-panel-width btn btn-icon btn-ghost-secondary position-absolute bottom-0 start-0 mb-2">
+            <i class="fas fa-caret-left"></i>
+        </button>
+    </span>
+</div>
+
+<script type="text/javascript">
+$(function() {
+   if ($(window).width() < 768) { // medium breakpoint (Todo check if it's possible to get bootstrap breakpoints withint javascript)
+      $('#itil-data .accordion-collapse').each(function() {
+         $(this).removeClass('show');
+      })
+   }
+});
+
+var reloadCategory = function() {
+    var type = $('[name=type]').val();
+
+    $('#category_block_{{ rand }} .field-container').load(
+        '{{ path("ajax/dropdownTicketCategories.php") }}',
+        {
+            'type': type,
+            'entity_restrict': {{ item.fields['entities_id'] }},
+            'value': {{ item.fields['itilcategories_id'] }},
+        }
+    );
+};
+</script>

@@ -1,0 +1,5 @@
+0
+4da0c0710c04e865a3df26f1ec696bc44f19ded8
+a:3:{s:80:"bf4ca0b1dae9d259f7b3b3ad51b8f6fc933932478c972a915d4e83737af2ef4c9dd953feb68a0155";a:1:{i:0;a:4:{s:3:"key";i:0;s:5:"title";s:292:"<a href='/glpi/front/central.php?active_entity=0'>Grupo Solutions</a><a href='/glpi/front/central.php?active_entity=0&is_recursive=1'>
+                <i class='fas fa-angle-double-down ms-1' data-bs-toggle='tooltip' data-bs-placement='right' title='+ sub-entidades'></i>
+                </a>";s:6:"folder";b:1;s:8:"children";a:1:{i:0;a:2:{s:3:"key";i:1;s:5:"title";s:63:"<a href='/glpi/front/central.php?active_entity=1'>Finanças</a>";}}}}s:80:"b76af3233b75ca7be36fe81afcea3b1e38011aa9730b416404fdef77f58d03d87c43c5017086cf91";a:1:{i:0;a:4:{s:2:"id";i:0;s:12:"is_recursive";i:0;s:3:"key";i:0;s:5:"title";s:77:"<a href='/glpi/front/helpdesk.public.php?active_entity=0'>Grupo Solutions</a>";}}s:80:"b76af3233b75ca7be36fe81afcea3b1e38011aa98c972a915d4e83737af2ef4c9dd953feb68a0155";a:1:{i:0;a:4:{s:2:"id";i:0;s:12:"is_recursive";i:0;s:3:"key";i:0;s:5:"title";s:69:"<a href='/glpi/front/central.php?active_entity=0'>Grupo Solutions</a>";}}}

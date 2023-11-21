@@ -1,0 +1,20 @@
+2023-11-17 14:10:22 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/ticket.form.php2023-11-21 08:22:33 [54@GS003021]
+User ID: 54 tried to access or perform an action on /glpi/front/ticket.form?id=1110 with insufficient rights. Additional information: Missing READ right. Cannot view the item.
+	Stack Trace:
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6392 displayRightError()
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6485 displayAccessDeniedPage()
+		C:\wamp64\www\glpi\front\ticket.form.php:277 displayFullPageForItem()
+2023-11-21 08:36:45 [2@GS003021]
+CSRF check failed for User ID: 2 at /glpi/front/computer.form.php2023-11-21 10:05:55 [54@GS003021]
+User ID: 54 tried to access or perform an action on /glpi/front/ticket.form?id=1110 with insufficient rights. Additional information: Missing READ right. Cannot view the item.
+	Stack Trace:
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6392 displayRightError()
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6485 displayAccessDeniedPage()
+		C:\wamp64\www\glpi\front\ticket.form.php:277 displayFullPageForItem()
+2023-11-21 10:40:49 [19@GS003021]
+User ID: 19 tried to access or perform an action on /glpi/front/ticket.form?id=1113 with insufficient rights. Additional information: Missing READ right. Cannot view the item.
+	Stack Trace:
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6392 displayRightError()
+		C:\wamp64\www\glpi\src\CommonDBTM.php:6485 displayAccessDeniedPage()
+		C:\wamp64\www\glpi\front\ticket.form.php:277 displayFullPageForItem()
