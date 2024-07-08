@@ -1,0 +1,76 @@
+<?php
+include('../../inc/includes.php');
+print_r($_POST);
+exit;
+if(isset($_POST)){
+    require '../../src/db_config.php';
+    $date = date('Y-m-d H:i:s');
+    $solicitacoes = $_POST['insumoDestino'];
+    $usuSolicitante = $_POST['usuarioSolicitante'];
+    $usuValidador = $_POST['usuarioValidador'];
+    // 1. Contar os itens em insumoDestino
+    $insumoCount = count($_POST['insumoDestino']);
+    $execSolicitacaoSuccess = true; // Variável para rastrear o sucesso da execução das solicitações
+    // 2. Iterar sobre os índices dos approvalSwitch
+    for ($i = 0; $i < $insumoCount; $i++) {
+        $approvalKey = "approvalSwitch" . $i;
+        $observationKey = "observation" . $i;
+        $input_string = $solicitacoes[$i];
+        $solicitacao = explode(' - ', $input_string);
+        // Remover espaços extras dos elementos, se houver
+        $solicitacao = array_map('trim', $solicitacao);
+
+        $idSolicitacao = $solicitacao[1];
+        if(isset($solicitacao[2])){
+            $quantidade = $solicitacao[2];
+        } else {
+            $quantidade = 0;
+        }
+        $insumoId = $solicitacao[0];
+        
+        // Verifica se o approvalSwitch está definido e se está "off"
+        if (isset($_POST[$approvalKey]) && $_POST[$approvalKey] === "off") {
+            // Busca o valor correspondente de observation
+            if (isset($_POST[$observationKey])) {
+                $observacao = $_POST[$observationKey];
+
+                $atualizaSolicitacao = "UPDATE glpi_plugin_consumables_requests
+                                        SET validators_id = '$usuValidador', date_mod = '$date', status = 4, observacao = '$observacao'
+                                        WHERE id = $idSolicitacao";
+
+                // Executa a atualização da solicitação
+                if (!mysqli_query($sqlcon, $atualizaSolicitacao)) {
+                    $execSolicitacaoSuccess = false; // Marca como falha se qualquer execução falhar
+                }
+            } else {
+                echo "Erro: Reprovado sem observação, favor inserir.";
+                exit();
+            }
+        } else {
+            // SQL para baixar os insumos
+            $baixaInsumos = "UPDATE glpi_consumableitems
+                             SET qtd_usado = qtd_usado + $quantidade, qtd_novo = qtd_novo - $quantidade
+                             WHERE id = $insumoId";
+
+            // SQL para atualizar a solicitação
+            $atualizaSolicitacao = "UPDATE glpi_plugin_consumables_requests
+                                    SET validators_id = '$usuValidador', status = 3 
+                                    WHERE id = '$idSolicitacao'";
+
+            // Executa as consultas de baixa e atualização
+            if (!mysqli_query($sqlcon, $baixaInsumos) || !mysqli_query($sqlcon, $atualizaSolicitacao)) {
+                $execSolicitacaoSuccess = false; // Marca como falha se qualquer execução falhar
+            }
+        }
+    }
+    
+    // Redireciona se todas as operações foram bem-sucedidas
+    if ($execSolicitacaoSuccess) {
+        $_SESSION['moviRealizada'] = true;
+        header('Location: https://ativo.gruposolutions.com.br/marketplace/consumables/front/wizard.form.php?action=consumablevalidation');
+        exit();
+    } else {
+        echo "Erro ao processar as solicitações. Por favor, tente novamente.";
+    }
+}
+?>
